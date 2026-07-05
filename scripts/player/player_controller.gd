@@ -153,8 +153,12 @@ func is_carrying_forms() -> bool:
 	return carried_item != null and carried_item.item_id == "form"
 
 
+func is_carrying_contraband() -> bool:
+	return carried_item != null and StowawaySystem.is_smuggle_item(carried_item.item_id)
+
+
 func is_carrying_hot_dog() -> bool:
-	return carried_item != null and carried_item.item_id == "hot_dog"
+	return is_carrying_contraband()
 
 
 func has_mop_equipped() -> bool:
@@ -165,8 +169,8 @@ func equip_mop() -> void:
 	has_mop = true
 
 
-func consume_hot_dog() -> bool:
-	if not is_carrying_hot_dog():
+func consume_contraband() -> bool:
+	if not is_carrying_contraband():
 		return false
 	if carried_item != null:
 		carried_item.queue_free()
@@ -174,6 +178,10 @@ func consume_hot_dog() -> bool:
 	if multiplayer.is_server():
 		_sync_carryable_consumed.rpc()
 	return true
+
+
+func consume_hot_dog() -> bool:
+	return consume_contraband()
 
 
 func pickup_item(item: CarryableItem) -> void:
@@ -231,6 +239,9 @@ func _enter_bonk_state(state: PlayerState, duration: float) -> void:
 	_drop_carried_item()
 	bonk_stars.visible = true
 	bonk_stars.text = "★ BONK ★" if state == PlayerState.BONKED else "★ DIZZY ★"
+	if is_multiplayer_authority():
+		StatsTracker.record(int(name), "bonks", 1)
+		StatsTracker.record_global("bonks", 1)
 	_ragdoll_spin = Vector3(
 		randf_range(-TAU, TAU),
 		randf_range(-TAU, TAU),

@@ -66,7 +66,7 @@ func _on_role_assigned(role: GameState.Role) -> void:
 
 func _update_smuggle_label() -> void:
 	var count := GameState.smuggle_counts.get(multiplayer.get_unique_id(), 0)
-	stowaway_label.text = "Smuggled: %d / %d" % [count, RoundManager.SMUGGLE_QUOTA]
+	stowaway_label.text = "Smuggled: %d / %d" % [count, StowawaySystem.SMUGGLE_QUOTA]
 
 
 func _on_job_board_changed(active_jobs: Array, progress_text: String) -> void:

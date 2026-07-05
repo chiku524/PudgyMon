@@ -10,25 +10,22 @@ You and your friends are the worst freight crew in the galaxy. Load weird **spac
 
 ## Status
 
-**Phase 2 — Core loop**
+**Phase 3 — Vertical slice (Steam playtest ready)**
 
-- [x] Phase 0 + Phase 1 features
-- [x] Crew vs Stowaway roles (private reveal)
-- [x] 4 jobs: Paperwork, Power Hour, Mop the Future, Manifest Lies
-- [x] Hot dog smuggling + Hidden Cache
-- [x] Emergency Stand-Up Meeting + Write-Up vote
-- [x] Shuttle bay extraction timer + round end screen
+- [x] MegaBargain Orbit #12 map with all zones
+- [x] All 10 jobs (complete 7 to launch shuttle)
+- [x] 5 smuggle item types + 5 sabotages (keys 1–5)
+- [x] PA announcer + post-round stats
+- [x] 7 jobs required · 3 smuggle quota · 20-min rounds
 
-See [docs/ROADMAP.md](docs/ROADMAP.md) for the full solo-dev plan.
+See [docs/ROADMAP.md](docs/ROADMAP.md) for Phase 4 polish plan.
 
 ## How to play a full round
 
-1. **Host** a game with friends (2+ players recommended).
-2. Check your **Role** in the HUD (Stowaway is private to you).
-3. Complete **4 jobs** around the hub (kiosk, breakers, mop, manifest).
-4. **Stowaway:** steal hot dog crates → **Janitor Vent** (×2).
-5. **Crew:** call **Emergency Meeting** in the break room if suspicious.
-6. When jobs are done, rush the **Shuttle Bay** before the timer ends.
+1. **Host** with 2–8 players.
+2. Complete **7 of 10 jobs** across the station.
+3. **Stowaway:** smuggle **3 contraband** items to the Janitor Vent; press **1–5** for sabotage.
+4. **Crew:** call meetings, Write Up suspects, reach the **Shuttle Bay** when it opens.
 
 ## Controls
 
@@ -38,6 +35,7 @@ See [docs/ROADMAP.md](docs/ROADMAP.md) for the full solo-dev plan.
 | Shift | Sprint |
 | Space | Jump |
 | E | Interact / drop item |
+| 1–5 | Stowaway sabotages |
 | Q / R | Orbit camera |
 | Scroll | Zoom camera |
 

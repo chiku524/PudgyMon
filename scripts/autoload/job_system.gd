@@ -1,6 +1,6 @@
 extends Node
 
-## Server-authoritative job tracking for ShipHappens.
+## Server-authoritative job tracking — all 10 station jobs.
 
 signal satisfaction_changed(value: float)
 signal job_board_changed(active_jobs: Array, progress_text: String)
@@ -11,45 +11,82 @@ const PAPERWORK_JOB_ID := "paperwork_avalanche"
 const POWER_HOUR_JOB_ID := "power_hour"
 const MOP_JOB_ID := "mop_the_future"
 const MANIFEST_JOB_ID := "manifest_lies"
+const CRANE_JOB_ID := "crane_of_regret"
+const COOLANT_JOB_ID := "coolant_gargle"
+const DISH_JOB_ID := "dish_go_brr"
+const TRUST_FALL_JOB_ID := "trust_fall"
+const VENDING_JOB_ID := "vending_restock"
+const DUCT_TAPE_JOB_ID := "duct_tape"
 
-const PAPERWORK_FORMS_REQUIRED := 5
-const MOP_PUDDLES_REQUIRED := 6
-const MANIFEST_CRATES_REQUIRED := 2
-
-const JOB_SATISFACTION := {
-	PAPERWORK_JOB_ID: 6.0,
-	POWER_HOUR_JOB_ID: 7.0,
-	MOP_JOB_ID: 5.0,
-	MANIFEST_JOB_ID: 8.0,
-}
+const ALL_JOB_IDS: Array[String] = [
+	PAPERWORK_JOB_ID,
+	POWER_HOUR_JOB_ID,
+	MOP_JOB_ID,
+	MANIFEST_JOB_ID,
+	CRANE_JOB_ID,
+	COOLANT_JOB_ID,
+	DISH_JOB_ID,
+	TRUST_FALL_JOB_ID,
+	VENDING_JOB_ID,
+	DUCT_TAPE_JOB_ID,
+]
 
 const JOB_NAMES := {
 	PAPERWORK_JOB_ID: "Paperwork Avalanche",
 	POWER_HOUR_JOB_ID: "Power Hour",
 	MOP_JOB_ID: "Mop the Future",
 	MANIFEST_JOB_ID: "Manifest Lies",
+	CRANE_JOB_ID: "Crane of Regret",
+	COOLANT_JOB_ID: "Coolant Gargle",
+	DISH_JOB_ID: "Dish Go Brr",
+	TRUST_FALL_JOB_ID: "Trust Fall Certification",
+	VENDING_JOB_ID: "Vending Restock",
+	DUCT_TAPE_JOB_ID: "Duct Tape OR ELSE",
 }
 
-var paperwork_active: bool = false
-var paperwork_complete: bool = false
-var forms_fed: int = 0
+const JOB_SATISFACTION := {
+	PAPERWORK_JOB_ID: 6.0,
+	POWER_HOUR_JOB_ID: 7.0,
+	MOP_JOB_ID: 5.0,
+	MANIFEST_JOB_ID: 8.0,
+	CRANE_JOB_ID: 12.0,
+	COOLANT_JOB_ID: 8.0,
+	DISH_JOB_ID: 10.0,
+	TRUST_FALL_JOB_ID: 10.0,
+	VENDING_JOB_ID: 6.0,
+	DUCT_TAPE_JOB_ID: 12.0,
+}
 
-var power_hour_active: bool = false
-var power_hour_complete: bool = false
-var power_hour_step: int = 0
+const JOB_TARGETS := {
+	PAPERWORK_JOB_ID: 5,
+	POWER_HOUR_JOB_ID: 4,
+	MOP_JOB_ID: 8,
+	MANIFEST_JOB_ID: 2,
+	CRANE_JOB_ID: 3,
+	COOLANT_JOB_ID: 100,
+	DISH_JOB_ID: 100,
+	TRUST_FALL_JOB_ID: 3,
+	VENDING_JOB_ID: 3,
+	DUCT_TAPE_JOB_ID: 5,
+}
+
+const PAPERWORK_FORMS_REQUIRED := 5
+const MOP_PUDDLES_REQUIRED := 8
+const MANIFEST_CRATES_REQUIRED := 2
 const POWER_HOUR_SEQUENCE := [0, 2, 1, 3]
 
-var mop_active: bool = false
-var mop_complete: bool = false
-var mop_cleaned: int = 0
-
-var manifest_active: bool = false
-var manifest_complete: bool = false
-var manifest_scanned: int = 0
+var job_states: Dictionary = {}
 
 
 func _ready() -> void:
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
+	_init_states()
+
+
+func _init_states() -> void:
+	job_states.clear()
+	for job_id in ALL_JOB_IDS:
+		job_states[job_id] = {"active": false, "complete": false, "progress": 0}
 
 
 func reset_jobs() -> void:
@@ -61,90 +98,67 @@ func reset_jobs() -> void:
 
 
 func _reset_local() -> void:
-	paperwork_active = false
-	paperwork_complete = false
-	forms_fed = 0
-	power_hour_active = false
-	power_hour_complete = false
-	power_hour_step = 0
-	mop_active = false
-	mop_complete = false
-	mop_cleaned = 0
-	manifest_active = false
-	manifest_complete = false
-	manifest_scanned = 0
+	_init_states()
 	GameState.jobs_completed = 0
 	GameState.corporate_satisfaction = 100.0
 	_emit_board()
 
 
+func is_active(job_id: String) -> bool:
+	return bool(job_states.get(job_id, {}).get("active", false))
+
+
 func is_job_complete(job_id: String) -> bool:
-	match job_id:
-		PAPERWORK_JOB_ID:
-			return paperwork_complete
-		POWER_HOUR_JOB_ID:
-			return power_hour_complete
-		MOP_JOB_ID:
-			return mop_complete
-		MANIFEST_JOB_ID:
-			return manifest_complete
-	return false
+	return bool(job_states.get(job_id, {}).get("complete", false))
+
+
+func get_progress(job_id: String) -> int:
+	return int(job_states.get(job_id, {}).get("progress", 0))
+
+
+func set_progress(job_id: String, value: int) -> void:
+	if not job_states.has(job_id):
+		return
+	job_states[job_id]["progress"] = value
+	_broadcast_state()
 
 
 func start_job(job_id: String) -> bool:
-	if not multiplayer.is_server() or is_job_complete(job_id):
+	if not multiplayer.is_server() or is_job_complete(job_id) or is_active(job_id):
 		return false
-	match job_id:
-		PAPERWORK_JOB_ID:
-			if paperwork_active:
-				return false
-			paperwork_active = true
-			forms_fed = 0
-		POWER_HOUR_JOB_ID:
-			if power_hour_active:
-				return false
-			power_hour_active = true
-			power_hour_step = 0
-		MOP_JOB_ID:
-			if mop_active:
-				return false
-			mop_active = true
-			mop_cleaned = 0
-		MANIFEST_JOB_ID:
-			if manifest_active:
-				return false
-			manifest_active = true
-			manifest_scanned = 0
-		_:
-			return false
+	if not job_states.has(job_id):
+		return false
+	job_states[job_id]["active"] = true
+	job_states[job_id]["progress"] = 0
 	_broadcast_state()
+	Announcer.bark_event("job_started")
+	return true
+
+
+func add_progress(job_id: String, amount: int = 1) -> bool:
+	if not multiplayer.is_server() or not is_active(job_id) or is_job_complete(job_id):
+		return false
+	var target: int = JOB_TARGETS.get(job_id, 1)
+	job_states[job_id]["progress"] = mini(get_progress(job_id) + amount, target)
+	if get_progress(job_id) >= target:
+		complete_job(job_id)
+	else:
+		_broadcast_state()
 	return true
 
 
 func complete_job(job_id: String) -> bool:
 	if not multiplayer.is_server() or is_job_complete(job_id):
 		return false
-	match job_id:
-		PAPERWORK_JOB_ID:
-			paperwork_active = false
-			paperwork_complete = true
-		POWER_HOUR_JOB_ID:
-			power_hour_active = false
-			power_hour_complete = true
-		MOP_JOB_ID:
-			mop_active = false
-			mop_complete = true
-		MANIFEST_JOB_ID:
-			manifest_active = false
-			manifest_complete = true
-		_:
-			return false
-
+	job_states[job_id]["active"] = false
+	job_states[job_id]["complete"] = true
 	GameState.jobs_completed += 1
 	GameState.add_satisfaction(JOB_SATISFACTION.get(job_id, 5.0))
 	GameState.jobs_progress_changed.emit(GameState.jobs_completed, GameState.jobs_required)
+	StatsTracker.record_global("jobs_completed", 1)
 	_broadcast_state()
 	job_completed.emit(job_id)
+	Announcer.bark_event("job_complete")
 	RoundManager.check_shuttle_unlock()
 	return true
 
@@ -154,57 +168,47 @@ func start_paperwork_job(_requester_id: int) -> bool:
 
 
 func feed_paperwork_form() -> bool:
-	if not multiplayer.is_server() or not paperwork_active:
+	if not multiplayer.is_server() or not is_active(PAPERWORK_JOB_ID):
 		return false
-	if forms_fed >= PAPERWORK_FORMS_REQUIRED:
+	if get_progress(PAPERWORK_JOB_ID) >= PAPERWORK_FORMS_REQUIRED:
 		return false
-	forms_fed += 1
+	job_states[PAPERWORK_JOB_ID]["progress"] += 1
 	_broadcast_state()
 	return true
 
 
 func complete_paperwork_job() -> bool:
-	if not paperwork_active or forms_fed < PAPERWORK_FORMS_REQUIRED:
+	if not is_active(PAPERWORK_JOB_ID) or get_progress(PAPERWORK_JOB_ID) < PAPERWORK_FORMS_REQUIRED:
 		return false
 	return complete_job(PAPERWORK_JOB_ID)
 
 
 func try_power_hour_breaker(breaker_index: int) -> Dictionary:
-	if not multiplayer.is_server() or not power_hour_active or power_hour_complete:
+	if not is_active(POWER_HOUR_JOB_ID) or is_job_complete(POWER_HOUR_JOB_ID):
 		return {"ok": false}
-	if breaker_index == POWER_HOUR_SEQUENCE[power_hour_step]:
-		power_hour_step += 1
-		if power_hour_step >= POWER_HOUR_SEQUENCE.size():
+	var step := get_progress(POWER_HOUR_JOB_ID)
+	if breaker_index == POWER_HOUR_SEQUENCE[step]:
+		job_states[POWER_HOUR_JOB_ID]["progress"] = step + 1
+		if get_progress(POWER_HOUR_JOB_ID) >= POWER_HOUR_SEQUENCE.size():
 			complete_job(POWER_HOUR_JOB_ID)
-		_broadcast_state()
-		return {"ok": true, "done": power_hour_complete}
+		else:
+			_broadcast_state()
+		return {"ok": true, "done": is_job_complete(POWER_HOUR_JOB_ID)}
 	_broadcast_state()
 	return {"ok": false, "zap": true}
 
 
 func clean_mop_puddle() -> bool:
-	if not multiplayer.is_server() or not mop_active or mop_complete:
-		return false
-	mop_cleaned += 1
-	if mop_cleaned >= MOP_PUDDLES_REQUIRED:
-		complete_job(MOP_JOB_ID)
-	_broadcast_state()
-	return true
+	return add_progress(MOP_JOB_ID, 1)
 
 
 func scan_manifest_crate() -> bool:
-	if not multiplayer.is_server() or not manifest_active or manifest_complete:
-		return false
-	manifest_scanned += 1
-	if manifest_scanned >= MANIFEST_CRATES_REQUIRED:
-		complete_job(MANIFEST_JOB_ID)
-	_broadcast_state()
-	return true
+	return add_progress(MANIFEST_JOB_ID, 1)
 
 
 func get_active_jobs() -> Array:
 	var jobs: Array = []
-	for job_id in [PAPERWORK_JOB_ID, POWER_HOUR_JOB_ID, MOP_JOB_ID, MANIFEST_JOB_ID]:
+	for job_id in ALL_JOB_IDS:
 		if is_job_complete(job_id):
 			continue
 		jobs.append({
@@ -212,7 +216,7 @@ func get_active_jobs() -> Array:
 			"name": JOB_NAMES[job_id],
 			"progress": _job_progress_text(job_id),
 		})
-	return jobs
+	return jobs.slice(0, 3)
 
 
 func get_board_progress_text() -> String:
@@ -221,53 +225,28 @@ func get_board_progress_text() -> String:
 	if GameState.round_phase == GameState.RoundPhase.MEETING:
 		return "Emergency Stand-Up Meeting in progress."
 	if GameState.jobs_completed >= GameState.jobs_required:
-		return "All required jobs complete — shuttle is available."
-	return "Complete jobs around the hub. Stowaway is smuggling. Call a meeting if suspicious."
+		return "Required jobs done — shuttle is available."
+	return "Complete 7 jobs across the station. Watch for the Stowaway."
 
 
 func _job_progress_text(job_id: String) -> String:
-	match job_id:
-		PAPERWORK_JOB_ID:
-			if paperwork_active:
-				return "%d/%d forms" % [forms_fed, PAPERWORK_FORMS_REQUIRED]
-			return "Start at Job Kiosk"
-		POWER_HOUR_JOB_ID:
-			if power_hour_active:
-				return "Breakers %d/%d" % [power_hour_step, POWER_HOUR_SEQUENCE.size()]
-			return "Start at Breaker Panel"
-		MOP_JOB_ID:
-			if mop_active:
-				return "%d/%d puddles" % [mop_cleaned, MOP_PUDDLES_REQUIRED]
-			return "Start at Mop Closet"
-		MANIFEST_JOB_ID:
-			if manifest_active:
-				return "%d/%d crates scanned" % [manifest_scanned, MANIFEST_CRATES_REQUIRED]
-			return "Start at Manifest Terminal"
-	return "Available"
+	if is_active(job_id):
+		return "%d/%d" % [get_progress(job_id), JOB_TARGETS.get(job_id, 1)]
+	return "Available at station"
 
 
 func _broadcast_state() -> void:
-	_sync_state.rpc(
-		paperwork_active,
-		paperwork_complete,
-		forms_fed,
-		power_hour_active,
-		power_hour_complete,
-		power_hour_step,
-		mop_active,
-		mop_complete,
-		mop_cleaned,
-		manifest_active,
-		manifest_complete,
-		manifest_scanned,
-		GameState.corporate_satisfaction,
-		GameState.jobs_completed
-	)
+	_sync_state.rpc(job_states.duplicate(true), GameState.corporate_satisfaction, GameState.jobs_completed)
 
 
 func _emit_board() -> void:
-	job_board_changed.emit(get_active_jobs(), get_board_progress_text())
-	paperwork_state_changed.emit(paperwork_active, forms_fed, paperwork_complete)
+	var jobs := get_active_jobs()
+	job_board_changed.emit(jobs, get_board_progress_text())
+	paperwork_state_changed.emit(
+		is_active(PAPERWORK_JOB_ID),
+		get_progress(PAPERWORK_JOB_ID),
+		is_job_complete(PAPERWORK_JOB_ID)
+	)
 	satisfaction_changed.emit(GameState.corporate_satisfaction)
 
 
@@ -291,34 +270,46 @@ func _request_full_state() -> void:
 
 
 @rpc("authority", "call_remote", "reliable")
-func _sync_state(
-	p_active: bool,
-	p_complete: bool,
-	p_fed: int,
-	ph_active: bool,
-	ph_complete: bool,
-	ph_step: int,
-	m_active: bool,
-	m_complete: bool,
-	m_cleaned: int,
-	man_active: bool,
-	man_complete: bool,
-	man_scanned: int,
-	satisfaction: float,
-	jobs_done: int
-) -> void:
-	paperwork_active = p_active
-	paperwork_complete = p_complete
-	forms_fed = p_fed
-	power_hour_active = ph_active
-	power_hour_complete = ph_complete
-	power_hour_step = ph_step
-	mop_active = m_active
-	mop_complete = m_complete
-	mop_cleaned = m_cleaned
-	manifest_active = man_active
-	manifest_complete = man_complete
-	manifest_scanned = man_scanned
+func _sync_state(states: Dictionary, satisfaction: float, jobs_done: int) -> void:
+	job_states = states.duplicate(true)
 	GameState.corporate_satisfaction = satisfaction
 	GameState.jobs_completed = jobs_done
 	_emit_board()
+
+
+# Backward-compatible accessors used by existing Phase 2 scripts.
+var paperwork_active: bool:
+	get: return is_active(PAPERWORK_JOB_ID)
+
+var paperwork_complete: bool:
+	get: return is_job_complete(PAPERWORK_JOB_ID)
+
+var forms_fed: int:
+	get: return get_progress(PAPERWORK_JOB_ID)
+
+var power_hour_active: bool:
+	get: return is_active(POWER_HOUR_JOB_ID)
+
+var power_hour_complete: bool:
+	get: return is_job_complete(POWER_HOUR_JOB_ID)
+
+var power_hour_step: int:
+	get: return get_progress(POWER_HOUR_JOB_ID)
+
+var mop_active: bool:
+	get: return is_active(MOP_JOB_ID)
+
+var mop_complete: bool:
+	get: return is_job_complete(MOP_JOB_ID)
+
+var mop_cleaned: int:
+	get: return get_progress(MOP_JOB_ID)
+
+var manifest_active: bool:
+	get: return is_active(MANIFEST_JOB_ID)
+
+var manifest_complete: bool:
+	get: return is_job_complete(MANIFEST_JOB_ID)
+
+var manifest_scanned: int:
+	get: return get_progress(MANIFEST_JOB_ID)

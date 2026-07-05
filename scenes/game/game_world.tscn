@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://sh_game_world"]
+[gd_scene load_steps=5 format=3 uid="uid://sh_game_world"]
 
 [ext_resource type="Script" path="res://scripts/game/game_world.gd" id="1_world"]
 [ext_resource type="Script" path="res://scripts/ui/game_hud.gd" id="2_hud"]
+[ext_resource type="PackedScene" uid="uid://sh_announcer_bar" path="res://scenes/ui/announcer_bar.tscn" id="3_announcer"]
+[ext_resource type="PackedScene" uid="uid://sh_stowaway_panel" path="res://scenes/ui/stowaway_panel.tscn" id="4_stowaway"]
 
 [node name="GameWorld" type="Node3D"]
 script = ExtResource("1_world")
@@ -83,7 +85,7 @@ show_percentage = false
 
 [node name="JobsLabel" type="Label" parent="HUD/GameHUD/MarginContainer/HBoxContainer/LeftColumn"]
 layout_mode = 2
-text = "Jobs: 0 / 4"
+text = "Jobs: 0 / 7"
 
 [node name="TimerLabel" type="Label" parent="HUD/GameHUD/MarginContainer/HBoxContainer/LeftColumn"]
 layout_mode = 2
@@ -96,7 +98,7 @@ text = "Role: Crew"
 [node name="StowawayLabel" type="Label" parent="HUD/GameHUD/MarginContainer/HBoxContainer/LeftColumn"]
 layout_mode = 2
 visible = false
-text = "Smuggled: 0 / 2"
+text = "Smuggled: 0 / 3"
 
 [node name="JobBoardPanel" type="PanelContainer" parent="HUD/GameHUD/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -125,3 +127,7 @@ scroll_active = false
 layout_mode = 2
 autowrap_mode = 3
 text = "Objective"
+
+[node name="AnnouncerBar" parent="HUD" instance=ExtResource("3_announcer")]
+
+[node name="StowawayPanel" parent="HUD" instance=ExtResource("4_stowaway")]

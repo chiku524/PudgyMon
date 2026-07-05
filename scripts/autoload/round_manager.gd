@@ -14,7 +14,7 @@ const ROUND_DURATION := 1200.0
 const SHUTTLE_DURATION := 180.0
 const MEETING_DURATION := 90.0
 const MAX_MEETINGS := 3
-const SMUGGLE_QUOTA := 2
+const SMUGGLE_QUOTA := 3
 
 var round_time_remaining: float = 0.0
 var shuttle_time_remaining: float = 0.0
@@ -60,13 +60,23 @@ func start_round(peer_ids: PackedInt32Array) -> void:
 
 	_reset_local()
 	_assign_roles(peer_ids)
+	StatsTracker.reset_stats()
+	StowawaySystem.reset()
 	round_time_remaining = ROUND_DURATION
 	_round_running = true
 	GameState.round_phase = GameState.RoundPhase.PLAYING
 	JobSystem.reset_jobs()
 	_broadcast_round_state()
+	Announcer.bark_event("round_start")
 	round_started.emit()
 	round_phase_changed.emit(GameState.round_phase)
+
+
+func add_shuttle_delay(seconds: float) -> void:
+	if not multiplayer.is_server() or not shuttle_active:
+		return
+	shuttle_time_remaining += seconds
+	_broadcast_timer()
 
 
 func call_meeting(caller_id: int) -> bool:
@@ -83,6 +93,8 @@ func call_meeting(caller_id: int) -> bool:
 	_votes.clear()
 	GameState.round_phase = GameState.RoundPhase.MEETING
 	_broadcast_round_state()
+	StatsTracker.record_global("meetings", 1)
+	Announcer.bark_event("meeting_called")
 	meeting_started.emit(MEETING_DURATION)
 	return true
 
@@ -103,6 +115,8 @@ func deposit_smuggle(peer_id: int) -> bool:
 	var count: int = GameState.smuggle_counts.get(peer_id, 0)
 	count += 1
 	GameState.smuggle_counts[peer_id] = count
+	StatsTracker.record(peer_id, "smuggled", 1)
+	Announcer.bark_event("stowaway_smuggle")
 	_broadcast_round_state()
 	return true
 
@@ -121,6 +135,7 @@ func check_shuttle_unlock() -> void:
 		shuttle_time_remaining = SHUTTLE_DURATION
 		GameState.round_phase = GameState.RoundPhase.EXTRACTION
 		_broadcast_round_state()
+		Announcer.bark_event("shuttle_open")
 		shuttle_unlocked.emit(SHUTTLE_DURATION)
 		round_phase_changed.emit(GameState.round_phase)
 
@@ -180,6 +195,7 @@ func _close_meeting() -> void:
 		GameState.mark_written_up(written_up)
 		if GameState.is_stowaway(written_up):
 			GameState.stowaway_revealed = written_up
+		Announcer.bark_event("written_up")
 	elif skip_votes > 0:
 		GameState.add_satisfaction(-5.0)
 
@@ -229,6 +245,14 @@ func _end_round(result: Dictionary) -> void:
 	result["jobs_completed"] = GameState.jobs_completed
 	result["satisfaction"] = GameState.corporate_satisfaction
 	result["meetings_used"] = meetings_used
+	result["stats"] = StatsTracker.build_summary()
+	match result.get("winner", "none"):
+		"crew":
+			Announcer.bark_event("round_crew_win")
+		"stowaway":
+			Announcer.bark_event("round_stowaway_win")
+		_:
+			Announcer.bark_event("round_fail")
 	_broadcast_round_state()
 	round_phase_changed.emit(GameState.round_phase)
 	round_ended.emit(result)

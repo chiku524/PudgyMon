@@ -1,8 +1,8 @@
 extends Node3D
 
-## Spawns players and loads the hub greybox when a network session starts.
+## Spawns players and loads MegaBargain Orbit #12 when a network session starts.
 
-const HUB_SCENE := preload("res://scenes/levels/hub_greybox.tscn")
+const HUB_SCENE := preload("res://scenes/levels/megabargain_orbit_12.tscn")
 const PLAYER_SCENE := preload("res://scenes/player/player.tscn")
 const MEETING_PANEL_SCENE := preload("res://scenes/ui/meeting_panel.tscn")
 const ROUND_END_SCENE := preload("res://scenes/ui/round_end_panel.tscn")
@@ -116,7 +116,7 @@ func _update_status() -> void:
 		NetworkManager.DEFAULT_PORT,
 		player_count,
 	]
-	hint_label.text = "Break room: call meeting. Stowaway: smuggle hot dogs to the janitor vent."
+	hint_label.text = "Complete 7 jobs. Stowaway: smuggle 3 items (vent) + sabotage keys 1-5."
 
 
 func _on_player_joined(peer_id: int) -> void:

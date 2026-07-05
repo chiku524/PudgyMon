@@ -1,0 +1,340 @@
+[gd_scene load_steps=35 format=3 uid="uid://sh_megabargain_orbit_12"]
+
+[ext_resource type="PackedScene" uid="uid://sh_crate_scene" path="res://scenes/props/crate.tscn" id="1_crate"]
+[ext_resource type="PackedScene" uid="uid://sh_job_kiosk" path="res://scenes/jobs/job_kiosk.tscn" id="2_kiosk"]
+[ext_resource type="PackedScene" uid="uid://sh_paperwork_printer" path="res://scenes/jobs/paperwork_printer.tscn" id="3_printer"]
+[ext_resource type="PackedScene" uid="uid://sh_paperwork_tube" path="res://scenes/jobs/paperwork_tube.tscn" id="4_tube"]
+[ext_resource type="PackedScene" uid="uid://sh_bonk_pad" path="res://scenes/props/bonk_pad.tscn" id="5_bonk"]
+[ext_resource type="PackedScene" uid="uid://sh_power_breaker" path="res://scenes/jobs/power_hour_breaker.tscn" id="6_breaker"]
+[ext_resource type="PackedScene" uid="uid://sh_mop_closet" path="res://scenes/jobs/mop_closet.tscn" id="7_mop"]
+[ext_resource type="PackedScene" uid="uid://sh_slime_puddle" path="res://scenes/jobs/slime_puddle.tscn" id="8_puddle"]
+[ext_resource type="PackedScene" uid="uid://sh_manifest_terminal" path="res://scenes/jobs/manifest_terminal.tscn" id="9_manifest"]
+[ext_resource type="PackedScene" uid="uid://sh_manifest_scan_pad" path="res://scenes/jobs/manifest_scan_pad.tscn" id="10_scan"]
+[ext_resource type="PackedScene" uid="uid://sh_manifest_crate" path="res://scenes/props/manifest_crate.tscn" id="11_mcrate"]
+[ext_resource type="PackedScene" uid="uid://sh_hot_dog_crate" path="res://scenes/props/hot_dog_crate.tscn" id="12_hotdog"]
+[ext_resource type="PackedScene" uid="uid://sh_hidden_cache" path="res://scenes/stowaway/hidden_cache.tscn" id="13_cache"]
+[ext_resource type="PackedScene" uid="uid://sh_meeting_button" path="res://scenes/meeting/meeting_button.tscn" id="14_meeting"]
+[ext_resource type="PackedScene" uid="uid://sh_shuttle_bay" path="res://scenes/game/shuttle_bay.tscn" id="15_shuttle"]
+[ext_resource type="PackedScene" uid="uid://sh_crane_console" path="res://scenes/jobs/crane_console.tscn" id="16_crane"]
+[ext_resource type="PackedScene" uid="uid://sh_coolant_station" path="res://scenes/jobs/coolant_station.tscn" id="17_coolant"]
+[ext_resource type="PackedScene" uid="uid://sh_dish_station" path="res://scenes/jobs/dish_station.tscn" id="18_dish"]
+[ext_resource type="PackedScene" uid="uid://sh_trust_fall_ledge" path="res://scenes/jobs/trust_fall_ledge.tscn" id="19_trust"]
+[ext_resource type="PackedScene" uid="uid://sh_vending_machine" path="res://scenes/jobs/vending_machine.tscn" id="20_vending"]
+[ext_resource type="PackedScene" uid="uid://sh_hull_breach" path="res://scenes/jobs/hull_breach.tscn" id="21_breach"]
+[ext_resource type="PackedScene" uid="uid://sh_contraband_item" path="res://scenes/props/contraband_item.tscn" id="22_contraband"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.18, 0.2, 0.28, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.28, 0.32, 0.42, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_accent"]
+albedo_color = Color(0.95, 0.78, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+size = Vector3(80, 1, 80)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(80, 1, 80)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall"]
+size = Vector3(80, 6, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall"]
+size = Vector3(80, 6, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_platform"]
+size = Vector3(4, 0.5, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_platform"]
+size = Vector3(4, 0.5, 4)
+
+[node name="MegaBargainOrbit12" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 12, 0)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = SubResource("StandardMaterial3D_floor")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_floor")
+
+[node name="Walls" type="Node3D" parent="."]
+
+[node name="North" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -40)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Walls/North"]
+mesh = SubResource("BoxMesh_wall")
+surface_material_override/0 = SubResource("StandardMaterial3D_wall")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/North"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="South" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 40)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Walls/South"]
+mesh = SubResource("BoxMesh_wall")
+surface_material_override/0 = SubResource("StandardMaterial3D_wall")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/South"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="West" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -40, 3, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Walls/West"]
+mesh = SubResource("BoxMesh_wall")
+surface_material_override/0 = SubResource("StandardMaterial3D_wall")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/West"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="East" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 40, 3, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Walls/East"]
+mesh = SubResource("BoxMesh_wall")
+surface_material_override/0 = SubResource("StandardMaterial3D_wall")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/East"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="MainHubMarker" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = SubResource("StandardMaterial3D_accent")
+
+[node name="SpawnPoints" type="Node3D" parent="."]
+
+[node name="Spawn1" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1, -6)
+
+[node name="Spawn2" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1, -6)
+
+[node name="Spawn3" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1, 6)
+
+[node name="Spawn4" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1, 6)
+
+[node name="Spawn5" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Spawn6" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -10)
+
+[node name="Spawn7" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1, 0)
+
+[node name="Spawn8" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, 0)
+
+[node name="Crate" parent="." instance=ExtResource("1_crate")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 4)
+
+[node name="JobKiosk" parent="." instance=ExtResource("2_kiosk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -8)
+
+[node name="PaperworkPrinter" parent="." instance=ExtResource("3_printer")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, -8)
+
+[node name="PaperworkTube" parent="." instance=ExtResource("4_tube")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -8)
+
+[node name="BonkPad" parent="." instance=ExtResource("5_bonk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 3.55, 8)
+
+[node name="BonkPlatform" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 3.25, 8)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BonkPlatform"]
+shape = SubResource("BoxShape3D_platform")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BonkPlatform"]
+mesh = SubResource("BoxMesh_platform")
+surface_material_override/0 = SubResource("StandardMaterial3D_accent")
+
+[node name="Sign" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -12)
+text = "MEGABARGAIN ORBIT #12 — FULL STATION"
+font_size = 32
+outline_size = 8
+
+[node name="BreakRoom" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+
+[node name="MeetingButton" parent="BreakRoom" instance=ExtResource("14_meeting")]
+
+[node name="PowerHour" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 4)
+
+[node name="Breaker1" parent="PowerHour" instance=ExtResource("6_breaker")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 0, 0)
+breaker_index = 0
+
+[node name="Breaker2" parent="PowerHour" instance=ExtResource("6_breaker")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0, 0)
+breaker_index = 1
+
+[node name="Breaker3" parent="PowerHour" instance=ExtResource("6_breaker")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0, 0)
+breaker_index = 2
+
+[node name="Breaker4" parent="PowerHour" instance=ExtResource("6_breaker")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 0, 0)
+breaker_index = 3
+
+[node name="MopCloset" parent="." instance=ExtResource("7_mop")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, 4)
+
+[node name="SlimePuddles" type="Node3D" parent="."]
+
+[node name="Puddle1" parent="SlimePuddles" instance=ExtResource("8_puddle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.05, 2)
+
+[node name="Puddle2" parent="SlimePuddles" instance=ExtResource("8_puddle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.05, 6)
+
+[node name="Puddle3" parent="SlimePuddles" instance=ExtResource("8_puddle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.05, -2)
+
+[node name="Puddle4" parent="SlimePuddles" instance=ExtResource("8_puddle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.05, 4)
+
+[node name="Puddle5" parent="SlimePuddles" instance=ExtResource("8_puddle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 8)
+
+[node name="Puddle6" parent="SlimePuddles" instance=ExtResource("8_puddle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0.05, -4)
+
+[node name="ManifestTerminal" parent="." instance=ExtResource("9_manifest")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, -4)
+
+[node name="ManifestScanPad" parent="." instance=ExtResource("10_scan")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.1, -4)
+
+[node name="ManifestCrateA" parent="." instance=ExtResource("11_mcrate")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1, 2)
+
+[node name="ManifestCrateB" parent="." instance=ExtResource("11_mcrate")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 1, 2)
+
+[node name="HotDogCrate" parent="." instance=ExtResource("12_hotdog")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 10)
+
+[node name="BootlegToaster" parent="." instance=ExtResource("22_contraband")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, -4)
+smuggle_item_id = "bootleg_toaster"
+smuggle_display_name = "Bootleg Toaster"
+label_text = "BOOTLEG TOASTER"
+
+[node name="MiniBot" parent="." instance=ExtResource("22_contraband")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, 8)
+smuggle_item_id = "mini_bot"
+smuggle_display_name = "Mini Bot"
+label_text = "MINI BOT"
+
+[node name="HoloAutograph" parent="." instance=ExtResource("22_contraband")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 30)
+smuggle_item_id = "holo_autograph"
+smuggle_display_name = "Holo Autograph"
+label_text = "HOLO AUTOGRAPH"
+
+[node name="MislabeledAir" parent="." instance=ExtResource("22_contraband")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, -22)
+smuggle_item_id = "mislabeled_air"
+smuggle_display_name = "Mislabeled Air"
+label_text = "MISLABELED AIR"
+
+[node name="HiddenCache" parent="." instance=ExtResource("13_cache")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, 0)
+
+[node name="ShuttleBay" parent="." instance=ExtResource("15_shuttle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -34)
+
+[node name="Zones" type="Node3D" parent="."]
+
+[node name="CargoRingLabel" type="Label3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 5, -10)
+text = "CARGO RING"
+font_size = 28
+outline_size = 8
+
+[node name="OpsDeckLabel" type="Label3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 5, 0)
+text = "OPS DECK"
+font_size = 28
+outline_size = 8
+
+[node name="BreakRoomLabel" type="Label3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 28)
+text = "BREAK ROOM"
+font_size = 28
+outline_size = 8
+
+[node name="DockingArmLabel" type="Label3D" parent="Zones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 5, -28)
+text = "DOCKING ARM"
+font_size = 28
+outline_size = 8
+
+[node name="CraneConsole" parent="." instance=ExtResource("16_crane")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, -8)
+
+[node name="CoolantValve" parent="." instance=ExtResource("17_coolant")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 6)
+
+[node name="CoolantWheel" parent="." instance=ExtResource("17_coolant")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 6)
+step_kind = "wheel"
+
+[node name="DishStation" parent="." instance=ExtResource("18_dish")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, -6)
+
+[node name="TrustFallLedge" parent="." instance=ExtResource("19_trust")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3, 10)
+
+[node name="VendingMachine" parent="." instance=ExtResource("20_vending")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 14)
+
+[node name="DockingArm" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, -24)
+
+[node name="Breach1" parent="DockingArm" instance=ExtResource("21_breach")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+breach_index = 0
+
+[node name="Breach2" parent="DockingArm" instance=ExtResource("21_breach")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, 2)
+breach_index = 1
+
+[node name="Breach3" parent="DockingArm" instance=ExtResource("21_breach")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 2, 2)
+breach_index = 2
+
+[node name="Breach4" parent="DockingArm" instance=ExtResource("21_breach")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
+breach_index = 3
+
+[node name="Breach5" parent="DockingArm" instance=ExtResource("21_breach")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, -2)
+breach_index = 4
+
+[node name="Puddle7" parent="SlimePuddles" instance=ExtResource("8_puddle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.05, 10)
+
+[node name="Puddle8" parent="SlimePuddles" instance=ExtResource("8_puddle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.05, 6)

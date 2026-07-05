@@ -22,6 +22,9 @@ NetworkManager="*res://scripts/autoload/network_manager.gd"
 GameState="*res://scripts/autoload/game_state.gd"
 JobSystem="*res://scripts/autoload/job_system.gd"
 RoundManager="*res://scripts/autoload/round_manager.gd"
+StatsTracker="*res://scripts/autoload/stats_tracker.gd"
+Announcer="*res://scripts/autoload/announcer.gd"
+StowawaySystem="*res://scripts/autoload/stowaway_system.gd"
 
 [display]
 

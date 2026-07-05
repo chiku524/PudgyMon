@@ -1,6 +1,6 @@
 extends Interactable
 
-## Hidden vent cache where Stowaways deposit contraband.
+## Hidden vent cache for all smuggle contraband.
 
 @onready var label: Label3D = $Label3D
 
@@ -8,20 +8,19 @@ extends Interactable
 func _ready() -> void:
 	super._ready()
 	collision_layer = 8
-	prompt_text = "Deposit contraband"
-	_refresh_label()
+	RoundManager.timer_updated.connect(func _a, _b: _refresh_label())
 
 
 func get_prompt(player: Node3D) -> String:
 	if not GameState.is_local_stowaway():
 		return "Janitor vent"
-	if player.has_method("is_carrying_hot_dog") and player.is_carrying_hot_dog():
+	if player.has_method("is_carrying_contraband") and player.is_carrying_contraband():
 		return "Deposit contraband"
 	return "Need contraband"
 
 
 func can_interact(player: Node3D) -> bool:
-	return GameState.is_local_stowaway() and player.has_method("is_carrying_hot_dog") and player.is_carrying_hot_dog()
+	return GameState.is_local_stowaway() and player.has_method("is_carrying_contraband") and player.is_carrying_contraband()
 
 
 func interact(player: Node3D) -> void:
@@ -34,9 +33,9 @@ func interact(player: Node3D) -> void:
 
 
 func _deposit(player: Node3D) -> void:
-	if not player.has_method("consume_hot_dog"):
+	if not player.has_method("consume_contraband"):
 		return
-	if not player.consume_hot_dog():
+	if not player.consume_contraband():
 		return
 	RoundManager.deposit_smuggle(int(player.name))
 	_refresh_label()
@@ -45,7 +44,7 @@ func _deposit(player: Node3D) -> void:
 func _refresh_label() -> void:
 	var count := GameState.smuggle_counts.get(multiplayer.get_unique_id(), 0)
 	if GameState.is_local_stowaway():
-		label.text = "HIDDEN CACHE\nSmuggled: %d/%d" % [count, RoundManager.SMUGGLE_QUOTA]
+		label.text = "HIDDEN CACHE\nSmuggled: %d/%d" % [count, StowawaySystem.SMUGGLE_QUOTA]
 	else:
 		label.text = "JANITOR VENT"
 

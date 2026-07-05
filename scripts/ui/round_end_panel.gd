@@ -1,10 +1,11 @@
 extends CanvasLayer
 
-## Post-round results overlay.
+## Post-round results overlay with stats.
 
 @onready var panel: PanelContainer = $Panel
 @onready var title_label: Label = $Panel/MarginContainer/VBoxContainer/TitleLabel
 @onready var body_label: Label = $Panel/MarginContainer/VBoxContainer/BodyLabel
+@onready var stats_label: RichTextLabel = $Panel/MarginContainer/VBoxContainer/StatsLabel
 @onready var menu_button: Button = $Panel/MarginContainer/VBoxContainer/MenuButton
 @onready var rematch_button: Button = $Panel/MarginContainer/VBoxContainer/RematchButton
 
@@ -34,6 +35,8 @@ func _on_round_ended(result: Dictionary) -> void:
 		int(result.get("satisfaction", 0)),
 		result.get("meetings_used", 0),
 	]
+	var stats: Dictionary = result.get("stats", {})
+	stats_label.text = stats.get("text", "")
 	rematch_button.visible = multiplayer.is_server()
 
 
