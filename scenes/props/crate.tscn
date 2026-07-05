@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://sh_crate_scene"]
+
+[ext_resource type="Script" path="res://scripts/props/physics_crate.gd" id="1_crate"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_crate"]
+size = Vector3(1.2, 1.2, 1.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_crate"]
+size = Vector3(1.2, 1.2, 1.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_crate"]
+albedo_color = Color(0.95, 0.45, 0.15, 1)
+
+[node name="Crate" type="RigidBody3D"]
+collision_layer = 4
+collision_mask = 7
+mass = 12.0
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 4
+script = ExtResource("1_crate")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_crate")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_crate")
+surface_material_override/0 = SubResource("StandardMaterial3D_crate")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+billboard = 1
+text = "Space Goods"
+font_size = 24
+outline_size = 6

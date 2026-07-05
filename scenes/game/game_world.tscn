@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3 uid="uid://sh_game_world"]
+
+[ext_resource type="Script" path="res://scripts/game/game_world.gd" id="1_world"]
+
+[node name="GameWorld" type="Node3D"]
+script = ExtResource("1_world")
+
+[node name="Players" type="Node3D" parent="."]
+
+[node name="Level" type="Node3D" parent="."]
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="PanelContainer" parent="HUD"]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 760.0
+offset_bottom = 120.0
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="HUD/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Connecting..."
+
+[node name="HintLabel" type="Label" parent="HUD/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Hint"
+
+[node name="DisconnectButton" type="Button" parent="HUD/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Disconnect"

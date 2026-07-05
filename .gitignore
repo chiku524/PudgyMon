@@ -1,0 +1,39 @@
+# Godot 4+ specific ignores
+.godot/
+*.translation
+
+# Godot-specific ignores
+import/
+
+# Imported translations (automatically generated from CSV files)
+*.import
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash.*.json
+
+# System/tooling
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+
+# Build exports
+export/
+export_presets.cfg
+*.exe
+*.pck
+*.zip
+
+# Logs
+*.log
+
+# Secrets (future Steam keys)
+.env
+secrets/
