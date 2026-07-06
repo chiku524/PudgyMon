@@ -5,7 +5,6 @@ extends Interactable
 @export var step_kind: String = "valve"
 
 @onready var label: Label3D = $Label3D
-var _hold_time: float = 0.0
 
 
 func _ready() -> void:
@@ -53,7 +52,7 @@ func _refresh() -> void:
 	elif JobSystem.is_active(JobSystem.COOLANT_JOB_ID):
 		label.text = "COOLANT\n%d%%" % JobSystem.get_progress(JobSystem.COOLANT_JOB_ID)
 	else:
-		label.text = "COOLANT\nPress E"
+		label.text = "COOLANT\nPress F"
 
 
 @rpc("any_peer", "call_remote", "reliable")

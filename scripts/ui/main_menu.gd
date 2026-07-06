@@ -13,6 +13,7 @@ const GAME_WORLD_SCENE := "res://scenes/game/game_world.tscn"
 
 
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	name_edit.text = GameState.local_player_name
 	address_edit.text = "127.0.0.1"
 	port_edit.text = str(NetworkManager.DEFAULT_PORT)
@@ -28,7 +29,7 @@ func _on_host_pressed() -> void:
 	_set_status("Starting host...")
 	GameState.set_local_player_name(name_edit.text)
 	var port := _read_port()
-	var err := NetworkManager.host_game(port)
+	var err: Error = NetworkManager.host_game(port)
 	if err != OK:
 		_set_status("Failed to host (error %d)." % err)
 		return
@@ -42,7 +43,7 @@ func _on_join_pressed() -> void:
 	GameState.set_local_player_name(name_edit.text)
 	var port := _read_port()
 	var address := address_edit.text.strip_edges()
-	var err := NetworkManager.join_game(address, port)
+	var err: Error = NetworkManager.join_game(address, port)
 	if err != OK:
 		_set_status("Failed to join (error %d)." % err)
 
@@ -61,7 +62,7 @@ func _on_server_disconnected() -> void:
 
 
 func _read_port() -> int:
-	var parsed := port_edit.text.strip_edges().to_int()
+	var parsed: int = port_edit.text.strip_edges().to_int()
 	return parsed if parsed > 0 else NetworkManager.DEFAULT_PORT
 
 

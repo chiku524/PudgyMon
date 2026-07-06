@@ -18,11 +18,11 @@ var corporate_satisfaction: float = 100.0
 var jobs_completed: int = 0
 var jobs_required: int = 7
 var stowaway_revealed: int = -1
-var written_up_peer_ids: Dictionary = {}
-var smuggle_counts: Dictionary = {}
+var written_up_peer_ids: Dictionary[int, float] = {}
+var smuggle_counts: Dictionary[int, int] = {}
 var escaped_peer_ids: Array[int] = []
 
-var _player_roles: Dictionary = {}
+var _player_roles: Dictionary[int, Role] = {}
 
 
 func reset_round() -> void:
@@ -53,6 +53,11 @@ func set_local_player_name(player_name: String) -> void:
 
 func assign_role(peer_id: int, role: Role) -> void:
 	_player_roles[peer_id] = role
+
+
+func apply_local_role(role: Role) -> void:
+	local_role = role
+	role_assigned.emit(role)
 
 
 func get_role(peer_id: int) -> Role:

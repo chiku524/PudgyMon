@@ -17,7 +17,7 @@ func _ready() -> void:
 		label.text = label_text
 
 
-func get_prompt(player: Node3D) -> String:
+func get_prompt(_player: Node3D) -> String:
 	if is_carried:
 		return ""
 	if GameState.is_local_stowaway():

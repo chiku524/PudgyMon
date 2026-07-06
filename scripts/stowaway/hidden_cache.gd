@@ -8,7 +8,7 @@ extends Interactable
 func _ready() -> void:
 	super._ready()
 	collision_layer = 8
-	RoundManager.timer_updated.connect(func _a, _b: _refresh_label())
+	RoundManager.timer_updated.connect(func(_a, _b): _refresh_label())
 
 
 func get_prompt(player: Node3D) -> String:
@@ -42,7 +42,7 @@ func _deposit(player: Node3D) -> void:
 
 
 func _refresh_label() -> void:
-	var count := GameState.smuggle_counts.get(multiplayer.get_unique_id(), 0)
+	var count: int = GameState.smuggle_counts.get(multiplayer.get_unique_id(), 0)
 	if GameState.is_local_stowaway():
 		label.text = "HIDDEN CACHE\nSmuggled: %d/%d" % [count, StowawaySystem.SMUGGLE_QUOTA]
 	else:

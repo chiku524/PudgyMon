@@ -11,7 +11,7 @@ func _ready() -> void:
 	super._ready()
 	collision_layer = 8
 	prompt_text = "Flip breaker %d" % (breaker_index + 1)
-	JobSystem.job_board_changed.connect(func _a, _b: _refresh_label())
+	JobSystem.job_board_changed.connect(func(_a, _b): _refresh_label())
 	_refresh_label()
 
 
@@ -43,7 +43,7 @@ func interact(player: Node3D) -> void:
 
 
 func _handle_breaker(player: Node3D) -> void:
-	var result := JobSystem.try_power_hour_breaker(breaker_index)
+	var result: Dictionary = JobSystem.try_power_hour_breaker(breaker_index)
 	if result.get("zap", false) and player.has_method("trigger_bonk"):
 		player.trigger_bonk(2.0)
 	_refresh_label()

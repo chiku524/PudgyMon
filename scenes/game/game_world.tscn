@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://sh_game_world"]
+[gd_scene load_steps=4 format=3 uid="uid://sh_game_world"]
 
 [ext_resource type="Script" path="res://scripts/game/game_world.gd" id="1_world"]
 [ext_resource type="Script" path="res://scripts/ui/game_hud.gd" id="2_hud"]
 [ext_resource type="PackedScene" uid="uid://sh_announcer_bar" path="res://scenes/ui/announcer_bar.tscn" id="3_announcer"]
-[ext_resource type="PackedScene" uid="uid://sh_stowaway_panel" path="res://scenes/ui/stowaway_panel.tscn" id="4_stowaway"]
 
 [node name="GameWorld" type="Node3D"]
 script = ExtResource("1_world")
@@ -15,10 +14,14 @@ script = ExtResource("1_world")
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="TopPanel" type="PanelContainer" parent="HUD"]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
 offset_left = 16.0
 offset_top = 16.0
-offset_right = 860.0
-offset_bottom = 110.0
+offset_right = -16.0
+offset_bottom = 96.0
+grow_horizontal = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD/TopPanel"]
 layout_mode = 2
@@ -38,10 +41,6 @@ text = "Connecting..."
 layout_mode = 2
 text = "Hint"
 
-[node name="DisconnectButton" type="Button" parent="HUD/TopPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Disconnect"
-
 [node name="GameHUD" type="Control" parent="HUD"]
 layout_mode = 3
 anchors_preset = 15
@@ -60,7 +59,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 130
+theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
@@ -70,7 +69,8 @@ theme_override_constants/separation = 16
 
 [node name="LeftColumn" type="VBoxContainer" parent="HUD/GameHUD/MarginContainer/HBoxContainer"]
 layout_mode = 2
-custom_minimum_size = Vector2(320, 0)
+custom_minimum_size = Vector2(280, 0)
+size_flags_horizontal = 0
 theme_override_constants/separation = 8
 
 [node name="SatisfactionLabel" type="Label" parent="HUD/GameHUD/MarginContainer/HBoxContainer/LeftColumn"]
@@ -95,14 +95,24 @@ text = "Round time: 20:00"
 layout_mode = 2
 text = "Role: Crew"
 
+[node name="MissionHintLabel" type="Label" parent="HUD/GameHUD/MarginContainer/HBoxContainer/LeftColumn"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Complete jobs · watch for the Stowaway."
+
 [node name="StowawayLabel" type="Label" parent="HUD/GameHUD/MarginContainer/HBoxContainer/LeftColumn"]
 layout_mode = 2
 visible = false
 text = "Smuggled: 0 / 3"
 
+[node name="DisconnectButton" type="Button" parent="HUD/GameHUD/MarginContainer/HBoxContainer/LeftColumn"]
+layout_mode = 2
+text = "Disconnect"
+
 [node name="JobBoardPanel" type="PanelContainer" parent="HUD/GameHUD/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD/GameHUD/MarginContainer/HBoxContainer/JobBoardPanel"]
 layout_mode = 2
@@ -115,19 +125,96 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="JobBoard" type="RichTextLabel" parent="HUD/GameHUD/MarginContainer/HBoxContainer/JobBoardPanel/MarginContainer"]
+[node name="HeaderRow" type="HBoxContainer" parent="HUD/GameHUD/MarginContainer/HBoxContainer/JobBoardPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-custom_minimum_size = Vector2(420, 120)
+theme_override_constants/separation = 8
+
+[node name="JobBoardToggle" type="Button" parent="HUD/GameHUD/MarginContainer/HBoxContainer/JobBoardPanel/MarginContainer/VBoxContainer/HeaderRow"]
+layout_mode = 2
+text = "▼ Job Board"
+
+[node name="JobBoardSummary" type="Label" parent="HUD/GameHUD/MarginContainer/HBoxContainer/JobBoardPanel/MarginContainer/VBoxContainer/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+visible = false
+text = "3 active jobs"
+
+[node name="JobBoardContent" type="VBoxContainer" parent="HUD/GameHUD/MarginContainer/HBoxContainer/JobBoardPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="JobBoard" type="RichTextLabel" parent="HUD/GameHUD/MarginContainer/HBoxContainer/JobBoardPanel/MarginContainer/VBoxContainer/JobBoardContent"]
+layout_mode = 2
+custom_minimum_size = Vector2(320, 140)
 bbcode_enabled = true
 text = "Job board loading..."
 fit_content = true
 scroll_active = false
 
-[node name="ObjectiveLabel" type="Label" parent="HUD/GameHUD/MarginContainer/HBoxContainer/JobBoardPanel/MarginContainer"]
+[node name="ObjectiveLabel" type="Label" parent="HUD/GameHUD/MarginContainer/HBoxContainer/JobBoardPanel/MarginContainer/VBoxContainer/JobBoardContent"]
 layout_mode = 2
 autowrap_mode = 3
 text = "Objective"
 
 [node name="AnnouncerBar" parent="HUD" instance=ExtResource("3_announcer")]
 
-[node name="StowawayPanel" parent="HUD" instance=ExtResource("4_stowaway")]
+[node name="MissionBriefing" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Dim" type="ColorRect" parent="HUD/MissionBriefing"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.03, 0.08, 0.72)
+
+[node name="Panel" type="PanelContainer" parent="HUD/MissionBriefing"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -340.0
+offset_top = -260.0
+offset_right = 340.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/MissionBriefing/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/MissionBriefing/Panel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="HUD/MissionBriefing/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Mission Briefing"
+horizontal_alignment = 1
+
+[node name="BodyLabel" type="RichTextLabel" parent="HUD/MissionBriefing/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(580, 320)
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+text = "Loading..."
+
+[node name="DismissButton" type="Button" parent="HUD/MissionBriefing/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Got it — let's work"

@@ -31,12 +31,14 @@ See [docs/ROADMAP.md](docs/ROADMAP.md) for Phase 4 polish plan.
 
 | Key | Action |
 |-----|--------|
-| WASD | Move |
+| WASD | Move (relative to camera) |
+| Mouse | Look around |
 | Shift | Sprint |
 | Space | Jump |
-| E | Interact / drop item |
+| F | Interact / drop item |
+| Tab | Collapse / expand job board |
+| Esc | Release / capture mouse |
 | 1–5 | Stowaway sabotages |
-| Q / R | Orbit camera |
 | Scroll | Zoom camera |
 
 ## Requirements

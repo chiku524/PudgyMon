@@ -1,9 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://sh_dish_station"]
+[gd_scene load_steps=4 format=3 uid="uid://sh_dish_station"]
 
 [ext_resource type="Script" path="res://scripts/jobs/dish_station.gd" id="1"]
+[ext_resource type="Script" path="res://third_party/immersive_studio/scripts/immersive_studio_prop.gd" id="2_studio"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_zone"]
-size = Vector3(2, 2, 2)
+size = Vector3(0.7, 0.5, 0.7)
 
 [node name="DishStation" type="Area3D"]
 collision_layer = 8
@@ -11,11 +12,17 @@ collision_mask = 2
 script = ExtResource("1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 shape = SubResource("BoxShape3D_zone")
 
 [node name="Label3D" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 billboard = 1
 text = "DISH"
 font_size = 20
 outline_size = 6
+
+[node name="StudioModel" type="Node3D" parent="."]
+script = ExtResource("2_studio")
+asset_id = "satellite_dish_maintenance_wheel_crank_01"
+target_height = 0.5

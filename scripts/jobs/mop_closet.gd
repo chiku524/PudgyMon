@@ -9,7 +9,7 @@ func _ready() -> void:
 	super._ready()
 	collision_layer = 8
 	prompt_text = "Take mop"
-	JobSystem.job_board_changed.connect(func _a, _b: _refresh_label())
+	JobSystem.job_board_changed.connect(func(_a, _b): _refresh_label())
 	_refresh_label()
 
 
@@ -47,7 +47,7 @@ func _refresh_label() -> void:
 	elif JobSystem.mop_active:
 		label.text = "MOP CLOSET\n%d/%d cleaned" % [JobSystem.mop_cleaned, JobSystem.MOP_PUDDLES_REQUIRED]
 	else:
-		label.text = "MOP CLOSET\nPress E"
+		label.text = "MOP CLOSET\nPress F"
 
 
 @rpc("any_peer", "call_remote", "reliable")

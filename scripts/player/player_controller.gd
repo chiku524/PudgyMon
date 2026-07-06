@@ -14,6 +14,15 @@ const BONK_FALL_SPEED := 10.0
 const BONK_WALL_SPEED := 8.5
 const BONK_DURATION := 1.5
 const INTERACT_RANGE := 2.2
+const MOUSE_SENSITIVITY := 0.0025
+const MIN_CAMERA_PITCH := deg_to_rad(-35.0)
+const MAX_CAMERA_PITCH := deg_to_rad(55.0)
+const IDLE_BOB_HEIGHT := 0.035
+const IDLE_BOB_SPEED := 2.2
+const WALK_BOB_HEIGHT := 0.07
+const WALK_BOB_SPEED := 9.0
+const ARM_SWING_WALK := 0.75
+const ARM_SWING_IDLE := 0.06
 
 @export var player_name: String = "Crew Member"
 @export var body_color: Color = Color(0.95, 0.75, 0.2)
@@ -30,9 +39,12 @@ const INTERACT_RANGE := 2.2
 @onready var interact_area: Area3D = $InteractArea
 @onready var prompt_label: Label3D = $Visuals/PromptLabel
 @onready var dunce_hat: MeshInstance3D = $Visuals/DunceHat
+@onready var arm_l: MeshInstance3D = $Visuals/ArmL
+@onready var arm_r: MeshInstance3D = $Visuals/ArmR
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var camera_yaw: float = 0.0
+var camera_pitch: float = -0.35
 var player_state: PlayerState = PlayerState.NORMAL
 var state_timer: float = 0.0
 var carried_item: CarryableItem = null
@@ -42,6 +54,11 @@ var _previous_vertical_velocity: float = 0.0
 var _ragdoll_spin: Vector3 = Vector3.ZERO
 var _visual_base_rotation: Vector3 = Vector3.ZERO
 var _bonk_total_duration: float = 1.5
+var _anim_time: float = 0.0
+var _last_anim_position: Vector3 = Vector3.ZERO
+var _arm_l_base_rotation: Vector3 = Vector3.ZERO
+var _arm_r_base_rotation: Vector3 = Vector3.ZERO
+var _head_base_rotation: Vector3 = Vector3.ZERO
 
 
 func _enter_tree() -> void:
@@ -56,12 +73,58 @@ func _ready() -> void:
 	prompt_label.visible = false
 	dunce_hat.visible = GameState.is_written_up(int(name))
 	camera_yaw = rotation.y
+	camera_pitch = spring_arm.rotation.x
+	_apply_camera_rotation()
 	_visual_base_rotation = mesh_root.rotation
+	if arm_l:
+		_arm_l_base_rotation = arm_l.rotation
+	if arm_r:
+		_arm_r_base_rotation = arm_r.rotation
+	if head_mesh:
+		_head_base_rotation = head_mesh.rotation
+	_last_anim_position = global_position
 	GameState.written_up_changed.connect(_on_written_up_changed)
 	RoundManager.round_phase_changed.connect(_on_round_phase_changed)
+	if is_multiplayer_authority():
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	if not is_multiplayer_authority():
 		spring_arm.get_node("Camera3D").current = false
 		set_process_input(false)
+
+
+func _process(delta: float) -> void:
+	_update_character_animation(delta)
+
+
+func _update_character_animation(delta: float) -> void:
+	if player_state != PlayerState.NORMAL:
+		return
+
+	_anim_time += delta
+	var move_speed := Vector2(velocity.x, velocity.z).length()
+	if not is_multiplayer_authority():
+		move_speed = global_position.distance_to(_last_anim_position) / maxf(delta, 0.001)
+	_last_anim_position = global_position
+
+	var moving := move_speed > 0.35
+	var bob_speed := WALK_BOB_SPEED if moving else IDLE_BOB_SPEED
+	var bob_height := WALK_BOB_HEIGHT if moving else IDLE_BOB_HEIGHT
+	# Half-wave bob keeps feet above the floor (never dips below rest pose).
+	var bob_phase := (sin(_anim_time * bob_speed) * 0.5 + 0.5)
+	mesh_root.position.y = bob_phase * bob_height
+
+	if arm_l and arm_r:
+		var swing_amount := ARM_SWING_WALK if moving else ARM_SWING_IDLE
+		var swing := sin(_anim_time * bob_speed) * swing_amount
+		arm_l.rotation = _arm_l_base_rotation + Vector3(swing, 0.0, 0.12)
+		arm_r.rotation = _arm_r_base_rotation + Vector3(-swing, 0.0, -0.12)
+
+	if head_mesh:
+		head_mesh.rotation = _head_base_rotation + Vector3(
+			sin(_anim_time * (bob_speed * 0.5)) * 0.04,
+			0.0,
+			sin(_anim_time * (bob_speed * 0.35)) * 0.03
+		)
 
 
 func _physics_process(delta: float) -> void:
@@ -95,15 +158,16 @@ func _physics_process(delta: float) -> void:
 
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var speed := _get_move_speed()
-	var cam_basis := camera_rig.global_transform.basis
-	var direction := (cam_basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
-	direction.y = 0.0
+	var cam_forward := Vector3(-sin(camera_yaw), 0.0, -cos(camera_yaw))
+	var cam_right := Vector3(cos(camera_yaw), 0.0, -sin(camera_yaw))
+	var direction := cam_right * input_dir.x + cam_forward * (-input_dir.y)
 
 	if direction.length_squared() > 0.001:
+		direction = direction.normalized()
 		velocity.x = direction.x * speed
 		velocity.z = direction.z * speed
 		var target_rotation := atan2(direction.x, direction.z)
-		rotation.y = lerp_angle(rotation.y, target_rotation, ROTATION_LERP * delta)
+		mesh_root.rotation.y = lerp_angle(mesh_root.rotation.y, target_rotation, ROTATION_LERP * delta)
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, speed)
 		velocity.z = move_toward(velocity.z, 0.0, speed)
@@ -119,12 +183,25 @@ func _input(event: InputEvent) -> void:
 	if not is_multiplayer_authority():
 		return
 
-	if event.is_action_pressed("camera_left"):
-		camera_yaw -= deg_to_rad(3.0)
-	elif event.is_action_pressed("camera_right"):
-		camera_yaw += deg_to_rad(3.0)
+	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		camera_yaw -= event.relative.x * MOUSE_SENSITIVITY
+		camera_pitch = clampf(
+			camera_pitch - event.relative.y * MOUSE_SENSITIVITY,
+			MIN_CAMERA_PITCH,
+			MAX_CAMERA_PITCH
+		)
+		_apply_camera_rotation()
 
+	if event.is_action_pressed("ui_cancel"):
+		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		else:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
+func _apply_camera_rotation() -> void:
 	camera_rig.rotation.y = camera_yaw
+	spring_arm.rotation.x = camera_pitch
 
 
 func _get_move_speed() -> float:
@@ -137,12 +214,14 @@ func _get_move_speed() -> float:
 
 func set_display_name(new_name: String) -> void:
 	player_name = new_name
-	_update_name_label()
+	if is_node_ready():
+		_update_name_label()
 
 
 func set_player_color(color: Color) -> void:
 	body_color = color
-	_apply_colors()
+	if is_node_ready():
+		_apply_colors()
 
 
 func can_pickup_item() -> bool:
@@ -236,6 +315,7 @@ func _enter_bonk_state(state: PlayerState, duration: float) -> void:
 	state_timer = duration
 	_bonk_total_duration = maxf(duration, 0.1)
 	velocity = Vector3.ZERO
+	mesh_root.position = Vector3.ZERO
 	_drop_carried_item()
 	bonk_stars.visible = true
 	bonk_stars.text = "★ BONK ★" if state == PlayerState.BONKED else "★ DIZZY ★"
@@ -253,6 +333,13 @@ func _recover_from_bonk() -> void:
 	player_state = PlayerState.NORMAL
 	state_timer = 0.0
 	mesh_root.rotation = _visual_base_rotation
+	mesh_root.position = Vector3.ZERO
+	if arm_l:
+		arm_l.rotation = _arm_l_base_rotation
+	if arm_r:
+		arm_r.rotation = _arm_r_base_rotation
+	if head_mesh:
+		head_mesh.rotation = _head_base_rotation
 	bonk_stars.visible = false
 
 
@@ -268,7 +355,7 @@ func _check_bonk_triggers() -> void:
 	if horizontal_speed >= BONK_WALL_SPEED:
 		for index in get_slide_collision_count():
 			var collision := get_slide_collision(index)
-			var collider := collision.get_collider()
+			var collider: Object = collision.get_collider()
 			if collider != null and collider.is_in_group("bonk_pad"):
 				continue
 			trigger_bonk(1.2)
@@ -311,10 +398,10 @@ func _update_interact_prompt() -> void:
 
 	var target := _get_best_interactable()
 	if target != null and target.has_method("get_prompt"):
-		prompt_label.text = "[E] %s" % target.get_prompt(self)
+		prompt_label.text = "[F] %s" % target.get_prompt(self)
 		prompt_label.visible = true
 	elif carried_item != null:
-		prompt_label.text = "[E] Drop item"
+		prompt_label.text = "[F] Drop item"
 		prompt_label.visible = true
 	else:
 		prompt_label.visible = false
@@ -323,29 +410,71 @@ func _update_interact_prompt() -> void:
 func _drop_carried_item() -> void:
 	if carried_item == null:
 		return
-	var drop_position := global_position + global_transform.basis.z * 0.8 + Vector3.UP * 0.5
+	var drop_position := global_position + mesh_root.global_transform.basis.z * 0.8 + Vector3.UP * 0.5
 	carried_item.drop(drop_position)
 	carried_item = null
 
 
 func _apply_colors() -> void:
+	if body_mesh == null or head_mesh == null:
+		return
+
 	var body_mat := StandardMaterial3D.new()
 	body_mat.albedo_color = body_color
-	body_mesh.material_override = body_mat
+	body_mat.roughness = 0.75
+	_set_mesh_material(body_mesh, body_mat)
+	_set_mesh_material(_visual_mesh("ArmL"), body_mat)
+	_set_mesh_material(_visual_mesh("ArmR"), body_mat)
+	_set_mesh_material(_visual_mesh("LegL"), body_mat)
+	_set_mesh_material(_visual_mesh("LegR"), body_mat)
 
 	var head_mat := StandardMaterial3D.new()
 	head_mat.albedo_color = body_color.lightened(0.25)
-	head_mesh.material_override = head_mat
+	head_mat.roughness = 0.65
+	_set_mesh_material(head_mesh, head_mat)
+
+	var dark_mat := StandardMaterial3D.new()
+	dark_mat.albedo_color = body_color.darkened(0.55)
+	dark_mat.roughness = 0.55
+	_set_mesh_material(_visual_mesh("BootL"), dark_mat)
+	_set_mesh_material(_visual_mesh("BootR"), dark_mat)
+	_set_mesh_material(_visual_mesh("Backpack"), dark_mat)
+	_set_mesh_material(_visual_mesh("EyeL"), dark_mat)
+	_set_mesh_material(_visual_mesh("EyeR"), dark_mat)
+
+	var visor_mat := StandardMaterial3D.new()
+	visor_mat.albedo_color = body_color.lerp(Color(0.2, 0.45, 0.85), 0.65)
+	visor_mat.metallic = 0.35
+	visor_mat.roughness = 0.25
+	_set_mesh_material(_visual_mesh("Visor"), visor_mat)
+
+	var badge_mat := StandardMaterial3D.new()
+	badge_mat.albedo_color = body_color.lightened(0.15)
+	badge_mat.emission_enabled = true
+	badge_mat.emission = body_color
+	badge_mat.emission_energy_multiplier = 0.2
+	_set_mesh_material(_visual_mesh("Badge"), badge_mat)
+
+
+func _visual_mesh(node_name: String) -> MeshInstance3D:
+	return mesh_root.get_node_or_null(node_name) as MeshInstance3D
+
+
+func _set_mesh_material(mesh: MeshInstance3D, material: StandardMaterial3D) -> void:
+	if mesh != null:
+		mesh.material_override = material
 
 
 func _update_name_label() -> void:
+	if name_label == null:
+		return
 	name_label.text = player_name
 
 
 func _try_push_props() -> void:
 	for body in push_area.get_overlapping_bodies():
 		if body is RigidBody3D and body.has_method("apply_player_push"):
-			var push_dir := -global_transform.basis.z
+			var push_dir := mesh_root.global_transform.basis.z
 			push_dir.y = 0.0
 			body.apply_player_push(push_dir.normalized() * PUSH_FORCE)
 
@@ -356,7 +485,7 @@ func _sync_pickup(item_name: String) -> void:
 		return
 	var peer_id := multiplayer.get_remote_sender_id()
 	var player := _find_player_node(peer_id)
-	var item := get_tree().current_scene.get_node_or_null(item_name)
+	var item: Node = get_tree().current_scene.get_node_or_null(item_name)
 	if player == null or item == null or not item is CarryableItem:
 		return
 	player.carried_item = item
@@ -402,3 +531,8 @@ func _on_round_phase_changed(phase: GameState.RoundPhase) -> void:
 		has_mop = false
 		if is_multiplayer_authority():
 			velocity = Vector3.ZERO
+	if is_multiplayer_authority():
+		if phase == GameState.RoundPhase.MEETING or phase == GameState.RoundPhase.REVIEW:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		elif phase == GameState.RoundPhase.PLAYING or phase == GameState.RoundPhase.EXTRACTION:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

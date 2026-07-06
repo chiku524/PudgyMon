@@ -57,6 +57,32 @@ const JOB_SATISFACTION := {
 	DUCT_TAPE_JOB_ID: 12.0,
 }
 
+const JOB_ZONES := {
+	PAPERWORK_JOB_ID: "Main Hub",
+	POWER_HOUR_JOB_ID: "Main Hub · Breakers",
+	MOP_JOB_ID: "Main Hub · Mop Closet",
+	MANIFEST_JOB_ID: "Main Hub · Manifest",
+	CRANE_JOB_ID: "Cargo Ring (west)",
+	COOLANT_JOB_ID: "Ops Deck (east)",
+	DISH_JOB_ID: "Ops Deck",
+	TRUST_FALL_JOB_ID: "Main Hub · Trust Fall",
+	VENDING_JOB_ID: "Break Room (south)",
+	DUCT_TAPE_JOB_ID: "Docking Arm (SE)",
+}
+
+const JOB_HINTS := {
+	PAPERWORK_JOB_ID: "Kiosk → Printer → Tube → confirm at Kiosk",
+	POWER_HOUR_JOB_ID: "Flip breakers in the correct sequence",
+	MOP_JOB_ID: "Grab mop, clean slime puddles station-wide",
+	MANIFEST_JOB_ID: "Start terminal, push crates onto scan pad",
+	CRANE_JOB_ID: "Press F at the crane console 3 times",
+	COOLANT_JOB_ID: "Use valve and wheel stations to 100%",
+	DISH_JOB_ID: "Spin the dish wheel to max RPM",
+	TRUST_FALL_JOB_ID: "Launch off the ledge 3 times",
+	VENDING_JOB_ID: "Restock all 3 vending slots",
+	DUCT_TAPE_JOB_ID: "Hold F on hull breaches until taped",
+}
+
 const JOB_TARGETS := {
 	PAPERWORK_JOB_ID: 5,
 	POWER_HOUR_JOB_ID: 4,
@@ -131,7 +157,9 @@ func start_job(job_id: String) -> bool:
 	job_states[job_id]["active"] = true
 	job_states[job_id]["progress"] = 0
 	_broadcast_state()
-	Announcer.bark_event("job_started")
+	Announcer.bark_custom(
+		"New task: %s. Head to %s." % [JOB_NAMES[job_id], JOB_ZONES.get(job_id, "the station")]
+	)
 	return true
 
 
@@ -214,6 +242,9 @@ func get_active_jobs() -> Array:
 		jobs.append({
 			"id": job_id,
 			"name": JOB_NAMES[job_id],
+			"zone": JOB_ZONES.get(job_id, "Station"),
+			"hint": JOB_HINTS.get(job_id, ""),
+			"active": is_active(job_id),
 			"progress": _job_progress_text(job_id),
 		})
 	return jobs.slice(0, 3)
@@ -221,18 +252,35 @@ func get_active_jobs() -> Array:
 
 func get_board_progress_text() -> String:
 	if GameState.round_phase == GameState.RoundPhase.EXTRACTION:
-		return "Shuttle bay open — get to the yellow ramp!"
+		return "Shuttle bay open — run NORTH to the yellow ramp!"
 	if GameState.round_phase == GameState.RoundPhase.MEETING:
 		return "Emergency Stand-Up Meeting in progress."
 	if GameState.jobs_completed >= GameState.jobs_required:
-		return "Required jobs done — shuttle is available."
-	return "Complete 7 jobs across the station. Watch for the Stowaway."
+		return "Required jobs done — shuttle is available at the NORTH wall."
+	if GameState.is_local_stowaway():
+		return "Smuggle 3 contraband items into the Janitor Vent (west hub)."
+	return "Complete 7 of 10 jobs. Start at the blue Job Kiosk in Main Hub."
+
+
+func get_role_briefing(role: GameState.Role) -> String:
+	if role == GameState.Role.STOWAWAY:
+		return "Find contraband in zones → deliver to Janitor Vent (west). Sabotage: keys 1–5."
+	return "Complete jobs · call meetings if suspicious · escape via shuttle north."
+
+
+func get_job_zone(job_id: String) -> String:
+	return JOB_ZONES.get(job_id, "Station")
+
+
+func get_job_hint(job_id: String) -> String:
+	return JOB_HINTS.get(job_id, "")
 
 
 func _job_progress_text(job_id: String) -> String:
+	var zone: String = JOB_ZONES.get(job_id, "Station")
 	if is_active(job_id):
-		return "%d/%d" % [get_progress(job_id), JOB_TARGETS.get(job_id, 1)]
-	return "Available at station"
+		return "%s · %d/%d" % [zone, get_progress(job_id), JOB_TARGETS.get(job_id, 1)]
+	return "%s · Press F to start" % zone
 
 
 func _broadcast_state() -> void:

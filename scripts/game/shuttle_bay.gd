@@ -18,9 +18,13 @@ func _process(_delta: float) -> void:
 	if RoundManager.shuttle_active:
 		label.text = "SHUTTLE BAY\n%.0fs left" % maxf(RoundManager.shuttle_time_remaining, 0.0)
 	elif GameState.jobs_completed >= GameState.jobs_required:
-		label.text = "SHUTTLE BAY\nOpening..."
+		label.text = "SHUTTLE BAY\nOpening soon..."
 	else:
-		label.text = "SHUTTLE BAY\nComplete %d jobs" % GameState.jobs_required
+		label.text = "SHUTTLE BAY\nNeed %d jobs (%d/%d done)" % [
+			GameState.jobs_required,
+			GameState.jobs_completed,
+			GameState.jobs_required,
+		]
 
 
 func _on_body_entered(body: Node3D) -> void:

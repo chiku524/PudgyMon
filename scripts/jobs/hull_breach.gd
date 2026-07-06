@@ -35,7 +35,7 @@ func get_prompt(_player: Node3D) -> String:
 		return "Start Duct Tape OR ELSE"
 	if get_progress() > breach_index:
 		return "Patched"
-	return "Hold E to tape breach"
+	return "Hold F to tape breach"
 
 
 func can_interact(_player: Node3D) -> bool:

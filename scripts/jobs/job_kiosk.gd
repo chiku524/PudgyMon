@@ -50,7 +50,7 @@ func _handle_interact() -> void:
 		_refresh_label()
 
 
-func _refresh_label() -> void:
+func _refresh_label(_active: bool = false, _forms_fed: int = 0, _complete: bool = false) -> void:
 	if JobSystem.paperwork_complete:
 		label.text = "JOB KIOSK\n✓ Paperwork Done"
 	elif JobSystem.paperwork_active:
@@ -59,7 +59,7 @@ func _refresh_label() -> void:
 			JobSystem.PAPERWORK_FORMS_REQUIRED,
 		]
 	else:
-		label.text = "JOB KIOSK\nPress E to start"
+		label.text = "JOB KIOSK\nPress F to start"
 
 
 @rpc("any_peer", "call_remote", "reliable")

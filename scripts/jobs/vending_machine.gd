@@ -50,7 +50,7 @@ func _refresh() -> void:
 	elif JobSystem.is_active(JobSystem.VENDING_JOB_ID):
 		label.text = "VENDING\n%d/3" % JobSystem.get_progress(JobSystem.VENDING_JOB_ID)
 	else:
-		label.text = "VENDING\nPress E"
+		label.text = "VENDING\nPress F"
 
 
 @rpc("any_peer", "call_remote", "reliable")

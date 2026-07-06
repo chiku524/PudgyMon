@@ -27,7 +27,7 @@ func _ready() -> void:
 func host_game(port: int = DEFAULT_PORT) -> Error:
 	disconnect_from_game()
 	peer = ENetMultiplayerPeer.new()
-	var err := peer.create_server(port, MAX_PLAYERS)
+	var err: Error = peer.create_server(port, MAX_PLAYERS)
 	if err != OK:
 		peer = null
 		return err
@@ -38,7 +38,7 @@ func host_game(port: int = DEFAULT_PORT) -> Error:
 func join_game(address: String, port: int = DEFAULT_PORT) -> Error:
 	disconnect_from_game()
 	peer = ENetMultiplayerPeer.new()
-	var err := peer.create_client(address.strip_edges(), port)
+	var err: Error = peer.create_client(address.strip_edges(), port)
 	if err != OK:
 		peer = null
 		return err

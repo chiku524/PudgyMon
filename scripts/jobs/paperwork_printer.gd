@@ -49,19 +49,19 @@ func _spawn_form_for(player: Node3D) -> void:
 	_sync_spawn_form.rpc(spawn_point.global_position, peer_id, form_id)
 
 
-func _refresh_label() -> void:
+func _refresh_label(_active: bool = false, _forms_fed: int = 0, _complete: bool = false) -> void:
 	if JobSystem.paperwork_active and not JobSystem.paperwork_complete:
-		label.text = "PRINTER\nPress E for form"
+		label.text = "PRINTER\nPress F for form"
 	else:
 		label.text = "PRINTER\nIdle"
 
 
 @rpc("authority", "call_remote", "reliable")
-func _sync_spawn_form(position: Vector3, peer_id: int, form_id: String) -> void:
+func _sync_spawn_form(spawn_position: Vector3, peer_id: int, form_id: String) -> void:
 	var form := FORM_SCENE.instantiate()
 	form.name = form_id
 	get_tree().current_scene.add_child(form)
-	form.global_position = position
+	form.global_position = spawn_position
 	if multiplayer.get_unique_id() == peer_id:
 		var player := _find_player(peer_id)
 		if player != null and player.has_method("pickup_item"):

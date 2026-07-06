@@ -31,5 +31,5 @@ theme_override_constants/margin_bottom = 8
 
 [node name="Label" type="Label" parent="Panel/MarginContainer"]
 layout_mode = 2
-text = "PA: ..."
+text = ""
 horizontal_alignment = 1

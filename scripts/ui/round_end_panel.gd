@@ -41,6 +41,7 @@ func _on_round_ended(result: Dictionary) -> void:
 
 
 func _return_to_menu() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	NetworkManager.disconnect_from_game()
 	get_tree().change_scene_to_file("res://scenes/main/main_menu.tscn")
 

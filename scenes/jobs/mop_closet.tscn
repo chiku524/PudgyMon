@@ -1,12 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://sh_mop_closet"]
 
 [ext_resource type="Script" path="res://scripts/jobs/mop_closet.gd" id="1_script"]
+[ext_resource type="Script" path="res://third_party/immersive_studio/scripts/immersive_studio_prop.gd" id="2_studio"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_closet"]
-size = Vector3(1.0, 2.0, 1.0)
-
-[sub_resource type="BoxMesh" id="BoxMesh_closet"]
-size = Vector3(1.0, 2.0, 1.0)
+size = Vector3(0.85, 1.8, 0.75)
 
 [node name="MopCloset" type="Area3D"]
 collision_layer = 8
@@ -14,16 +12,17 @@ collision_mask = 2
 script = ExtResource("1_script")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("BoxShape3D_closet")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
-mesh = SubResource("BoxMesh_closet")
-
 [node name="Label3D" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
 billboard = 1
 text = "MOP CLOSET"
 font_size = 20
 outline_size = 6
+
+[node name="StudioModel" type="Node3D" parent="."]
+script = ExtResource("2_studio")
+asset_id = "env_freestanding_maintenance_cabinet_01"
+target_height = 1.8

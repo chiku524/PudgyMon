@@ -4,13 +4,16 @@
 
 [node name="StowawayPanel" type="Control"]
 layout_mode = 3
-anchors_preset = 2
+anchors_preset = 3
+anchor_left = 0.0
 anchor_top = 1.0
+anchor_right = 0.0
 anchor_bottom = 1.0
 offset_left = 16.0
 offset_top = -120.0
-offset_right = 360.0
+offset_right = 420.0
 offset_bottom = -16.0
+grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 script = ExtResource("1")
@@ -25,4 +28,4 @@ grow_vertical = 2
 
 [node name="Label" type="Label" parent="Panel"]
 layout_mode = 2
-text = "Stowaway Sabotage: 1 Jazz  2 Gravity  3 Door  4 Slime  5 Shuttle Delay"
+text = "Stowaway: find contraband in zones → Janitor Vent (west hub) · Sabotage 1 Jazz 2 Gravity 3 Door 4 Slime 5 Shuttle"

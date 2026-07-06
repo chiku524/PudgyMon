@@ -36,7 +36,7 @@ func interact(player: Node3D) -> void:
 
 func _handle_feed(player: Node3D) -> void:
 	if player.has_method("is_carrying_forms") and player.is_carrying_forms():
-		var consumed := player.consume_carried_form()
+		var consumed: bool = player.consume_carried_form()
 		if consumed and JobSystem.feed_paperwork_form():
 			_refresh_label()
 		return
@@ -46,7 +46,7 @@ func _handle_feed(player: Node3D) -> void:
 		player.trigger_dizzy(3.0)
 
 
-func _refresh_label() -> void:
+func _refresh_label(_active: bool = false, _forms_fed: int = 0, _complete: bool = false) -> void:
 	if JobSystem.paperwork_active and not JobSystem.paperwork_complete:
 		label.text = "PNEUMATIC TUBE\nForms: %d/%d" % [
 			JobSystem.forms_fed,

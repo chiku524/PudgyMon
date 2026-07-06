@@ -8,7 +8,7 @@ extends Interactable
 func _ready() -> void:
 	super._ready()
 	collision_layer = 8
-	JobSystem.job_board_changed.connect(func _a, _b: _refresh())
+	JobSystem.job_board_changed.connect(func(_a, _b): _refresh())
 	_refresh()
 
 
@@ -48,7 +48,7 @@ func _refresh() -> void:
 	elif JobSystem.is_active(JobSystem.DISH_JOB_ID):
 		label.text = "DISH\nRPM %d%%" % JobSystem.get_progress(JobSystem.DISH_JOB_ID)
 	else:
-		label.text = "DISH\nPress E"
+		label.text = "DISH\nPress F"
 
 
 @rpc("any_peer", "call_remote", "reliable")

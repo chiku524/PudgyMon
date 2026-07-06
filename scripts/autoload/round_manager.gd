@@ -79,7 +79,7 @@ func add_shuttle_delay(seconds: float) -> void:
 	_broadcast_timer()
 
 
-func call_meeting(caller_id: int) -> bool:
+func call_meeting(_caller_id: int) -> bool:
 	if not multiplayer.is_server() or not _round_running or _meeting_active:
 		return false
 	if meetings_used >= MAX_MEETINGS:
@@ -171,7 +171,10 @@ func _assign_roles(peer_ids: PackedInt32Array) -> void:
 	for i in ids.size():
 		var role := GameState.Role.STOWAWAY if i < stowaway_count else GameState.Role.CREW
 		GameState.assign_role(ids[i], role)
-		_send_role_to_peer.rpc_id(ids[i], role)
+		if ids[i] == multiplayer.get_unique_id():
+			GameState.apply_local_role(role)
+		else:
+			_send_role_to_peer.rpc_id(ids[i], role)
 
 
 func _close_meeting() -> void:
@@ -309,8 +312,7 @@ func _request_full_round_state() -> void:
 
 @rpc("authority", "call_remote", "reliable")
 func _send_role_to_peer(role: GameState.Role) -> void:
-	GameState.local_role = role
-	GameState.role_assigned.emit(role)
+	GameState.apply_local_role(role)
 
 
 @rpc("authority", "call_remote", "reliable")

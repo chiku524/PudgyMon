@@ -8,7 +8,7 @@ extends Interactable
 func _ready() -> void:
 	super._ready()
 	collision_layer = 8
-	JobSystem.job_board_changed.connect(func _a, _b: _refresh_label())
+	JobSystem.job_board_changed.connect(func(_a, _b): _refresh_label())
 	_refresh_label()
 
 
@@ -40,7 +40,7 @@ func _refresh_label() -> void:
 	elif JobSystem.manifest_active:
 		label.text = "MANIFEST\n%d/%d scanned" % [JobSystem.manifest_scanned, JobSystem.MANIFEST_CRATES_REQUIRED]
 	else:
-		label.text = "MANIFEST\nPress E to start"
+		label.text = "MANIFEST\nPress F to start"
 
 
 @rpc("any_peer", "call_remote", "reliable")
