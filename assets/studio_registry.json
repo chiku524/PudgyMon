@@ -1,0 +1,23 @@
+{
+  "import_root": "res://assets/models",
+  "assets": [
+    { "asset_id": "env_space_station_wall_04", "target_height": 2.0 },
+    { "asset_id": "env_light_oval_panel_01", "target_height": 0.6 },
+    { "asset_id": "env_blue_yellow_welcome_sign_01", "target_height": 3.0 },
+    { "asset_id": "cargo_ring_sign_01", "target_height": 1.5 },
+    { "asset_id": "env_freight_deck_panel_01", "target_height": 0.5 },
+    { "asset_id": "prop_wall_janitor_vent_grille", "target_height": 1.0 },
+    { "asset_id": "env_break_glass_panel_01", "target_height": 0.5 },
+    { "asset_id": "wall_panel_breach_hole_01", "target_height": 1.0 },
+    { "asset_id": "safety_mat_floor_pad_01", "target_width": 2.0 },
+    { "asset_id": "satellite_dish_maintenance_wheel_crank_01", "target_height": 0.5 },
+    { "asset_id": "env_cargo_crane_operator_console_01", "target_height": 1.2 },
+    { "asset_id": "env_freight_deck_pad_01", "target_height": 0.5 },
+    { "asset_id": "prop_cartoon_vending_machine", "target_height": 1.9 },
+    { "asset_id": "env_freestanding_maintenance_cabinet_01", "target_height": 1.8 },
+    { "asset_id": "env_breaker_panel_01", "target_height": 1.0 },
+    { "asset_id": "prop_pneumatic_tube_intake_funnel", "target_height": 1.2 },
+    { "asset_id": "office_printer_cartoon_space_station_01", "target_height": 0.8 },
+    { "asset_id": "blue_cartoon_sci_fi_job_terminal_kiosk_01", "target_height": 1.5 }
+  ]
+}

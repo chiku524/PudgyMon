@@ -2,19 +2,7 @@ extends Node3D
 
 ## Procedural station dressing — lighting, zone floors, clutter, and sky.
 
-const MODEL_WALL := preload("res://assets/models/env_space_station_wall_04/env_space_station_wall_04.glb")
-const MODEL_LIGHT := preload("res://assets/models/env_light_oval_panel_01/env_light_oval_panel_01.glb")
-const MODEL_WELCOME_SIGN := preload("res://assets/models/env_blue_yellow_welcome_sign_01/env_blue_yellow_welcome_sign_01.glb")
-const MODEL_CARGO_SIGN := preload("res://assets/models/cargo_ring_sign_01/cargo_ring_sign_01.glb")
-const MODEL_FREIGHT_DECK := preload("res://assets/models/env_freight_deck_panel_01/env_freight_deck_panel_01.glb")
-const MODEL_VENT_GRILLE := preload("res://assets/models/prop_wall_janitor_vent_grille/prop_wall_janitor_vent_grille.glb")
-const MODEL_FREIGHT_PAD := preload("res://assets/models/env_freight_deck_pad_01/env_freight_deck_pad_01.glb")
-const MODEL_BREAKER_PANEL := preload("res://assets/models/env_breaker_panel_01/env_breaker_panel_01.glb")
-const MODEL_BREAK_GLASS := preload("res://assets/models/env_break_glass_panel_01/env_break_glass_panel_01.glb")
-const MODEL_SAFETY_MAT := preload("res://assets/models/safety_mat_floor_pad_01/safety_mat_floor_pad_01.glb")
-
-const ZONE_TILES := [
-	{"name": "Main Hub", "pos": Vector3(0, 0.02, 0), "size": Vector3(18, 0.03, 18), "color": Color(0.32, 0.34, 0.42)},
+const ZONE_TILES := [	{"name": "Main Hub", "pos": Vector3(0, 0.02, 0), "size": Vector3(18, 0.03, 18), "color": Color(0.32, 0.34, 0.42)},
 	{"name": "Cargo Ring", "pos": Vector3(-28, 0.02, -10), "size": Vector3(16, 0.03, 14), "color": Color(0.42, 0.28, 0.18)},
 	{"name": "Ops Deck", "pos": Vector3(28, 0.02, 0), "size": Vector3(14, 0.03, 16), "color": Color(0.18, 0.32, 0.48)},
 	{"name": "Break Room", "pos": Vector3(0, 0.02, 24), "size": Vector3(16, 0.03, 12), "color": Color(0.2, 0.4, 0.28)},
@@ -164,16 +152,14 @@ func _add_lights() -> void:
 			light.shadow_enabled = x % 30 == 0
 			root.add_child(light)
 
-			_spawn_scaled_model(
+			_spawn_studio_model(
 				root,
-				MODEL_LIGHT,
 				"env_light_oval_panel_01",
 				light.position + Vector3(0, -0.28, 0),
 				0.0,
 				0.6,
 				true
 			)
-
 
 func _add_pipes() -> void:
 	var root := Node3D.new()
@@ -224,16 +210,14 @@ func _add_hub_props() -> void:
 	root.name = "HubProps"
 	add_child(root)
 
-	var welcome := _spawn_scaled_model(
+	var welcome := _spawn_studio_model(
 		root,
-		MODEL_WELCOME_SIGN,
 		"env_blue_yellow_welcome_sign_01",
 		Vector3(0, 3.05, -13.55),
 		PI,
 		3.0,
 		false
-	)
-	_add_sign_label(
+	)	_add_sign_label(
 		welcome,
 		"WELCOME TO MEGABARGAIN ORBIT #12\nDiscount Freight · Questionable Safety",
 		Vector3(0, 0, -0.14),
@@ -328,16 +312,14 @@ func _add_cargo_ring_props() -> void:
 	for i in 3:
 		_add_cone(root, origin + Vector3(-5 + i * 2.5, 0, -5), Color(0.95, 0.55, 0.1))
 
-	var cargo_sign := _spawn_scaled_model(
+	var cargo_sign := _spawn_studio_model(
 		root,
-		MODEL_CARGO_SIGN,
 		"cargo_ring_sign_01",
 		origin + Vector3(0, 3.8, -6.15),
 		PI,
 		1.5,
 		false
-	)
-	_add_sign_label(
+	)	_add_sign_label(
 		cargo_sign,
 		"CARGO RING\nLift With Confidence™",
 		Vector3(0, 0, -0.12),
@@ -346,9 +328,8 @@ func _add_cargo_ring_props() -> void:
 
 	for gx in 4:
 		for gz in 3:
-			_spawn_scaled_model(
+			_spawn_studio_model(
 				root,
-				MODEL_FREIGHT_DECK,
 				"env_freight_deck_panel_01",
 				origin + Vector3(-4.5 + gx * 3.0, 0.0, -3.0 + gz * 3.0),
 				0.0,
@@ -356,16 +337,14 @@ func _add_cargo_ring_props() -> void:
 				true
 			)
 
-	_spawn_scaled_model(
+	_spawn_studio_model(
 		root,
-		MODEL_FREIGHT_PAD,
 		"env_freight_deck_pad_01",
 		origin + Vector3(0, 0.0, 0),
 		0.0,
 		0.5,
 		true
 	)
-
 
 func _add_break_room_props() -> void:
 	var root := Node3D.new()
@@ -378,16 +357,14 @@ func _add_break_room_props() -> void:
 		_add_box(root, origin + seat_offset, Vector3(0.7, 0.5, 0.7), Color(0.25, 0.55, 0.75), 0.2)
 
 	_add_box(root, origin + Vector3(-3.5, 0.35, 0), Vector3(1.8, 0.7, 0.9), Color(0.6, 0.25, 0.25), 0.25)
-	_spawn_scaled_model(
+	_spawn_studio_model(
 		root,
-		MODEL_BREAK_GLASS,
 		"env_break_glass_panel_01",
 		origin + Vector3(5.5, 1.4, -4.8),
 		PI,
 		0.5,
 		false
-	)
-	_add_label_panel(root, origin + Vector3(0, 3.0, -5), "BREAK ROOM\nMandatory Fun Zone")
+	)	_add_label_panel(root, origin + Vector3(0, 3.0, -5), "BREAK ROOM\nMandatory Fun Zone")
 	_add_poster(root, origin + Vector3(4, 2.2, -2), "Employee of the Month:\nStill TBD")
 
 
@@ -740,28 +717,24 @@ func _add_corridor_details() -> void:
 		lamp.light_energy = 0.35
 		lamp.omni_range = 10.0
 		root.add_child(lamp)
-		_spawn_scaled_model(
+		_spawn_studio_model(
 			root,
-			MODEL_LIGHT,
 			"env_light_oval_panel_01",
 			pos + Vector3(0, -0.22, 0),
 			0.0,
 			0.6,
 			true
 		)
-
 	for vent_pos in [Vector3(-39.5, 2.5, -10), Vector3(-39.5, 2.5, 10), Vector3(39.5, 2.5, -10), Vector3(39.5, 2.5, 10)]:
 		var rot_y := PI * 0.5 if vent_pos.x > 0.0 else -PI * 0.5
-		_spawn_scaled_model(
+		_spawn_studio_model(
 			root,
-			MODEL_VENT_GRILLE,
 			"prop_wall_janitor_vent_grille",
 			vent_pos,
 			rot_y,
 			1.0,
 			false
 		)
-
 	for pillar_pos in [Vector3(-20, 2.5, -20), Vector3(20, 2.5, -20), Vector3(-20, 2.5, 20), Vector3(20, 2.5, 20)]:
 		_add_cylinder(root, pillar_pos, 0.25, 5.0, Color(0.38, 0.4, 0.48), Vector3.ZERO)
 
@@ -837,12 +810,11 @@ func _add_wall_cladding() -> void:
 	var segment_height := 2.0
 	var y := 2.0
 	for x in range(-38, 39, 4):
-		_spawn_scaled_model(root, MODEL_WALL, "env_space_station_wall_04", Vector3(x, y, -39.35), 0.0, segment_height, false)
-		_spawn_scaled_model(root, MODEL_WALL, "env_space_station_wall_04", Vector3(x, y, 39.35), PI, segment_height, false)
+		_spawn_studio_model(root, "env_space_station_wall_04", Vector3(x, y, -39.35), 0.0, segment_height, false)
+		_spawn_studio_model(root, "env_space_station_wall_04", Vector3(x, y, 39.35), PI, segment_height, false)
 	for z in range(-38, 39, 4):
-		_spawn_scaled_model(root, MODEL_WALL, "env_space_station_wall_04", Vector3(-39.35, y, z), PI * 0.5, segment_height, false)
-		_spawn_scaled_model(root, MODEL_WALL, "env_space_station_wall_04", Vector3(39.35, y, z), -PI * 0.5, segment_height, false)
-
+		_spawn_studio_model(root, "env_space_station_wall_04", Vector3(-39.35, y, z), PI * 0.5, segment_height, false)
+		_spawn_studio_model(root, "env_space_station_wall_04", Vector3(39.35, y, z), -PI * 0.5, segment_height, false)
 
 func _add_sign_label(parent: Node3D, text: String, offset: Vector3, font_size: int) -> void:
 	var label := Label3D.new()
@@ -859,9 +831,8 @@ func _add_power_hour_visuals() -> void:
 	var root := Node3D.new()
 	root.name = "PowerHourVisuals"
 	add_child(root)
-	_spawn_scaled_model(
+	_spawn_studio_model(
 		root,
-		MODEL_BREAKER_PANEL,
 		"env_breaker_panel_01",
 		Vector3(14, 1.0, 7.2),
 		PI,
@@ -869,14 +840,12 @@ func _add_power_hour_visuals() -> void:
 		false
 	)
 
-
 func _add_trust_fall_visuals() -> void:
 	var root := Node3D.new()
 	root.name = "TrustFallVisuals"
 	add_child(root)
-	_spawn_scaled_model(
+	_spawn_studio_model(
 		root,
-		MODEL_SAFETY_MAT,
 		"safety_mat_floor_pad_01",
 		Vector3(4, 0.02, 10),
 		0.0,
@@ -886,65 +855,21 @@ func _add_trust_fall_visuals() -> void:
 	)
 
 
-func _spawn_scaled_model(
+func _spawn_studio_model(
 	parent: Node3D,
-	scene: PackedScene,
-	asset_key: String,
+	asset_id: String,
 	pos: Vector3,
 	rot_y: float,
 	target_height: float,
 	snap_bottom: bool,
 	target_width: float = -1.0
 ) -> Node3D:
-	var inst := scene.instantiate() as Node3D
-	parent.add_child(inst)
-	inst.rotation.y = rot_y
-
-	var aabb := _local_mesh_aabb(inst)
-	if aabb.size.length_squared() > 0.0001:
-		var uniform_scale := ImmersiveStudioMaterial.get_default_scale(
-			asset_key,
-			aabb,
-			target_height,
-			target_width
-		)
-		inst.scale = Vector3.ONE * uniform_scale
-
-		var scaled_pos := aabb.position * inst.scale
-		var scaled_size := aabb.size * inst.scale
-		var anchor := Vector3(
-			scaled_pos.x + scaled_size.x * 0.5,
-			scaled_pos.y if snap_bottom else scaled_pos.y + scaled_size.y * 0.5,
-			scaled_pos.z + scaled_size.z * 0.5
-		)
-		inst.position = pos - anchor
-
-	return inst
-
-
-func _local_mesh_aabb(node: Node) -> AABB:
-	var result := AABB()
-	var first := true
-	for child in node.find_children("*", "MeshInstance3D", true, false):
-		var mesh_inst := child as MeshInstance3D
-		if mesh_inst.mesh == null:
-			continue
-		var mesh_aabb := mesh_inst.mesh.get_aabb()
-		var corners: Array[Vector3] = [
-			mesh_aabb.position,
-			mesh_aabb.position + Vector3(mesh_aabb.size.x, 0.0, 0.0),
-			mesh_aabb.position + Vector3(0.0, mesh_aabb.size.y, 0.0),
-			mesh_aabb.position + Vector3(0.0, 0.0, mesh_aabb.size.z),
-			mesh_aabb.position + Vector3(mesh_aabb.size.x, mesh_aabb.size.y, 0.0),
-			mesh_aabb.position + Vector3(mesh_aabb.size.x, 0.0, mesh_aabb.size.z),
-			mesh_aabb.position + Vector3(0.0, mesh_aabb.size.y, mesh_aabb.size.z),
-			mesh_aabb.position + mesh_aabb.size,
-		]
-		for corner in corners:
-			var local_corner := mesh_inst.transform * corner
-			if first:
-				result = AABB(local_corner, Vector3.ZERO)
-				first = false
-			else:
-				result = result.expand(local_corner)
-	return result
+	return ImmersiveStudioModel.spawn_at(
+		parent,
+		asset_id,
+		pos,
+		rot_y,
+		target_height,
+		target_width,
+		snap_bottom
+	)

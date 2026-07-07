@@ -68,11 +68,23 @@ See [docs/ROADMAP.md](docs/ROADMAP.md) for Phase 4 polish plan.
 | [JOBS](docs/JOBS.md) | All 10 station jobs |
 | [STOWAWAY](docs/STOWAWAY.md) | Smuggle routes and sabotage |
 | [STEAM](docs/STEAM.md) | Store page draft and tags |
+| [STUDIO_ASSETS](docs/STUDIO_ASSETS.md) | Immersive Studio → Tripo → Godot import workflow |
+
+## Immersive Studio assets (Tripo → Godot)
+
+3D props and environment pieces are generated with **Immersive Labs Studio** (Tripo mesh + PBR) and imported via:
+
+```bash
+python scripts/import_immersive_studio_pack.py path/to/pack.zip
+```
+
+See [docs/STUDIO_ASSETS.md](docs/STUDIO_ASSETS.md) for the full workflow, registry format, and worker settings.
 
 ## Project structure
 
 ```
 ShipHappens/
+├── assets/         # Studio GLBs, textures, studio_registry.json
 ├── docs/           # Design & planning markdown
 ├── scenes/         # Godot scenes (.tscn)
 │   ├── main/       # Main menu
@@ -81,11 +93,14 @@ ShipHappens/
 │   ├── props/      # Interactables (crates, etc.)
 │   └── levels/     # Station maps
 ├── scripts/        # GDScript
-│   ├── autoload/   # NetworkManager, GameState
+│   ├── autoload/   # NetworkManager, GameState, ImmersiveStudioAssets
+│   ├── assets/     # Immersive Studio registry loader
+│   ├── levels/     # Station visuals, objective markers
 │   ├── player/     # Movement, camera
 │   ├── ui/         # Menus
 │   ├── props/      # Prop logic
 │   └── game/       # Session flow
+├── third_party/    # immersive_studio Godot helpers (from immersive.labs)
 └── project.godot
 ```
 
