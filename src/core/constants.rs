@@ -22,3 +22,8 @@ pub const POWER_HOUR_SEQUENCE: [u8; 4] = [0, 2, 1, 3];
 
 pub const CRANE_CONSOLE_ASSET: &str = "env_cargo_crane_operator_console_01";
 pub const BREAKER_PANEL_ASSET: &str = "env_breaker_panel_01";
+pub const FREIGHT_CRATE_ASSET: &str = "env_freight_crate_01";
+pub const GANTRY_HOOK_ASSET: &str = "env_cargo_gantry_hook_01";
+pub const JOB_KIOSK_ASSET: &str = "blue_cartoon_sci_fi_job_terminal_kiosk_01";
+pub const COOLANT_CONSOLE_ASSET: &str = "prop_coolant_console_01";
+pub const SHUTTLE_BAY_ASSET: &str = "shuttle_bay_escape_zone_01";

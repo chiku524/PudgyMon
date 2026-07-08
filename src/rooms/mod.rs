@@ -1,3 +1,5 @@
+pub mod layout;
+
 use bevy::prelude::*;
 
 use crate::{
@@ -6,12 +8,15 @@ use crate::{
     tournament::types::{RoomId, RoomProgress, SlotId, SlotSize},
 };
 
+pub use layout::{sync_room_layout, ActiveRoomLayout, RoomLayoutPiece};
+
 #[derive(Resource, Debug, Clone, Default)]
 pub struct RoomRuntime {
     pub active: Option<RoomId>,
     pub progress: RoomProgress,
     pub slot_progress: std::collections::HashMap<SlotId, u32>,
     pub meltdown_rate: f32,
+    pub sort_target: u8,
     bot_entropy: u32,
 }
 
@@ -34,6 +39,7 @@ impl RoomRuntime {
         } else {
             0.0
         };
+        self.sort_target = 0;
         self.bot_entropy = 1;
     }
 
@@ -56,6 +62,19 @@ impl RoomRuntime {
         }
     }
 
+    pub fn sort_target_label(&self) -> &'static str {
+        match self.sort_target {
+            0 => "Hot Dogs",
+            1 => "Toasters",
+            2 => "Premium Air",
+            _ => "Write-Ups",
+        }
+    }
+
+    pub fn meltdown_percent(&self) -> u8 {
+        self.progress.meltdown_meter.min(100.0) as u8
+    }
+
     pub fn player_action(
         &mut self,
         scoring: &mut ScoringService,
@@ -65,9 +84,17 @@ impl RoomRuntime {
     ) {
         scoring.record(player, action);
         if action.objective_delta() > 0.0 {
-            self.advance_slot(scoring, slot, true);
-        } else if action.objective_delta() < 0.0 {
-            scoring.record(player, ScoreAction::IncorrectSort);
+            let entry = self.slot_progress.entry(slot.clone()).or_insert(0);
+            *entry += 1;
+            self.progress.objective_count += 1;
+            if self.meltdown_rate > 0.0 {
+                self.progress.meltdown_meter =
+                    (self.progress.meltdown_meter + self.meltdown_rate).min(100.0);
+            }
+            if self.progress.objective_count >= self.progress.objective_target {
+                self.progress.cleared = true;
+                scoring.record(player, ScoreAction::RoomClearBonus);
+            }
         }
     }
 
@@ -141,7 +168,9 @@ pub struct RoomsPlugin;
 
 impl Plugin for RoomsPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<RoomRuntime>();
+        app.init_resource::<RoomRuntime>()
+            .init_resource::<ActiveRoomLayout>()
+            .add_systems(Update, sync_room_layout);
     }
 }
 

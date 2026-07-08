@@ -5,6 +5,7 @@ use crate::{
     announcer::AnnouncerQueue,
     economy::PracticeLedger,
     interaction::InteractPrompt,
+    rooms::RoomRuntime,
     tournament::{TournamentDirector, TournamentPhase, TournamentSnapshot},
 };
 
@@ -78,6 +79,7 @@ fn update_hud_text(
     director: Res<TournamentDirector>,
     announcer: Res<AnnouncerQueue>,
     ledger: Res<PracticeLedger>,
+    room_runtime: Res<RoomRuntime>,
     snapshots: Query<&TournamentSnapshot>,
     server_state: Res<State<ServerState>>,
     client_state: Res<State<ClientState>>,
@@ -122,16 +124,17 @@ fn update_hud_text(
 
     let snap = snapshots.iter().next();
     let phase = snap.map(|s| s.phase).unwrap_or(director.phase);
-    let room = snap.map(|s| s.room).unwrap_or(director.room);
+    let room_id = snap.map(|s| s.room).unwrap_or(director.room);
     let progress = snap.map(|s| s.room_progress).unwrap_or(0);
 
     if let Ok(mut text) = tournament.single_mut() {
         **text = format!(
-            "Phase: {:?} | Room: {} | Alive: {} | Progress: {}% | VC: {}\nAnnouncer: {}",
+            "Phase: {:?} | Room: {} | Alive: {} | Progress: {}% | Meltdown: {}% | VC: {}\nAnnouncer: {}",
             phase,
-            room.label(),
+            room_id.label(),
             director.alive_count(),
             progress,
+            room_runtime.meltdown_percent(),
             ledger.balance_vc,
             announcer.last_bark,
         );
