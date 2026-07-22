@@ -21,6 +21,8 @@ jobs:
             libudev-dev \
             libwayland-dev \
             libxkbcommon-dev \
+            libxkbcommon-x11-0 \
+            libxkbcommon-x11-dev \
             libx11-dev \
             libxcb1-dev
       - name: Check game + accounts workspace
