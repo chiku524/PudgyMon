@@ -57,7 +57,12 @@ Production: [https://pudgymon.vercel.app](https://pudgymon.vercel.app)
 Vercel Hobby is free. Root directory: `web/`.  
 Hosted pages call `https://pudgymon-api.boing.network` via [`web/js/config.js`](../web/js/config.js).
 
-Optional custom domain: Vercel → Project → Domains (needs a domain you own; Vercel subdomain is already free).
+Optional custom domain (free): `pudgymon.boing.network` is already added on Vercel.  
+In Cloudflare DNS for `boing.network`, create:
+
+`A` `pudgymon` → `76.76.21.21` (proxied or DNS-only both work; Vercel recommends the A record)
+
+Until that record exists, use [https://pudgymon.vercel.app](https://pudgymon.vercel.app).
 
 Local preview: open [`web/index.html`](../web/index.html).
 
