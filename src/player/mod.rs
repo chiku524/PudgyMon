@@ -33,8 +33,8 @@ use crate::{
 pub const HOST_OWNER_ID: u64 = 0;
 
 /// Extra yaw on character GLB children so mesh forward matches Bevy −Z.
-/// Tripo / polish exports currently face −X; −90° Y maps that to −Z.
-const CHARACTER_MESH_YAW_OFFSET: f32 = -std::f32::consts::FRAC_PI_2;
+/// Tripo / polish exports currently face +X; +90° Y maps that to −Z.
+const CHARACTER_MESH_YAW_OFFSET: f32 = std::f32::consts::FRAC_PI_2;
 
 pub struct PlayerPlugin;
 
