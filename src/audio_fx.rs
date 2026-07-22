@@ -229,14 +229,21 @@ fn drain_audio_fx(
     }
 }
 
-fn drain_vo(mut queue: ResMut<VoQueue>, catalog: Res<AudioCatalog>, mut commands: Commands) {
+fn drain_vo(
+    mut queue: ResMut<VoQueue>,
+    catalog: Res<AudioCatalog>,
+    settings: Option<Res<crate::settings::GameSettings>>,
+    mut commands: Commands,
+) {
+    let master = settings.map(|s| s.master_volume).unwrap_or(1.0);
     for kind in queue.pending.drain(..) {
         let Some(handle) = catalog.vo.get(&kind) else {
             continue;
         };
         commands.spawn((
             AudioPlayer(handle.clone()),
-            PlaybackSettings::DESPAWN.with_volume(bevy::audio::Volume::Linear(0.7)),
+            PlaybackSettings::DESPAWN
+                .with_volume(bevy::audio::Volume::Linear(0.7 * master)),
         ));
     }
 }

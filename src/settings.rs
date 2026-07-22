@@ -1,12 +1,17 @@
 //! Game settings + Esc Nest menu (pause overlay).
 
+use std::fs;
+use std::path::PathBuf;
+
 use bevy::prelude::*;
 use bevy::window::{CursorGrabMode, CursorOptions, PrimaryWindow, WindowMode};
 use bevy_replicon::prelude::*;
+use serde::{Deserialize, Serialize};
 
 use crate::{
     account::PlayerAccount,
     boing::{self, BoingConfig, BoingStatus, ClaimVoucher},
+    brand::APP_DATA_DIR,
     challenges::ChallengeBoard,
     cosmetics::{CosmeticsCatalog, EquippedCosmetic},
     flow::AppScreen,
@@ -16,7 +21,7 @@ use crate::{
     session_flow::{LeaveToNestRequest, NetworkBanner},
 };
 
-#[derive(Resource, Debug, Clone)]
+#[derive(Resource, Debug, Clone, Serialize, Deserialize)]
 pub struct GameSettings {
     pub mouse_sensitivity: f32,
     pub master_volume: f32,
@@ -29,6 +34,33 @@ impl Default for GameSettings {
             mouse_sensitivity: crate::core::MOUSE_SENSITIVITY,
             master_volume: 1.0,
             fullscreen: false,
+        }
+    }
+}
+
+impl GameSettings {
+    fn path() -> PathBuf {
+        if let Ok(base) = std::env::var("LOCALAPPDATA") {
+            PathBuf::from(base).join(APP_DATA_DIR).join("settings.json")
+        } else {
+            PathBuf::from("settings.json")
+        }
+    }
+
+    pub fn load() -> Self {
+        let Ok(raw) = fs::read_to_string(Self::path()) else {
+            return Self::default();
+        };
+        serde_json::from_str(&raw).unwrap_or_default()
+    }
+
+    pub fn save(&self) {
+        let path = Self::path();
+        if let Some(parent) = path.parent() {
+            let _ = fs::create_dir_all(parent);
+        }
+        if let Ok(json) = serde_json::to_string_pretty(self) {
+            let _ = fs::write(path, json);
         }
     }
 }
@@ -50,6 +82,7 @@ pub enum MenuPage {
     Market,
     Challenges,
     Controls,
+    ConfirmQuit,
 }
 
 #[derive(Component)]
@@ -94,7 +127,7 @@ enum MenuAction {
     Open(MenuPage),
     Back,
     ReturnToNest,
-    QuitGame,
+    ConfirmQuitYes,
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -119,10 +152,75 @@ enum AccountAction {
     LinkPendingToken,
     RefreshProfile,
     SignOut,
+    ModeSignIn,
+    ModeRegister,
+    SubmitAuth,
 }
 
 #[derive(Component)]
 struct AccountActionButton(AccountAction);
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+enum NestAuthMode {
+    #[default]
+    SignIn,
+    Register,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+enum NestAuthField {
+    #[default]
+    Email,
+    Password,
+    DisplayName,
+}
+
+#[derive(Resource, Debug, Default)]
+struct NestAuthForm {
+    mode: NestAuthMode,
+    focus: NestAuthField,
+    email: String,
+    password: String,
+    display_name: String,
+    busy: bool,
+}
+
+impl NestAuthForm {
+    fn focused_mut(&mut self) -> &mut String {
+        match self.focus {
+            NestAuthField::Email => &mut self.email,
+            NestAuthField::Password => &mut self.password,
+            NestAuthField::DisplayName => &mut self.display_name,
+        }
+    }
+
+    fn cycle_focus(&mut self) {
+        self.focus = match self.mode {
+            NestAuthMode::SignIn => match self.focus {
+                NestAuthField::Email => NestAuthField::Password,
+                _ => NestAuthField::Email,
+            },
+            NestAuthMode::Register => match self.focus {
+                NestAuthField::DisplayName => NestAuthField::Email,
+                NestAuthField::Email => NestAuthField::Password,
+                NestAuthField::Password => NestAuthField::DisplayName,
+            },
+        };
+    }
+
+    fn set_mode(&mut self, mode: NestAuthMode) {
+        self.mode = mode;
+        self.focus = match mode {
+            NestAuthMode::SignIn => NestAuthField::Email,
+            NestAuthMode::Register => NestAuthField::DisplayName,
+        };
+    }
+}
+
+#[derive(Component)]
+struct MarketBuyButton {
+    id: String,
+}
 
 const PANEL_BG: Color = Color::srgba(0.08, 0.16, 0.14, 0.94);
 const BTN_BG: Color = Color::srgb(0.16, 0.30, 0.26);
@@ -137,10 +235,11 @@ pub struct SettingsPlugin;
 
 impl Plugin for SettingsPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<GameSettings>()
+        app.insert_resource(GameSettings::load())
             .init_resource::<PauseState>()
             .init_resource::<MenuPage>()
-            .add_systems(Startup, spawn_nest_menu)
+            .init_resource::<NestAuthForm>()
+            .add_systems(Startup, (apply_fullscreen_on_boot, spawn_nest_menu).chain())
             .add_systems(
                 Update,
                 (
@@ -152,13 +251,34 @@ impl Plugin for SettingsPlugin {
                     handle_menu_nav,
                     handle_settings_buttons,
                     handle_market_equip,
+                    handle_market_buy,
                     handle_market_boing,
                     handle_account_buttons,
+                    handle_nest_auth_typing,
                     sync_player_name_from_account,
                     refresh_menu_labels.run_if(in_state(AppScreen::Playing)),
                     apply_settings_hotkeys,
+                    persist_settings,
                 ),
             );
+    }
+}
+
+fn apply_fullscreen_on_boot(
+    settings: Res<GameSettings>,
+    mut windows: Query<&mut Window, With<PrimaryWindow>>,
+) {
+    if !settings.fullscreen {
+        return;
+    }
+    if let Ok(mut window) = windows.single_mut() {
+        window.mode = WindowMode::BorderlessFullscreen(MonitorSelection::Current);
+    }
+}
+
+fn persist_settings(settings: Res<GameSettings>) {
+    if settings.is_changed() {
+        settings.save();
     }
 }
 
@@ -220,6 +340,7 @@ fn spawn_nest_menu(mut commands: Commands, catalog: Res<CosmeticsCatalog>) {
                 spawn_page_market(panel, &catalog);
                 spawn_page_challenges(panel);
                 spawn_page_controls(panel);
+                spawn_page_confirm_quit(panel);
             });
         });
 }
@@ -257,7 +378,46 @@ fn spawn_page_main(parent: &mut ChildSpawnerCommands) {
             );
             menu_btn(page, "Controls", MenuAction::Open(MenuPage::Controls), false);
             menu_btn(page, "Return to Nest", MenuAction::ReturnToNest, false);
-            menu_btn(page, "Quit Game", MenuAction::QuitGame, true);
+            menu_btn(
+                page,
+                "Quit Game",
+                MenuAction::Open(MenuPage::ConfirmQuit),
+                true,
+            );
+        });
+}
+
+fn spawn_page_confirm_quit(parent: &mut ChildSpawnerCommands) {
+    parent
+        .spawn((
+            MenuPageRoot(MenuPage::ConfirmQuit),
+            Node {
+                width: Val::Percent(100.0),
+                flex_direction: FlexDirection::Column,
+                row_gap: Val::Px(8.0),
+                ..Default::default()
+            },
+            Visibility::Hidden,
+        ))
+        .with_children(|page| {
+            page.spawn((
+                Text::new("Quit Game?"),
+                TextFont {
+                    font_size: FontSize::Px(20.0),
+                    ..Default::default()
+                },
+                TextColor(TEAL),
+            ));
+            page.spawn((
+                Text::new("Close PudgyMon and leave The Nest."),
+                TextFont {
+                    font_size: FontSize::Px(14.0),
+                    ..Default::default()
+                },
+                TextColor(MUTED),
+            ));
+            menu_btn(page, "Yes, quit", MenuAction::ConfirmQuitYes, true);
+            menu_btn(page, "Cancel", MenuAction::Back, false);
         });
 }
 
@@ -367,6 +527,9 @@ fn spawn_page_account(parent: &mut ChildSpawnerCommands) {
             account_btn(page, "Open website", AccountAction::OpenWebsite);
             account_btn(page, "Link pending token", AccountAction::LinkPendingToken);
             account_btn(page, "Refresh profile", AccountAction::RefreshProfile);
+            account_btn(page, "Sign In mode", AccountAction::ModeSignIn);
+            account_btn(page, "Register mode", AccountAction::ModeRegister);
+            account_btn(page, "Submit email/password", AccountAction::SubmitAuth);
             account_btn(page, "Sign out", AccountAction::SignOut);
             menu_btn(page, "Back", MenuAction::Back, false);
         });
@@ -483,9 +646,13 @@ fn spawn_page_wallet(parent: &mut ChildSpawnerCommands) {
                 },
                 TextColor(MUTED),
             ));
-            boing_btn(page, "Link wallet (BOING_ACCOUNT)", BoingAction::LinkWallet);
             boing_btn(page, "Prepare claim voucher", BoingAction::ClaimVoucher);
-            boing_btn(page, "Open Claim Desk", BoingAction::OpenCompanion);
+            boing_btn(page, "Open Claim Desk (Express)", BoingAction::OpenCompanion);
+            boing_btn(
+                page,
+                "Advanced: link BOING_ACCOUNT",
+                BoingAction::LinkWallet,
+            );
             menu_btn(page, "Back", MenuAction::Back, false);
         });
 }
@@ -527,7 +694,7 @@ fn spawn_page_market(parent: &mut ChildSpawnerCommands, catalog: &CosmeticsCatal
                     Node {
                         width: Val::Percent(100.0),
                         flex_direction: FlexDirection::Row,
-                        column_gap: Val::Px(8.0),
+                        column_gap: Val::Px(6.0),
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::SpaceBetween,
                         ..Default::default()
@@ -548,9 +715,28 @@ fn spawn_page_market(parent: &mut ChildSpawnerCommands, catalog: &CosmeticsCatal
                         ),
                         (
                             Button,
+                            MarketBuyButton { id: id.clone() },
+                            Node {
+                                padding: UiRect::axes(Val::Px(10.0), Val::Px(6.0)),
+                                justify_content: JustifyContent::Center,
+                                border_radius: BorderRadius::all(Val::Px(8.0)),
+                                ..Default::default()
+                            },
+                            BackgroundColor(BTN_BG),
+                            children![(
+                                Text::new("Buy"),
+                                TextFont {
+                                    font_size: FontSize::Px(13.0),
+                                    ..Default::default()
+                                },
+                                TextColor(Color::srgb(0.95, 0.95, 0.9)),
+                            )],
+                        ),
+                        (
+                            Button,
                             MarketEquipButton { id },
                             Node {
-                                padding: UiRect::axes(Val::Px(12.0), Val::Px(6.0)),
+                                padding: UiRect::axes(Val::Px(10.0), Val::Px(6.0)),
                                 justify_content: JustifyContent::Center,
                                 border_radius: BorderRadius::all(Val::Px(8.0)),
                                 ..Default::default()
@@ -569,14 +755,13 @@ fn spawn_page_market(parent: &mut ChildSpawnerCommands, catalog: &CosmeticsCatal
                 ));
             }
             page.spawn((
-                Text::new("Boing Network"),
+                Text::new("External wallet (Express)"),
                 TextFont {
                     font_size: FontSize::Px(16.0),
                     ..Default::default()
                 },
                 TextColor(ACCENT),
             ));
-            boing_btn(page, "Link wallet (BOING_ACCOUNT)", BoingAction::LinkWallet);
             boing_btn(page, "Prepare claim voucher", BoingAction::ClaimVoucher);
             boing_btn(page, "Open Claim Desk", BoingAction::OpenCompanion);
             menu_btn(page, "Back", MenuAction::Back, false);
@@ -846,7 +1031,12 @@ fn menu_button_hover(
         return;
     }
     for (interaction, mut bg, nav) in &mut buttons {
-        let danger = nav.is_some_and(|n| matches!(n.0, MenuAction::QuitGame));
+        let danger = nav.is_some_and(|n| {
+            matches!(
+                n.0,
+                MenuAction::ConfirmQuitYes | MenuAction::Open(MenuPage::ConfirmQuit)
+            )
+        });
         match *interaction {
             Interaction::Pressed => {
                 *bg = BackgroundColor(if danger {
@@ -904,7 +1094,7 @@ fn handle_menu_nav(
                 *page = MenuPage::Main;
                 banner.show("Returning to The Nest…", 2.5);
             }
-            MenuAction::QuitGame => {
+            MenuAction::ConfirmQuitYes => {
                 exit.write(AppExit::Success);
             }
         }
@@ -972,7 +1162,10 @@ fn handle_market_equip(
 fn handle_account_buttons(
     pause: Res<PauseState>,
     mut account: ResMut<PlayerAccount>,
+    mut form: ResMut<NestAuthForm>,
     mut banner: ResMut<NetworkBanner>,
+    mut boing: ResMut<BoingConfig>,
+    mut ledger: ResMut<SeasonLedger>,
     interactions: Query<(&Interaction, &AccountActionButton), Changed<Interaction>>,
 ) {
     if !pause.paused {
@@ -984,14 +1177,186 @@ fn handle_account_buttons(
         }
         let note = match btn.0 {
             AccountAction::OpenWebsite => crate::account::open_website(&mut account),
-            AccountAction::LinkPendingToken => crate::account::link_pending_token(&mut account),
-            AccountAction::RefreshProfile => crate::account::refresh_profile(&mut account),
+            AccountAction::LinkPendingToken => {
+                let note = crate::account::link_pending_token(&mut account);
+                merge_owned_into_ledger(&account, &mut ledger);
+                let _ = boing::link_cloud_wallet(&account, &mut boing, None);
+                note
+            }
+            AccountAction::RefreshProfile => {
+                let note = crate::account::refresh_profile(&mut account);
+                merge_owned_into_ledger(&account, &mut ledger);
+                let _ = boing::link_cloud_wallet(&account, &mut boing, None);
+                note
+            }
+            AccountAction::ModeSignIn => {
+                form.set_mode(NestAuthMode::SignIn);
+                "Account: Sign In mode (Tab fields · type · Submit)".into()
+            }
+            AccountAction::ModeRegister => {
+                form.set_mode(NestAuthMode::Register);
+                "Account: Register mode (Tab fields · type · Submit)".into()
+            }
+            AccountAction::SubmitAuth => {
+                let note = submit_nest_auth(&mut form, &mut account);
+                if account.signed_in() {
+                    merge_owned_into_ledger(&account, &mut ledger);
+                    let _ = boing::link_cloud_wallet(&account, &mut boing, None);
+                }
+                note
+            }
             AccountAction::SignOut => {
                 account.clear();
                 account.note.clone()
             }
         };
         banner.show(note, 3.5);
+    }
+}
+
+fn handle_nest_auth_typing(
+    pause: Res<PauseState>,
+    page: Res<MenuPage>,
+    mut form: ResMut<NestAuthForm>,
+    mut account: ResMut<PlayerAccount>,
+    mut banner: ResMut<NetworkBanner>,
+    mut boing: ResMut<BoingConfig>,
+    mut ledger: ResMut<SeasonLedger>,
+    mut reader: bevy::ecs::message::MessageReader<bevy::input::keyboard::KeyboardInput>,
+    keyboard: Res<ButtonInput<KeyCode>>,
+) {
+    use bevy::input::{keyboard::Key, ButtonState};
+
+    if !pause.paused || *page != MenuPage::Account || form.busy {
+        return;
+    }
+
+    for event in reader.read() {
+        if event.state != ButtonState::Pressed {
+            continue;
+        }
+        match &event.logical_key {
+            Key::Tab => {
+                form.cycle_focus();
+                continue;
+            }
+            Key::Enter => {
+                let note = submit_nest_auth(&mut form, &mut account);
+                if account.signed_in() {
+                    merge_owned_into_ledger(&account, &mut ledger);
+                    let _ = boing::link_cloud_wallet(&account, &mut boing, None);
+                }
+                banner.show(note, 3.5);
+                continue;
+            }
+            Key::Backspace => {
+                form.focused_mut().pop();
+                continue;
+            }
+            _ => {}
+        }
+        if keyboard.pressed(KeyCode::ControlLeft) || keyboard.pressed(KeyCode::ControlRight) {
+            continue;
+        }
+        if let Some(text) = &event.text {
+            for ch in text.chars() {
+                if ch.is_control() {
+                    continue;
+                }
+                let field = form.focused_mut();
+                if field.len() < 96 {
+                    field.push(ch);
+                }
+            }
+        }
+    }
+}
+
+fn submit_nest_auth(form: &mut NestAuthForm, account: &mut PlayerAccount) -> String {
+    if form.busy {
+        return "Busy…".into();
+    }
+    let email = form.email.trim().to_string();
+    let password = form.password.clone();
+    if email.is_empty() || password.is_empty() {
+        return "Email and password are required.".into();
+    }
+    if password.len() < 8 {
+        return "Password must be at least 8 characters.".into();
+    }
+    form.busy = true;
+    let note = match form.mode {
+        NestAuthMode::SignIn => crate::account::login(account, &email, &password),
+        NestAuthMode::Register => {
+            let name = form.display_name.trim().to_string();
+            if name.is_empty() {
+                form.busy = false;
+                return "Display name is required to register.".into();
+            }
+            crate::account::signup(account, &email, &password, &name)
+        }
+    };
+    form.busy = false;
+    if account.signed_in() {
+        form.password.clear();
+    }
+    note
+}
+
+fn merge_owned_into_ledger(account: &PlayerAccount, ledger: &mut SeasonLedger) {
+    for id in &account.owned_skins {
+        if !ledger.unlocked.contains(id) {
+            ledger.unlocked.push(id.clone());
+        }
+    }
+    ledger.save();
+}
+
+fn handle_market_buy(
+    pause: Res<PauseState>,
+    mut account: ResMut<PlayerAccount>,
+    mut ledger: ResMut<SeasonLedger>,
+    catalog: Res<CosmeticsCatalog>,
+    mut banner: ResMut<NetworkBanner>,
+    interactions: Query<(&Interaction, &MarketBuyButton), Changed<Interaction>>,
+) {
+    if !pause.paused {
+        return;
+    }
+    for (interaction, btn) in &interactions {
+        if *interaction != Interaction::Pressed {
+            continue;
+        }
+        if !account.signed_in() {
+            banner.show("Sign in under Account to buy on-chain skins.", 3.5);
+            continue;
+        }
+        let Some(item) = catalog.items.iter().find(|i| i.id == btn.id) else {
+            banner.show("Unknown skin.", 2.5);
+            continue;
+        };
+        if account.owned_skins.contains(&btn.id) {
+            banner.show(format!("{} already owned on-chain.", item.label), 2.5);
+            continue;
+        }
+        if ledger.points < item.cost_points {
+            banner.show(
+                format!(
+                    "Need {} season pts (have {}).",
+                    item.cost_points, ledger.points
+                ),
+                3.0,
+            );
+            continue;
+        }
+        let _ = crate::account::sync_season_points(&mut account, ledger.points);
+        match crate::account::purchase_skin(&mut account, &btn.id, ledger.points) {
+            Ok(msg) => {
+                merge_owned_into_ledger(&account, &mut ledger);
+                banner.show(msg, 4.0);
+            }
+            Err(err) => banner.show(err, 4.0),
+        }
     }
 }
 
@@ -1057,6 +1422,7 @@ fn refresh_menu_labels(
     board: Res<ChallengeBoard>,
     voucher: Res<ClaimVoucher>,
     account: Res<PlayerAccount>,
+    form: Res<NestAuthForm>,
     mut bodies: Query<(&MenuBodyText, &mut Text), Without<MarketRowLabel>>,
     mut market_rows: Query<(&MarketRowLabel, &mut Text), Without<MenuBodyText>>,
 ) {
@@ -1102,27 +1468,77 @@ fn refresh_menu_labels(
                 );
             }
             (MenuBodyText::Account, MenuPage::Account) => {
+                let mark = |field: NestAuthField| -> &'static str {
+                    if form.focus == field {
+                        ">"
+                    } else {
+                        " "
+                    }
+                };
+                let masked: String = form.password.chars().map(|_| '*').collect();
+                let mode = match form.mode {
+                    NestAuthMode::SignIn => "Sign In",
+                    NestAuthMode::Register => "Register",
+                };
+                let fields = match form.mode {
+                    NestAuthMode::SignIn => format!(
+                        "{} Email: {}\n{} Password: {}",
+                        mark(NestAuthField::Email),
+                        if form.email.is_empty() {
+                            "_"
+                        } else {
+                            form.email.as_str()
+                        },
+                        mark(NestAuthField::Password),
+                        if masked.is_empty() {
+                            "_"
+                        } else {
+                            masked.as_str()
+                        },
+                    ),
+                    NestAuthMode::Register => format!(
+                        "{} Name: {}\n{} Email: {}\n{} Password: {}",
+                        mark(NestAuthField::DisplayName),
+                        if form.display_name.is_empty() {
+                            "_"
+                        } else {
+                            form.display_name.as_str()
+                        },
+                        mark(NestAuthField::Email),
+                        if form.email.is_empty() {
+                            "_"
+                        } else {
+                            form.email.as_str()
+                        },
+                        mark(NestAuthField::Password),
+                        if masked.is_empty() {
+                            "_"
+                        } else {
+                            masked.as_str()
+                        },
+                    ),
+                };
                 if account.signed_in() {
                     let wallet = account
                         .boing_wallet
                         .as_deref()
                         .unwrap_or("(no Boing wallet)");
                     **text = format!(
-                        "Signed in as {}\n{}\nBoing wallet {}\nAPI {}\n{}\nDrop pending_token.txt into {}",
+                        "Signed in as {}\n{}\nBoing wallet {}\nOwned skins: {}\nAPI {}\n{}\n— or switch account ({mode}) —\n{fields}\nTab · type · Submit / Enter",
                         account.display_name,
                         account.email,
                         wallet,
+                        account.owned_skins.len(),
                         account.api_base,
                         if account.note.is_empty() {
                             "Ready."
                         } else {
                             account.note.as_str()
                         },
-                        PlayerAccount::pending_token_path().display()
                     );
                 } else {
                     **text = format!(
-                        "Not signed in.\nRestart the game to use the Sign In / Register intro,\nor link a website token at {}\nAPI: {}\n{}",
+                        "Not signed in · mode {mode}\n{fields}\nTab · type · Submit / Enter\nOr link website token at {}\nAPI: {}\n{}",
                         PlayerAccount::pending_token_path().display(),
                         account.api_base,
                         if account.note.is_empty() {
@@ -1136,6 +1552,7 @@ fn refresh_menu_labels(
             (MenuBodyText::Inventory, MenuPage::Inventory) => {
                 let owned = ledger.unlocked.len();
                 let total = catalog.items.len();
+                let cloud = account.owned_skins.len();
                 let skin = catalog
                     .items
                     .iter()
@@ -1143,7 +1560,7 @@ fn refresh_menu_labels(
                     .map(|i| i.label.as_str())
                     .unwrap_or(equipped.id.as_str());
                 **text = format!(
-                    "Owned {owned}/{total} cosmetics · equipped: {skin}\nUnlock more in Market with season points."
+                    "Owned {owned}/{total} cosmetics · cloud NFTs {cloud} · equipped: {skin}\nBuy in Market (on-chain mint) or unlock via season pts."
                 );
             }
             (MenuBodyText::Wallet, MenuPage::Wallet) => {
@@ -1209,11 +1626,12 @@ fn refresh_menu_labels(
             }
             (MenuBodyText::MarketStatus, MenuPage::Market) => {
                 **text = format!(
-                    "{} season pts · equipped {} · {}",
+                    "{} season pts · equipped {} · cloud NFTs {}\nBuy mints a PUDGY NFT to your custodial wallet · {}",
                     ledger.points,
                     equipped.id,
+                    account.owned_skins.len(),
                     if voucher.note.is_empty() {
-                        "Boing ready"
+                        "Express fallback ready"
                     } else {
                         voucher.note.as_str()
                     }
@@ -1228,11 +1646,17 @@ fn refresh_menu_labels(
             let Some(item) = catalog.items.iter().find(|i| i.id == row.id) else {
                 continue;
             };
+            let cloud = account.owned_skins.contains(&row.id);
+            let unlocked = ledger.unlocked.contains(&row.id) || cloud;
             if matches!(*page, MenuPage::Inventory) {
                 let state = if equipped.id == row.id {
                     "Equipped"
-                } else if ledger.unlocked.contains(&row.id) {
-                    "Owned — Equip"
+                } else if unlocked {
+                    if cloud {
+                        "Owned (NFT) — Equip"
+                    } else {
+                        "Owned — Equip"
+                    }
                 } else {
                     "Locked"
                 };
@@ -1240,10 +1664,12 @@ fn refresh_menu_labels(
             } else {
                 let state = if equipped.id == row.id {
                     "Equipped"
-                } else if ledger.unlocked.contains(&row.id) {
-                    "Owned"
+                } else if cloud {
+                    "Owned on-chain"
+                } else if unlocked {
+                    "Unlocked"
                 } else {
-                    "Locked"
+                    "Buy"
                 };
                 **text = format!("{} · {} pts · {state}", item.label, item.cost_points);
             }

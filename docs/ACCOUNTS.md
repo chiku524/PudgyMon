@@ -9,7 +9,8 @@ Online email/password accounts for Nest identity, plus a small marketing site.
 | [`web/`](../web/) | Landing, Learn, Signup, Login, Account |
 | [`services/accounts/`](../services/accounts/) | Axum + Postgres API (host `:8788`) |
 | Game intro (Title) | Sign In / Register → JWT → Nest |
-| Nest menu → **Account** | Open site, link token, refresh, sign out |
+| Nest menu → **Account** | Sign in / register, open site, link token, refresh, sign out |
+| Nest menu → **Market** | Buy → on-chain PUDGY mint to custodial wallet |
 
 ## Run the API (local, free)
 
@@ -88,8 +89,12 @@ Game env:
 
 - `POST /v1/auth/signup` `{ email, password, display_name }` → creates + links a Boing wallet; response may include `boing_wallet_secret` (once)
 - `POST /v1/auth/login` `{ email, password }` → backfills a wallet if the account is missing one
-- `GET /v1/me` Bearer
+- `GET /v1/me` Bearer → profile + `owned_skins` + `season_points`
+- `POST /v1/me/season` `{ points }` → sync soft season points for Market gating
 - `PATCH /v1/me` `{ display_name?, boing_wallet? }` (Boing AccountId = `0x` + 64 hex)
 - `GET /v1/me/wallet/secret` Bearer → export custodial private key
+- `POST /v1/market/purchase` `{ skin_id, points? }` → treasury mint NFT to custodial wallet
 
-See [`services/accounts/README.md`](../services/accounts/README.md) and [`docs/BOING_INTEGRATION.md`](BOING_INTEGRATION.md).
+Market mint needs Node + `boing-sdk` on the API host (prefer `cargo run -p pudgymon-accounts` with `BOING_SECRET_HEX` set). See [`docs/BOING_INTEGRATION.md`](BOING_INTEGRATION.md).
+
+See [`services/accounts/README.md`](../services/accounts/README.md).

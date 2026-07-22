@@ -15,6 +15,8 @@ pub struct PlayerAccount {
     pub email: String,
     pub display_name: String,
     pub boing_wallet: Option<String>,
+    #[serde(default)]
+    pub owned_skins: Vec<String>,
     pub access_token: String,
     pub api_base: String,
     pub note: String,
@@ -125,6 +127,21 @@ struct ApiProfile {
     email: String,
     display_name: String,
     boing_wallet: Option<String>,
+    #[serde(default)]
+    owned_skins: Vec<String>,
+}
+
+#[derive(Debug, Deserialize)]
+struct PurchaseResponse {
+    skin_id: String,
+    #[serde(default)]
+    boing_token_id: i64,
+    #[serde(default)]
+    tx_hash: Option<String>,
+    #[serde(default)]
+    owned_skins: Vec<String>,
+    #[serde(default)]
+    note: String,
 }
 
 fn deserialize_id<'de, D>(deserializer: D) -> Result<String, D::Error>
@@ -162,7 +179,8 @@ impl Plugin for AccountPlugin {
             }
         }
         app.insert_resource(account)
-            .add_systems(Startup, refresh_account_on_boot);
+            .add_systems(Startup, (refresh_account_on_boot, sync_owned_skins_on_boot).chain())
+            .add_systems(Update, sync_owned_skins_when_account_changes);
     }
 }
 
@@ -180,6 +198,40 @@ fn refresh_account_on_boot(mut account: ResMut<PlayerAccount>) {
             account.note = format!("Session refresh failed: {err}");
         }
     }
+}
+
+/// Merge cloud owned skins into the local season unlock list after login/refresh.
+pub fn merge_owned_skins_into_ledger(
+    account: &PlayerAccount,
+    ledger: &mut crate::season::SeasonLedger,
+) {
+    let mut dirty = false;
+    for id in &account.owned_skins {
+        if !ledger.unlocked.contains(id) {
+            ledger.unlocked.push(id.clone());
+            dirty = true;
+        }
+    }
+    if dirty {
+        ledger.save();
+    }
+}
+
+fn sync_owned_skins_on_boot(
+    account: Res<PlayerAccount>,
+    mut ledger: ResMut<crate::season::SeasonLedger>,
+) {
+    merge_owned_skins_into_ledger(&account, &mut ledger);
+}
+
+fn sync_owned_skins_when_account_changes(
+    account: Res<PlayerAccount>,
+    mut ledger: ResMut<crate::season::SeasonLedger>,
+) {
+    if !account.is_changed() {
+        return;
+    }
+    merge_owned_skins_into_ledger(&account, &mut ledger);
 }
 
 pub fn open_website(account: &mut PlayerAccount) -> String {
@@ -326,12 +378,105 @@ fn apply_profile(account: &mut PlayerAccount, profile: ApiProfile) {
     account.email = profile.email;
     account.display_name = profile.display_name;
     account.boing_wallet = profile.boing_wallet;
+    account.owned_skins = profile.owned_skins;
+}
+
+/// Push local season points to the accounts service (Market purchase gating).
+pub fn sync_season_points(account: &mut PlayerAccount, points: u32) -> Result<(), String> {
+    if account.access_token.is_empty() {
+        return Err("Not signed in.".into());
+    }
+    let url = format!(
+        "{}/v1/me/season",
+        account.api_base.trim_end_matches('/')
+    );
+    let body = serde_json::json!({ "points": points });
+    let resp = match http_agent()
+        .post(&url)
+        .set("Authorization", &format!("Bearer {}", account.access_token))
+        .set("Content-Type", "application/json")
+        .set("Accept", "application/json")
+        .send_json(body)
+    {
+        Ok(resp) => resp,
+        Err(ureq::Error::Status(_, resp)) => {
+            let body = read_json_body(resp)?;
+            return Err(parse_api_error(&body).unwrap_or(body));
+        }
+        Err(e) => return Err(format!("accounts API unreachable: {e}")),
+    };
+    let body = read_json_body(resp)?;
+    let profile: ApiProfile =
+        serde_json::from_str(&body).map_err(|e| format!("bad season json: {e}"))?;
+    apply_profile(account, profile);
+    account.save();
+    Ok(())
+}
+
+/// Buy a skin via custodial on-chain mint (`POST /v1/market/purchase`).
+pub fn purchase_skin(
+    account: &mut PlayerAccount,
+    skin_id: &str,
+    points: u32,
+) -> Result<String, String> {
+    if account.access_token.is_empty() {
+        return Err("Not signed in.".into());
+    }
+    let url = format!(
+        "{}/v1/market/purchase",
+        account.api_base.trim_end_matches('/')
+    );
+    let body = serde_json::json!({
+        "skin_id": skin_id,
+        "points": points,
+    });
+    let resp = match http_agent_long()
+        .post(&url)
+        .set("Authorization", &format!("Bearer {}", account.access_token))
+        .set("Content-Type", "application/json")
+        .set("Accept", "application/json")
+        .send_json(body)
+    {
+        Ok(resp) => resp,
+        Err(ureq::Error::Status(_, resp)) => {
+            let body = read_json_body(resp)?;
+            return Err(parse_api_error(&body).unwrap_or(body));
+        }
+        Err(e) => return Err(format!("accounts API unreachable: {e}")),
+    };
+    let body = read_json_body(resp)?;
+    let purchase: PurchaseResponse =
+        serde_json::from_str(&body).map_err(|e| format!("bad purchase json: {e}"))?;
+    account.owned_skins = purchase.owned_skins;
+    if !account.owned_skins.contains(&purchase.skin_id) {
+        account.owned_skins.push(purchase.skin_id.clone());
+    }
+    let note = if purchase.note.is_empty() {
+        format!(
+            "Bought {} · token {} · {}",
+            purchase.skin_id,
+            purchase.boing_token_id,
+            purchase.tx_hash.unwrap_or_else(|| "ok".into())
+        )
+    } else {
+        purchase.note
+    };
+    account.note = note.clone();
+    account.save();
+    Ok(note)
 }
 
 fn http_agent() -> ureq::Agent {
     ureq::AgentBuilder::new()
         .timeout_connect(std::time::Duration::from_secs(5))
         .timeout(std::time::Duration::from_secs(10))
+        .build()
+}
+
+fn http_agent_long() -> ureq::Agent {
+    ureq::AgentBuilder::new()
+        .timeout_connect(std::time::Duration::from_secs(5))
+        .timeout(std::time::Duration::from_secs(120))
         .build()
 }
 

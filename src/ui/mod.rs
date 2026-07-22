@@ -1,7 +1,6 @@
 mod auth;
 mod overlays;
 pub mod menu_options;
-pub mod title;
 
 use bevy::prelude::*;
 

@@ -2,7 +2,14 @@
 
 mod wallet;
 
-use std::{env, net::SocketAddr, time::Duration};
+use std::{
+    env, fs,
+    net::SocketAddr,
+    path::PathBuf,
+    process::Stdio,
+    sync::Arc,
+    time::Duration,
+};
 
 use argon2::{
     password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
@@ -20,6 +27,7 @@ use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation}
 use rand_core::OsRng;
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgPoolOptions, FromRow, PgPool};
+use tokio::process::Command;
 use tower_http::cors::{Any, CorsLayer};
 use uuid::Uuid;
 
@@ -29,6 +37,9 @@ struct AppState {
     jwt_secret: String,
     /// AES master for encrypting custodial Boing secrets (defaults to JWT_SECRET).
     wallet_master: String,
+    catalog: Arc<Vec<CatalogItem>>,
+    mint_script: PathBuf,
+    node_bin: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -55,6 +66,10 @@ struct Profile {
     display_name: String,
     boing_wallet: Option<String>,
     created_at: chrono::DateTime<Utc>,
+    #[serde(default)]
+    owned_skins: Vec<String>,
+    #[serde(default)]
+    season_points: i32,
 }
 
 impl From<UserRow> for Profile {
@@ -65,8 +80,59 @@ impl From<UserRow> for Profile {
             display_name: u.display_name,
             boing_wallet: u.boing_wallet,
             created_at: u.created_at,
+            owned_skins: Vec::new(),
+            season_points: 0,
         }
     }
+}
+
+#[derive(Debug, Clone, Deserialize)]
+struct CatalogItem {
+    id: String,
+    label: String,
+    cost_points: u32,
+    #[serde(default)]
+    #[allow(dead_code)]
+    boing_token_id: Option<u64>,
+}
+
+#[derive(Debug, Deserialize)]
+struct CatalogFile {
+    items: Vec<CatalogItem>,
+}
+
+#[derive(Debug, Deserialize)]
+struct SeasonSyncRequest {
+    points: u32,
+}
+
+#[derive(Debug, Deserialize)]
+struct PurchaseRequest {
+    skin_id: String,
+    /// Client-reported season points (also synced to users.season_points).
+    #[serde(default)]
+    points: Option<u32>,
+}
+
+#[derive(Debug, Serialize)]
+struct PurchaseResponse {
+    skin_id: String,
+    boing_token_id: i64,
+    tx_hash: Option<String>,
+    owned_skins: Vec<String>,
+    note: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct MintScriptResult {
+    ok: bool,
+    #[serde(default)]
+    #[allow(dead_code)]
+    token_id: Option<u64>,
+    #[serde(default)]
+    tx_hash: Option<String>,
+    #[serde(default)]
+    error: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -139,10 +205,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     run_migrations(&pool).await?;
 
+    let catalog = Arc::new(load_catalog());
+    let mint_script = env::var("BOING_MINT_SCRIPT")
+        .map(PathBuf::from)
+        .unwrap_or_else(|_| {
+            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../scripts/boing/mint_skin.mjs")
+        });
+    let node_bin = env::var("NODE_BIN").unwrap_or_else(|_| "node".into());
+
     let state = AppState {
         pool,
         jwt_secret,
         wallet_master,
+        catalog,
+        mint_script,
+        node_bin,
     };
 
     // Open CORS for local web + Vercel static site talking to this API.
@@ -156,7 +233,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/v1/auth/signup", post(signup))
         .route("/v1/auth/login", post(login))
         .route("/v1/me", get(me).patch(patch_me))
+        .route("/v1/me/season", post(sync_season))
         .route("/v1/me/wallet/secret", get(export_wallet_secret))
+        .route("/v1/market/purchase", post(purchase_skin))
         .layer(cors)
         .with_state(state);
 
@@ -197,7 +276,92 @@ async fn run_migrations(pool: &PgPool) -> Result<(), sqlx::Error> {
     )
     .execute(pool)
     .await?;
+    sqlx::query(
+        r#"
+        ALTER TABLE users
+        ADD COLUMN IF NOT EXISTS season_points INTEGER NOT NULL DEFAULT 0
+        "#,
+    )
+    .execute(pool)
+    .await?;
+    sqlx::query(
+        r#"
+        CREATE TABLE IF NOT EXISTS owned_skins (
+            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+            user_id UUID NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+            skin_id TEXT NOT NULL,
+            boing_token_id BIGINT NOT NULL,
+            tx_hash TEXT NULL,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            UNIQUE (user_id, skin_id)
+        )
+        "#,
+    )
+    .execute(pool)
+    .await?;
+    sqlx::query(r#"CREATE INDEX IF NOT EXISTS owned_skins_user_idx ON owned_skins (user_id)"#)
+        .execute(pool)
+        .await?;
+    sqlx::query(r#"CREATE SEQUENCE IF NOT EXISTS owned_skins_token_seq START WITH 1001"#)
+        .execute(pool)
+        .await?;
     Ok(())
+}
+
+fn load_catalog() -> Vec<CatalogItem> {
+    let path = env::var("PUDGYMON_CATALOG_PATH")
+        .map(PathBuf::from)
+        .unwrap_or_else(|_| {
+            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../data/cosmetics/catalog.json")
+        });
+    match fs::read_to_string(&path) {
+        Ok(raw) => match serde_json::from_str::<CatalogFile>(&raw) {
+            Ok(file) => {
+                tracing::info!(
+                    path = %path.display(),
+                    items = file.items.len(),
+                    "loaded cosmetics catalog"
+                );
+                file.items
+            }
+            Err(e) => {
+                tracing::warn!("catalog parse failed ({}): {e}", path.display());
+                Vec::new()
+            }
+        },
+        Err(e) => {
+            tracing::warn!("catalog missing ({}): {e}", path.display());
+            Vec::new()
+        }
+    }
+}
+
+async fn load_owned_skins(pool: &PgPool, user_id: Uuid) -> Result<Vec<String>, ApiError> {
+    let rows = sqlx::query_as::<_, (String,)>(
+        r#"SELECT skin_id FROM owned_skins WHERE user_id = $1 ORDER BY created_at"#,
+    )
+    .bind(user_id)
+    .fetch_all(pool)
+    .await
+    .map_err(|e| ApiError::internal(e.to_string()))?;
+    Ok(rows.into_iter().map(|r| r.0).collect())
+}
+
+async fn load_season_points(pool: &PgPool, user_id: Uuid) -> Result<i32, ApiError> {
+    let pts = sqlx::query_as::<_, (i32,)>(r#"SELECT season_points FROM users WHERE id = $1"#)
+        .bind(user_id)
+        .fetch_optional(pool)
+        .await
+        .map_err(|e| ApiError::internal(e.to_string()))?
+        .map(|r| r.0)
+        .unwrap_or(0);
+    Ok(pts)
+}
+
+async fn enrich_profile(pool: &PgPool, mut profile: Profile) -> Result<Profile, ApiError> {
+    profile.owned_skins = load_owned_skins(pool, profile.id).await?;
+    profile.season_points = load_season_points(pool, profile.id).await?;
+    Ok(profile)
 }
 
 async fn signup(
@@ -241,7 +405,7 @@ async fn signup(
         ApiError::internal(e.to_string())
     })?;
 
-    let profile = Profile::from(row);
+    let profile = enrich_profile(&state.pool, Profile::from(row)).await?;
     let token = issue_token(&state.jwt_secret, &profile)?;
     tracing::info!(
         user_id = %profile.id,
@@ -275,6 +439,7 @@ async fn login(
     verify_password(&body.password, &row.password_hash)?;
 
     let (profile, new_secret) = ensure_custodial_wallet(&state, row).await?;
+    let profile = enrich_profile(&state.pool, profile).await?;
     let token = issue_token(&state.jwt_secret, &profile)?;
     Ok(Json(AuthResponse {
         access_token: token,
@@ -335,7 +500,200 @@ async fn me(
     .await
     .map_err(|e| ApiError::internal(e.to_string()))?
     .ok_or_else(|| ApiError::unauthorized("user not found"))?;
-    Ok(Json(Profile::from(row)))
+    Ok(Json(
+        enrich_profile(&state.pool, Profile::from(row)).await?,
+    ))
+}
+
+async fn sync_season(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<SeasonSyncRequest>,
+) -> Result<Json<Profile>, ApiError> {
+    let user_id = auth_user_id(&state, &headers)?;
+    sqlx::query(r#"UPDATE users SET season_points = $1 WHERE id = $2"#)
+        .bind(body.points as i32)
+        .bind(user_id)
+        .execute(&state.pool)
+        .await
+        .map_err(|e| ApiError::internal(e.to_string()))?;
+    let row = sqlx::query_as::<_, UserRow>(
+        r#"
+        SELECT id, email, password_hash, display_name, boing_wallet, created_at
+        FROM users WHERE id = $1
+        "#,
+    )
+    .bind(user_id)
+    .fetch_one(&state.pool)
+    .await
+    .map_err(|e| ApiError::internal(e.to_string()))?;
+    Ok(Json(
+        enrich_profile(&state.pool, Profile::from(row)).await?,
+    ))
+}
+
+async fn purchase_skin(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<PurchaseRequest>,
+) -> Result<Json<PurchaseResponse>, ApiError> {
+    let user_id = auth_user_id(&state, &headers)?;
+    let skin_id = body.skin_id.trim().to_string();
+    if skin_id.is_empty() {
+        return Err(ApiError::bad("skin_id required"));
+    }
+
+    let item = state
+        .catalog
+        .iter()
+        .find(|i| i.id == skin_id)
+        .cloned()
+        .ok_or_else(|| ApiError::bad("unknown skin_id"))?;
+
+    // Already owned → idempotent success.
+    if let Some(existing) = sqlx::query_as::<_, (i64, Option<String>)>(
+        r#"SELECT boing_token_id, tx_hash FROM owned_skins WHERE user_id = $1 AND skin_id = $2"#,
+    )
+    .bind(user_id)
+    .bind(&skin_id)
+    .fetch_optional(&state.pool)
+    .await
+    .map_err(|e| ApiError::internal(e.to_string()))?
+    {
+        let owned = load_owned_skins(&state.pool, user_id).await?;
+        return Ok(Json(PurchaseResponse {
+            skin_id,
+            boing_token_id: existing.0,
+            tx_hash: existing.1,
+            owned_skins: owned,
+            note: "Already owned.".into(),
+        }));
+    }
+
+    if let Some(points) = body.points {
+        sqlx::query(r#"UPDATE users SET season_points = $1 WHERE id = $2"#)
+            .bind(points as i32)
+            .bind(user_id)
+            .execute(&state.pool)
+            .await
+            .map_err(|e| ApiError::internal(e.to_string()))?;
+    }
+
+    let season_points = load_season_points(&state.pool, user_id).await?;
+    if (season_points as u32) < item.cost_points {
+        return Err(ApiError::bad(format!(
+            "need {} season points (have {})",
+            item.cost_points, season_points
+        )));
+    }
+
+    let row = sqlx::query_as::<_, (Option<String>, Option<String>)>(
+        r#"SELECT boing_wallet, boing_wallet_secret_enc FROM users WHERE id = $1"#,
+    )
+    .bind(user_id)
+    .fetch_optional(&state.pool)
+    .await
+    .map_err(|e| ApiError::internal(e.to_string()))?
+    .ok_or_else(|| ApiError::unauthorized("user not found"))?;
+
+    let wallet = row
+        .0
+        .filter(|w| wallet::is_valid_boing_account(w))
+        .ok_or_else(|| ApiError::bad("no Boing wallet on this account"))?;
+    if row.1.is_none() {
+        return Err(ApiError::bad(
+            "no custodial secret — use Claim Desk / Boing Express for external wallets",
+        ));
+    }
+
+    let token_id: i64 = sqlx::query_as::<_, (i64,)>(r#"SELECT nextval('owned_skins_token_seq')"#)
+        .fetch_one(&state.pool)
+        .await
+        .map_err(|e| ApiError::internal(e.to_string()))?
+        .0;
+
+    let mint = run_mint_script(&state, &wallet, token_id as u64).await?;
+    if !mint.ok {
+        return Err(ApiError::internal(
+            mint.error.unwrap_or_else(|| "mint failed".into()),
+        ));
+    }
+
+    sqlx::query(
+        r#"
+        INSERT INTO owned_skins (user_id, skin_id, boing_token_id, tx_hash)
+        VALUES ($1, $2, $3, $4)
+        "#,
+    )
+    .bind(user_id)
+    .bind(&skin_id)
+    .bind(token_id)
+    .bind(mint.tx_hash.as_deref())
+    .execute(&state.pool)
+    .await
+    .map_err(|e| ApiError::internal(e.to_string()))?;
+
+    let owned = load_owned_skins(&state.pool, user_id).await?;
+    tracing::info!(
+        user_id = %user_id,
+        skin = %skin_id,
+        token_id,
+        tx = ?mint.tx_hash,
+        "minted skin NFT"
+    );
+    Ok(Json(PurchaseResponse {
+        skin_id: skin_id.clone(),
+        boing_token_id: token_id,
+        tx_hash: mint.tx_hash.clone(),
+        owned_skins: owned,
+        note: format!(
+            "Minted {} (token {}) · {}",
+            item.label,
+            token_id,
+            mint.tx_hash.unwrap_or_else(|| "ok".into())
+        ),
+    }))
+}
+
+async fn run_mint_script(
+    state: &AppState,
+    recipient: &str,
+    token_id: u64,
+) -> Result<MintScriptResult, ApiError> {
+    if !state.mint_script.is_file() {
+        return Err(ApiError::internal(format!(
+            "mint script missing: {}",
+            state.mint_script.display()
+        )));
+    }
+    let output = Command::new(&state.node_bin)
+        .arg(&state.mint_script)
+        .arg("--to")
+        .arg(recipient)
+        .arg("--token-id")
+        .arg(token_id.to_string())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .output()
+        .await
+        .map_err(|e| ApiError::internal(format!("failed to spawn node mint: {e}")))?;
+
+    let stdout = String::from_utf8_lossy(&output.stdout).trim().to_string();
+    let stderr = String::from_utf8_lossy(&output.stderr).trim().to_string();
+    if stdout.is_empty() {
+        return Err(ApiError::internal(format!(
+            "mint script produced no stdout (exit {:?}): {stderr}",
+            output.status.code()
+        )));
+    }
+    // Prefer last JSON line (script may log to stderr; stdout is one JSON object).
+    let line = stdout.lines().last().unwrap_or(&stdout);
+    match serde_json::from_str::<MintScriptResult>(line) {
+        Ok(result) => Ok(result),
+        Err(e) => Err(ApiError::internal(format!(
+            "bad mint json ({e}): {line} stderr={stderr}"
+        ))),
+    }
 }
 
 async fn patch_me(
@@ -394,7 +752,9 @@ async fn patch_me(
     .fetch_one(&state.pool)
     .await
     .map_err(|e| ApiError::internal(e.to_string()))?;
-    Ok(Json(Profile::from(row)))
+    Ok(Json(
+        enrich_profile(&state.pool, Profile::from(row)).await?,
+    ))
 }
 
 async fn export_wallet_secret(

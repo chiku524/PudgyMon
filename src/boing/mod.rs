@@ -274,73 +274,37 @@ pub fn open_claim_companion_page(voucher: &mut ClaimVoucher) -> String {
     voucher.note.clone()
 }
 
-/// Minimal JSON-RPC helper (no extra crate — uses std + serde_json).
+/// Minimal JSON-RPC helper via `ureq`.
 pub fn boing_rpc_call(
     rpc_url: &str,
     method: &str,
     params_json: &str,
 ) -> Result<serde_json::Value, String> {
-    // Prefer ureq-like via std::process curl on Windows is fragile; use a tiny blocking HTTP.
-    // Ship with `ureq` would be cleaner — use std TCP for MVP simplicity via `attohttpc`? 
-    // Stick to optional: try `std::process::Command` curl, else mark unreachable.
-    #[cfg(target_os = "windows")]
-    {
-        let body = format!(
-            "{{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"{method}\",\"params\":{params_json}}}"
-        );
-        let output = std::process::Command::new("curl")
-            .args([
-                "-s",
-                "-X",
-                "POST",
-                rpc_url,
-                "-H",
-                "Content-Type: application/json",
-                "-d",
-                &body,
-                "--max-time",
-                "2",
-            ])
-            .output()
-            .map_err(|e| format!("curl missing/failed: {e}"))?;
-        if !output.status.success() {
-            return Err("rpc curl non-zero".into());
-        }
-        let v: serde_json::Value = serde_json::from_slice(&output.stdout)
-            .map_err(|e| format!("rpc json: {e}"))?;
-        if let Some(err) = v.get("error") {
-            return Err(err.to_string());
-        }
-        Ok(v.get("result").cloned().unwrap_or(serde_json::Value::Null))
+    let params: serde_json::Value =
+        serde_json::from_str(params_json).unwrap_or(serde_json::json!([]));
+    let body = serde_json::json!({
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": method,
+        "params": params,
+    });
+    let agent = ureq::AgentBuilder::new()
+        .timeout_connect(std::time::Duration::from_secs(2))
+        .timeout(std::time::Duration::from_secs(3))
+        .build();
+    let resp = agent
+        .post(rpc_url)
+        .set("Content-Type", "application/json")
+        .set("Accept", "application/json")
+        .send_json(body)
+        .map_err(|e| format!("rpc http: {e}"))?;
+    let text = resp
+        .into_string()
+        .map_err(|e| format!("rpc read: {e}"))?;
+    let v: serde_json::Value =
+        serde_json::from_str(&text).map_err(|e| format!("rpc json: {e}"))?;
+    if let Some(err) = v.get("error") {
+        return Err(err.to_string());
     }
-    #[cfg(not(target_os = "windows"))]
-    {
-        let body = format!(
-            "{{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"{method}\",\"params\":{params_json}}}"
-        );
-        let output = std::process::Command::new("curl")
-            .args([
-                "-s",
-                "-X",
-                "POST",
-                rpc_url,
-                "-H",
-                "Content-Type: application/json",
-                "-d",
-                &body,
-                "--max-time",
-                "2",
-            ])
-            .output()
-            .map_err(|e| format!("curl missing/failed: {e}"))?;
-        if !output.status.success() {
-            return Err("rpc curl non-zero".into());
-        }
-        let v: serde_json::Value = serde_json::from_slice(&output.stdout)
-            .map_err(|e| format!("rpc json: {e}"))?;
-        if let Some(err) = v.get("error") {
-            return Err(err.to_string());
-        }
-        Ok(v.get("result").cloned().unwrap_or(serde_json::Value::Null))
-    }
+    Ok(v.get("result").cloned().unwrap_or(serde_json::Value::Null))
 }

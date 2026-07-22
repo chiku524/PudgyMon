@@ -9,7 +9,8 @@ Boing is a **native L1** (32-byte `AccountId`, Ed25519, Boing VM) — not MetaMa
 | Source | Purpose |
 |--------|---------|
 | `BOING_RPC_URL` | JSON-RPC endpoint (default `http://127.0.0.1:8545`, matching `contracts.json`) |
-| `BOING_ACCOUNT` | Your `0x` + 64 hex AccountId — Ctrl+V in-game to link |
+| `BOING_ACCOUNT` | Optional external AccountId — Nest menu → Wallet → Advanced link / Ctrl+V |
+| `BOING_SECRET_HEX` | Treasury/deployer seed for Market mints (accounts API + deploy/mint scripts) |
 | [`data/boing/contracts.json`](../data/boing/contracts.json) | Deployed NFT collection + fungible AccountIds + preferred RPC |
 
 Chain id (testnet): **6913** / `0x1b01`.
@@ -22,13 +23,41 @@ Current reference deploy in `contracts.json`: **Saga Token (SAGA)** + **PudgyMon
 
 **Registration creates a custodial Boing wallet** (Ed25519 AccountId `0x` + 64 hex) and stores it on the user profile (`boing_wallet`). The private key is encrypted at rest (`boing_wallet_secret_enc`) and returned **once** on signup (also exportable via `GET /v1/me/wallet/secret`).
 
-In-game, that cloud wallet is auto-linked into `BoingConfig.linked_account` after sign-in.
+In-game, that cloud wallet is auto-linked into `BoingConfig.linked_account` after sign-in. Desktop Bevy does **not** embed Boing Express / `window.boing`.
 
-You can still use **[Boing Express](https://boing.express)** for an external wallet (PATCH profile / Ctrl+V `BOING_ACCOUNT`). Desktop Bevy cannot inject `window.boing`; claim flow:
+## Nest Market — on-chain Buy
 
-1. Earn season points in-game (M builds a voucher).
-2. Voucher written to `%LOCALAPPDATA%/PudgyMon/logs/claim_voucher.json`.
-3. Companion page / operator uses **boing-sdk** `buildReferenceNftCollectionDeployMetaTx` / mint `contract_call` with Express.
+Primary purchase path (custodial):
+
+1. Sign in (intro or Nest menu → Account).
+2. Earn season points in party modes (soft currency; host-trusted MVP).
+3. Esc → **Market** → **Buy** on a skin.
+4. Game calls `POST /v1/market/purchase` with JWT + points.
+5. Accounts API allocates a unique `boing_token_id`, runs [`scripts/boing/mint_skin.mjs`](../scripts/boing/mint_skin.mjs) (treasury-signed lazy mint via `transfer_nft` to the player’s custodial AccountId), and stores ownership in `owned_skins`.
+6. Game merges `owned_skins` into local unlocks and equips as usual.
+
+Accounts env for minting (see [`services/accounts/.env.example`](../services/accounts/.env.example)):
+
+```bash
+BOING_RPC_URL=http://127.0.0.1:8545
+BOING_SECRET_HEX=0x…64 hex   # same deployer as contracts.json
+BOING_SDK_PATH=…/boing-sdk/dist/index.js
+# optional: BOING_MINT_SCRIPT, NODE_BIN, PUDGYMON_CATALOG_PATH
+```
+
+Manual mint (operator):
+
+```bash
+node scripts/boing/mint_skin.mjs --to 0x…recipient --token-id 1001
+```
+
+### External wallet / Express fallback
+
+If the player replaces their custodial wallet (`PATCH /v1/me` with an external AccountId), the server drops the custodial secret and Market Buy cannot mint for them. Use:
+
+1. Earn season points → **M** builds a voucher (`%LOCALAPPDATA%/PudgyMon/logs/claim_voucher.json`).
+2. Nest menu → Wallet → **Open Claim Desk** (or Ctrl+O).
+3. Complete mint in **[Boing Express](https://boing.express)** against `contracts.json`.
 
 ## Deploy reference assets
 
@@ -58,23 +87,19 @@ MSYS_NO_PATHCONV=1 docker run -d --name pudgymon-boing-solo -p 8546:8545 \
 
 Then set `BOING_RPC_URL=http://127.0.0.1:8546` for that deploy only.
 
-## Claim companion
-
-Static page: [`companion/claim/`](../companion/claim/README.md)
-
-In-game **Ctrl+O** opens it. Paste `%LOCALAPPDATA%/PudgyMon/logs/claim_voucher.json` and continue in Boing Express.
-
 ## In-game keys
 
 | Key | Action |
 |-----|--------|
-| Ctrl+V | Link `BOING_ACCOUNT` |
+| Esc | Nest menu (Settings, Account, Market, Wallet, …) |
+| Ctrl+V | Link external `BOING_ACCOUNT` |
 | M | Write claim voucher for equipped skin |
 | Ctrl+O | Open claim companion page |
 | C | Cycle unlocked cosmetics |
 
 ## Security
 
-- Season points are **host-trusted** offline/LAN for MVP.
+- Season points are **host-trusted** offline/LAN for MVP; synced to accounts for Market gating.
+- NFT mint is the on-chain purchase artifact; SAGA debit as payment is a follow-up.
 - Do not mint from raw client scores without attestation later.
 - NFTs/currency ≠ gambling; see archived wager docs.

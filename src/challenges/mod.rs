@@ -157,9 +157,11 @@ impl Plugin for ChallengesPlugin {
 fn claim_completed_challenges(
     mut board: ResMut<ChallengeBoard>,
     mut season: ResMut<SeasonLedger>,
+    mut banner: ResMut<crate::session_flow::NetworkBanner>,
 ) {
     let mut reward = 0u32;
     let mut newly = Vec::new();
+    let mut labels = Vec::new();
     for def in &board.defs {
         if board.claimed.contains(&def.id) {
             continue;
@@ -167,6 +169,7 @@ fn claim_completed_challenges(
         let p = board.progress.get(&def.id).copied().unwrap_or(0);
         if p >= def.target {
             newly.push(def.id.clone());
+            labels.push(def.label.clone());
             reward = reward.saturating_add(def.reward_points);
         }
     }
@@ -179,6 +182,16 @@ fn claim_completed_challenges(
     // Award challenge points without bumping parties_played.
     season.points = season.points.saturating_add(reward);
     board.save();
+    let summary = if labels.len() == 1 {
+        format!("Challenge complete: {} (+{} pts)", labels[0], reward)
+    } else {
+        format!(
+            "{} challenges complete (+{} pts)",
+            labels.len(),
+            reward
+        )
+    };
+    banner.show(summary, 3.5);
 }
 
 fn persist_challenges(board: Res<ChallengeBoard>) {
