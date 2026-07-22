@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "characters": [
+    {
+      "id": "char_pudgy_base_01",
+      "label": "Soft Cartoon",
+      "blurb": "Studio 5a0db910 — soft matte Pokémon / Kirby pass"
+    },
+    {
+      "id": "char_pudgy_base_02",
+      "label": "Vivid Cartoon",
+      "blurb": "Studio c00ebe10 — vibrant color body variant"
+    }
+  ]
+}

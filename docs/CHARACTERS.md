@@ -2,15 +2,21 @@
 
 Chunky party creatures for **PudgyMon: Party Saga**. One shared base figure, species skins that match the same proportions, and **detachable accessories** on fixed sockets so movement and cosmetics stay in sync.
 
-## Base rig — `char_pudgy_base_01`
+## Base rigs
 
+### `char_pudgy_base_01` — Soft Cartoon
 - Round body, oversized head, stubby limbs
 - Soft **stylized cartoon 3D** look (Pokémon / Kirby / Animal Crossing vibes) — painted matte candy colors, not clay or glossy vinyl; family-friendly
 - Playable height ~1.2 m (read as “cute chunky,” not adult humanoid)
 - GLB: `assets/models/char_pudgy_base_01/char_pudgy_base_01.glb`
-- **Current mesh:** Studio job `5a0db910-520c-406d-987f-b3914d7ab296` (pack id `pudgy_mon_shared_base_01`, remapped)
+- Studio job `5a0db910-520c-406d-987f-b3914d7ab296` (pack id `pudgy_mon_shared_base_01`, remapped)
 
-Default crew id: [`data/player_defaults.json`](../data/player_defaults.json). If the GLB is missing, runtime uses a **procedural Pudgy stub**.
+### `char_pudgy_base_02` — Vivid Cartoon
+- Same contract as base_01 (compare in Esc Nest menu → **Characters**)
+- GLB: `assets/models/char_pudgy_base_02/char_pudgy_base_02.glb`
+- Studio job `c00ebe10-82b0-4f59-8f67-477d3852e0d4` (pack id `pudgy_mon_body_shared_base_01`, remapped)
+
+Default crew id: [`data/player_defaults.json`](../data/player_defaults.json) (user pick saved under `%LOCALAPPDATA%/…/player_defaults.json`). Roster: [`data/characters/roster.json`](../data/characters/roster.json). If the GLB is missing, runtime uses a **procedural Pudgy stub**.
 
 ## Pudgy Character Contract
 

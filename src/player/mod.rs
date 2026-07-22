@@ -42,10 +42,12 @@ impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<ThirdPersonCamera>()
             .init_resource::<freight::FreightCadence>()
-            .add_observer(init_player_visuals)
+            .add_client_event::<SelectCharacterRequest>(Channel::Unordered)
+            .add_observer(handle_select_character)
             .add_systems(
                 Update,
                 (
+                    sync_player_visuals,
                     assign_local_player,
                     capture_cursor_when_playing.run_if(in_state(AppScreen::Playing)),
                     toggle_cursor_capture.run_if(in_state(AppScreen::Playing)),
@@ -139,6 +141,16 @@ pub struct LocalPlayer;
 /// Procedural Pudgy body part — tinted when cosmetics change.
 #[derive(Component, Debug, Clone, Copy, Default)]
 pub struct PudgyTintPart;
+
+/// Root of the spawned character mesh (GLB or procedural stub). Cleared on model swap.
+#[derive(Component, Debug, Clone, Copy, Default)]
+pub struct PlayerVisualRoot;
+
+/// Client → server: equip a playable character GLB by Studio `asset_id`.
+#[derive(Event, Serialize, Deserialize, Clone, Debug)]
+pub struct SelectCharacterRequest {
+    pub model_id: String,
+}
 
 #[derive(Resource, Default, Debug)]
 pub struct PlayerRegistry {
@@ -388,102 +400,147 @@ fn assign_local_player(
     }
 }
 
-fn init_player_visuals(
-    add: On<Add, NetworkPlayer>,
+fn handle_select_character(
+    request: On<FromClient<SelectCharacterRequest>>,
+    mut players: Query<&mut PlayerVisualSpec, With<NetworkPlayer>>,
+    owners: Query<&OwnedPlayer>,
+) {
+    let Some(client_entity) = request.client_id.entity() else {
+        return;
+    };
+    let Ok(owned) = owners.get(client_entity) else {
+        return;
+    };
+    let model_id = request.model_id.trim();
+    if model_id.is_empty() || !crate::data::character_glb_exists(model_id) {
+        return;
+    }
+    if let Ok(mut visual) = players.get_mut(owned.0) {
+        visual.model_id = Some(model_id.to_string());
+    }
+}
+
+fn sync_player_visuals(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
     asset_server: Res<AssetServer>,
     registry: Option<Res<crate::data::StudioRegistry>>,
-    players: Query<(&PlayerColor, Option<&PlayerVisualSpec>), With<NetworkPlayer>>,
+    players: Query<
+        (
+            Entity,
+            &PlayerColor,
+            Option<&PlayerVisualSpec>,
+            Option<&Children>,
+        ),
+        Or<(Added<NetworkPlayer>, Changed<PlayerVisualSpec>)>,
+    >,
+    visual_roots: Query<(), With<PlayerVisualRoot>>,
 ) {
-    let Ok((color, visual)) = players.get(add.entity) else {
-        return;
-    };
-
-    // Prefer a character GLB when PlayerVisualSpec.model_id is set and the file exists.
-    if let Some(visual) = visual {
-        if let Some(model_id) = visual.model_id.as_deref() {
-            let disk = format!(
-                "{}/assets/models/{model_id}/{model_id}.glb",
-                env!("CARGO_MANIFEST_DIR")
-            );
-            if std::path::Path::new(&disk).is_file() {
-                let scale = registry
-                    .as_ref()
-                    .map(|r| r.spawn_scale(model_id))
-                    .unwrap_or(Vec3::ONE);
-                let glb_path = format!("models/{model_id}/{model_id}.glb");
-                let scene = asset_server
-                    .load(bevy::gltf::GltfAssetLabel::Scene(0).from_asset(glb_path));
-                commands.entity(add.entity).insert((GameplayEntity, Knockback::default())).with_children(|parent| {
-                    parent.spawn((
-                        WorldAssetRoot(scene),
-                        Transform {
-                            translation: Vec3::ZERO,
-                            rotation: Quat::from_rotation_y(CHARACTER_MESH_YAW_OFFSET),
-                            scale,
-                        },
-                        Visibility::default(),
-                    ));
-                });
-                return;
+    for (entity, color, visual, children) in &players {
+        if let Some(children) = children {
+            for child in children.iter() {
+                if visual_roots.contains(child) {
+                    commands.entity(child).despawn();
+                }
             }
         }
-    }
 
-    // Procedural Pudgy stub when no crew/species GLB is on disk.
-    let [r, g, b] = color.0;
-    let body_mat = materials.add(StandardMaterial {
-        base_color: Color::srgb(r, g, b),
-        ..Default::default()
-    });
-    let eye_mat = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.08, 0.08, 0.1),
-        ..Default::default()
-    });
-    let cheek_mat = materials.add(StandardMaterial {
-        base_color: Color::srgb((r * 0.7 + 0.3).min(1.0), g * 0.55, b * 0.55),
-        ..Default::default()
-    });
+        commands
+            .entity(entity)
+            .insert((GameplayEntity, Knockback::default()));
 
-    commands
-        .entity(add.entity)
-        .insert((GameplayEntity, Knockback::default()))
-        .with_children(|parent| {
-            parent.spawn((
-                PudgyTintPart,
-                Mesh3d(meshes.add(Sphere::new(0.55))),
-                MeshMaterial3d(body_mat.clone()),
-                Transform::from_xyz(0.0, 0.55, 0.0),
-                Name::new("PudgyBody"),
-            ));
-            parent.spawn((
-                PudgyTintPart,
-                Mesh3d(meshes.add(Sphere::new(0.42))),
-                MeshMaterial3d(body_mat),
-                Transform::from_xyz(0.0, 1.25, 0.05),
-                Name::new("PudgyHead"),
-            ));
-            parent.spawn((
-                Mesh3d(meshes.add(Sphere::new(0.08))),
-                MeshMaterial3d(eye_mat.clone()),
-                Transform::from_xyz(-0.14, 1.32, 0.34),
-                Name::new("PudgyEyeL"),
-            ));
-            parent.spawn((
-                Mesh3d(meshes.add(Sphere::new(0.08))),
-                MeshMaterial3d(eye_mat),
-                Transform::from_xyz(0.14, 1.32, 0.34),
-                Name::new("PudgyEyeR"),
-            ));
-            parent.spawn((
-                Mesh3d(meshes.add(Sphere::new(0.09))),
-                MeshMaterial3d(cheek_mat),
-                Transform::from_xyz(0.0, 1.12, 0.38),
-                Name::new("PudgySnout"),
-            ));
+        let model_id = visual.and_then(|v| v.model_id.as_deref()).filter(|id| {
+            let disk = format!(
+                "{}/assets/models/{id}/{id}.glb",
+                env!("CARGO_MANIFEST_DIR")
+            );
+            std::path::Path::new(&disk).is_file()
         });
+
+        if let Some(model_id) = model_id {
+            let scale = registry
+                .as_ref()
+                .map(|r| r.spawn_scale(model_id))
+                .unwrap_or(Vec3::ONE);
+            let glb_path = format!("models/{model_id}/{model_id}.glb");
+            let scene =
+                asset_server.load(bevy::gltf::GltfAssetLabel::Scene(0).from_asset(glb_path));
+            commands.entity(entity).with_children(|parent| {
+                parent.spawn((
+                    PlayerVisualRoot,
+                    WorldAssetRoot(scene),
+                    Transform {
+                        translation: Vec3::ZERO,
+                        rotation: Quat::from_rotation_y(CHARACTER_MESH_YAW_OFFSET),
+                        scale,
+                    },
+                    Visibility::default(),
+                    Name::new(format!("CrewMesh:{model_id}")),
+                ));
+            });
+            continue;
+        }
+
+        // Procedural Pudgy stub when no crew/species GLB is on disk.
+        let [r, g, b] = color.0;
+        let body_mat = materials.add(StandardMaterial {
+            base_color: Color::srgb(r, g, b),
+            ..Default::default()
+        });
+        let eye_mat = materials.add(StandardMaterial {
+            base_color: Color::srgb(0.08, 0.08, 0.1),
+            ..Default::default()
+        });
+        let cheek_mat = materials.add(StandardMaterial {
+            base_color: Color::srgb((r * 0.7 + 0.3).min(1.0), g * 0.55, b * 0.55),
+            ..Default::default()
+        });
+
+        commands.entity(entity).with_children(|parent| {
+            parent
+                .spawn((
+                    PlayerVisualRoot,
+                    Transform::default(),
+                    Visibility::default(),
+                    Name::new("PudgyStub"),
+                ))
+                .with_children(|stub| {
+                    stub.spawn((
+                        PudgyTintPart,
+                        Mesh3d(meshes.add(Sphere::new(0.55))),
+                        MeshMaterial3d(body_mat.clone()),
+                        Transform::from_xyz(0.0, 0.55, 0.0),
+                        Name::new("PudgyBody"),
+                    ));
+                    stub.spawn((
+                        PudgyTintPart,
+                        Mesh3d(meshes.add(Sphere::new(0.42))),
+                        MeshMaterial3d(body_mat),
+                        Transform::from_xyz(0.0, 1.25, 0.05),
+                        Name::new("PudgyHead"),
+                    ));
+                    stub.spawn((
+                        Mesh3d(meshes.add(Sphere::new(0.08))),
+                        MeshMaterial3d(eye_mat.clone()),
+                        Transform::from_xyz(-0.14, 1.32, 0.34),
+                        Name::new("PudgyEyeL"),
+                    ));
+                    stub.spawn((
+                        Mesh3d(meshes.add(Sphere::new(0.08))),
+                        MeshMaterial3d(eye_mat),
+                        Transform::from_xyz(0.14, 1.32, 0.34),
+                        Name::new("PudgyEyeR"),
+                    ));
+                    stub.spawn((
+                        Mesh3d(meshes.add(Sphere::new(0.09))),
+                        MeshMaterial3d(cheek_mat),
+                        Transform::from_xyz(0.0, 1.12, 0.38),
+                        Name::new("PudgySnout"),
+                    ));
+                });
+        });
+    }
 }
 
 fn follow_camera(

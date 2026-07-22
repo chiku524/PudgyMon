@@ -14,9 +14,10 @@ use crate::{
     brand::APP_DATA_DIR,
     challenges::ChallengeBoard,
     cosmetics::{CosmeticsCatalog, EquippedCosmetic},
+    data::{CharacterRoster, PlayerDefaults},
     flow::AppScreen,
     hub::EditorMode,
-    player::{PlayerName, ThirdPersonCamera},
+    player::{PlayerName, PlayerVisualSpec, SelectCharacterRequest, ThirdPersonCamera},
     season::SeasonLedger,
     session_flow::{LeaveToNestRequest, NetworkBanner},
 };
@@ -76,6 +77,7 @@ pub enum MenuPage {
     Settings,
     Profile,
     Account,
+    Characters,
     Inventory,
     Wallet,
     Market,
@@ -109,6 +111,16 @@ struct MarketEquipButton {
 }
 
 #[derive(Component)]
+struct CharacterSelectButton {
+    id: String,
+}
+
+#[derive(Component)]
+struct CharacterRowLabel {
+    id: String,
+}
+
+#[derive(Component)]
 struct MarketBoingButton(BoingAction);
 
 #[derive(Component, Clone, Copy, PartialEq, Eq)]
@@ -116,6 +128,7 @@ enum MenuBodyText {
     Settings,
     Profile,
     Account,
+    Characters,
     Inventory,
     Wallet,
     Challenges,
@@ -256,6 +269,7 @@ impl Plugin for SettingsPlugin {
                     handle_menu_nav,
                     handle_settings_buttons,
                     handle_market_equip,
+                    handle_character_select,
                     handle_market_buy,
                     handle_market_boing,
                     handle_account_buttons,
@@ -297,7 +311,7 @@ fn persist_settings(settings: Res<GameSettings>) {
     }
 }
 
-fn spawn_nest_menu(mut commands: Commands, catalog: Res<CosmeticsCatalog>) {
+fn spawn_nest_menu(mut commands: Commands, catalog: Res<CosmeticsCatalog>, roster: Res<CharacterRoster>) {
     commands
         .spawn((
             PauseRoot,
@@ -352,6 +366,7 @@ fn spawn_nest_menu(mut commands: Commands, catalog: Res<CosmeticsCatalog>) {
             spawn_page_settings(panel);
             spawn_page_profile(panel);
             spawn_page_account(panel);
+            spawn_page_characters(panel, &roster);
             spawn_page_inventory(panel, &catalog);
             spawn_page_wallet(panel);
             spawn_page_market(panel, &catalog);
@@ -383,6 +398,7 @@ fn spawn_top_nav(parent: &mut ChildSpawnerCommands) {
             // First nav item = Settings (default open page).
             top_nav_btn(bar, "⚙", "Settings", MenuAction::Open(MenuPage::Settings), Some(MenuPage::Settings), false);
             top_nav_btn(bar, "◆", "Profile", MenuAction::Open(MenuPage::Profile), Some(MenuPage::Profile), false);
+            top_nav_btn(bar, "☺", "Characters", MenuAction::Open(MenuPage::Characters), Some(MenuPage::Characters), false);
             top_nav_btn(bar, "@", "Account", MenuAction::Open(MenuPage::Account), Some(MenuPage::Account), false);
             top_nav_btn(bar, "▣", "Inventory", MenuAction::Open(MenuPage::Inventory), Some(MenuPage::Inventory), false);
             top_nav_btn(bar, "¤", "Wallet", MenuAction::Open(MenuPage::Wallet), Some(MenuPage::Wallet), false);
@@ -607,6 +623,88 @@ fn spawn_page_account(parent: &mut ChildSpawnerCommands) {
             account_btn(page, "Register mode", AccountAction::ModeRegister);
             account_btn(page, "Submit email/password", AccountAction::SubmitAuth);
             account_btn(page, "Sign out", AccountAction::SignOut);
+        });
+}
+
+fn spawn_page_characters(parent: &mut ChildSpawnerCommands, roster: &CharacterRoster) {
+    parent
+        .spawn((
+            MenuPageRoot(MenuPage::Characters),
+            Node {
+                width: Val::Percent(100.0),
+                flex_direction: FlexDirection::Column,
+                row_gap: Val::Px(8.0),
+                ..Default::default()
+            },
+            Visibility::Hidden,
+        ))
+        .with_children(|page| {
+            page.spawn((
+                Text::new("Characters"),
+                TextFont {
+                    font_size: FontSize::Px(20.0),
+                    ..Default::default()
+                },
+                TextColor(TEAL),
+            ));
+            page.spawn((
+                MenuBodyText::Characters,
+                Text::new(""),
+                TextFont {
+                    font_size: FontSize::Px(13.0),
+                    ..Default::default()
+                },
+                TextColor(MUTED),
+            ));
+            for entry in roster.available() {
+                let id = entry.id.clone();
+                let label = format!("{}\n{}", entry.label, entry.blurb);
+                page.spawn((
+                    Node {
+                        width: Val::Percent(100.0),
+                        flex_direction: FlexDirection::Row,
+                        column_gap: Val::Px(8.0),
+                        align_items: AlignItems::Center,
+                        justify_content: JustifyContent::SpaceBetween,
+                        padding: UiRect::axes(Val::Px(4.0), Val::Px(6.0)),
+                        ..Default::default()
+                    },
+                    children![
+                        (
+                            CharacterRowLabel { id: id.clone() },
+                            Text::new(label),
+                            TextFont {
+                                font_size: FontSize::Px(13.0),
+                                ..Default::default()
+                            },
+                            TextColor(MUTED),
+                            Node {
+                                flex_grow: 1.0,
+                                ..Default::default()
+                            },
+                        ),
+                        (
+                            Button,
+                            CharacterSelectButton { id },
+                            Node {
+                                padding: UiRect::axes(Val::Px(12.0), Val::Px(8.0)),
+                                justify_content: JustifyContent::Center,
+                                border_radius: BorderRadius::all(Val::Px(8.0)),
+                                ..Default::default()
+                            },
+                            BackgroundColor(BTN_BG),
+                            children![(
+                                Text::new("Use"),
+                                TextFont {
+                                    font_size: FontSize::Px(13.0),
+                                    ..Default::default()
+                                },
+                                TextColor(Color::srgb(0.95, 0.95, 0.9)),
+                            )],
+                        ),
+                    ],
+                ));
+            }
         });
 }
 
@@ -899,6 +997,7 @@ fn spawn_page_controls(parent: &mut ChildSpawnerCommands) {
                     "WASD move · mouse look · scroll zoom\n\
                      Pads · E / Enter start mode\n\
                      Create Map / My Maps · C skins · M claim\n\
+                     Esc Nest menu → Characters to swap bases\n\
                      Ctrl+V link wallet · Ctrl+O claim desk\n\
                      Esc Nest menu · Q return Nest · R rematch\n\
                      ` free cursor · F11 fullscreen",
@@ -1291,6 +1390,40 @@ fn handle_market_equip(
     }
 }
 
+fn handle_character_select(
+    pause: Res<PauseState>,
+    roster: Res<CharacterRoster>,
+    mut defaults: ResMut<PlayerDefaults>,
+    mut banner: ResMut<NetworkBanner>,
+    mut commands: Commands,
+    mut visuals: Query<&mut PlayerVisualSpec, With<crate::player::LocalPlayer>>,
+    client: Option<Res<bevy_replicon_renet::RenetClient>>,
+    interactions: Query<(&Interaction, &CharacterSelectButton), Changed<Interaction>>,
+) {
+    if !pause.paused {
+        return;
+    }
+    for (interaction, btn) in &interactions {
+        if *interaction != Interaction::Pressed {
+            continue;
+        }
+        if !crate::data::character_glb_exists(&btn.id) {
+            banner.show(format!("Missing mesh for {}", btn.id), 2.5);
+            continue;
+        }
+        defaults.set_crew_model(&btn.id);
+        if client.is_some() {
+            commands.client_trigger(SelectCharacterRequest {
+                model_id: btn.id.clone(),
+            });
+        } else if let Ok(mut visual) = visuals.single_mut() {
+            visual.model_id = Some(btn.id.clone());
+        }
+        let label = roster.label_for(&btn.id);
+        banner.show(format!("Character: {label}"), 2.0);
+    }
+}
+
 fn handle_account_buttons(
     pause: Res<PauseState>,
     mut account: ResMut<PlayerAccount>,
@@ -1549,20 +1682,25 @@ fn refresh_menu_labels(
     ledger: Res<SeasonLedger>,
     equipped: Res<EquippedCosmetic>,
     catalog: Res<CosmeticsCatalog>,
+    roster: Res<CharacterRoster>,
+    defaults: Res<PlayerDefaults>,
     config: Res<BoingConfig>,
     status: Res<BoingStatus>,
     board: Res<ChallengeBoard>,
     voucher: Res<ClaimVoucher>,
     account: Res<PlayerAccount>,
     form: Res<NestAuthForm>,
-    mut bodies: Query<(&MenuBodyText, &mut Text), Without<MarketRowLabel>>,
-    mut market_rows: Query<(&MarketRowLabel, &mut Text), Without<MenuBodyText>>,
+    mut texts: ParamSet<(
+        Query<(&MenuBodyText, &mut Text)>,
+        Query<(&MarketRowLabel, &mut Text)>,
+        Query<(&CharacterRowLabel, &mut Text)>,
+    )>,
 ) {
     if !pause.paused {
         return;
     }
 
-    for (kind, mut text) in &mut bodies {
+    for (kind, mut text) in &mut texts.p0() {
         match (*kind, *page) {
             (MenuBodyText::Settings, MenuPage::Settings) => {
                 **text = format!(
@@ -1585,18 +1723,27 @@ fn refresh_menu_labels(
                     .find(|i| i.id == equipped.id)
                     .map(|i| i.label.as_str())
                     .unwrap_or(equipped.id.as_str());
+                let character = roster.label_for(&defaults.crew_model_id);
                 let who = if account.signed_in() {
                     format!("{} ({})", account.display_name, account.email)
                 } else {
                     "Guest — open Account to sign in".into()
                 };
                 **text = format!(
-                    "{who}\nSeason {} · {} pts · {} parties\nSkin: {}\nWallet: {}\nInventory / Wallet / Account for more",
+                    "{who}\nSeason {} · {} pts · {} parties\nCharacter: {}\nSkin tint: {}\nWallet: {}\nCharacters / Inventory / Wallet / Account for more",
                     ledger.season_id,
                     ledger.points,
                     ledger.parties_played,
+                    character,
                     skin,
                     wallet,
+                );
+            }
+            (MenuBodyText::Characters, MenuPage::Characters) => {
+                let label = roster.label_for(&defaults.crew_model_id);
+                **text = format!(
+                    "Active: {label} (`{}`)\nPick a base to swap live — compare Soft vs Vivid in The Nest.",
+                    defaults.crew_model_id
                 );
             }
             (MenuBodyText::Account, MenuPage::Account) => {
@@ -1773,8 +1920,22 @@ fn refresh_menu_labels(
         }
     }
 
+    if matches!(*page, MenuPage::Characters) {
+        for (row, mut text) in &mut texts.p2() {
+            let Some(entry) = roster.characters.iter().find(|c| c.id == row.id) else {
+                continue;
+            };
+            let mark = if defaults.crew_model_id == row.id {
+                "● Active"
+            } else {
+                "○"
+            };
+            **text = format!("{mark} {}\n{}", entry.label, entry.blurb);
+        }
+    }
+
     if matches!(*page, MenuPage::Market | MenuPage::Inventory) {
-        for (row, mut text) in &mut market_rows {
+        for (row, mut text) in &mut texts.p1() {
             let Some(item) = catalog.items.iter().find(|i| i.id == row.id) else {
                 continue;
             };

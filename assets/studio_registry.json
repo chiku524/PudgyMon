@@ -16,6 +16,12 @@
       "notes": "Shared Pudgy base from Studio job 5a0db910-520c-406d-987f-b3914d7ab296 (pack id pudgy_mon_shared_base_01). Polished + soft toon material pass."
     },
     {
+      "asset_id": "char_pudgy_base_02",
+      "target_height": 1.2,
+      "uniform_scale": 1.0,
+      "notes": "Shared Pudgy base variant from Studio job c00ebe10-82b0-4f59-8f67-477d3852e0d4 (pack id pudgy_mon_body_shared_base_01). Polished + soft toon material pass."
+    },
+    {
       "asset_id": "duct_tape_dispenser_cart_01",
       "target_height": 1.0
     },

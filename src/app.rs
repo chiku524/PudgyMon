@@ -15,7 +15,7 @@ use crate::{
     challenges::ChallengesPlugin,
     cli::Cli,
     cosmetics::CosmeticsPlugin,
-    data::load_player_defaults,
+    data::{load_character_roster, load_player_defaults},
     flow::AppScreen,
     hub::HubPlugin,
     juice::JuicePlugin,
@@ -134,6 +134,7 @@ pub fn build_app(headless: bool, enable_smoke: bool) -> App {
         (
             load_studio_registry,
             load_player_defaults,
+            load_character_roster,
             ensure_party_spawn_point,
             spawn_camera,
             spawn_party_arena,
