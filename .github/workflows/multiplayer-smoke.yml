@@ -28,10 +28,16 @@ jobs:
             libxkbcommon-x11-dev \
             libx11-dev \
             libxcb1-dev \
+            libegl1-mesa-dev \
+            libgl1-mesa-dev \
+            mesa-vulkan-drivers \
             xvfb
 
       - name: Unit and integration tests
         run: cargo test
 
       - name: Headless multiplayer smoke test
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
+          WGPU_BACKEND: gl
         run: xvfb-run -a bash scripts/run_mp_smoke_test.sh

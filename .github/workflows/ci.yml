@@ -24,7 +24,10 @@ jobs:
             libxkbcommon-x11-0 \
             libxkbcommon-x11-dev \
             libx11-dev \
-            libxcb1-dev
+            libxcb1-dev \
+            libegl1-mesa-dev \
+            libgl1-mesa-dev \
+            mesa-vulkan-drivers
       - name: Check game + accounts workspace
         run: cargo check --workspace
       - name: Unit / integration tests

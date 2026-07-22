@@ -1,4 +1,8 @@
 use bevy::prelude::*;
+use bevy::render::{
+    settings::{Backends, RenderCreation, WgpuSettings},
+    RenderPlugin,
+};
 use bevy::window::{EnabledButtons, MonitorSelection, WindowMode};
 use bevy_replicon::prelude::*;
 use bevy_replicon_renet::RepliconRenetPlugins;
@@ -65,12 +69,31 @@ pub fn build_app(headless: bool, enable_smoke: bool) -> App {
         }
     };
 
-    let default_plugins = DefaultPlugins
-        .set(AssetPlugin {
-            file_path: asset_root,
-            ..default()
-        })
-        .set(window_plugin);
+    let default_plugins = if headless {
+        // CI runners have no discrete GPU — prefer GL (llvmpipe under Xvfb) over Vulkan.
+        DefaultPlugins
+            .set(AssetPlugin {
+                file_path: asset_root,
+                ..default()
+            })
+            .set(window_plugin)
+            .set(RenderPlugin {
+                render_creation: RenderCreation::Automatic(Box::new(WgpuSettings {
+                    // Prefer software adapters (llvmpipe / lavapipe) on GPU-less CI runners.
+                    force_fallback_adapter: true,
+                    backends: Some(Backends::VULKAN | Backends::GL),
+                    ..default()
+                })),
+                ..default()
+            })
+    } else {
+        DefaultPlugins
+            .set(AssetPlugin {
+                file_path: asset_root,
+                ..default()
+            })
+            .set(window_plugin)
+    };
 
     app.add_plugins((default_plugins, RepliconPlugins, RepliconRenetPlugins));
     let initial = {
