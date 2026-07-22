@@ -5,7 +5,7 @@ Chunky party creatures for **PudgyMon: Party Saga**. One shared base figure, spe
 ## Base rig — `char_pudgy_base_01`
 
 - Round body, oversized head, stubby limbs
-- Soft rubber / candy-toy look; family-friendly
+- Smooth **vinyl designer-toy** look (Blankos / Pokémon vibes) — glossy plastic, not clay; family-friendly
 - Playable height ~1.2 m (read as “cute chunky,” not adult humanoid)
 - GLB: `assets/models/char_pudgy_base_01/char_pudgy_base_01.glb`
 - **Current mesh:** Studio job `ff7ef050-4f9c-4300-962a-d5231c519270` (pack id `pudgy_mon_base_01`, remapped)

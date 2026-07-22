@@ -32,6 +32,10 @@ use crate::{
 /// Owner id for the listen-server / offline avatar (not a netcode client).
 pub const HOST_OWNER_ID: u64 = 0;
 
+/// Extra yaw on character GLB children so mesh forward matches Bevy −Z.
+/// Tripo / polish exports currently face −X; −90° Y maps that to −Z.
+const CHARACTER_MESH_YAW_OFFSET: f32 = -std::f32::consts::FRAC_PI_2;
+
 pub struct PlayerPlugin;
 
 impl Plugin for PlayerPlugin {
@@ -415,7 +419,11 @@ fn init_player_visuals(
                 commands.entity(add.entity).insert((GameplayEntity, Knockback::default())).with_children(|parent| {
                     parent.spawn((
                         WorldAssetRoot(scene),
-                        Transform::from_scale(scale),
+                        Transform {
+                            translation: Vec3::ZERO,
+                            rotation: Quat::from_rotation_y(CHARACTER_MESH_YAW_OFFSET),
+                            scale,
+                        },
                         Visibility::default(),
                     ));
                 });

@@ -17,13 +17,16 @@ After generation → import → place (see [STUDIO_ASSETS.md](STUDIO_ASSETS.md))
 | Facing | Character faces −Z (Bevy forward) when possible |
 | Units | 1 unit ≈ 1 meter |
 | Naming | Folder + file = `asset_id` / `asset_id.glb` |
-| Characters | Register with `uniform_scale` `0.27` (do not use Studio `target_height_m` as spawn scale) |
+| Characters | After polish: baked ~1.2 m height, `uniform_scale` `1.0`. Raw Tripo imports: run `scripts/polish_character_glb.py` |
+
+**Art direction (characters):** smooth **vinyl designer-toy** look — think Blankos / Pokémon figures. Glossy injection-molded plastic, clean color blocks, big simple eyes. **Not** clay, ceramic, polymer clay, matte stone, or fuzzy plush.
 
 **Optional negative prompt (if Studio supports a separate field):**
 
 ```
 photorealistic, grimdark, horror, blood, realistic weapons, space freight, corporate office,
-tiny unreadable labels, multiple objects, diorama, landscape, adult human proportions
+tiny unreadable labels, multiple objects, diorama, landscape, adult human proportions,
+clay, polymer clay, ceramic, matte earthen texture, stone, fuzzy fur, dirty, scratched plastic
 ```
 
 ---
@@ -32,16 +35,17 @@ tiny unreadable labels, multiple objects, diorama, landscape, adult human propor
 
 All playable Pudgys share one figure. Each species job below is a full standalone prompt (proportions restated every time because jobs are not cached).
 
-### `char_pudgy_base_01` · playable height **1.2** · `uniform_scale` **0.27**
+### `char_pudgy_base_01` · playable height **1.2** · `uniform_scale` **1.0** (after polish)
 
 **Plugs into:** `data/player_defaults.json` / `PlayerVisualSpec.model_id`
 
 ```
 Cartoon stylized 3D game character for PudgyMon: Party Saga — the SHARED BASE body for all Pudgy Monsters.
-Bright readable candy colors, soft rounded edges, slightly rubbery plastic / plush toy materials,
-exaggerated silhouettes, clean PBR, no gore, no realistic dirt, no photorealism.
-Cute chunky monster, round soft dumpling body, oversized round head, stubby limbs of equal length,
-big friendly eyes, tiny snout, coral-peach base color.
+Smooth glossy vinyl designer-toy look like Blankos or a Pokémon figure — injection-molded plastic,
+clean color blocks, soft rounded edges, subtle specular shine, NOT clay, NOT ceramic, NOT matte polymer clay, NOT plush.
+Bright readable candy colors, exaggerated silhouettes, clean PBR, no gore, no realistic dirt, no photorealism.
+Cute chunky monster, round dumpling body, oversized round head, stubby limbs of equal length,
+big simple friendly eyes, tiny snout, coral-peach vinyl base color, smooth painted surface.
 Neutral A-pose only: arms slightly away from sides, feet planted flat, standing upright.
 Leave clear wear volumes: flat crown for hats, bare neck band for necklaces, simple stubby feet for shoes,
 clean back for capes/wings, open face for glasses/masks, stubby hands for mittens.
@@ -51,7 +55,12 @@ Do NOT pose swimming, running, or mid-action — idle A-pose only so animations 
 Game-ready low-to-mid poly, about 1.2 meters tall playable.
 ```
 
-**Import:** `python scripts/register_studio_asset.py char_pudgy_base_01 --height 1.2 --scale 0.27 --update`
+**Import + polish:**
+
+```bash
+python scripts/register_studio_asset.py char_pudgy_base_01 --height 1.2 --scale 1.0 --update
+python scripts/polish_character_glb.py char_pudgy_base_01
+```
 
 ### `oceanic_pudgymon_01` · same scale as base
 
@@ -59,8 +68,10 @@ Game-ready low-to-mid poly, about 1.2 meters tall playable.
 
 ```
 Cartoon stylized 3D game character for PudgyMon: Party Saga — Ocean PudgyMon species variant.
-Bright readable candy colors, soft rounded edges, slightly rubbery plastic / plush toy materials,
-exaggerated silhouettes, clean PBR, no gore, no realistic dirt, no photorealism.
+Smooth glossy vinyl designer-toy look like Blankos or a Pokémon figure — injection-molded plastic,
+clean color blocks, subtle specular shine, NOT clay, NOT ceramic, NOT matte polymer clay, NOT plush.
+Bright readable candy colors, soft rounded edges, exaggerated silhouettes, clean PBR,
+no gore, no realistic dirt, no photorealism.
 MUST match the shared Pudgy base figure: same overall height (~1.2 m), same stubby limb lengths,
 same torso roundness, same head-to-body ratio, same neutral A-pose (arms slightly out, feet planted),
 floor-pivoted at ground center, faces camera-forward.
@@ -77,8 +88,10 @@ Idle A-pose only — not swimming or mid-action. Game-ready low-to-mid poly.
 
 ```
 Cartoon stylized 3D game character for PudgyMon: Party Saga — Forest PudgyMon species variant.
-Bright readable candy colors, soft rounded edges, slightly rubbery plastic / plush toy materials,
-exaggerated silhouettes, clean PBR, no gore, no realistic dirt, no photorealism.
+Smooth glossy vinyl designer-toy look like Blankos or a Pokémon figure — injection-molded plastic,
+clean color blocks, subtle specular shine, NOT clay, NOT ceramic, NOT matte polymer clay, NOT plush.
+Bright readable candy colors, soft rounded edges, exaggerated silhouettes, clean PBR,
+no gore, no realistic dirt, no photorealism.
 MUST match the shared Pudgy base figure: same overall height (~1.2 m), same stubby limb lengths,
 same torso roundness, same head-to-body ratio, same neutral A-pose (arms slightly out, feet planted),
 floor-pivoted at ground center, faces camera-forward.
@@ -95,8 +108,10 @@ Idle A-pose only — not running or mid-action. Game-ready low-to-mid poly.
 
 ```
 Cartoon stylized 3D game character for PudgyMon: Party Saga — Lava PudgyMon species variant.
-Bright readable candy colors, soft rounded edges, slightly rubbery plastic / plush toy materials,
-exaggerated silhouettes, clean PBR, no gore, no realistic dirt, no photorealism.
+Smooth glossy vinyl designer-toy look like Blankos or a Pokémon figure — injection-molded plastic,
+clean color blocks, subtle specular shine, NOT clay, NOT ceramic, NOT matte polymer clay, NOT plush.
+Bright readable candy colors, soft rounded edges, exaggerated silhouettes, clean PBR,
+no gore, no realistic dirt, no photorealism.
 MUST match the shared Pudgy base figure: same overall height (~1.2 m), same stubby limb lengths,
 same torso roundness, same head-to-body ratio, same neutral A-pose (arms slightly out, feet planted),
 floor-pivoted at ground center, faces camera-forward.
@@ -113,8 +128,10 @@ Idle A-pose only — not attacking or mid-action. Game-ready low-to-mid poly.
 
 ```
 Cartoon stylized 3D game character for PudgyMon: Party Saga — Sky PudgyMon species variant.
-Bright readable candy colors, soft rounded edges, slightly rubbery plastic / plush toy materials,
-exaggerated silhouettes, clean PBR, no gore, no realistic dirt, no photorealism.
+Smooth glossy vinyl designer-toy look like Blankos or a Pokémon figure — injection-molded plastic,
+clean color blocks, subtle specular shine, NOT clay, NOT ceramic, NOT matte polymer clay, NOT plush.
+Bright readable candy colors, soft rounded edges, exaggerated silhouettes, clean PBR,
+no gore, no realistic dirt, no photorealism.
 MUST match the shared Pudgy base figure: same overall height (~1.2 m), same stubby limb lengths,
 same torso roundness, same head-to-body ratio, same neutral A-pose (arms slightly out, feet planted),
 floor-pivoted at ground center, faces camera-forward.

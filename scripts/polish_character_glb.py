@@ -116,23 +116,20 @@ offset = mathutils.Vector((
 body.location = offset
 bpy.ops.object.transform_apply(location=True, rotation=False, scale=False)
 
-# Face −Y in Blender (= −Z in glTF/Bevy). Heuristic: rotate 180° around Z if
-# the mesh extends farther forward than back on +Y (Tripo often faces +Y/+Z).
+# Face −Y in Blender (= −Z Bevy forward). Raw Tripo faces −X after upright;
+# +90° around Z maps −X → −Y. Runtime also applies CHARACTER_MESH_YAW_OFFSET.
+bpy.ops.object.select_all(action="DESELECT")
+body.select_set(True)
+bpy.context.view_layer.objects.active = body
+body.rotation_euler = (0.0, 0.0, math.radians(90.0))
+bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
 minv, maxv = world_aabb(body)
-# Prefer the thinner silhouette axis as "depth"; if depth is mostly +Y, spin 180.
-depth_pos = abs(maxv.y)
-depth_neg = abs(minv.y)
-if depth_pos >= depth_neg:
-    body.rotation_euler = (0.0, 0.0, math.radians(180.0))
-    bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
-    # Re-center XZ after spin
-    minv, maxv = world_aabb(body)
-    body.location = mathutils.Vector((
-        -((minv.x + maxv.x) * 0.5),
-        -((minv.y + maxv.y) * 0.5),
-        -minv.z,
-    ))
-    bpy.ops.object.transform_apply(location=True, rotation=False, scale=False)
+body.location = mathutils.Vector((
+    -((minv.x + maxv.x) * 0.5),
+    -((minv.y + maxv.y) * 0.5),
+    -minv.z,
+))
+bpy.ops.object.transform_apply(location=True, rotation=False, scale=False)
 
 # Material polish — rubbery candy toy
 for slot in body.material_slots:
@@ -148,15 +145,17 @@ for slot in body.material_slots:
     principled = next((n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"), None)
     if not principled:
         continue
-    # Soft rubber look
-    if "Roughness" in principled.inputs:
-        # Keep texture-driven roughness if linked; only bump default when unlinked
-        if not principled.inputs["Roughness"].is_linked:
-            principled.inputs["Roughness"].default_value = 0.55
+    # Vinyl / designer-toy plastic (finer pass: scripts/vinyl_material_pass.py)
+    if "Roughness" in principled.inputs and not principled.inputs["Roughness"].is_linked:
+        principled.inputs["Roughness"].default_value = 0.22
+    if "Coat Weight" in principled.inputs and not principled.inputs["Coat Weight"].is_linked:
+        principled.inputs["Coat Weight"].default_value = 0.45
+    if "Coat Roughness" in principled.inputs and not principled.inputs["Coat Roughness"].is_linked:
+        principled.inputs["Coat Roughness"].default_value = 0.12
     if "Specular IOR Level" in principled.inputs and not principled.inputs["Specular IOR Level"].is_linked:
-        principled.inputs["Specular IOR Level"].default_value = 0.35
+        principled.inputs["Specular IOR Level"].default_value = 0.5
     elif "Specular" in principled.inputs and not principled.inputs["Specular"].is_linked:
-        principled.inputs["Specular"].default_value = 0.35
+        principled.inputs["Specular"].default_value = 0.5
     if "Metallic" in principled.inputs and not principled.inputs["Metallic"].is_linked:
         principled.inputs["Metallic"].default_value = 0.0
     if "Alpha" in principled.inputs and not principled.inputs["Alpha"].is_linked:
@@ -183,7 +182,13 @@ sockets = {
 # Parent sockets under an empty root so Bevy can find them beside the mesh
 root = bpy.data.objects.new(f"{ASSET_ID}_Root", None)
 bpy.context.scene.collection.objects.link(root)
-body.parent = root
+
+def parent_keep(child, parent):
+    mw = child.matrix_world.copy()
+    child.parent = parent
+    child.matrix_world = mw
+
+parent_keep(body, root)
 
 for name, loc in sockets.items():
     empty = bpy.data.objects.new(name, None)
@@ -191,7 +196,7 @@ for name, loc in sockets.items():
     empty.empty_display_size = 0.08
     empty.location = loc
     bpy.context.scene.collection.objects.link(empty)
-    empty.parent = root
+    parent_keep(empty, root)
 
 # Export
 OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -226,6 +231,9 @@ def polish(asset_id: str, height: float, blender: Path) -> int:
     if not backup.is_file():
         shutil.copy2(glb, backup)
         print(f"backup -> {backup.relative_to(_REPO)}")
+    else:
+        shutil.copy2(backup, glb)
+        print(f"restored source -> {backup.name}")
 
     out_tmp = folder / f"{asset_id}.polished.glb"
     script = _WORKER
