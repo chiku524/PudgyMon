@@ -33,7 +33,7 @@ impl Default for GameSettings {
         Self {
             mouse_sensitivity: crate::core::MOUSE_SENSITIVITY,
             master_volume: 1.0,
-            fullscreen: false,
+            fullscreen: true,
         }
     }
 }
@@ -222,7 +222,6 @@ struct MarketBuyButton {
     id: String,
 }
 
-const PANEL_BG: Color = Color::srgba(0.08, 0.16, 0.14, 0.94);
 const BTN_BG: Color = Color::srgb(0.16, 0.30, 0.26);
 const BTN_HOVER: Color = Color::srgb(0.22, 0.40, 0.34);
 const BTN_PRESS: Color = Color::srgb(0.12, 0.24, 0.20);
@@ -268,12 +267,22 @@ fn apply_fullscreen_on_boot(
     settings: Res<GameSettings>,
     mut windows: Query<&mut Window, With<PrimaryWindow>>,
 ) {
-    if !settings.fullscreen {
+    let Ok(mut window) = windows.single_mut() else {
         return;
-    }
-    if let Ok(mut window) = windows.single_mut() {
-        window.mode = WindowMode::BorderlessFullscreen(MonitorSelection::Current);
-    }
+    };
+    // Always strip OS chrome (no title bar / min / max / close).
+    window.decorations = false;
+    window.resizable = false;
+    window.enabled_buttons = bevy::window::EnabledButtons {
+        minimize: false,
+        maximize: false,
+        close: false,
+    };
+    window.mode = if settings.fullscreen {
+        WindowMode::BorderlessFullscreen(MonitorSelection::Current)
+    } else {
+        WindowMode::Windowed
+    };
 }
 
 fn persist_settings(settings: Res<GameSettings>) {
@@ -290,58 +299,46 @@ fn spawn_nest_menu(mut commands: Commands, catalog: Res<CosmeticsCatalog>) {
                 position_type: PositionType::Absolute,
                 width: Val::Percent(100.0),
                 height: Val::Percent(100.0),
-                justify_content: JustifyContent::Center,
-                align_items: AlignItems::Center,
+                flex_direction: FlexDirection::Column,
+                justify_content: JustifyContent::FlexStart,
+                align_items: AlignItems::Stretch,
+                padding: UiRect::all(Val::Px(28.0)),
+                row_gap: Val::Px(14.0),
+                overflow: Overflow::scroll_y(),
                 ..Default::default()
             },
-            BackgroundColor(Color::srgba(0.02, 0.05, 0.04, 0.82)),
+            BackgroundColor(Color::srgba(0.03, 0.07, 0.06, 0.96)),
             GlobalZIndex(600),
             Visibility::Hidden,
         ))
-        .with_children(|root| {
-            root.spawn((
-                Node {
-                    width: Val::Px(520.0),
-                    max_height: Val::Percent(90.0),
-                    flex_direction: FlexDirection::Column,
-                    padding: UiRect::all(Val::Px(22.0)),
-                    row_gap: Val::Px(12.0),
-                    border: UiRect::all(Val::Px(1.0)),
-                    border_radius: BorderRadius::all(Val::Px(16.0)),
+        .with_children(|panel| {
+            panel.spawn((
+                Text::new("NEST MENU"),
+                TextFont {
+                    font_size: FontSize::Px(36.0),
                     ..Default::default()
                 },
-                BackgroundColor(PANEL_BG),
-                BorderColor::all(Color::srgba(1.0, 0.55, 0.35, 0.35)),
-            ))
-            .with_children(|panel| {
-                panel.spawn((
-                    Text::new("NEST MENU"),
-                    TextFont {
-                        font_size: FontSize::Px(28.0),
-                        ..Default::default()
-                    },
-                    TextColor(ACCENT),
-                ));
-                panel.spawn((
-                    Text::new("Esc closes · click a page"),
-                    TextFont {
-                        font_size: FontSize::Px(13.0),
-                        ..Default::default()
-                    },
-                    TextColor(MUTED),
-                ));
+                TextColor(ACCENT),
+            ));
+            panel.spawn((
+                Text::new("Esc closes · full-screen pause · Quit exits the game"),
+                TextFont {
+                    font_size: FontSize::Px(14.0),
+                    ..Default::default()
+                },
+                TextColor(MUTED),
+            ));
 
-                spawn_page_main(panel);
-                spawn_page_settings(panel);
-                spawn_page_profile(panel);
-                spawn_page_account(panel);
-                spawn_page_inventory(panel, &catalog);
-                spawn_page_wallet(panel);
-                spawn_page_market(panel, &catalog);
-                spawn_page_challenges(panel);
-                spawn_page_controls(panel);
-                spawn_page_confirm_quit(panel);
-            });
+            spawn_page_main(panel);
+            spawn_page_settings(panel);
+            spawn_page_profile(panel);
+            spawn_page_account(panel);
+            spawn_page_inventory(panel, &catalog);
+            spawn_page_wallet(panel);
+            spawn_page_market(panel, &catalog);
+            spawn_page_challenges(panel);
+            spawn_page_controls(panel);
+            spawn_page_confirm_quit(panel);
         });
 }
 
@@ -351,8 +348,9 @@ fn spawn_page_main(parent: &mut ChildSpawnerCommands) {
             MenuPageRoot(MenuPage::Main),
             Node {
                 width: Val::Percent(100.0),
+                max_width: Val::Px(720.0),
                 flex_direction: FlexDirection::Column,
-                row_gap: Val::Px(8.0),
+                row_gap: Val::Px(10.0),
                 ..Default::default()
             },
             Visibility::Visible,
@@ -1009,13 +1007,20 @@ fn update_pause_visibility(
 fn sync_menu_page_visibility(
     pause: Res<PauseState>,
     page: Res<MenuPage>,
-    mut pages: Query<(&MenuPageRoot, &mut Visibility), Without<PauseRoot>>,
+    mut pages: Query<(&MenuPageRoot, &mut Visibility, &mut Node), Without<PauseRoot>>,
 ) {
-    for (root, mut vis) in &mut pages {
-        *vis = if pause.paused && root.0 == *page {
+    for (root, mut vis, mut node) in &mut pages {
+        let active = pause.paused && root.0 == *page;
+        *vis = if active {
             Visibility::Visible
         } else {
             Visibility::Hidden
+        };
+        // Hidden still reserves flex space — collapse inactive pages.
+        node.display = if active {
+            Display::Flex
+        } else {
+            Display::None
         };
     }
 }
@@ -1095,6 +1100,9 @@ fn handle_menu_nav(
                 banner.show("Returning to The Nest…", 2.5);
             }
             MenuAction::ConfirmQuitYes => {
+                // Leave pause cleanly, then exit the process (no OS close chrome in borderless).
+                pause.paused = false;
+                camera.captured = false;
                 exit.write(AppExit::Success);
             }
         }
@@ -1734,6 +1742,13 @@ fn apply_settings_action(
         SettingsAction::ToggleFullscreen => {
             settings.fullscreen = !settings.fullscreen;
             if let Ok(mut window) = windows.single_mut() {
+                window.decorations = false;
+                window.resizable = false;
+                window.enabled_buttons = bevy::window::EnabledButtons {
+                    minimize: false,
+                    maximize: false,
+                    close: false,
+                };
                 window.mode = if settings.fullscreen {
                     WindowMode::BorderlessFullscreen(MonitorSelection::Current)
                 } else {

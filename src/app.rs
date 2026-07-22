@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy::window::{EnabledButtons, MonitorSelection, WindowMode};
 use bevy_replicon::prelude::*;
 use bevy_replicon_renet::RepliconRenetPlugins;
 
@@ -50,6 +51,14 @@ pub fn build_app(headless: bool, enable_smoke: bool) -> App {
         WindowPlugin {
             primary_window: Some(Window {
                 title: crate::brand::window_title(),
+                mode: WindowMode::BorderlessFullscreen(MonitorSelection::Current),
+                decorations: false,
+                resizable: false,
+                enabled_buttons: EnabledButtons {
+                    minimize: false,
+                    maximize: false,
+                    close: false,
+                },
                 ..default()
             }),
             ..default()
