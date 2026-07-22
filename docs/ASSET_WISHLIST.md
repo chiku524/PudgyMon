@@ -26,14 +26,14 @@ All species must obey the **Pudgy Character Contract** (same proportions + acces
 
 | Priority | Slot | Suggested ids | Plugs into |
 |----------|------|---------------|------------|
-| High | Hat | `acc_hat_party_crown_01` … `acc_hat_sleep_01` (8) | `PlayerVisualSpec.accessories.hat` |
-| High | Necklace | `acc_necklace_shell_01`, `_medal_01`, `_beads_01`, `_bell_01` | `…accessories.necklace` |
-| High | Shoes | `acc_shoes_racer_01`, `_party_01`, `_boots_01`, `_slippers_01` | `…accessories.shoes` |
-| Medium | Back | `acc_back_cape_01`, `_wings_01`, `_pack_01` | `…accessories.back` |
-| Medium | Face | `acc_face_shades_01`, `_goggles_01`, `_mask_01` | `…accessories.face` |
-| Medium | Hands | `acc_hands_mittens_01`, `_gloves_01` | `…accessories.hands` |
+| Done | Hat | `acc_hat_*_01` (8 procedural) | Esc → Accessories |
+| Done | Necklace | `acc_necklace_*_01` (4) | Esc → Accessories |
+| Done | Shoes | `acc_shoes_*_01` (4) | Esc → Accessories |
+| Done | Back | `acc_back_*_01` (3) | Esc → Accessories |
+| Done | Face | `acc_face_*_01` (3) | Esc → Accessories |
+| Done | Hands | `acc_hands_*_01` (2) | Esc → Accessories |
 
-Hats are no longer roster-only tint indices — generate real meshes per id above.
+Hats are no longer roster-only tint indices — equip real meshes via Nest **Accessories**. Rebuild: `python scripts/build_procedural_party_assets.py`.
 
 ---
 
@@ -41,10 +41,10 @@ Hats are no longer roster-only tint indices — generate real meshes per id abov
 
 | Priority | Suggested `asset_id` | Replace / place | Current stand-in |
 |----------|----------------------|-----------------|------------------|
-| High | `env_nest_egg_01` | Nest centerpiece | Greybox egg |
-| Medium | `env_nest_bench_01` | Nest seating ring | Greybox benches |
-| Medium | `prop_vibe_mushroom_01` | Nest flora ring | Greybox mushrooms |
-| Low | `env_pad_race_01` / `_vibe_01` / `_shooter_01` / `_party_01` | Mode pads | Colored greybox pads |
+| Done | `env_nest_egg_01` | Nest centerpiece | Procedural GLB |
+| Done | `env_nest_bench_01` | Nest seating ring | Procedural GLB |
+| Done | `prop_vibe_mushroom_01` | Nest flora ring | Procedural GLB |
+| Done | `env_pad_race_01` / `_vibe_01` / `_shooter_01` / `_party_01` | Mode pads | Procedural GLB |
 
 ---
 

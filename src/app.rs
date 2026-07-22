@@ -107,6 +107,7 @@ pub fn build_app(headless: bool, enable_smoke: bool) -> App {
         WorldPlugin,
         NetworkPlugin,
         PlayerPlugin,
+        crate::player::AccessoriesPlugin,
         PartyPlugin,
         StagesPlugin,
         SeasonPlugin,

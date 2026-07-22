@@ -4,7 +4,9 @@ use bevy::prelude::*;
 use bevy_replicon::prelude::*;
 
 use crate::{
+    assets::{spawn_studio_prop, studio_asset_exists},
     cosmetics::{CosmeticsCatalog, EquippedCosmetic},
+    data::StudioRegistry,
     flow::AppScreen,
     maps::{ActiveStageMaps, PartyPack},
     party::{PartyDirector, PartyPhase, PartyPlan, PartySpawn, StageKind},
@@ -114,22 +116,37 @@ fn spawn_social_hub(
     mut materials: ResMut<Assets<StandardMaterial>>,
     catalog: Res<CosmeticsCatalog>,
     spawn: Res<PartySpawn>,
+    asset_server: Res<AssetServer>,
+    registry: Option<Res<StudioRegistry>>,
 ) {
     let hub = spawn.hub;
+    let registry = registry.as_deref();
 
-    // Nest egg centerpiece (plaza stays readable; pads spread for room to grow).
-    commands.spawn((
-        HubProp,
-        GameplayEntity,
-        Mesh3d(meshes.add(Sphere::new(1.8))),
-        MeshMaterial3d(materials.add(StandardMaterial {
-            base_color: Color::srgb(0.95, 0.72, 0.45),
-            emissive: LinearRgba::rgb(0.4, 0.2, 0.05),
-            ..Default::default()
-        })),
-        Transform::from_translation(hub + Vec3::new(0.0, 1.5, -4.0)),
-        Name::new("NestEgg"),
-    ));
+    // Nest egg centerpiece
+    let egg_tf = Transform::from_translation(hub + Vec3::new(0.0, 0.0, -4.0));
+    if registry.is_some_and(|r| studio_asset_exists(r, "env_nest_egg_01")) {
+        let _ = spawn_studio_prop(
+            &mut commands,
+            &asset_server,
+            registry.unwrap(),
+            "env_nest_egg_01",
+            egg_tf,
+            (HubProp, Name::new("NestEgg")),
+        );
+    } else {
+        commands.spawn((
+            HubProp,
+            GameplayEntity,
+            Mesh3d(meshes.add(Sphere::new(1.8))),
+            MeshMaterial3d(materials.add(StandardMaterial {
+                base_color: Color::srgb(0.95, 0.72, 0.45),
+                emissive: LinearRgba::rgb(0.4, 0.2, 0.05),
+                ..Default::default()
+            })),
+            Transform::from_translation(hub + Vec3::new(0.0, 1.5, -4.0)),
+            Name::new("NestEgg"),
+        ));
+    }
     commands.spawn((
         HubProp,
         GameplayEntity,
@@ -145,127 +162,183 @@ fn spawn_social_hub(
 
     // Soft benches around the egg.
     for (i, offset) in [
-        Vec3::new(-8.0, 0.35, 1.0),
-        Vec3::new(8.0, 0.35, 1.0),
-        Vec3::new(0.0, 0.35, 12.0),
+        Vec3::new(-8.0, 0.0, 1.0),
+        Vec3::new(8.0, 0.0, 1.0),
+        Vec3::new(0.0, 0.0, 12.0),
     ]
     .into_iter()
     .enumerate()
     {
-        commands.spawn((
-            HubProp,
-            GameplayEntity,
-            Mesh3d(meshes.add(Cuboid::new(2.8, 0.35, 0.8))),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::srgb(0.85, 0.55, 0.35),
-                ..Default::default()
-            })),
-            Transform::from_translation(hub + offset),
-            Name::new(format!("NestBench_{i}")),
-        ));
-    }
-
-    // Coral pillars / vibe mushrooms — outer ring leaves open midfield.
-    for (i, pos) in [
-        Vec3::new(-22.0, 1.2, -16.0),
-        Vec3::new(22.0, 1.2, -16.0),
-        Vec3::new(-20.0, 0.9, 16.0),
-        Vec3::new(20.0, 0.9, 16.0),
-        Vec3::new(-28.0, 1.0, 2.0),
-        Vec3::new(28.0, 1.0, 2.0),
-    ]
-    .into_iter()
-    .enumerate()
-    {
-        let stem = materials.add(StandardMaterial {
-            base_color: Color::srgb(0.35, 0.75, 0.55),
-            ..Default::default()
-        });
-        let cap_col = if i % 2 == 0 {
-            Color::srgb(1.0, 0.45, 0.4)
+        let tf = Transform::from_translation(hub + offset);
+        if registry.is_some_and(|r| studio_asset_exists(r, "env_nest_bench_01")) {
+            let _ = spawn_studio_prop(
+                &mut commands,
+                &asset_server,
+                registry.unwrap(),
+                "env_nest_bench_01",
+                tf,
+                (HubProp, Name::new(format!("NestBench_{i}"))),
+            );
         } else {
-            Color::srgb(0.45, 0.85, 1.0)
-        };
-        commands.spawn((
-            HubProp,
-            GameplayEntity,
-            Mesh3d(meshes.add(Cylinder::new(0.25, 1.6))),
-            MeshMaterial3d(stem),
-            Transform::from_translation(hub + pos),
-            Name::new(format!("VibeStem_{i}")),
-        ));
-        commands.spawn((
-            HubProp,
-            GameplayEntity,
-            Mesh3d(meshes.add(Sphere::new(0.85))),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: cap_col,
-                emissive: LinearRgba::rgb(0.3, 0.15, 0.1),
-                unlit: true,
-                ..Default::default()
-            })),
-            Transform::from_translation(hub + pos + Vec3::Y * 1.1),
-            Name::new(format!("VibeCap_{i}")),
-        ));
+            commands.spawn((
+                HubProp,
+                GameplayEntity,
+                Mesh3d(meshes.add(Cuboid::new(2.8, 0.35, 0.8))),
+                MeshMaterial3d(materials.add(StandardMaterial {
+                    base_color: Color::srgb(0.85, 0.55, 0.35),
+                    ..Default::default()
+                })),
+                Transform::from_translation(hub + offset + Vec3::Y * 0.35),
+                Name::new(format!("NestBench_{i}")),
+            ));
+        }
     }
 
-    let pads: [(PartyPlan, Vec3, [f32; 3], &str); 4] = [
+    // Vibe mushrooms — outer ring
+    for (i, pos) in [
+        Vec3::new(-22.0, 0.0, -16.0),
+        Vec3::new(22.0, 0.0, -16.0),
+        Vec3::new(-20.0, 0.0, 16.0),
+        Vec3::new(20.0, 0.0, 16.0),
+        Vec3::new(-28.0, 0.0, 2.0),
+        Vec3::new(28.0, 0.0, 2.0),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        let tf = Transform::from_translation(hub + pos);
+        if registry.is_some_and(|r| studio_asset_exists(r, "prop_vibe_mushroom_01")) {
+            let _ = spawn_studio_prop(
+                &mut commands,
+                &asset_server,
+                registry.unwrap(),
+                "prop_vibe_mushroom_01",
+                tf,
+                (HubProp, Name::new(format!("VibeMushroom_{i}"))),
+            );
+        } else {
+            let stem = materials.add(StandardMaterial {
+                base_color: Color::srgb(0.35, 0.75, 0.55),
+                ..Default::default()
+            });
+            let cap_col = if i % 2 == 0 {
+                Color::srgb(1.0, 0.45, 0.4)
+            } else {
+                Color::srgb(0.45, 0.85, 1.0)
+            };
+            commands.spawn((
+                HubProp,
+                GameplayEntity,
+                Mesh3d(meshes.add(Cylinder::new(0.25, 1.6))),
+                MeshMaterial3d(stem),
+                Transform::from_translation(hub + pos + Vec3::Y * 1.2),
+                Name::new(format!("VibeStem_{i}")),
+            ));
+            commands.spawn((
+                HubProp,
+                GameplayEntity,
+                Mesh3d(meshes.add(Sphere::new(0.85))),
+                MeshMaterial3d(materials.add(StandardMaterial {
+                    base_color: cap_col,
+                    emissive: LinearRgba::rgb(0.3, 0.15, 0.1),
+                    unlit: true,
+                    ..Default::default()
+                })),
+                Transform::from_translation(hub + pos + Vec3::Y * 2.3),
+                Name::new(format!("VibeCap_{i}")),
+            ));
+        }
+    }
+
+    let pads: [(PartyPlan, Vec3, [f32; 3], &str, &str); 4] = [
         (
             PartyPlan::Single(StageKind::Race),
-            Vec3::new(-16.0, 0.12, -12.0),
+            Vec3::new(-16.0, 0.0, -12.0),
             [0.2, 0.85, 1.0],
             "Race",
+            "env_pad_race_01",
         ),
         (
             PartyPlan::Single(StageKind::Vibe),
-            Vec3::new(0.0, 0.12, -20.0),
+            Vec3::new(0.0, 0.0, -20.0),
             [1.0, 0.85, 0.2],
             "Vibe",
+            "env_pad_vibe_01",
         ),
         (
             PartyPlan::Single(StageKind::Shooter),
-            Vec3::new(16.0, 0.12, -12.0),
+            Vec3::new(16.0, 0.0, -12.0),
             [1.0, 0.4, 0.55],
             "Shooter",
+            "env_pad_shooter_01",
         ),
         (
             PartyPlan::FullParty,
-            Vec3::new(0.0, 0.12, 8.0),
+            Vec3::new(0.0, 0.0, 8.0),
             [0.55, 1.0, 0.45],
             "PartySaga",
+            "env_pad_party_01",
         ),
     ];
 
-    for (plan, offset, [r, g, b], name) in pads {
+    for (plan, offset, [r, g, b], name, asset_id) in pads {
         let pos = hub + offset;
-        commands.spawn((
-            HubProp,
-            ModePad { plan },
-            GameplayEntity,
-            Mesh3d(meshes.add(Cylinder::new(2.8, 0.25))),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::srgb(r, g, b),
-                emissive: LinearRgba::rgb(r * 1.4, g * 1.4, b * 1.4),
-                unlit: true,
-                ..Default::default()
-            })),
-            Transform::from_translation(pos),
-            Name::new(format!("ModePad_{name}")),
-        ));
-        // Soft arch marker behind pad.
-        commands.spawn((
-            HubProp,
-            GameplayEntity,
-            Mesh3d(meshes.add(Cuboid::new(3.2, 0.25, 0.25))),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::srgb(r, g, b),
-                emissive: LinearRgba::rgb(r, g, b),
-                unlit: true,
-                ..Default::default()
-            })),
-            Transform::from_translation(pos + Vec3::new(0.0, 2.2, -3.2)),
-            Name::new(format!("ModeSign_{name}")),
-        ));
+        let tf = Transform::from_translation(pos);
+        if registry.is_some_and(|reg| studio_asset_exists(reg, asset_id)) {
+            if let Some(entity) = spawn_studio_prop(
+                &mut commands,
+                &asset_server,
+                registry.unwrap(),
+                asset_id,
+                tf,
+                (HubProp, ModePad { plan }, Name::new(format!("ModePad_{name}"))),
+            ) {
+                let _ = entity;
+            }
+        } else {
+            commands.spawn((
+                HubProp,
+                ModePad { plan },
+                GameplayEntity,
+                Mesh3d(meshes.add(Cylinder::new(2.8, 0.25))),
+                MeshMaterial3d(materials.add(StandardMaterial {
+                    base_color: Color::srgb(r, g, b),
+                    emissive: LinearRgba::rgb(r * 1.4, g * 1.4, b * 1.4),
+                    unlit: true,
+                    ..Default::default()
+                })),
+                Transform::from_translation(pos + Vec3::Y * 0.12),
+                Name::new(format!("ModePad_{name}")),
+            ));
+        }
+        // Soft arch / checkpoint marker behind pad when available
+        let sign_pos = pos + Vec3::new(0.0, 0.0, -3.2);
+        if name == "Race"
+            && registry.is_some_and(|reg| studio_asset_exists(reg, "prop_race_checkpoint_01"))
+        {
+            let _ = spawn_studio_prop(
+                &mut commands,
+                &asset_server,
+                registry.unwrap(),
+                "prop_race_checkpoint_01",
+                Transform::from_translation(sign_pos),
+                (HubProp, Name::new(format!("ModeSign_{name}"))),
+            );
+        } else {
+            commands.spawn((
+                HubProp,
+                GameplayEntity,
+                Mesh3d(meshes.add(Cuboid::new(3.2, 0.25, 0.25))),
+                MeshMaterial3d(materials.add(StandardMaterial {
+                    base_color: Color::srgb(r, g, b),
+                    emissive: LinearRgba::rgb(r, g, b),
+                    unlit: true,
+                    ..Default::default()
+                })),
+                Transform::from_translation(sign_pos + Vec3::Y * 2.2),
+                Name::new(format!("ModeSign_{name}")),
+            ));
+        }
     }
 
     // Map creator / browser utility pads — south wing, room between them.

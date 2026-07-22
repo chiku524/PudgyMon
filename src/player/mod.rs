@@ -1,9 +1,13 @@
+pub mod accessories;
 pub mod carry;
 pub mod collision;
 pub mod freight;
 pub mod knockback;
 pub mod leaseholder;
 
+pub use accessories::{
+    accessory_glb_exists, apply_slot, AccessoriesPlugin, AccessoryCatalog, EquipAccessoryRequest,
+};
 pub use carry::CarryingFreight;
 pub use freight::WorldFreight;
 pub use knockback::Knockback;

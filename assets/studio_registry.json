@@ -2,6 +2,150 @@
   "import_root": "res://assets/models",
   "assets": [
     {
+      "asset_id": "acc_back_cape_01",
+      "target_height": 0.55,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Party cape"
+    },
+    {
+      "asset_id": "acc_back_pack_01",
+      "target_height": 0.4,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Vibe orb backpack"
+    },
+    {
+      "asset_id": "acc_back_wings_01",
+      "target_height": 0.45,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Angel wings"
+    },
+    {
+      "asset_id": "acc_face_goggles_01",
+      "target_height": 0.12,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Racer goggles"
+    },
+    {
+      "asset_id": "acc_face_mask_01",
+      "target_height": 0.14,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Party half-mask"
+    },
+    {
+      "asset_id": "acc_face_shades_01",
+      "target_height": 0.12,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Sunglasses"
+    },
+    {
+      "asset_id": "acc_hands_gloves_01",
+      "target_height": 0.18,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Racer gloves pair"
+    },
+    {
+      "asset_id": "acc_hands_mittens_01",
+      "target_height": 0.18,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Mittens pair"
+    },
+    {
+      "asset_id": "acc_hat_blaster_beanie_01",
+      "target_height": 0.3,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Star beanie"
+    },
+    {
+      "asset_id": "acc_hat_chef_01",
+      "target_height": 0.38,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Chef hat"
+    },
+    {
+      "asset_id": "acc_hat_flower_01",
+      "target_height": 0.36,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Daisy flower hat"
+    },
+    {
+      "asset_id": "acc_hat_party_crown_01",
+      "target_height": 0.28,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Party crown hat"
+    },
+    {
+      "asset_id": "acc_hat_propeller_01",
+      "target_height": 0.34,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Propeller beanie"
+    },
+    {
+      "asset_id": "acc_hat_racer_cap_01",
+      "target_height": 0.22,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Racer cap hat"
+    },
+    {
+      "asset_id": "acc_hat_sleep_01",
+      "target_height": 0.24,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Sleep cap"
+    },
+    {
+      "asset_id": "acc_hat_vibe_mushroom_01",
+      "target_height": 0.32,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Mushroom hat"
+    },
+    {
+      "asset_id": "acc_necklace_beads_01",
+      "target_height": 0.16,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Candy beads"
+    },
+    {
+      "asset_id": "acc_necklace_bell_01",
+      "target_height": 0.16,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Jingle bell"
+    },
+    {
+      "asset_id": "acc_necklace_medal_01",
+      "target_height": 0.18,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Party medal"
+    },
+    {
+      "asset_id": "acc_necklace_shell_01",
+      "target_height": 0.18,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Shell pendant"
+    },
+    {
+      "asset_id": "acc_shoes_boots_01",
+      "target_height": 0.2,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Rain boots pair"
+    },
+    {
+      "asset_id": "acc_shoes_party_01",
+      "target_height": 0.16,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Party shoes pair"
+    },
+    {
+      "asset_id": "acc_shoes_racer_01",
+      "target_height": 0.16,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Racer shoes pair"
+    },
+    {
+      "asset_id": "acc_shoes_slippers_01",
+      "target_height": 0.12,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Slippers pair"
+    },
+    {
       "asset_id": "blue_cartoon_sci_fi_job_terminal_kiosk_01",
       "target_height": 1.5
     },
@@ -68,6 +212,42 @@
       "target_height": 0.6
     },
     {
+      "asset_id": "env_nest_bench_01",
+      "target_height": 0.7,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Nest bench"
+    },
+    {
+      "asset_id": "env_nest_egg_01",
+      "target_height": 3.2,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Nest centerpiece egg"
+    },
+    {
+      "asset_id": "env_pad_party_01",
+      "target_height": 0.28,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Full party pad"
+    },
+    {
+      "asset_id": "env_pad_race_01",
+      "target_height": 0.28,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Race mode pad"
+    },
+    {
+      "asset_id": "env_pad_shooter_01",
+      "target_height": 0.28,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Shooter mode pad"
+    },
+    {
+      "asset_id": "env_pad_vibe_01",
+      "target_height": 0.28,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Vibe mode pad"
+    },
+    {
       "asset_id": "env_space_station_wall_04",
       "target_height": 2.0
     },
@@ -100,6 +280,12 @@
       "target_height": 0.5
     },
     {
+      "asset_id": "prop_cover_block_01",
+      "target_height": 1.1,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Shooter cover block"
+    },
+    {
       "asset_id": "prop_hull_patch_plate_01",
       "target_height": 0.4
     },
@@ -112,12 +298,42 @@
       "target_height": 1.2
     },
     {
+      "asset_id": "prop_race_checkpoint_01",
+      "target_height": 2.2,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Race checkpoint arch"
+    },
+    {
+      "asset_id": "prop_race_cone_01",
+      "target_height": 0.75,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Race cone"
+    },
+    {
       "asset_id": "prop_satellite_dish_array_01",
       "target_height": 2.5
     },
     {
       "asset_id": "prop_slime_puddle_floor_01",
       "target_height": 0.05
+    },
+    {
+      "asset_id": "prop_target_star_01",
+      "target_height": 0.7,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Shooter star target"
+    },
+    {
+      "asset_id": "prop_vibe_mushroom_01",
+      "target_height": 1.9,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Vibe mushroom"
+    },
+    {
+      "asset_id": "prop_vibe_orb_01",
+      "target_height": 0.45,
+      "uniform_scale": 1.0,
+      "notes": "Procedural party asset \u2014 Vibe collect orb"
     },
     {
       "asset_id": "prop_wall_janitor_vent_grille",

@@ -17,7 +17,10 @@ use crate::{
     data::{CharacterRoster, PlayerDefaults},
     flow::AppScreen,
     hub::EditorMode,
-    player::{PlayerName, PlayerVisualSpec, SelectCharacterRequest, ThirdPersonCamera},
+    player::{
+        apply_slot, AccessoryCatalog, EquipAccessoryRequest, PlayerName, PlayerVisualSpec,
+        SelectCharacterRequest, ThirdPersonCamera,
+    },
     season::SeasonLedger,
     session_flow::{LeaveToNestRequest, NetworkBanner},
 };
@@ -78,6 +81,7 @@ pub enum MenuPage {
     Profile,
     Account,
     Characters,
+    Accessories,
     Inventory,
     Wallet,
     Market,
@@ -121,6 +125,18 @@ struct CharacterRowLabel {
 }
 
 #[derive(Component)]
+struct AccessorySelectButton {
+    slot: String,
+    id: Option<String>,
+}
+
+#[derive(Component)]
+struct AccessoryRowLabel {
+    slot: String,
+    id: String,
+}
+
+#[derive(Component)]
 struct MarketBoingButton(BoingAction);
 
 #[derive(Component, Clone, Copy, PartialEq, Eq)]
@@ -129,6 +145,7 @@ enum MenuBodyText {
     Profile,
     Account,
     Characters,
+    Accessories,
     Inventory,
     Wallet,
     Challenges,
@@ -275,12 +292,14 @@ impl Plugin for SettingsPlugin {
                     handle_settings_buttons,
                     handle_market_equip,
                     handle_character_select,
+                    handle_accessory_select,
                     handle_market_buy,
                     handle_market_boing,
                     handle_account_buttons,
                     handle_nest_auth_typing,
                     sync_player_name_from_account,
                     refresh_menu_labels.run_if(in_state(AppScreen::Playing)),
+                    refresh_accessory_labels.run_if(in_state(AppScreen::Playing)),
                     apply_settings_hotkeys,
                     persist_settings,
                 ),
@@ -316,7 +335,12 @@ fn persist_settings(settings: Res<GameSettings>) {
     }
 }
 
-fn spawn_nest_menu(mut commands: Commands, catalog: Res<CosmeticsCatalog>, roster: Res<CharacterRoster>) {
+fn spawn_nest_menu(
+    mut commands: Commands,
+    catalog: Res<CosmeticsCatalog>,
+    roster: Res<CharacterRoster>,
+    accessories: Res<AccessoryCatalog>,
+) {
     commands
         .spawn((
             PauseRoot,
@@ -372,6 +396,7 @@ fn spawn_nest_menu(mut commands: Commands, catalog: Res<CosmeticsCatalog>, roste
             spawn_page_profile(panel);
             spawn_page_account(panel);
             spawn_page_characters(panel, &roster);
+            spawn_page_accessories(panel, &accessories);
             spawn_page_inventory(panel, &catalog);
             spawn_page_wallet(panel);
             spawn_page_market(panel, &catalog);
@@ -404,6 +429,7 @@ fn spawn_top_nav(parent: &mut ChildSpawnerCommands) {
             top_nav_btn(bar, "⚙", "Settings", MenuAction::Open(MenuPage::Settings), Some(MenuPage::Settings), false);
             top_nav_btn(bar, "◆", "Profile", MenuAction::Open(MenuPage::Profile), Some(MenuPage::Profile), false);
             top_nav_btn(bar, "☺", "Characters", MenuAction::Open(MenuPage::Characters), Some(MenuPage::Characters), false);
+            top_nav_btn(bar, "👒", "Accessories", MenuAction::Open(MenuPage::Accessories), Some(MenuPage::Accessories), false);
             top_nav_btn(bar, "@", "Account", MenuAction::Open(MenuPage::Account), Some(MenuPage::Account), false);
             top_nav_btn(bar, "▣", "Inventory", MenuAction::Open(MenuPage::Inventory), Some(MenuPage::Inventory), false);
             top_nav_btn(bar, "¤", "Wallet", MenuAction::Open(MenuPage::Wallet), Some(MenuPage::Wallet), false);
@@ -709,6 +735,125 @@ fn spawn_page_characters(parent: &mut ChildSpawnerCommands, roster: &CharacterRo
                         ),
                     ],
                 ));
+            }
+        });
+}
+
+fn spawn_page_accessories(parent: &mut ChildSpawnerCommands, catalog: &AccessoryCatalog) {
+    parent
+        .spawn((
+            MenuPageRoot(MenuPage::Accessories),
+            Node {
+                width: Val::Percent(100.0),
+                flex_direction: FlexDirection::Column,
+                row_gap: Val::Px(8.0),
+                ..Default::default()
+            },
+            Visibility::Hidden,
+        ))
+        .with_children(|page| {
+            page.spawn((
+                Text::new("Accessories"),
+                TextFont {
+                    font_size: FontSize::Px(20.0),
+                    ..Default::default()
+                },
+                TextColor(TEAL),
+            ));
+            page.spawn((
+                MenuBodyText::Accessories,
+                Text::new(""),
+                TextFont {
+                    font_size: FontSize::Px(13.0),
+                    ..Default::default()
+                },
+                TextColor(MUTED),
+            ));
+            for slot in &catalog.slots {
+                page.spawn((
+                    Text::new(slot.label.clone()),
+                    TextFont {
+                        font_size: FontSize::Px(15.0),
+                        ..Default::default()
+                    },
+                    TextColor(ACCENT),
+                ));
+                // Clear slot
+                let slot_id = slot.id.clone();
+                page.spawn((
+                    Button,
+                    AccessorySelectButton {
+                        slot: slot_id.clone(),
+                        id: None,
+                    },
+                    Node {
+                        padding: UiRect::axes(Val::Px(10.0), Val::Px(6.0)),
+                        border_radius: BorderRadius::all(Val::Px(8.0)),
+                        ..Default::default()
+                    },
+                    BackgroundColor(BTN_BG),
+                    children![(
+                        Text::new(format!("Clear {}", slot.label)),
+                        TextFont {
+                            font_size: FontSize::Px(12.0),
+                            ..Default::default()
+                        },
+                        TextColor(Color::srgb(0.95, 0.95, 0.9)),
+                    )],
+                ));
+                for item in catalog.available_in_slot(&slot.id) {
+                    let id = item.id.clone();
+                    let label = item.label.clone();
+                    page.spawn((
+                        Node {
+                            width: Val::Percent(100.0),
+                            flex_direction: FlexDirection::Row,
+                            column_gap: Val::Px(8.0),
+                            align_items: AlignItems::Center,
+                            justify_content: JustifyContent::SpaceBetween,
+                            ..Default::default()
+                        },
+                        children![
+                            (
+                                AccessoryRowLabel {
+                                    slot: slot_id.clone(),
+                                    id: id.clone(),
+                                },
+                                Text::new(label),
+                                TextFont {
+                                    font_size: FontSize::Px(13.0),
+                                    ..Default::default()
+                                },
+                                TextColor(MUTED),
+                                Node {
+                                    flex_grow: 1.0,
+                                    ..Default::default()
+                                },
+                            ),
+                            (
+                                Button,
+                                AccessorySelectButton {
+                                    slot: slot_id.clone(),
+                                    id: Some(id),
+                                },
+                                Node {
+                                    padding: UiRect::axes(Val::Px(12.0), Val::Px(6.0)),
+                                    border_radius: BorderRadius::all(Val::Px(8.0)),
+                                    ..Default::default()
+                                },
+                                BackgroundColor(BTN_BG),
+                                children![(
+                                    Text::new("Wear"),
+                                    TextFont {
+                                        font_size: FontSize::Px(13.0),
+                                        ..Default::default()
+                                    },
+                                    TextColor(Color::srgb(0.95, 0.95, 0.9)),
+                                )],
+                            ),
+                        ],
+                    ));
+                }
             }
         });
 }
@@ -1429,6 +1574,38 @@ fn handle_character_select(
     }
 }
 
+fn handle_accessory_select(
+    pause: Res<PauseState>,
+    catalog: Res<AccessoryCatalog>,
+    mut banner: ResMut<NetworkBanner>,
+    mut commands: Commands,
+    mut visuals: Query<&mut PlayerVisualSpec, With<crate::player::LocalPlayer>>,
+    client: Option<Res<bevy_replicon_renet::RenetClient>>,
+    interactions: Query<(&Interaction, &AccessorySelectButton), Changed<Interaction>>,
+) {
+    if !pause.paused {
+        return;
+    }
+    for (interaction, btn) in &interactions {
+        if *interaction != Interaction::Pressed {
+            continue;
+        }
+        if client.is_some() {
+            commands.client_trigger(EquipAccessoryRequest {
+                slot: btn.slot.clone(),
+                asset_id: btn.id.clone(),
+            });
+        } else if let Ok(mut visual) = visuals.single_mut() {
+            apply_slot(&mut visual.accessories, &btn.slot, btn.id.clone());
+        }
+        let note = match &btn.id {
+            Some(id) => format!("Wearing {}", catalog.label_for(id)),
+            None => format!("Cleared {} slot", btn.slot),
+        };
+        banner.show(note, 2.0);
+    }
+}
+
 fn handle_account_buttons(
     pause: Res<PauseState>,
     mut account: ResMut<PlayerAccount>,
@@ -1735,7 +1912,7 @@ fn refresh_menu_labels(
                     "Guest — open Account to sign in".into()
                 };
                 **text = format!(
-                    "{who}\nSeason {} · {} pts · {} parties\nCharacter: {}\nSkin tint: {}\nWallet: {}\nCharacters / Inventory / Wallet / Account for more",
+                    "{who}\nSeason {} · {} pts · {} parties\nCharacter: {}\nSkin tint: {}\nWallet: {}\nCharacters / Accessories for looks",
                     ledger.season_id,
                     ledger.points,
                     ledger.parties_played,
@@ -1747,9 +1924,14 @@ fn refresh_menu_labels(
             (MenuBodyText::Characters, MenuPage::Characters) => {
                 let label = roster.label_for(&defaults.crew_model_id);
                 **text = format!(
-                    "Active: {label} (`{}`)\nPick a base to swap live — compare Soft vs Vivid in The Nest.",
+                    "Active: {label} (`{}`)\nPick a base to swap live — compare Soft / Vivid / Procedural.",
                     defaults.crew_model_id
                 );
+            }
+            (MenuBodyText::Accessories, MenuPage::Accessories) => {
+                **text =
+                    "Wear hats, necklaces, shoes, back, face, and hands on your Pudgy.\nClear removes a slot — changes apply live in The Nest."
+                        .into();
             }
             (MenuBodyText::Account, MenuPage::Account) => {
                 let mark = |field: NestAuthField| -> &'static str {
@@ -1972,6 +2154,57 @@ fn refresh_menu_labels(
                 **text = format!("{} · {} pts · {state}", item.label, item.cost_points);
             }
         }
+    }
+}
+
+fn refresh_accessory_labels(
+    pause: Res<PauseState>,
+    page: Res<MenuPage>,
+    catalog: Res<AccessoryCatalog>,
+    local_visual: Query<&PlayerVisualSpec, With<crate::player::LocalPlayer>>,
+    mut rows: Query<(&AccessoryRowLabel, &mut Text)>,
+    mut bodies: Query<(&MenuBodyText, &mut Text), Without<AccessoryRowLabel>>,
+) {
+    if !pause.paused || *page != MenuPage::Accessories {
+        return;
+    }
+    let accessories = local_visual
+        .single()
+        .ok()
+        .map(|v| v.accessories.clone())
+        .unwrap_or_default();
+
+    for (kind, mut text) in &mut bodies {
+        if *kind == MenuBodyText::Accessories {
+            **text = format!(
+                "Hat {} · Necklace {} · Shoes {}\nBack {} · Face {} · Hands {}\nWear items live — Clear removes a slot.",
+                accessories.hat.as_deref().unwrap_or("—"),
+                accessories.necklace.as_deref().unwrap_or("—"),
+                accessories.shoes.as_deref().unwrap_or("—"),
+                accessories.back.as_deref().unwrap_or("—"),
+                accessories.face.as_deref().unwrap_or("—"),
+                accessories.hands.as_deref().unwrap_or("—"),
+            );
+        }
+    }
+
+    for (row, mut text) in &mut rows {
+        let equipped_id = match row.slot.as_str() {
+            "hat" => accessories.hat.as_deref(),
+            "necklace" => accessories.necklace.as_deref(),
+            "shoes" => accessories.shoes.as_deref(),
+            "back" => accessories.back.as_deref(),
+            "face" => accessories.face.as_deref(),
+            "hands" => accessories.hands.as_deref(),
+            _ => None,
+        };
+        let mark = if equipped_id == Some(row.id.as_str()) {
+            "●"
+        } else {
+            "○"
+        };
+        let label = catalog.label_for(&row.id);
+        **text = format!("{mark} {label}");
     }
 }
 
