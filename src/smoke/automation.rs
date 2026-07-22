@@ -25,6 +25,7 @@ pub struct SmokeResult {
     pub message: String,
     pub finished: bool,
     pub written: bool,
+    pub exit_requested: bool,
 }
 
 #[derive(Resource, Debug)]
@@ -32,6 +33,8 @@ struct SmokeAutomation {
     role: SmokeRole,
     timer: Timer,
     saw_client: bool,
+    /// After a pass, host keeps the server up briefly so join can observe the phase change.
+    exit_delay: Option<Timer>,
 }
 
 pub struct SmokeAutomationPlugin;
@@ -72,6 +75,7 @@ fn init_smoke_automation(mut commands: Commands, cli: Res<crate::Cli>) {
                 role: SmokeRole::Host,
                 timer: Timer::new(Duration::from_secs(25), TimerMode::Once),
                 saw_client: true,
+                exit_delay: None,
             });
             return;
         }
@@ -81,6 +85,7 @@ fn init_smoke_automation(mut commands: Commands, cli: Res<crate::Cli>) {
         role,
         timer: Timer::new(Duration::from_secs(45), TimerMode::Once),
         saw_client: false,
+        exit_delay: None,
     });
 }
 
@@ -95,6 +100,16 @@ fn run_party_smoke(
     let Some(mut automation) = automation else {
         return;
     };
+
+    // Host linger after pass so join can sync Race phase.
+    if let Some(delay) = automation.exit_delay.as_mut() {
+        delay.tick(time.delta());
+        if delay.just_finished() {
+            result.exit_requested = true;
+        }
+        return;
+    }
+
     if result.finished {
         return;
     }
@@ -114,6 +129,12 @@ fn run_party_smoke(
         result.pass = true;
         result.message = format!("party advanced to {:?}", director.phase);
         result.finished = true;
+        if matches!(automation.role, SmokeRole::Host) {
+            automation.exit_delay = Some(Timer::new(Duration::from_secs(20), TimerMode::Once));
+            info!("smoke host pass — lingering 20s for join sync");
+        } else {
+            result.exit_requested = true;
+        }
         return;
     }
 
@@ -124,6 +145,7 @@ fn run_party_smoke(
             automation.role, automation.saw_client
         );
         result.finished = true;
+        result.exit_requested = true;
     }
 }
 
@@ -132,38 +154,42 @@ fn finish_smoke(
     automation: Option<Res<SmokeAutomation>>,
     mut exit: MessageWriter<AppExit>,
 ) {
-    if !result.finished || result.written {
-        return;
+    if result.finished && !result.written {
+        result.written = true;
+
+        let role_name = automation
+            .as_ref()
+            .map(|a| match a.role {
+                SmokeRole::Host => "host",
+                SmokeRole::Join => "join",
+            })
+            .unwrap_or("unknown");
+
+        let _ = fs::create_dir_all(SMOKE_RESULT_DIR);
+        let path = PathBuf::from(SMOKE_RESULT_DIR).join(format!("mp_smoke_{role_name}.result"));
+        let legacy = PathBuf::from(SMOKE_RESULT_DIR).join("smoke_result.txt");
+        let body = format!(
+            "pass={}\nmessage={}\nrole={role_name}\n",
+            result.pass, result.message
+        );
+        let _ = fs::write(&path, &body);
+        let _ = fs::write(&legacy, &body);
+        info!(
+            "smoke finished: {} — {} (wrote {})",
+            result.pass,
+            result.message,
+            path.display()
+        );
     }
-    result.written = true;
 
-    let role_name = automation
-        .as_ref()
-        .map(|a| match a.role {
-            SmokeRole::Host => "host",
-            SmokeRole::Join => "join",
-        })
-        .unwrap_or("unknown");
-
-    let _ = fs::create_dir_all(SMOKE_RESULT_DIR);
-    let path = PathBuf::from(SMOKE_RESULT_DIR).join(format!("mp_smoke_{role_name}.result"));
-    // Also write legacy name for local tooling.
-    let legacy = PathBuf::from(SMOKE_RESULT_DIR).join("smoke_result.txt");
-    let body = format!(
-        "pass={}\nmessage={}\nrole={role_name}\n",
-        result.pass, result.message
-    );
-    let _ = fs::write(&path, &body);
-    let _ = fs::write(&legacy, &body);
-    info!(
-        "smoke finished: {} — {} (wrote {})",
-        result.pass,
-        result.message,
-        path.display()
-    );
-    if result.pass {
-        exit.write(AppExit::Success);
-    } else {
-        exit.write(AppExit::from_code(1));
+    if result.exit_requested {
+        result.exit_requested = false;
+        if result.pass {
+            exit.write(AppExit::Success);
+        } else {
+            exit.write(AppExit::from_code(1));
+            // Ensure CI scripts see a non-zero status even if the winit runner drops AppExit.
+            std::process::exit(1);
+        }
     }
 }
