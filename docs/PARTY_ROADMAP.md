@@ -33,7 +33,7 @@ Related: [BOING_INTEGRATION.md](BOING_INTEGRATION.md) · [PACKAGING.md](PACKAGIN
 - [x] Race map creator (Nest Create Map / My Maps) — see [MAP_CREATOR.md](MAP_CREATOR.md)
 - [x] Vibe / Shooter map kits + Party Saga pack save/play/share — [MAP_CREATOR.md](MAP_CREATOR.md)
 - [x] Companion map share desk (`companion/maps`)
-- [ ] Drop real Pudgy / Nest GLBs via Studio
+- [ ] Drop real Pudgy / Nest GLBs via Studio (Party Saga prompts + accessory slots — see STUDIO_PROMPTS.md)
 - [ ] Live GLB meshes for map deco `asset_id` in stage boot
 - [ ] Host-attested anti-cheat for claims
 - [x] LAN Nest + stage co-op (director sync, pad RPC, stage boot, shoot RPC) — soak 2–8 still open

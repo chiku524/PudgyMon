@@ -99,17 +99,34 @@ pub struct PlayerName(pub String);
 #[derive(Component, Serialize, Deserialize, Clone, Copy, Debug)]
 pub struct PlayerColor(pub [f32; 3]);
 
-/// Visual swap hook for character GLBs. `model_id = None` keeps the capsule placeholder.
+/// Detachable accessory loadout — Studio `acc_*` ids parented on shared sockets.
+///
+/// See `docs/CHARACTERS.md` for socket names and id patterns (`acc_hat_*`, etc.).
+#[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq, Eq)]
+pub struct AccessorySlots {
+    pub hat: Option<String>,
+    pub necklace: Option<String>,
+    pub shoes: Option<String>,
+    pub back: Option<String>,
+    pub face: Option<String>,
+    pub hands: Option<String>,
+}
+
+/// Visual swap hook for character GLBs. `model_id = None` keeps the capsule / procedural stub.
 ///
 /// Default crew mesh is `char_pudgy_base_01` (shared Pudgy base). Species skins
 /// (e.g. `oceanic_pudgymon_01`) may override `model_id` later via cosmetics, but must
-/// obey the Pudgy Character Contract in `docs/CHARACTERS.md` so clips stay in sync.
+/// obey the Pudgy Character Contract in `docs/CHARACTERS.md` so clips and accessories stay in sync.
 #[derive(Component, Serialize, Deserialize, Clone, Debug, Default, PartialEq, Eq)]
 pub struct PlayerVisualSpec {
     /// Studio `asset_id` for the equipped character GLB (`char_pudgy_base_01` or a species skin).
     pub model_id: Option<String>,
-    /// Roster hat slot 0–7 (see docs/CHARACTERS.md).
+    /// Legacy roster index 0–7 (palette / stand-in). Prefer `accessories.hat` once GLBs exist.
+    #[serde(default)]
     pub hat_slot: u8,
+    /// Equipped accessory asset ids (hat, necklace, shoes, back, face, hands).
+    #[serde(default)]
+    pub accessories: AccessorySlots,
 }
 
 #[derive(Component, Debug, Clone, Copy, Default)]

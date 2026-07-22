@@ -364,6 +364,7 @@ fn spawn_player_entity(
             PlayerVisualSpec {
                 model_id: defaults.resolved_crew_model(),
                 hat_slot: (slot % 8) as u8,
+                accessories: Default::default(),
             },
             Knockback::default(),
             owner,

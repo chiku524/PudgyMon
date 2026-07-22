@@ -1,76 +1,10 @@
-# Immersive Studio prompt pack — PudgyMon
+# Immersive Studio prompt pack — PudgyMon: Party Saga
 
 Copy-paste prompts for [Immersive Labs Studio](https://github.com/chiku524/immersive.labs) / Tripo jobs. Each entry includes the **`asset_id`**, target height, where it plugs into PudgyMon, and a ready prompt.
 
-After generation → import → place (see [STUDIO_ASSETS.md](STUDIO_ASSETS.md)). Stand-in map: [ASSET_WISHLIST.md](ASSET_WISHLIST.md).
+After generation → import → place (see [STUDIO_ASSETS.md](STUDIO_ASSETS.md)). Stand-in map: [ASSET_WISHLIST.md](ASSET_WISHLIST.md). Character + accessory contract: [CHARACTERS.md](CHARACTERS.md).
 
----
-
-## Priority — Pudgy + Nest
-
-### `char_pudgy_base_01` · playable height **1.2** · `uniform_scale` **0.27**
-
-**Plugs into:** `data/player_defaults.json` / `PlayerVisualSpec.model_id`  
-**Contract:** [CHARACTERS.md — Pudgy Character Contract](CHARACTERS.md)
-
-Canonical shared base. Future species must match its proportions so one animation set retargets cleanly.
-
-```
-Cartoon stylized 3D game character for PudgyMon: Party Saga — the SHARED BASE body.
-Cute chunky monster, round soft dumpling body, oversized round head, stubby limbs of equal length,
-big friendly eyes, tiny snout, rubbery plastic toy materials, coral-peach base color.
-Neutral A-pose only: arms slightly away from sides, feet planted flat, standing upright.
-Floor-pivoted at ground center, faces camera-forward, single character, no weapons, no text.
-Do NOT pose swimming, running, or mid-action — idle A-pose only so animations can drive motion.
-Clean PBR, exaggerated silhouette, game-ready low-to-mid poly, about 1.2 meters tall playable.
-```
-
-**Import:** `python scripts/register_studio_asset.py char_pudgy_base_01 --height 1.2 --scale 0.27 --update`
-
-### Pudgy species variant template · same scale as base
-
-**Plugs into:** cosmetics / `PlayerVisualSpec.model_id` override  
-**Id pattern:** `char_pudgy_<biome>_01` or `*_pudgymon_01` (example: `oceanic_pudgymon_01`)
-
-Copy this block for every new species. Change only the biome details line; keep proportions locked.
-
-```
-Cartoon stylized 3D game character for PudgyMon: Party Saga — SPECIES VARIANT of char_pudgy_base_01.
-MUST match the shared base: same overall height, same stubby limb lengths, same torso roundness,
-same head-to-body ratio, same A-pose (arms slightly out, feet planted), floor-pivoted ground center.
-Only change biome silhouette details and palette — e.g. [FINS / GILLS / HORNS / FUR / SHELL].
-Theme: [BIOME VIBE — ocean / forest / lava / sky / …]. Colors: [PALETTE].
-Single character, no weapons, no text, family-friendly, clean PBR, game-ready low-to-mid poly.
-Do NOT invent a unique locomotion pose; idle A-pose only for animation retarget compatibility.
-```
-
-**Import rule:** register with the same `uniform_scale` as the base (`0.27`) unless you measure a different mesh height:
-
-```bash
-python scripts/import_immersive_studio_pack.py path/to/pack
-python scripts/register_studio_asset.py <asset_id> --height 1.2 --scale 0.27 --update \
-  --notes "Species skin on char_pudgy_base_01 contract"
-```
-
-### `env_nest_egg_01` · target height **2.0**
-
-**Plugs into:** Nest centerpiece (replace greybox sphere)
-
-```
-Giant decorative party egg sculpture for a cute monster social hub.
-Soft speckled shell, warm pastel orange and cream, rounded cartoon prop,
-floor-pivoted, single object, no cracks with creatures emerging, no text.
-```
-
-### `prop_vibe_mushroom_01` · target height **1.8**
-
-**Plugs into:** Nest flora décor
-
-```
-Oversized cartoon mushroom prop with glowing cap for a colorful party playground.
-Thick stem, wide soft cap in coral or teal, slightly emissive toy plastic look,
-floor-pivoted, single object, no characters.
-```
+**Theme lock:** cute chunky **Pudgy Monsters** in a party playground — The Nest social hub + Race / Vibe Collect / Shooter. Not freight, vaults, or corporate comedy.
 
 ---
 
@@ -80,17 +14,17 @@ Use this block (or Studio’s style preset) on **every** job so the set matches:
 
 ```
 Cartoon stylized 3D game asset for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable colors, soft rounded edges, slightly rubbery plastic materials,
+Bright readable candy colors, soft rounded edges, slightly rubbery plastic / plush toy materials,
 exaggerated silhouettes, clean PBR, no gore, no realistic dirt, no photorealism.
-Single isolated object, centered, floor-pivoted (origin at ground center),
-game-ready low-to-mid poly, no base/plinth, no floating text UI.
+Single isolated object, centered, floor-pivoted (origin at ground center) unless noted as an accessory,
+game-ready low-to-mid poly, no base/plinth, no floating text UI, no people unless the job is a Pudgy.
 ```
 
 **Negative / avoid (if Studio supports it):**
 
 ```
-photorealistic, grimdark, horror, blood, weapons, complex machinery internals,
-tiny unreadable labels, multiple objects, diorama, landscape, character holding prop
+photorealistic, grimdark, horror, blood, weapons with realistic ammo, space freight, corporate office,
+tiny unreadable labels, multiple objects, diorama, landscape, character holding prop, adult human proportions
 ```
 
 **Export settings**
@@ -98,7 +32,7 @@ tiny unreadable labels, multiple objects, diorama, landscape, character holding 
 | Setting | Value |
 |---------|--------|
 | Format | GLB with baked Tripo PBR |
-| Pivot | Floor center |
+| Pivot | Floor center (characters / props) · wear origin (accessories) |
 | Facing | Character faces −Z (Bevy forward) when possible |
 | Units | 1 unit ≈ 1 meter |
 | Naming | Folder + file = `asset_id` / `asset_id.glb` |
@@ -106,279 +40,246 @@ tiny unreadable labels, multiple objects, diorama, landscape, character holding 
 
 ---
 
-## Batch A — High priority (playable replacements)
+## Priority 0 — Shared Pudgy base + species
 
-Generate these first. Rooms already have markers waiting.
+All playable Pudgys share one figure. Species change palette and silhouette details only. Accessories attach to fixed sockets on this base.
 
-### 1. Sort chute (reusable) — `env_sort_chute_01`
+### `char_pudgy_base_01` · playable height **1.2** · `uniform_scale` **0.27**
 
-| Field | Value |
-|-------|--------|
-| **asset_id** | `env_sort_chute_01` |
-| **target_height** | `1.5` |
-| **Place on** | `sort_chute_*` in `data/rooms/hr_orientation.json` (reuse ×4; tint via materials later or generate color variants) |
-| **Replaces** | `prop_pneumatic_tube_intake_funnel` |
+**Plugs into:** `data/player_defaults.json` / `PlayerVisualSpec.model_id`  
+**Contract:** [CHARACTERS.md — Pudgy Character Contract](CHARACTERS.md)
 
-**Prompt:**
+Canonical shared base. Future species and every accessory must match its proportions and sockets.
 
 ```
-Cartoon stylized 3D game prop for a slapstick space-freight comedy game.
-Bright readable colors, soft rounded edges, slightly rubbery plastic materials,
-exaggerated silhouettes, clean PBR, no gore, no realistic dirt, no photorealism.
-Single isolated object, centered, floor-pivoted (origin at ground center),
-game-ready low-to-mid poly, no base/plinth, no floating text UI, no people.
-
-A freestanding pneumatic freight sort chute for a corporate space station:
-wide funnel mouth on top, short vertical tube, open dump hatch at the bottom,
-chunky hazard stripes, big cartoon intake rim, friendly industrial look,
-orange and cream plastic with yellow caution bands, about 1.5 meters tall.
+Cartoon stylized 3D game character for PudgyMon: Party Saga — the SHARED BASE body.
+Cute chunky monster, round soft dumpling body, oversized round head, stubby limbs of equal length,
+big friendly eyes, tiny snout, rubbery plastic toy materials, coral-peach base color.
+Neutral A-pose only: arms slightly away from sides, feet planted flat, standing upright.
+Leave clear wear volumes: flat crown for hats, bare neck band for necklaces, simple stubby feet for shoes,
+clean back for capes/wings, open face for glasses/masks, stubby hands for mittens.
+Floor-pivoted at ground center, faces camera-forward, single character, no weapons, no text, no accessories baked on.
+Do NOT pose swimming, running, or mid-action — idle A-pose only so animations can drive motion.
+Clean PBR, exaggerated silhouette, game-ready low-to-mid poly, about 1.2 meters tall playable.
 ```
 
-**Optional color variants** (same mesh, different prompt color line):
+**Import:**
 
-| asset_id | Accent color | Chute label (in-game) |
-|----------|--------------|------------------------|
-| `env_sort_chute_hot_dogs_01` | hot-dog orange / mustard | Hot Dogs |
-| `env_sort_chute_toasters_01` | silver / chrome plastic | Toasters |
-| `env_sort_chute_premium_air_01` | sky blue / white | Premium Air |
-| `env_sort_chute_writeups_01` | angry red / pink | Write-Ups |
-
----
-
-### 2. Shuttle seal door — `env_shuttle_seal_door_01`
-
-| Field | Value |
-|-------|--------|
-| **asset_id** | `env_shuttle_seal_door_01` |
-| **target_height** | `2.2` |
-| **Place on** | `meltdown_door_left`, `meltdown_door_right` in `shuttle_meltdown.json` |
-| **Replaces** | `env_break_glass_panel_01` |
-
-**Prompt:**
-
-```
-Cartoon stylized 3D game prop for a slapstick space-freight comedy game.
-Bright readable colors, soft rounded edges, slightly rubbery plastic materials,
-exaggerated silhouettes, clean PBR, no gore, no realistic dirt, no photorealism.
-Single isolated object, centered, floor-pivoted (origin at ground center),
-game-ready low-to-mid poly, no base/plinth, no floating text UI, no people.
-
-A freestanding cartoon airlock seal door panel for a shuttle bay:
-tall rectangular bulkhead door with a big round viewport window,
-chunky red seal lever, yellow-black hazard stripes, glowing green LOCKED light,
-thick rubber gasket frame, about 2.2 meters tall, readable from a distance.
+```bash
+python scripts/register_studio_asset.py char_pudgy_base_01 --height 1.2 --scale 0.27 --update
 ```
 
----
+### Pudgy species variant template · same scale as base
 
-### 3. Crew character base — `char_crew_base_01`
+**Plugs into:** cosmetics / `PlayerVisualSpec.model_id` override  
+**Id pattern:** `char_pudgy_<biome>_01` or `*_pudgymon_01` (example: `oceanic_pudgymon_01`)
 
-| Field | Value |
-|-------|--------|
-| **asset_id** | `char_crew_base_01` |
-| **target_height** | `1.6` |
-| **Place via** | `PlayerVisualSpec.model_id` (see [CHARACTERS.md](CHARACTERS.md)) |
-| **Replaces** | Capsule placeholder |
-
-**Prompt:**
+Copy this block for every new species. Change only the biome details line; keep proportions and sockets locked.
 
 ```
-Cartoon stylized 3D game character for a slapstick space-freight comedy game.
-Bright readable colors, soft rounded edges, slightly rubbery materials,
-exaggerated silhouettes, clean PBR, no gore, no photorealism.
-Single isolated character, T-pose or neutral A-pose, floor-pivoted,
-game-ready low-to-mid poly, no weapons, no base.
-
-A stubby cartoon space freight contractor: big head, short legs, oversized gloves,
-soft rubber limbs, simple jumpsuit with reflective stripes, blank friendly face,
-neutral crew colors (yellow and navy accents), about 1.6 meters tall,
-designed as a base mesh for hat and palette swaps, clear silhouette from third-person camera.
+Cartoon stylized 3D game character for PudgyMon: Party Saga — SPECIES VARIANT of char_pudgy_base_01.
+MUST match the shared base: same overall height, same stubby limb lengths, same torso roundness,
+same head-to-body ratio, same A-pose (arms slightly out, feet planted), floor-pivoted ground center.
+Same accessory wear volumes (crown, neck band, feet, back, face, hands) — do not bake hats/jewelry/shoes onto the mesh.
+Only change biome silhouette details and palette — e.g. [FINS / GILLS / HORNS / FUR / SHELL / SPARKLES].
+Theme: [BIOME VIBE — ocean / forest / lava / sky / candy / …]. Colors: [PALETTE].
+Single character, no weapons, no text, family-friendly, clean PBR, game-ready low-to-mid poly.
+Do NOT invent a unique locomotion pose; idle A-pose only for animation retarget compatibility.
 ```
 
-**Notes for Studio:** Prefer a simple single-mesh or few-part character. Hats are separate jobs (Batch C).
+**Starter species to generate**
 
----
+| asset_id | Biome line |
+|----------|------------|
+| `oceanic_pudgymon_01` | Soft fins + gill freckles, teal/coral ocean candy palette |
+| `char_pudgy_forest_01` | Leaf tuft ears + moss freckles, lime/olive forest party palette |
+| `char_pudgy_lava_01` | Ember freckles + tiny magma belly glow, coral/orange/charcoal |
+| `char_pudgy_sky_01` | Puffball cheeks + soft cloud tufts, sky blue/cream |
 
-## Batch B — Medium priority (arena & signage)
+**Import rule:** same `uniform_scale` as the base (`0.27`) unless you measure a different mesh height:
 
-### 4. Freight deck floor panel — `env_freight_deck_panel_01`
-
-| Field | Value |
-|-------|--------|
-| **asset_id** | `env_freight_deck_panel_01` |
-| **target_height** | `0.15` (thin) / or use `target_width: 4.0` |
-| **Place on** | `floor_main` in `data/rooms/arena.json` (tile / repeat visually) |
-| **Replaces** | Greybox slab |
-
-**Prompt:**
-
-```
-Cartoon stylized 3D game prop for a slapstick space-freight comedy game.
-Bright readable colors, soft rounded edges, clean PBR, no photorealism.
-Single isolated object, centered, floor-pivoted, game-ready low-to-mid poly.
-
-A square modular space-station freight deck floor panel tile:
-thick metal plate with soft cartoon bevels, subtle rivets, painted lane stripes,
-cool grey-blue with yellow safety chevrons, about 4 meters across and very thin,
-designed to tile as a floor, no walls attached.
+```bash
+python scripts/import_immersive_studio_pack.py path/to/pack
+python scripts/register_studio_asset.py <asset_id> --height 1.2 --scale 0.27 --update \
+  --notes "Species skin on char_pudgy_base_01 contract"
 ```
 
 ---
 
-### 5. Room signs (per vault)
+## Priority 1 — Accessory slots (shared sockets)
 
-Generate three (or one reusable + recolor). Place on `room_sign` markers.
+Accessories are **separate GLBs**, never baked into the body. Parent under the matching socket on `char_pudgy_base_01` (see [CHARACTERS.md](CHARACTERS.md)).
 
-#### `env_room_sign_hr_01`
+| Slot | Socket (target) | Pivot | Id pattern |
+|------|-----------------|-------|------------|
+| Hat | `Socket_Hat` (crown) | Wear origin at crown contact | `acc_hat_<name>_01` |
+| Necklace | `Socket_Necklace` (neck band) | Wear origin at neck center | `acc_necklace_<name>_01` |
+| Shoes | `Socket_Shoes` (pair, ground) | Floor between both feet | `acc_shoes_<name>_01` |
+| Back | `Socket_Back` (upper back) | Wear origin at spine contact | `acc_back_<name>_01` |
+| Face | `Socket_Face` (eyes/nose) | Wear origin at bridge of snout | `acc_face_<name>_01` |
+| Hands | `Socket_Hands` (pair) | Midpoint between stubby hands | `acc_hands_<name>_01` |
 
-**Prompt:**
-
-```
-Cartoon stylized 3D game prop for a slapstick space-freight comedy game.
-Bright readable colors, soft rounded edges, clean PBR, no photorealism.
-Single isolated object, centered, floor-pivoted or freestanding post, game-ready.
-
-A big cartoon corporate welcome sign on a short stand for an HR orientation bay:
-wide horizontal board, bright yellow and blue, friendly but bureaucratic,
-large blank face for baked text area, soft plastic look, about 3 meters wide and 1.5 meters tall including post.
-```
-
-#### `env_room_sign_breaker_01`
-
-**Prompt:**
+**Shared accessory wrapper** (prepend global style, then):
 
 ```
-Cartoon stylized 3D game prop for a slapstick space-freight comedy game.
-Bright readable colors, soft rounded edges, clean PBR, no photorealism.
-Single isolated object, centered, freestanding, game-ready.
-
-A big cartoon industrial warning sign for a breaker room:
-wide board with electric bolt icon silhouette, blue and white corporate hazard style,
-chunky frame, about 3 meters wide, readable silhouette, blank text panel area.
+Cartoon stylized 3D game accessory for PudgyMon: Party Saga.
+Single isolated accessory only — no head, no body, no full character.
+Centered at the wear origin for slot [HAT / NECKLACE / SHOES / BACK / FACE / HANDS],
+sized for a 1.2 m chunky dumpling Pudgy (same as char_pudgy_base_01).
+Soft rubber / candy plastic materials, exaggerated silhouette readable from third-person camera,
+clean PBR, family-friendly, game-ready low poly.
 ```
 
-#### `env_room_sign_meltdown_01`
+### Batch A — Starter hats
 
-**Prompt:**
+| asset_id | Prompt focus |
+|----------|--------------|
+| `acc_hat_party_crown_01` | Soft candy party crown with round gems, coral/gold |
+| `acc_hat_racer_cap_01` | Tiny bill racing cap with stripe, cyan/white |
+| `acc_hat_vibe_mushroom_01` | Mini mushroom cap hat, teal glow freckles |
+| `acc_hat_blaster_beanie_01` | Soft beanie with star pom, pink/magenta |
+| `acc_hat_propeller_01` | Silly soft propeller beanie, yellow/sky |
+| `acc_hat_flower_01` | Big plush daisy flower, cream/lime |
+| `acc_hat_chef_01` | Chunky toy chef hat, white/coral trim |
+| `acc_hat_sleep_01` | Floppy nightcap with star tip, indigo/cream |
+
+**Example full prompt (`acc_hat_party_crown_01`):**
 
 ```
-Cartoon stylized 3D game prop for a slapstick space-freight comedy game.
-Bright readable colors, soft rounded edges, clean PBR, no photorealism.
-Single isolated object, centered, freestanding, game-ready.
+Cartoon stylized 3D game accessory for PudgyMon: Party Saga.
+Bright readable candy colors, soft rounded edges, slightly rubbery plastic materials,
+exaggerated silhouettes, clean PBR, no photorealism.
+Single isolated hat only — no head, no body — centered at crown wear origin,
+sized for a 1.2 m chunky dumpling monster, game-ready low poly.
 
-A big cartoon emergency shuttle bay sign:
-wide board with red-orange meltdown / heat warning vibe, soft plastic materials,
-flame or thermometer icon silhouette, chunky frame, about 3 meters wide, blank text panel area.
+A soft candy party crown with round gem studs, coral and gold toy plastic,
+short stubby points, friendly party silhouette, readable from third-person camera.
 ```
 
-*(Cargo already has `cargo_ring_sign_01` — skip unless regenerating.)*
+### Batch B — Necklaces
+
+| asset_id | Prompt focus |
+|----------|--------------|
+| `acc_necklace_shell_01` | Soft shell pendant on thick candy chain, teal/cream |
+| `acc_necklace_medal_01` | Oversized round race medal, gold/cyan ribbon |
+| `acc_necklace_beads_01` | Chunky rainbow bead collar, party candy colors |
+| `acc_necklace_bell_01` | Soft jingle bell charm, yellow/coral |
+
+### Batch C — Shoes
+
+| asset_id | Prompt focus |
+|----------|--------------|
+| `acc_shoes_racer_01` | Pair of stubby racing sneakers with stripe, cyan/white |
+| `acc_shoes_party_01` | Pair of soft party loafers with stars, coral/gold |
+| `acc_shoes_boots_01` | Pair of chunky toy rain boots, yellow/teal |
+| `acc_shoes_slippers_01` | Pair of plush cloud slippers, cream/sky |
+
+**Shoes note:** Generate as a **connected pair** at floor pivot (left + right), not two separate jobs.
+
+### Batch D — Back / face / hands
+
+| asset_id | Slot | Prompt focus |
+|----------|------|--------------|
+| `acc_back_cape_01` | Back | Short soft hero cape, coral lining |
+| `acc_back_wings_01` | Back | Stubby candy angel wings, cream/pink |
+| `acc_back_pack_01` | Back | Round vibe-orb backpack, teal glow |
+| `acc_face_shades_01` | Face | Oversized toy sunglasses, black/gold |
+| `acc_face_goggles_01` | Face | Soft racer goggles on forehead, cyan |
+| `acc_face_mask_01` | Face | Friendly party half-mask, pink sparkles |
+| `acc_hands_mittens_01` | Hands | Pair of stubby star mittens, coral |
+| `acc_hands_gloves_01` | Hands | Pair of soft racing gloves, cyan |
 
 ---
 
-### 6. Meltdown floor glow disc — `vfx_meltdown_floor_glow_01`
+## Priority 2 — The Nest (social hub)
 
-| Field | Value |
-|-------|--------|
-| **asset_id** | `vfx_meltdown_floor_glow_01` |
-| **target_height** | `0.05` |
-| **target_width** | `8.0` |
-| **Place on** | `meltdown_glow` in `shuttle_meltdown.json` |
+### `env_nest_egg_01` · target height **2.0**
 
-**Prompt:**
+**Plugs into:** Nest centerpiece (replace greybox egg)
 
 ```
-Cartoon stylized 3D game prop for a slapstick space-freight comedy game.
-Single isolated flat disc, floor-pivoted, very thin, game-ready.
+Giant decorative party egg sculpture for The Nest social hub in PudgyMon: Party Saga.
+Soft speckled shell, warm pastel orange and cream, rounded cartoon prop,
+floor-pivoted, single object, no cracks with creatures emerging, no text, no characters.
+```
 
-A large flat circular warning glow plate for a shuttle bay floor:
-soft red-orange emissive cartoon hazard pattern, concentric rings,
-no thickness, no walls, looks like a glowing safety decal about 8 meters wide.
+### `env_nest_bench_01` · target height **0.6**
+
+**Plugs into:** Nest seating ring
+
+```
+Cute chunky outdoor bench for a monster party plaza.
+Soft rounded seat and back, candy coral and cream toy plastic, short stubby legs,
+floor-pivoted, single object, seats about two Pudgys, no characters, no text.
+```
+
+### `prop_vibe_mushroom_01` · target height **1.8**
+
+**Plugs into:** Nest flora décor
+
+```
+Oversized cartoon mushroom prop with glowing cap for The Nest party playground.
+Thick stem, wide soft cap in coral or teal, slightly emissive toy plastic look,
+floor-pivoted, single object, no characters.
+```
+
+### Mode pads (optional mesh upgrade)
+
+| asset_id | Color vibe | For pad |
+|----------|------------|---------|
+| `env_pad_race_01` | Cyan speed stripes | Race |
+| `env_pad_vibe_01` | Yellow/orange glow rings | Vibe Collect |
+| `env_pad_shooter_01` | Pink star burst | Shooter |
+| `env_pad_party_01` | Rainbow candy swirl | Full Party Saga |
+
+```
+Circular floor mode pad for PudgyMon: Party Saga Nest hub.
+Flat soft disc with raised candy rim, [COLOR VIBE], subtle emissive pattern,
+floor-pivoted, very thin, about 2.5 meters wide, no characters, no text glyphs (icon silhouette ok).
 ```
 
 ---
 
-## Batch C — Character hats (after base crew)
+## Priority 3 — Stage props
 
-One hat mesh per roster slot. Parent under `char_crew_base_01` later. Keep pivots at head attachment (document in notes: “hat attach at origin”).
+### Race
 
-| # | asset_id | Prompt focus |
-|---|----------|--------------|
-| 1 | `char_hat_zip_01` | Lightning-bolt shaped soft cap, yellow/navy |
-| 2 | `char_hat_grom_01` | Square cartoon hard hat, orange/brown |
-| 3 | `char_hat_bloop_01` | Clear fishbowl helmet dome, cyan rim |
-| 4 | `char_hat_taffy_01` | Stretchy neck scarf loop, pink/magenta (worn as head wrap) |
-| 5 | `char_hat_rivet_01` | Spiky wrench-shaped hairpiece, grey/red |
-| 6 | `char_hat_nix_01` | Hood with antenna stub, purple/black |
-| 7 | `char_hat_boingo_01` | Two puffball antennae, lime/teal |
-| 8 | `char_hat_pax_01` | Soft beret with tiny clipboard badge, beige/green |
+| asset_id | height | Prompt seed |
+|----------|--------|-------------|
+| `prop_race_checkpoint_01` | 2.0 | Soft arch checkpoint gate with cyan stripes, freestanding |
+| `prop_race_cone_01` | 0.7 | Chunky candy traffic cone, coral/white |
+| `prop_race_banner_01` | 1.5 | Soft finish-line banner on two stubby posts, cyan/cream |
+| `env_race_ramp_01` | 1.2 | Short rounded toy ramp, teal deck with yellow edge |
 
-**Shared hat prompt wrapper:**
+### Vibe Collect
 
-```
-Cartoon stylized 3D game accessory for a slapstick space-freight comedy game.
-Bright readable colors, soft rounded edges, clean PBR, no photorealism.
-Single isolated hat/accessory only, no head, no body, centered at wear origin,
-game-ready low poly, exaggerated silhouette readable from third-person camera.
+| asset_id | height | Prompt seed |
+|----------|--------|-------------|
+| `prop_vibe_orb_01` | 0.5 | Floating-looking candy vibe orb (floor-pivoted stand ok), yellow glow |
+| `prop_vibe_flower_01` | 1.0 | Oversized collectible flower prop, soft petals, lime/pink |
+| `prop_vibe_crystal_01` | 0.8 | Rounded toy crystal cluster, teal emissive tips |
 
-[INSERT HAT DESCRIPTION FROM TABLE]
-```
+### Shooter
 
----
+| asset_id | height | Prompt seed |
+|----------|--------|-------------|
+| `prop_blaster_toy_01` | 0.4 | Chunky foam toy blaster prop (decoration only), pink/yellow — no realistic gun |
+| `prop_target_star_01` | 1.0 | Soft star-shaped pop target on a stubby stand, cream/coral |
+| `prop_cover_block_01` | 1.2 | Rounded soft cover block / crate for arena cover, teal candy plastic |
+| `vfx_ko_burst_marker_01` | 0.05 | Flat soft KO burst decal disc, pink stars, very thin |
 
-## Batch D — Low priority (scale-up content)
-
-### Extra breaker panel — `env_breaker_panel_wall_01`
-
-*(You already have `env_breaker_panel_01`; this is a wider wall-mounted bank for the GDD’s 12-switch layout.)*
-
-```
-Cartoon stylized 3D game prop for a slapstick space-freight comedy game.
-Bright readable colors, soft rounded edges, clean PBR, no photorealism.
-Single isolated object, floor-pivoted, game-ready.
-
-A wide freestanding cartoon breaker panel bank with a row of chunky colorful toggle switches,
-blue corporate housing, glowing status lights, soft plastic look, about 1.2 meters tall and 2 meters wide,
-readable switch silhouettes, no tiny text.
-```
-
-### Extra coolant valve wheel — reuse / variant
-
-You already have `prop_coolant_pipe_wheel_01/02`. For more valves, regenerate with:
-
-```
-... A large cartoon industrial coolant pipe valve handwheel on a short vertical stem,
-bright red wheel, cyan pipe stub, soft rubber grips, about 0.8 meters tall ...
-```
-
-Suggested ids: `prop_coolant_pipe_wheel_03` … `_06`.
-
----
-
-## Batch E — Nice-to-have props (fill dead space)
-
-| asset_id | target_height | One-line prompt seed |
-|----------|---------------|----------------------|
-| `prop_hr_clipboard_stack_01` | 0.4 | Stack of oversized cartoon clipboards with sticky notes |
-| `prop_explosive_egg_crate_01` | 1.0 | Freight crate stamped with cartoon egg + boom icon |
-| `prop_writeup_form_kiosk_01` | 1.5 | Skinny HR kiosk that prints write-up tickets |
-| `env_conveyor_short_01` | 0.8 | Short cartoon conveyor belt segment with rollers |
-| `prop_ping_beacon_01` | 0.5 | Soft glowing teammate ping puck |
-| `prop_dunce_hat_intern_01` | 0.5 | Tall dotted dunce cone for eliminated “intern” gag |
-
-Use the **global style** block + the one-line seed as the full prompt.
+Use **global style** + the one-line seed as the full prompt for each.
 
 ---
 
 ## Suggested Studio job order
 
-1. `env_sort_chute_01` (or 4 color variants)
-2. `env_shuttle_seal_door_01`
-3. `char_crew_base_01`
-4. `env_freight_deck_panel_01`
-5. Room signs (HR / Breaker / Meltdown)
-6. `vfx_meltdown_floor_glow_01`
-7. Hats (Batch C)
-8. Scale-up / nice-to-haves
+1. `char_pudgy_base_01` (if regenerating) — lock sockets
+2. Species pack (`oceanic_pudgymon_01`, forest / lava / sky)
+3. Accessory Batch A hats (8) → B necklaces → C shoes → D back/face/hands
+4. Nest: `env_nest_egg_01`, `env_nest_bench_01`, `prop_vibe_mushroom_01`
+5. Mode pads (optional)
+6. Race props → Vibe props → Shooter props
 
 ---
 
@@ -387,7 +288,7 @@ Use the **global style** block + the one-line seed as the full prompt.
 ```bash
 python scripts/import_immersive_studio_pack.py path/to/pack.zip
 python scripts/validate_studio_assets.py
-# Swap asset_id on the matching marker in data/rooms/*.json
+# Swap asset_id on Nest / stage markers, or equip accessories via PlayerVisualSpec
 cargo run -- local
 ```
 

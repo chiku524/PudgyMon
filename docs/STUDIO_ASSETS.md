@@ -17,8 +17,6 @@ Placement is **data-driven**: import a pack → register the asset → add a mar
 2. Download `pack.zip` when complete.
 3. In `pack_diagnostics.json`, confirm Tripo mesh + textures succeeded (not Comfy-only sidecars).
 
-## Import into ShipHappens
-
 From the repo root:
 
 ```bash
@@ -102,7 +100,9 @@ Walk to the marker and press **F** if it has an `interactable`.
 
 ## Character models
 
-Players are capsules until a character GLB exists. Set `PlayerVisualSpec.model_id` to a registry `asset_id` (see `docs/CHARACTERS.md`). Hat slot `0–7` maps to the roster palette.
+Players use a shared **Pudgy** figure (`char_pudgy_base_01`) with optional species skins and detachable accessories. Set `PlayerVisualSpec.model_id` to a registry `asset_id` and fill `accessories` slots (`hat`, `necklace`, `shoes`, `back`, `face`, `hands`) with `acc_*` ids — see [CHARACTERS.md](CHARACTERS.md) and [STUDIO_PROMPTS.md](STUDIO_PROMPTS.md).
+
+Until accessory GLBs exist, leave those fields empty; `hat_slot` 0–7 remains a legacy roster index.
 
 ## Regenerating existing assets with Tripo
 
@@ -110,6 +110,6 @@ Older packs may use ComfyUI sidecars or placeholder meshes. Re-run Studio jobs w
 
 ## Still needed (wishlist)
 
-See [ASSET_WISHLIST.md](ASSET_WISHLIST.md) for dedicated sort-chute, door, floor, and character assets that still use stand-ins.
+See [ASSET_WISHLIST.md](ASSET_WISHLIST.md) for Nest props, stage props, species skins, and accessory batches that still use stand-ins.
 
 **Ready-to-paste Immersive Studio / Tripo prompts:** [STUDIO_PROMPTS.md](STUDIO_PROMPTS.md)

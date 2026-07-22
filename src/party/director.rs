@@ -224,6 +224,7 @@ fn spawn_bots_for_match(
             crate::player::PlayerVisualSpec {
                 model_id: defaults.resolved_crew_model(),
                 hat_slot: (slot % 8) as u8,
+                accessories: Default::default(),
             },
             crate::player::Knockback::default(),
             PlayerOwner(HOST_OWNER_ID.wrapping_add(100 + slot as u64)),
