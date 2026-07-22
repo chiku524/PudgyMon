@@ -153,6 +153,11 @@ cy = 0.5 * (minv.y + maxv.y)
 body.location -= mathutils.Vector((cx, cy, minv.z))
 bpy.ops.object.transform_apply(location=True, rotation=False, scale=False)
 
+# Face +X in mesh space so the shared runtime CHARACTER_MESH_YAW_OFFSET (+90° Y)
+# maps face to Bevy −Z — same convention as Tripo imports.
+body.rotation_euler[2] = math.radians(90.0)
+bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
+
 # Accessory sockets (match polish_character_glb.py convention)
 minv, maxv = world_aabb(body)
 h = maxv.z - minv.z
