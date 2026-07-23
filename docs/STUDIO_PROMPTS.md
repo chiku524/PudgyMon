@@ -2,7 +2,7 @@
 
 Copy-paste prompts for [Immersive Labs Studio](https://github.com/chiku524/immersive.labs) / Tripo jobs.
 
-**Important:** Studio does **not** cache prior prompts. Every job is independent. Each fenced block below is a **complete** prompt — paste it alone. Do not rely on a shared style block, a previous job, or a “prepend this” wrapper.
+**Important:** Studio does **not** cache prior prompts. Every job is independent. Each fenced block below is a **complete** prompt — paste it alone. Do not rely on a shared style block, a previous job, or a “prepend this” wrapper. **Hard limit: each prompt ≤ 1000 characters.**
 
 After generation → import → place (see [STUDIO_ASSETS.md](STUDIO_ASSETS.md)). Stand-in map: [ASSET_WISHLIST.md](ASSET_WISHLIST.md). Character + accessory contract: [CHARACTERS.md](CHARACTERS.md).
 
@@ -42,21 +42,13 @@ All playable Pudgys share one figure. Each species job below is a full standalon
 **Plugs into:** `data/player_defaults.json` / `PlayerVisualSpec.model_id`
 
 ```
-Stylized cartoon 3D game character for PudgyMon: Party Saga — the SHARED BASE body for all Pudgy Monsters.
-Soft animated-cartoon look like a Pokémon or Kirby-style mascot: smooth painted color, soft matte finish,
-big graphic shapes, clean readable silhouette — NOT clay, NOT polymer clay, NOT ceramic, NOT glossy vinyl,
-NOT shiny injection-molded plastic, NOT photoreal toy scan.
-Bright candy coral-peach body color with soft even shading (gentle gradients only, no specular hotspots),
-exaggerated cute proportions, family-friendly, no gore, no dirt, no photorealism.
-Cute chunky monster, round dumpling body, oversized round head, stubby equal-length limbs,
-huge simple friendly eyes with clean white sclera and simple pupils, tiny soft snout, no pores or fingerprints.
-Neutral A-pose only: arms slightly away from sides, feet planted flat, standing upright.
-Leave clear wear volumes: flat crown for hats, bare neck band for necklaces, simple stubby feet for shoes,
-clean back for capes/wings, open face for glasses/masks, stubby hands for mittens.
-Floor-pivoted at ground center, faces camera-forward, single character only,
-no weapons, no text, no accessories baked onto the mesh, no base/plinth.
-Do NOT pose swimming, running, or mid-action — idle A-pose only so animations can drive motion.
-Game-ready low-to-mid poly, about 1.2 meters tall playable.
+Stylized cartoon 3D PudgyMon Party Saga SHARED BASE body. Soft Pokémon/Kirby mascot look:
+painted matte candy color, big graphic shapes — NOT clay, vinyl, shiny plastic, or photoreal.
+Coral-peach dumpling body, oversized round head, stubby equal limbs, huge simple friendly eyes,
+tiny snout, soft even shading, no pores. Neutral A-pose: arms slightly out, feet flat.
+Clear wear volumes: flat crown, bare neck, stubby feet/hands, clean back, open face — no baked accessories.
+Floor pivot, faces camera-forward, single character, no weapons/text/plinth.
+Idle A-pose only (~1.2 m), game-ready low-mid poly, family-friendly.
 ```
 
 **Import + polish:**
@@ -72,19 +64,12 @@ python scripts/toon_material_pass.py char_pudgy_base_01
 **Plugs into:** species skin / `PlayerVisualSpec.model_id`
 
 ```
-Stylized cartoon 3D game character for PudgyMon: Party Saga — Ocean PudgyMon species variant.
-Soft animated-cartoon look like a Pokémon or Kirby-style mascot: smooth painted color, soft matte finish,
-big graphic shapes — NOT clay, NOT polymer clay, NOT ceramic, NOT glossy vinyl, NOT shiny plastic.
-Bright readable candy colors, exaggerated silhouette, gentle gradients only, no specular hotspots,
-no gore, no dirt, no photorealism.
-MUST match the shared Pudgy base figure: same overall height (~1.2 m), same stubby limb lengths,
-same torso roundness, same head-to-body ratio, same neutral A-pose (arms slightly out, feet planted),
-floor-pivoted at ground center, faces camera-forward.
-Same accessory wear volumes (flat crown, bare neck band, stubby feet, clean back, open face, stubby hands)
-— do not bake hats, jewelry, shoes, or other accessories onto the mesh.
-Only biome details differ: soft cartoon fins and simple gill freckles, teal and coral ocean candy palette.
-Single character only, no weapons, no text, no base/plinth, family-friendly.
-Idle A-pose only — not swimming or mid-action. Game-ready low-to-mid poly.
+Stylized cartoon 3D PudgyMon Party Saga — Ocean species. Soft Pokémon/Kirby painted matte look —
+NOT clay, vinyl, shiny plastic, or photoreal. Match shared base: ~1.2 m, stubby equal limbs,
+round dumpling torso, oversized head, A-pose arms out feet flat, floor pivot, faces camera-forward.
+Clear wear volumes (crown, neck, feet, back, face, hands) — no baked accessories.
+Only biome differs: soft cartoon fins, gill freckles, teal/coral candy palette.
+Single character, idle A-pose only, no weapons/text/plinth, family-friendly, low-mid poly.
 ```
 
 ### `char_pudgy_forest_01` · same scale as base
@@ -92,19 +77,12 @@ Idle A-pose only — not swimming or mid-action. Game-ready low-to-mid poly.
 **Plugs into:** species skin / `PlayerVisualSpec.model_id`
 
 ```
-Stylized cartoon 3D game character for PudgyMon: Party Saga — Forest PudgyMon species variant.
-Soft animated-cartoon look like a Pokémon or Kirby-style mascot: smooth painted color, soft matte finish,
-big graphic shapes — NOT clay, NOT polymer clay, NOT ceramic, NOT glossy vinyl, NOT shiny plastic.
-Bright readable candy colors, exaggerated silhouette, gentle gradients only, no specular hotspots,
-no gore, no dirt, no photorealism.
-MUST match the shared Pudgy base figure: same overall height (~1.2 m), same stubby limb lengths,
-same torso roundness, same head-to-body ratio, same neutral A-pose (arms slightly out, feet planted),
-floor-pivoted at ground center, faces camera-forward.
-Same accessory wear volumes (flat crown, bare neck band, stubby feet, clean back, open face, stubby hands)
-— do not bake hats, jewelry, shoes, or other accessories onto the mesh.
-Only biome details differ: simple leaf tuft ears and soft moss freckles, lime and olive forest party palette.
-Single character only, no weapons, no text, no base/plinth, family-friendly.
-Idle A-pose only — not running or mid-action. Game-ready low-to-mid poly.
+Stylized cartoon 3D PudgyMon Party Saga — Forest species. Soft Pokémon/Kirby painted matte look —
+NOT clay, vinyl, shiny plastic, or photoreal. Match shared base: ~1.2 m, stubby equal limbs,
+round dumpling torso, oversized head, A-pose arms out feet flat, floor pivot, faces camera-forward.
+Clear wear volumes (crown, neck, feet, back, face, hands) — no baked accessories.
+Only biome differs: leaf tuft ears, soft moss freckles, lime/olive candy palette.
+Single character, idle A-pose only, no weapons/text/plinth, family-friendly, low-mid poly.
 ```
 
 ### `char_pudgy_lava_01` · same scale as base
@@ -112,19 +90,12 @@ Idle A-pose only — not running or mid-action. Game-ready low-to-mid poly.
 **Plugs into:** species skin / `PlayerVisualSpec.model_id`
 
 ```
-Stylized cartoon 3D game character for PudgyMon: Party Saga — Lava PudgyMon species variant.
-Soft animated-cartoon look like a Pokémon or Kirby-style mascot: smooth painted color, soft matte finish,
-big graphic shapes — NOT clay, NOT polymer clay, NOT ceramic, NOT glossy vinyl, NOT shiny plastic.
-Bright readable candy colors, exaggerated silhouette, gentle gradients only, no specular hotspots,
-no gore, no dirt, no photorealism.
-MUST match the shared Pudgy base figure: same overall height (~1.2 m), same stubby limb lengths,
-same torso roundness, same head-to-body ratio, same neutral A-pose (arms slightly out, feet planted),
-floor-pivoted at ground center, faces camera-forward.
-Same accessory wear volumes (flat crown, bare neck band, stubby feet, clean back, open face, stubby hands)
-— do not bake hats, jewelry, shoes, or other accessories onto the mesh.
-Only biome details differ: soft ember freckles and a tiny cartoon glow belly patch, coral orange and charcoal palette.
-Single character only, no weapons, no text, no base/plinth, family-friendly, no real fire or burns.
-Idle A-pose only — not attacking or mid-action. Game-ready low-to-mid poly.
+Stylized cartoon 3D PudgyMon Party Saga — Lava species. Soft Pokémon/Kirby painted matte look —
+NOT clay, vinyl, shiny plastic, or photoreal. Match shared base: ~1.2 m, stubby equal limbs,
+round dumpling torso, oversized head, A-pose arms out feet flat, floor pivot, faces camera-forward.
+Clear wear volumes (crown, neck, feet, back, face, hands) — no baked accessories.
+Only biome differs: ember freckles, tiny cartoon glow belly, coral-orange/charcoal palette; no real fire.
+Single character, idle A-pose only, no weapons/text/plinth, family-friendly, low-mid poly.
 ```
 
 ### `char_pudgy_sky_01` · same scale as base
@@ -132,19 +103,12 @@ Idle A-pose only — not attacking or mid-action. Game-ready low-to-mid poly.
 **Plugs into:** species skin / `PlayerVisualSpec.model_id`
 
 ```
-Stylized cartoon 3D game character for PudgyMon: Party Saga — Sky PudgyMon species variant.
-Soft animated-cartoon look like a Pokémon or Kirby-style mascot: smooth painted color, soft matte finish,
-big graphic shapes — NOT clay, NOT polymer clay, NOT ceramic, NOT glossy vinyl, NOT shiny plastic.
-Bright readable candy colors, exaggerated silhouette, gentle gradients only, no specular hotspots,
-no gore, no dirt, no photorealism.
-MUST match the shared Pudgy base figure: same overall height (~1.2 m), same stubby limb lengths,
-same torso roundness, same head-to-body ratio, same neutral A-pose (arms slightly out, feet planted),
-floor-pivoted at ground center, faces camera-forward.
-Same accessory wear volumes (flat crown, bare neck band, stubby feet, clean back, open face, stubby hands)
-— do not bake hats, jewelry, shoes, or other accessories onto the mesh.
-Only biome details differ: puffball cheeks and soft cloud tufts, sky blue and cream palette.
-Single character only, no weapons, no text, no base/plinth, family-friendly.
-Idle A-pose only — not flying or mid-action. Game-ready low-to-mid poly.
+Stylized cartoon 3D PudgyMon Party Saga — Sky species. Soft Pokémon/Kirby painted matte look —
+NOT clay, vinyl, shiny plastic, or photoreal. Match shared base: ~1.2 m, stubby equal limbs,
+round dumpling torso, oversized head, A-pose arms out feet flat, floor pivot, faces camera-forward.
+Clear wear volumes (crown, neck, feet, back, face, hands) — no baked accessories.
+Only biome differs: puffball cheeks, soft cloud tufts, sky-blue/cream palette.
+Single character, idle A-pose only, no weapons/text/plinth, family-friendly, low-mid poly.
 ```
 
 **Species import:**
