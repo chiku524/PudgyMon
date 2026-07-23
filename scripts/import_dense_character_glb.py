@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 """Import a dense Tripo/download GLB as a playable Pudgy character.
 
-Decimates high-poly scans, floor-pivots, bakes ~1.2 m height, adds accessory sockets.
+Avoids Blender Decimate (it shreds Tripo UVs → see-through textures).
+Instead:
+  1. Floor-pivot + ~1.2 m + accessory sockets
+  2. Force opaque materials (Tripo ships HASHED alpha)
+  3. Downscale textures (4K → 1024 JPEG)
+  4. UV-aware mesh simplify via gltf-transform (meshoptimizer)
 
 Usage:
   python scripts/import_dense_character_glb.py \\
@@ -13,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -32,7 +38,8 @@ IN_PATH = Path(r"__IN_PATH__")
 OUT_PATH = Path(r"__OUT_PATH__")
 ASSET_ID = "__ASSET_ID__"
 TARGET_HEIGHT = float("__TARGET_HEIGHT__")
-TARGET_FACES = int("__TARGET_FACES__")
+MAX_TEX = int("__MAX_TEX__")
+JPEG_QUALITY = int("__JPEG_QUALITY__")
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 bpy.ops.import_scene.gltf(filepath=str(IN_PATH))
@@ -54,19 +61,39 @@ if body.data:
 
 bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
 
-# Decimate dense Tripo exports for runtime.
-face_count = len(body.data.polygons)
-if face_count > TARGET_FACES:
-    ratio = max(TARGET_FACES / float(face_count), 0.001)
-    mod = body.modifiers.new(name="GameDecimate", type="DECIMATE")
-    mod.ratio = ratio
-    bpy.ops.object.modifier_apply(modifier=mod.name)
-    print("DECIMATE", face_count, "->", len(body.data.polygons), "ratio", round(ratio, 5))
+# Never use Blender Decimate here — it wrecks Tripo UVs. Mesh size is handled
+# after export by gltf-transform simplify (UV-aware meshoptimizer).
+print("KEEP_FACES", len(body.data.polygons))
 
-# Soft matte cartoon defaults on unlinked inputs
+# Downscale textures — main GLB weight on Tripo exports (often 3× 4K).
+for img in list(bpy.data.images):
+    w, h = img.size
+    if w <= 0 or h <= 0:
+        continue
+    longest = max(w, h)
+    if longest > MAX_TEX:
+        scale = MAX_TEX / float(longest)
+        nw = max(1, int(round(w * scale)))
+        nh = max(1, int(round(h * scale)))
+        print("TEX_RESIZE", img.name, f"{w}x{h}", "->", f"{nw}x{nh}")
+        img.scale(nw, nh)
+    img.pack()
+
+# Force opaque cartoon materials (Tripo often ships HASHED alpha → see-through in engine).
 for slot in body.material_slots:
     mat = slot.material
-    if not mat or not mat.use_nodes:
+    if not mat:
+        continue
+    if hasattr(mat, "blend_method"):
+        mat.blend_method = "OPAQUE"
+    if hasattr(mat, "surface_render_method"):
+        # Blender 4.2+ EEVEE: avoid dithered transparency paths.
+        try:
+            mat.surface_render_method = "DITHERED"
+            # Still mark as opaque for export intent; glTF uses alphaMode.
+        except Exception:
+            pass
+    if not getattr(mat, "use_nodes", False):
         continue
     nt = mat.node_tree
     principled = next((n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"), None)
@@ -78,7 +105,14 @@ for slot in body.material_slots:
         principled.inputs["Coat Weight"].default_value = 0.0
     if "Metallic" in principled.inputs and not principled.inputs["Metallic"].is_linked:
         principled.inputs["Metallic"].default_value = 0.0
-    mat.blend_method = "OPAQUE"
+    if "Alpha" in principled.inputs:
+        # Unlink any accidental alpha map and lock fully opaque.
+        for link in list(principled.inputs["Alpha"].links):
+            nt.links.remove(link)
+        principled.inputs["Alpha"].default_value = 1.0
+    for key in ("Transmission Weight", "Transmission"):
+        if key in principled.inputs and not principled.inputs[key].is_linked:
+            principled.inputs[key].default_value = 0.0
 
 def world_aabb(obj):
     minv = mathutils.Vector((1e9, 1e9, 1e9))
@@ -134,8 +168,14 @@ for name, loc in sockets.items():
     bpy.context.scene.collection.objects.link(empty)
     parent_keep(empty, root)
 
+# Ensure exporter writes opaque alphaMode.
+for mat in bpy.data.materials:
+    if hasattr(mat, "blend_method"):
+        mat.blend_method = "OPAQUE"
+
 OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-bpy.ops.export_scene.gltf(
+# Blender 5.x export kwargs vary slightly — try quality if present.
+export_kwargs = dict(
     filepath=str(OUT_PATH),
     export_format="GLB",
     use_selection=False,
@@ -143,14 +183,55 @@ bpy.ops.export_scene.gltf(
     export_texcoords=True,
     export_normals=True,
     export_materials="EXPORT",
-    export_image_format="AUTO",
+    export_image_format="JPEG",
     export_yup=True,
 )
+try:
+    bpy.ops.export_scene.gltf(**export_kwargs, export_jpeg_quality=JPEG_QUALITY)
+except TypeError:
+    bpy.ops.export_scene.gltf(**export_kwargs)
+
 minv, maxv = world_aabb(body)
 print("IMPORT_OK", ASSET_ID)
 print("height", round(maxv.z - minv.z, 4))
 print("faces", len(body.data.polygons))
+print("bytes", OUT_PATH.stat().st_size)
 '''
+
+
+def _gltf_transform(*args: str) -> None:
+    cmd = ["npx", "--yes", "@gltf-transform/cli@4.1.1", *args]
+    print("+", " ".join(cmd))
+    proc = subprocess.run(cmd, capture_output=True, text=True)
+    if proc.stdout:
+        print(proc.stdout[-2000:])
+    if proc.returncode != 0:
+        if proc.stderr:
+            print(proc.stderr[-2000:], file=sys.stderr)
+        raise RuntimeError(f"gltf-transform failed: {' '.join(args[:2])}")
+
+
+def _optimize_mesh(glb: Path, *, ratio: float, error: float) -> None:
+    """UV-aware simplify. Bevy cannot load Draco/meshopt compression extensions."""
+    weld = glb.with_name(glb.stem + "_weld.glb")
+    simp = glb.with_name(glb.stem + "_simp.glb")
+    try:
+        _gltf_transform("weld", str(glb), str(weld))
+        _gltf_transform(
+            "simplify",
+            str(weld),
+            str(simp),
+            "--ratio",
+            str(ratio),
+            "--error",
+            str(error),
+            "--lock-border",
+            "true",
+        )
+        shutil.move(str(simp), str(glb))
+    finally:
+        weld.unlink(missing_ok=True)
+        simp.unlink(missing_ok=True)
 
 
 def _register(asset_id: str, notes: str) -> None:
@@ -177,8 +258,35 @@ def main() -> int:
     parser.add_argument("--src", type=Path, required=True)
     parser.add_argument("--asset-id", required=True)
     parser.add_argument("--height", type=float, default=1.2)
-    parser.add_argument("--faces", type=int, default=28000)
-    parser.add_argument("--notes", default="Imported dense creature GLB (decimated for play).")
+    parser.add_argument(
+        "--faces",
+        type=int,
+        default=0,
+        help="Deprecated (ignored). Mesh reduction uses --simplify-ratio instead.",
+    )
+    parser.add_argument(
+        "--max-tex",
+        type=int,
+        default=1024,
+        help="Longest texture edge after downscale (default 1024).",
+    )
+    parser.add_argument("--jpeg-quality", type=int, default=85)
+    parser.add_argument(
+        "--simplify-ratio",
+        type=float,
+        default=0.08,
+        help="Vertex keep ratio for UV-aware simplify (0 skips simplify).",
+    )
+    parser.add_argument(
+        "--simplify-error",
+        type=float,
+        default=0.05,
+        help="Max simplify error as fraction of mesh radius.",
+    )
+    parser.add_argument(
+        "--notes",
+        default="Imported dense creature GLB (opaque textures + UV-aware simplify).",
+    )
     args = parser.parse_args()
 
     if not _BLENDER.is_file():
@@ -198,7 +306,8 @@ def main() -> int:
         .replace("__OUT_PATH__", str(out.resolve()).replace("\\", "/"))
         .replace("__ASSET_ID__", aid)
         .replace("__TARGET_HEIGHT__", str(args.height))
-        .replace("__TARGET_FACES__", str(args.faces))
+        .replace("__MAX_TEX__", str(args.max_tex))
+        .replace("__JPEG_QUALITY__", str(args.jpeg_quality))
     )
     worker.write_text(script, encoding="utf-8")
     try:
@@ -210,13 +319,21 @@ def main() -> int:
     finally:
         worker.unlink(missing_ok=True)
 
-    print(proc.stdout[-3000:] if proc.stdout else "")
+    print(proc.stdout[-4000:] if proc.stdout else "")
     if proc.returncode != 0 or not out.is_file():
         print(proc.stderr[-4000:], file=sys.stderr)
         return 1
 
+    if args.simplify_ratio > 0:
+        if shutil.which("npx") is None:
+            print("error: npx required for UV-aware simplify", file=sys.stderr)
+            return 1
+        _optimize_mesh(out, ratio=args.simplify_ratio, error=args.simplify_error)
+
     (dest_dir / "README.txt").write_text(
-        f"{aid}\nSource: {args.src.name}\nDecimated playable import (~{args.faces} faces, height {args.height}).\n",
+        f"{aid}\nSource: {args.src.name}\n"
+        f"Playable import (height {args.height}, textures ≤{args.max_tex}px "
+        f"JPEG q{args.jpeg_quality}, opaque, simplify ratio {args.simplify_ratio}).\n",
         encoding="utf-8",
     )
     _register(aid, args.notes)

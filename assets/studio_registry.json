@@ -157,13 +157,13 @@
       "asset_id": "char_pudgy_pink_01",
       "target_height": 1.2,
       "uniform_scale": 1.0,
-      "notes": "Pink stylized creature download \u2014 decimated (~28k faces) for Nest play."
+      "notes": "Pink stylized creature \u2014 opaque materials, 1024 JPEG textures, UV-aware simplify (~360k faces)."
     },
     {
       "asset_id": "char_pudgy_stylized_01",
       "target_height": 1.2,
       "uniform_scale": 1.0,
-      "notes": "Stylized cartoon creature download \u2014 decimated (~28k faces) for Nest play."
+      "notes": "Stylized cartoon creature \u2014 opaque materials, 1024 JPEG textures, UV-aware simplify (~360k faces)."
     },
     {
       "asset_id": "duct_tape_dispenser_cart_01",

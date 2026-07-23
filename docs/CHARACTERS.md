@@ -5,13 +5,14 @@ Chunky party creatures for **PudgyMon: Party Saga**. One shared base figure, spe
 ## Playable roster
 
 ### `char_pudgy_pink_01` — Pink Creature
-- Soft stylized pink cartoon creature (Tripo download, decimated for play)
+- Soft stylized pink cartoon creature (Tripo download)
+- Opaque materials + 1024 JPEG textures; UV-aware mesh simplify (~360k faces, ~14MB)
 - Playable height ~1.2 m; accessory sockets attached
 - GLB: `assets/models/char_pudgy_pink_01/char_pudgy_pink_01.glb`
 
 ### `char_pudgy_stylized_01` — Cartoon Creature
-- Soft stylized cartoon creature (Tripo download, decimated for play)
-- Same playable contract as pink (~1.2 m, sockets)
+- Soft stylized cartoon creature (Tripo download)
+- Same playable contract as pink (~1.2 m, sockets, opaque + UV-aware simplify)
 - GLB: `assets/models/char_pudgy_stylized_01/char_pudgy_stylized_01.glb`
 
 Default crew id: [`data/player_defaults.json`](../data/player_defaults.json) (user pick saved under `%LOCALAPPDATA%/…/player_defaults.json`). Roster: [`data/characters/roster.json`](../data/characters/roster.json). If the GLB is missing, runtime uses a **procedural Pudgy stub**. Switch live in Esc Nest → **Characters**.
