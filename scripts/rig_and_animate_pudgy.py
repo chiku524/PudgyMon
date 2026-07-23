@@ -306,8 +306,10 @@ for vert in body.data.vertices:
     nz = (wp.z - minv.z) / h
     radial = (nx * nx + ny * ny) ** 0.5
 
-    if nz >= 0.70:
-        set_vert(vert.index, {"Head": 0.85, "Spine": 0.15})
+    # Face / eyes first: must be 100% Head. Previously eye verts fell into the
+    # Root/Spine belly band (nz < 0.70) and stretched vertically on walk bounce.
+    if nz >= 0.66 or (nz >= 0.50 and ny <= 0.12 and abs(nx) < 0.55):
+        set_vert(vert.index, {"Head": 1.0})
     elif nx > arm_L0 and nz > 0.40:
         # Left flipper tip — armpit stays on Spine.
         tip = min(1.0, max(0.0, (nx - arm_L0) / max(arm_xmax - arm_L0, 1e-4)))
@@ -344,9 +346,9 @@ for vert in body.data.vertices:
             "R_Leg": 0.35 * limb,
             "Root": max(0.20, 1.0 - limb),
         })
-    elif radial < 0.62 and 0.08 <= nz <= 0.72:
-        # Volume lock: dumpling core prefers Root/Spine so Hip sway won't melt.
-        set_vert(vert.index, {"Root": 0.50, "Spine": 0.35, "Hips": 0.15})
+    elif radial < 0.64 and 0.08 <= nz <= 0.58:
+        # Belly / mid core — Root-heavy so bounce doesn't squash the silhouette.
+        set_vert(vert.index, {"Root": 0.72, "Spine": 0.28})
     else:
         # Keep envelope blend on transitional verts.
         continue
@@ -359,6 +361,19 @@ if gap:
     for idx in gap:
         set_vert(idx, {"Root": 0.55, "Spine": 0.45})
     print("WEIGHT_FILL", len(gap), "verts -> Root/Spine")
+
+# Also force face verts off every non-Head bone (catches envelope leftovers).
+face_locked = 0
+for vert in body.data.vertices:
+    wp = mw @ vert.co
+    nx = (wp.x - cx) / hw
+    ny = (wp.y - cy) / hd
+    nz = (wp.z - minv.z) / h
+    if not (nz >= 0.66 or (nz >= 0.50 and ny <= 0.12 and abs(nx) < 0.55)):
+        continue
+    set_vert(vert.index, {"Head": 1.0})
+    face_locked += 1
+print("FACE_LOCK_HEAD", face_locked)
 
 # Hard strip: kill leftover envelope limb weights on belly + crotch + armpits.
 LIMB_GROUPS = ("L_Arm", "R_Arm", "L_Forearm", "R_Forearm", "L_Leg", "R_Leg", "L_Shin", "R_Shin")
@@ -380,7 +395,10 @@ for vert in body.data.vertices:
     # Armpit band: any arm weight under the shoulder folds the torso.
     armpit = 0.38 <= nz <= 0.62 and abs(nx) < abs(arm_L0 if nx >= 0 else arm_R0) * 0.98
     crotch_mid = abs(nx) < 0.20 and 0.06 <= nz <= 0.38
-    belly = radial <= 0.60 and 0.10 <= nz <= 0.70
+    belly = radial <= 0.60 and 0.10 <= nz <= 0.55
+    # Never strip/rewire the face plate.
+    if nz >= 0.50 and ny <= 0.12 and abs(nx) < 0.55:
+        continue
 
     if armpit:
         had = False
@@ -506,23 +524,22 @@ set_bone_keys(idle, "Root", [
     (24, (0, 0, 0), (0, 0.02, 0)),
     (48, (0, 0, 0), (0, 0.0, 0)),
 ])
-set_bone_keys(idle, "Spine", [(1, (0, 0, 0)), (24, (-3, 0, 0)), (48, (0, 0, 0))])
-set_bone_keys(idle, "Head", [(1, (0, 0, 0)), (24, (3, 0, 3)), (48, (0, 0, 0))])
-set_bone_keys(idle, "L_Arm", [(1, (4, 0, 8)), (24, (7, 0, 10)), (48, (4, 0, 8))])
-set_bone_keys(idle, "R_Arm", [(1, (4, 0, -8)), (24, (7, 0, -10)), (48, (4, 0, -8))])
+set_bone_keys(idle, "Spine", [(1, (0, 0, 0)), (24, (-2, 0, 0)), (48, (0, 0, 0))])
+set_bone_keys(idle, "Head", [(1, (0, 0, 0)), (24, (0, 0, 0)), (48, (0, 0, 0))])
+set_bone_keys(idle, "L_Arm", [(1, (4, 0, 8)), (24, (6, 0, 9)), (48, (4, 0, 8))])
+set_bone_keys(idle, "R_Arm", [(1, (4, 0, -8)), (24, (6, 0, -9)), (48, (4, 0, -8))])
 
-# walk — Root bounce + tip flaps (Hip sway was melting the silhouette)
+# walk — Root bounce + tip flaps (no Head keys — face stays rigid)
 clear_pose()
 walk = ensure_action("walk")
 set_bone_keys(walk, "Root", [
     (1, (0, 0, 0), (0, 0.0, 0)),
-    (6, (0, 0, 0), (0, 0.03, 0)),
+    (6, (0, 0, 0), (0, 0.025, 0)),
     (11, (0, 0, 0), (0, 0.0, 0)),
-    (16, (0, 0, 0), (0, 0.03, 0)),
+    (16, (0, 0, 0), (0, 0.025, 0)),
     (22, (0, 0, 0), (0, 0.0, 0)),
 ])
-set_bone_keys(walk, "Spine", [(1, (2, 0, 0)), (11, (2, 0, 0)), (22, (2, 0, 0))])
-set_bone_keys(walk, "Head", [(1, (0, 0, -2)), (11, (0, 0, 2)), (22, (0, 0, -2))])
+set_bone_keys(walk, "Spine", [(1, (1, 0, 0)), (11, (1, 0, 0)), (22, (1, 0, 0))])
 set_bone_keys(walk, "L_Leg", [(1, (-5, 0, 0)), (11, (5, 0, 0)), (22, (-5, 0, 0))])
 set_bone_keys(walk, "R_Leg", [(1, (5, 0, 0)), (11, (-5, 0, 0)), (22, (5, 0, 0))])
 set_bone_keys(walk, "L_Shin", [(1, (2, 0, 0)), (11, (1, 0, 0)), (22, (2, 0, 0))])
@@ -532,22 +549,21 @@ set_bone_keys(walk, "R_Arm", [(1, (-3, 0, -5)), (11, (4, 0, -7)), (22, (-3, 0, -
 set_bone_keys(walk, "L_Forearm", [(1, (0, 0, 2)), (11, (0, 0, 0)), (22, (0, 0, 2))])
 set_bone_keys(walk, "R_Forearm", [(1, (0, 0, 0)), (11, (0, 0, 2)), (22, (0, 0, 0))])
 
-# run — faster Root bounce, still tip-only flaps
+# run — faster Root bounce, still tip-only flaps (no Head keys)
 clear_pose()
 run = ensure_action("run")
 set_bone_keys(run, "Root", [
-    (1, (0, 0, 0), (0, 0.015, 0)),
-    (4, (0, 0, 0), (0, 0.04, 0)),
-    (7, (0, 0, 0), (0, 0.015, 0)),
-    (10, (0, 0, 0), (0, 0.04, 0)),
-    (13, (0, 0, 0), (0, 0.015, 0)),
+    (1, (0, 0, 0), (0, 0.012, 0)),
+    (4, (0, 0, 0), (0, 0.032, 0)),
+    (7, (0, 0, 0), (0, 0.012, 0)),
+    (10, (0, 0, 0), (0, 0.032, 0)),
+    (13, (0, 0, 0), (0, 0.012, 0)),
 ])
-set_bone_keys(run, "Spine", [(1, (3, 0, 0)), (7, (4, 0, 0)), (13, (3, 0, 0))])
-set_bone_keys(run, "L_Leg", [(1, (-8, 0, 0)), (7, (8, 0, 0)), (13, (-8, 0, 0))])
-set_bone_keys(run, "R_Leg", [(1, (8, 0, 0)), (7, (-8, 0, 0)), (13, (8, 0, 0))])
-set_bone_keys(run, "L_Arm", [(1, (5, 0, 9)), (7, (-4, 0, 6)), (13, (5, 0, 9))])
-set_bone_keys(run, "R_Arm", [(1, (-4, 0, -6)), (7, (5, 0, -9)), (13, (-4, 0, -6))])
-set_bone_keys(run, "Head", [(1, (0, 0, -2)), (7, (0, 0, 2)), (13, (0, 0, -2))])
+set_bone_keys(run, "Spine", [(1, (2, 0, 0)), (7, (2, 0, 0)), (13, (2, 0, 0))])
+set_bone_keys(run, "L_Leg", [(1, (-7, 0, 0)), (7, (7, 0, 0)), (13, (-7, 0, 0))])
+set_bone_keys(run, "R_Leg", [(1, (7, 0, 0)), (7, (-7, 0, 0)), (13, (7, 0, 0))])
+set_bone_keys(run, "L_Arm", [(1, (5, 0, 8)), (7, (-3, 0, 5)), (13, (5, 0, 8))])
+set_bone_keys(run, "R_Arm", [(1, (-3, 0, -5)), (7, (5, 0, -8)), (13, (-3, 0, -5))])
 
 # jump — squash / stretch on torso
 clear_pose()

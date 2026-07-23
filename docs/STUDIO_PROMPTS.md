@@ -123,7 +123,9 @@ python scripts/toon_material_pass.py <asset_id>
 
 ## Priority 1 — Accessories (each job independent)
 
-Accessories are separate GLBs. Parent under sockets on `char_pudgy_base_01` (see [CHARACTERS.md](CHARACTERS.md)). Every prompt below is complete on its own.
+Accessories are **standalone wearable props**. Tripo often ignores weak “no character” wording and returns a dressed mascot instead — so every prompt below leads with a hard **OBJECT ONLY** lock and never uses a creature/body as the subject.
+
+Parent under sockets on `char_pudgy_base_01` (see [CHARACTERS.md](CHARACTERS.md)). Every prompt is complete on its own. **≤ 1000 characters.**
 
 | Slot | Socket | Pivot | Id pattern |
 |------|--------|-------|------------|
@@ -134,110 +136,110 @@ Accessories are separate GLBs. Parent under sockets on `char_pudgy_base_01` (see
 | Face | `Socket_Face` | Bridge of snout | `acc_face_*_01` |
 | Hands | `Socket_Hands` | Midpoint between hands (pair) | `acc_hands_*_01` |
 
+**Accessory negative prompt (paste if Studio has a separate negative field):**
+
+```
+character, creature, mascot, monster, animal, person, human, avatar, mannequin, dummy head,
+bust, torso, body, face, eyes, mouth, arms, legs, hands, feet, wearer, model wearing item,
+full figure, chibi character, cartoon creature, pudgy monster body
+```
+
 ### Hats
 
 #### `acc_hat_party_crown_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated hat only — no head, no body, no full character, no base/plinth, no text.
-Centered at crown wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A soft candy party crown with round gem studs, coral and gold cartoon candy,
-short stubby points, friendly party silhouette, readable from third-person camera.
-Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: soft candy party crown with round gem studs, coral and gold, short stubby points
+Pivot at crown wear origin. About 0.28 m tall.
 ```
 
 #### `acc_hat_racer_cap_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated hat only — no head, no body, no full character, no base/plinth, no text.
-Centered at crown wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A tiny soft racing cap with a short bill and a speed stripe, cyan and white cartoon candy,
-chunky friendly silhouette, readable from third-person camera.
-Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: tiny soft racing cap with short bill and cyan-white speed stripe
+Pivot at crown wear origin. About 0.18 m tall.
 ```
 
 #### `acc_hat_vibe_mushroom_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated hat only — no head, no body, no full character, no base/plinth, no text.
-Centered at crown wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A mini mushroom-cap hat with soft teal glow freckles on the cap, thick stubby stem rim,
-cartoon candy look, readable from third-person camera.
-Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: mini mushroom-cap hat with teal freckles and thick stubby stem rim
+Pivot at crown wear origin. About 0.30 m tall.
 ```
 
 #### `acc_hat_blaster_beanie_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated hat only — no head, no body, no full character, no base/plinth, no text.
-Centered at crown wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A soft beanie with a star pom-pom on top, pink and magenta candy colors,
-floppy friendly silhouette, readable from third-person camera.
-Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: soft beanie with star pom-pom, pink and magenta candy colors, floppy silhouette
+Pivot at crown wear origin. About 0.22 m tall.
 ```
 
 #### `acc_hat_propeller_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated hat only — no head, no body, no full character, no base/plinth, no text.
-Centered at crown wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A silly soft propeller beanie with a stubby candy propeller on top, yellow and sky blue,
-cartoon candy look, readable from third-person camera.
-Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: silly propeller beanie with stubby candy propeller on top, yellow and sky blue
+Pivot at crown wear origin. About 0.26 m tall.
 ```
 
 #### `acc_hat_flower_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated hat only — no head, no body, no full character, no base/plinth, no text.
-Centered at crown wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A big plush daisy flower hat with soft petals, cream and lime candy colors,
-chunky friendly silhouette, readable from third-person camera.
-Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: big plush daisy flower hat with soft petals, cream and lime candy colors
+Pivot at crown wear origin. About 0.32 m tall.
 ```
 
 #### `acc_hat_chef_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated hat only — no head, no body, no full character, no base/plinth, no text.
-Centered at crown wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A chunky toy chef hat, white with coral trim, soft rounded puff top,
-friendly silhouette, readable from third-person camera.
-Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: chunky toy chef hat, white with coral trim, soft rounded puff top
+Pivot at crown wear origin. About 0.30 m tall.
 ```
 
 #### `acc_hat_sleep_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated hat only — no head, no body, no full character, no base/plinth, no text.
-Centered at crown wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A floppy nightcap with a soft star tip, indigo and cream candy colors,
-cozy plush look, readable from third-person camera.
-Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: floppy nightcap with soft star tip, indigo and cream candy colors
+Pivot at crown wear origin. About 0.28 m tall.
 ```
 
 ### Necklaces
@@ -245,53 +247,49 @@ Game-ready low poly.
 #### `acc_necklace_shell_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated necklace only — no head, no body, no full character, no base/plinth, no text.
-Centered at neck wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A soft shell pendant on a thick candy chain, teal and cream cartoon candy,
-chunky friendly silhouette, readable from third-person camera.
-Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: soft shell pendant on a thick candy chain, teal and cream
+Pivot at neck wear origin. About 0.20 m tall.
 ```
 
 #### `acc_necklace_medal_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated necklace only — no head, no body, no full character, no base/plinth, no text.
-Centered at neck wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-An oversized round race medal on a soft ribbon, gold medal with cyan ribbon,
-blank face (no readable text), chunky toy look, readable from third-person camera.
-Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: oversized round race medal on soft cyan ribbon, gold face blank (no readable text)
+Pivot at neck wear origin. About 0.22 m tall.
 ```
 
 #### `acc_necklace_beads_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated necklace only — no head, no body, no full character, no base/plinth, no text.
-Centered at neck wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A chunky rainbow bead collar, bright party candy colors, thick soft beads,
-friendly silhouette, readable from third-person camera.
-Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: chunky rainbow bead collar, thick soft party beads
+Pivot at neck wear origin. About 0.16 m tall.
 ```
 
 #### `acc_necklace_bell_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated necklace only — no head, no body, no full character, no base/plinth, no text.
-Centered at neck wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A soft jingle-bell charm on a short candy chain, yellow and coral cartoon candy,
-chunky friendly silhouette, readable from third-person camera.
-Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: soft jingle-bell charm on a short candy chain, yellow and coral
+Pivot at neck wear origin. About 0.18 m tall.
 ```
 
 ### Shoes (connected pair per job)
@@ -299,53 +297,49 @@ Game-ready low poly.
 #### `acc_shoes_racer_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated shoes accessory only — no legs, no body, no full character, no base/plinth, no text.
-A connected pair of left and right stubby racing sneakers in one mesh,
-floor-pivoted between both feet, sized for a 1.2 m chunky dumpling Pudgy monster.
-Cyan and white cartoon candy with a speed stripe, soft chunky soles,
-readable from third-person camera. Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: connected left+right stubby racing sneakers in one mesh, cyan-white speed stripe, soft chunky soles
+Floor pivot between both shoes. About 0.14 m tall.
 ```
 
 #### `acc_shoes_party_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated shoes accessory only — no legs, no body, no full character, no base/plinth, no text.
-A connected pair of left and right soft party loafers in one mesh,
-floor-pivoted between both feet, sized for a 1.2 m chunky dumpling Pudgy monster.
-Coral and gold cartoon candy with star accents, stubby chunky shape,
-readable from third-person camera. Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: connected left+right soft party loafers in one mesh, coral-gold with star accents
+Floor pivot between both shoes. About 0.12 m tall.
 ```
 
 #### `acc_shoes_boots_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated shoes accessory only — no legs, no body, no full character, no base/plinth, no text.
-A connected pair of left and right chunky toy rain boots in one mesh,
-floor-pivoted between both feet, sized for a 1.2 m chunky dumpling Pudgy monster.
-Yellow and teal cartoon candy, soft rounded toes, stubby friendly silhouette,
-readable from third-person camera. Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: connected left+right chunky toy rain boots in one mesh, yellow and teal, soft rounded toes
+Floor pivot between both shoes. About 0.16 m tall.
 ```
 
 #### `acc_shoes_slippers_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated shoes accessory only — no legs, no body, no full character, no base/plinth, no text.
-A connected pair of left and right plush cloud slippers in one mesh,
-floor-pivoted between both feet, sized for a 1.2 m chunky dumpling Pudgy monster.
-Cream and sky blue soft plush look, puffy cloud silhouette,
-readable from third-person camera. Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: connected left+right plush cloud slippers in one mesh, cream and sky blue
+Floor pivot between both shoes. About 0.12 m tall.
 ```
 
 ### Back / face / hands
@@ -353,99 +347,97 @@ readable from third-person camera. Game-ready low poly.
 #### `acc_back_cape_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated back accessory only — no body, no full character, no base/plinth, no text.
-Centered at upper-back wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A short soft hero cape with coral lining and cream outer fabric, stubby friendly shape,
-readable from third-person camera. Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: short soft hero cape, coral lining and cream outer, stubby friendly shape
+Pivot at upper-back wear origin. About 0.45 m tall.
 ```
 
 #### `acc_back_wings_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated back accessory only — no body, no full character, no base/plinth, no text.
-Centered at upper-back wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A pair of stubby candy angel wings as one mesh, cream and pink cartoon candy,
-soft rounded feathers, readable from third-person camera. Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: pair of stubby candy angel wings as one mesh, cream and pink, soft rounded feathers
+Pivot at upper-back wear origin. About 0.40 m tall.
 ```
 
 #### `acc_back_pack_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated back accessory only — no body, no full character, no base/plinth, no text.
-Centered at upper-back wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A round vibe-orb backpack with soft teal glow, cartoon candy shell, stubby straps implied at wear origin,
-readable from third-person camera. Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: round vibe-orb backpack with soft teal glow shell, stubby straps at wear origin
+Pivot at upper-back wear origin. About 0.35 m tall.
 ```
 
 #### `acc_face_shades_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated face accessory only — no head, no body, no full character, no base/plinth, no text.
-Centered at snout/eye wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-Oversized toy sunglasses with black lenses and gold frame, chunky cartoon look,
-readable from third-person camera. Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: oversized toy sunglasses, black lenses and gold frame, chunky cartoon look
+Pivot at snout/eye wear origin. About 0.12 m wide.
 ```
 
 #### `acc_face_goggles_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated face accessory only — no head, no body, no full character, no base/plinth, no text.
-Centered at snout/eye wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-Soft racer goggles resting as if on a forehead ridge, cyan cartoon candy lenses and strap,
-chunky friendly silhouette, readable from third-person camera. Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: soft racer goggles with cyan candy lenses and strap, chunky friendly silhouette
+Pivot at snout/eye wear origin. About 0.14 m wide.
 ```
 
 #### `acc_face_mask_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated face accessory only — no head, no body, no full character, no base/plinth, no text.
-Centered at snout/eye wear origin, sized for a 1.2 m chunky dumpling Pudgy monster.
-A friendly party half-mask with pink sparkles, soft cartoon candy, cute not scary,
-readable from third-person camera. Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: friendly party half-mask with pink sparkles, cute not scary
+Pivot at snout/eye wear origin. About 0.16 m wide.
 ```
 
 #### `acc_hands_mittens_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated hands accessory only — no arms, no body, no full character, no base/plinth, no text.
-A connected pair of left and right stubby star mittens in one mesh,
-centered at the midpoint between both hands, sized for a 1.2 m chunky dumpling Pudgy monster.
-Coral candy colors with soft star accents, readable from third-person camera.
-Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: connected left+right stubby star mittens in one mesh, coral with soft star accents
+Pivot at midpoint between both mittens. About 0.12 m tall.
 ```
 
 #### `acc_hands_gloves_01`
 
 ```
-Stylized cartoon 3D game accessory for PudgyMon: Party Saga — cute chunky monster party world.
-Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
-exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
-Single isolated hands accessory only — no arms, no body, no full character, no base/plinth, no text.
-A connected pair of left and right soft racing gloves in one mesh,
-centered at the midpoint between both hands, sized for a 1.2 m chunky dumpling Pudgy monster.
-Cyan cartoon candy with stripe accents, stubby chunky fingers, readable from third-person camera.
-Game-ready low poly.
+OBJECT ONLY — single isolated wearable prop on empty background.
+NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar.
+NO one wearing it. Product turntable shot of the item alone.
+Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges,
+not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text.
+Item: connected left+right soft racing gloves in one mesh, cyan with stripe accents, stubby chunky fingers
+Pivot at midpoint between both gloves. About 0.12 m tall.
 ```
 
 ---
