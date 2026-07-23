@@ -88,6 +88,7 @@ impl Plugin for CrewAnimationPlugin {
         app.add_systems(
             Update,
             (
+                recover_stale_crew_playback,
                 poll_crew_scene_ready,
                 finish_crew_animation_setup,
                 choose_crew_anim_kind.run_if(in_state(AppScreen::Playing)),
@@ -121,8 +122,30 @@ pub fn on_crew_scene_ready(
     mut commands: Commands,
     setups: Query<&CrewAnimationSetup>,
 ) {
-    if setups.contains(ready.entity) {
-        commands.entity(ready.entity).insert(CrewSceneReady);
+    if !setups.contains(ready.entity) {
+        return;
+    }
+    // WorldAsset may respawn when dependencies finish loading (AssetEvent::Modified).
+    // Drop any prior binding so we re-attach to the new AnimationPlayer.
+    commands
+        .entity(ready.entity)
+        .remove::<CrewAnimPlayback>()
+        .insert(CrewSceneReady);
+}
+
+/// If the skinned instance was respawned, `player_entity` goes stale — force a rebind.
+fn recover_stale_crew_playback(
+    mut commands: Commands,
+    playback: Query<(Entity, &CrewAnimPlayback), With<CrewAnimationSetup>>,
+    players: Query<(), With<AnimationPlayer>>,
+) {
+    for (entity, anim) in &playback {
+        if !players.contains(anim.player_entity) {
+            commands
+                .entity(entity)
+                .remove::<CrewAnimPlayback>()
+                .insert(CrewSceneReady);
+        }
     }
 }
 
@@ -162,7 +185,7 @@ fn finish_crew_animation_setup(
         (With<CrewSceneReady>, Without<CrewAnimPlayback>),
     >,
     children: Query<&Children>,
-    players: Query<(), With<AnimationPlayer>>,
+    mut players: Query<&mut AnimationPlayer>,
 ) {
     for (entity, setup) in &pending {
         if !asset_server.is_loaded_with_dependencies(&setup.gltf) {
@@ -207,13 +230,23 @@ fn finish_crew_animation_setup(
             continue;
         };
 
+        // Match Bevy's animated_mesh_control example: start via AnimationTransitions
+        // before/with the graph handle so the transitions component owns playback.
+        let Ok(mut player) = players.get_mut(player_entity) else {
+            continue;
+        };
+        let mut transitions = AnimationTransitions::new();
+        transitions
+            .play(&mut player, nodes[0], Duration::ZERO)
+            .repeat();
+
         commands.entity(player_entity).insert((
             AnimationGraphHandle(graph_handle.clone()),
-            AnimationTransitions::new(),
+            transitions,
         ));
         commands.entity(entity).insert(CrewAnimPlayback {
             kind: CrewAnimKind::Idle,
-            applied: None,
+            applied: Some(CrewAnimKind::Idle),
             graph: graph_handle,
             idle: nodes[0],
             walk: nodes[1],
@@ -314,14 +347,20 @@ fn choose_crew_anim_kind(
 }
 
 fn apply_crew_anim_kind(
-    mut visuals: Query<&mut CrewAnimPlayback>,
+    mut commands: Commands,
+    mut visuals: Query<(Entity, &mut CrewAnimPlayback)>,
     mut players: Query<(&mut AnimationPlayer, &mut AnimationTransitions)>,
 ) {
-    for mut anim in &mut visuals {
+    for (entity, mut anim) in &mut visuals {
         if anim.applied == Some(anim.kind) {
             continue;
         }
         let Ok((mut player, mut transitions)) = players.get_mut(anim.player_entity) else {
+            // Instance was respawned — recover next frame.
+            commands
+                .entity(entity)
+                .remove::<CrewAnimPlayback>()
+                .insert(CrewSceneReady);
             continue;
         };
         let node = anim.node(anim.kind);
