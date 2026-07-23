@@ -157,13 +157,13 @@
       "asset_id": "char_pudgy_pink_01",
       "target_height": 1.2,
       "uniform_scale": 1.0,
-      "notes": "Pink stylized creature \u2014 opaque materials, 1024 JPEG textures, UV-aware simplify (~360k faces)."
+      "notes": "User-optimized pink creature \u2014 Draco/WebP decoded for Bevy (opaque JPEG, no mesh compression extensions)."
     },
     {
       "asset_id": "char_pudgy_stylized_01",
       "target_height": 1.2,
       "uniform_scale": 1.0,
-      "notes": "Stylized cartoon creature \u2014 opaque materials, 1024 JPEG textures, UV-aware simplify (~360k faces)."
+      "notes": "User-optimized cartoon creature \u2014 Draco/WebP decoded for Bevy (opaque JPEG, no mesh compression extensions)."
     },
     {
       "asset_id": "duct_tape_dispenser_cart_01",

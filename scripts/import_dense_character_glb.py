@@ -5,8 +5,12 @@ Avoids Blender Decimate (it shreds Tripo UVs → see-through textures).
 Instead:
   1. Floor-pivot + ~1.2 m + accessory sockets
   2. Force opaque materials (Tripo ships HASHED alpha)
-  3. Downscale textures (4K → 1024 JPEG)
-  4. UV-aware mesh simplify via gltf-transform (meshoptimizer)
+  3. Downscale / re-encode textures as JPEG (Bevy cannot use EXT_texture_webp)
+  4. Strip Draco / meshopt (Bevy cannot decode KHR_draco_mesh_compression)
+  5. Optional UV-aware simplify via gltf-transform (off by default)
+
+Already-optimized Downloads (Draco+WebP ~3MB) must still be re-exported this way
+or Bevy will spawn an empty / invisible mesh.
 
 Usage:
   python scripts/import_dense_character_glb.py \\
@@ -274,8 +278,9 @@ def main() -> int:
     parser.add_argument(
         "--simplify-ratio",
         type=float,
-        default=0.08,
-        help="Vertex keep ratio for UV-aware simplify (0 skips simplify).",
+        default=0.0,
+        help="Vertex keep ratio for UV-aware simplify (0 = skip; default). "
+        "Do not use on already-optimized Tripo downloads unless needed.",
     )
     parser.add_argument(
         "--simplify-error",

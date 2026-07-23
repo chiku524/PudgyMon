@@ -1,4 +1,5 @@
 char_pudgy_pink_01
-Playable import from Downloads Tripo GLB.
-Opaque materials (no HASHED alpha), textures ≤1024 JPEG, UV-aware mesh simplify (~360k faces, ~14MB).
+Source: user Downloads/optimized-models/*-optimized.glb (Draco + WebP ~3MB).
+Re-exported for Bevy: Draco/WebP extensions removed (Bevy cannot load them),
+opaque materials, JPEG textures, floor pivot ~1.2m, accessory sockets.
 See scripts/import_dense_character_glb.py
