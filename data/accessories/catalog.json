@@ -5,60 +5,132 @@
       "id": "hat",
       "label": "Hat",
       "items": [
-        { "id": "acc_hat_party_crown_01", "label": "Party Crown Crew", "character_look": true },
-        { "id": "acc_hat_racer_cap_01", "label": "Party Cap Crew", "character_look": true },
-        { "id": "acc_hat_vibe_mushroom_01", "label": "Mushroom Cap Crew", "character_look": true },
-        { "id": "acc_hat_blaster_beanie_01", "label": "Star Beanie" },
-        { "id": "acc_hat_propeller_01", "label": "Propeller Crew", "character_look": true },
-        { "id": "acc_hat_flower_01", "label": "Daisy Hat Crew", "character_look": true },
-        { "id": "acc_hat_chef_01", "label": "Chef Hat Crew", "character_look": true },
-        { "id": "acc_hat_sleep_01", "label": "Sleep Cap" }
+        {
+          "id": "acc_hat_party_crown_01",
+          "label": "Party Crown"
+        },
+        {
+          "id": "acc_hat_racer_cap_01",
+          "label": "Party Cap"
+        },
+        {
+          "id": "acc_hat_vibe_mushroom_01",
+          "label": "Mushroom Cap"
+        },
+        {
+          "id": "acc_hat_blaster_beanie_01",
+          "label": "Star Beanie"
+        },
+        {
+          "id": "acc_hat_propeller_01",
+          "label": "Propeller"
+        },
+        {
+          "id": "acc_hat_flower_01",
+          "label": "Daisy Hat"
+        },
+        {
+          "id": "acc_hat_chef_01",
+          "label": "Chef Hat"
+        },
+        {
+          "id": "acc_hat_sleep_01",
+          "label": "Sleep Cap"
+        }
       ]
     },
     {
       "id": "necklace",
       "label": "Necklace",
       "items": [
-        { "id": "acc_necklace_shell_01", "label": "Pendant Crew", "character_look": true },
-        { "id": "acc_necklace_medal_01", "label": "Medal Crew", "character_look": true },
-        { "id": "acc_necklace_beads_01", "label": "Beads Crew", "character_look": true },
-        { "id": "acc_necklace_bell_01", "label": "Jingle Bell" }
+        {
+          "id": "acc_necklace_shell_01",
+          "label": "Pendant"
+        },
+        {
+          "id": "acc_necklace_medal_01",
+          "label": "Medal"
+        },
+        {
+          "id": "acc_necklace_beads_01",
+          "label": "Beads"
+        },
+        {
+          "id": "acc_necklace_bell_01",
+          "label": "Jingle Bell"
+        }
       ]
     },
     {
       "id": "shoes",
       "label": "Shoes",
       "items": [
-        { "id": "acc_shoes_racer_01", "label": "Racer Shoes" },
-        { "id": "acc_shoes_party_01", "label": "Party Shoes" },
-        { "id": "acc_shoes_boots_01", "label": "Rain Boots" },
-        { "id": "acc_shoes_slippers_01", "label": "Slippers" }
+        {
+          "id": "acc_shoes_racer_01",
+          "label": "Racer Shoes"
+        },
+        {
+          "id": "acc_shoes_party_01",
+          "label": "Party Shoes"
+        },
+        {
+          "id": "acc_shoes_boots_01",
+          "label": "Rain Boots"
+        },
+        {
+          "id": "acc_shoes_slippers_01",
+          "label": "Slippers"
+        }
       ]
     },
     {
       "id": "back",
       "label": "Back",
       "items": [
-        { "id": "acc_back_cape_01", "label": "Party Cape" },
-        { "id": "acc_back_wings_01", "label": "Angel Wings" },
-        { "id": "acc_back_pack_01", "label": "Vibe Pack" }
+        {
+          "id": "acc_back_cape_01",
+          "label": "Party Cape"
+        },
+        {
+          "id": "acc_back_wings_01",
+          "label": "Angel Wings"
+        },
+        {
+          "id": "acc_back_pack_01",
+          "label": "Vibe Pack"
+        }
       ]
     },
     {
       "id": "face",
       "label": "Face",
       "items": [
-        { "id": "acc_face_shades_01", "label": "Shades" },
-        { "id": "acc_face_goggles_01", "label": "Racer Goggles" },
-        { "id": "acc_face_mask_01", "label": "Party Mask" }
+        {
+          "id": "acc_face_shades_01",
+          "label": "Shades"
+        },
+        {
+          "id": "acc_face_goggles_01",
+          "label": "Racer Goggles"
+        },
+        {
+          "id": "acc_face_mask_01",
+          "label": "Party Mask"
+        }
       ]
     },
     {
       "id": "hands",
       "label": "Hands",
       "items": [
-        { "id": "acc_hands_mittens_01", "label": "Mittens" },
-        { "id": "acc_hands_gloves_01", "label": "Racer Gloves" }
+        {
+          "id": "acc_hands_mittens_01",
+          "label": "Mittens"
+        },
+        {
+          "id": "acc_hands_gloves_01",
+          "label": "Racer Gloves"
+        }
       ]
     }
   ]

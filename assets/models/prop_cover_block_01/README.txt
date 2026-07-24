@@ -1,3 +1,3 @@
 prop_cover_block_01
-Procedural Blender party asset.
-Rebuild: python scripts/build_procedural_party_assets.py --only prop_cover_block_01
+Source: cute+monster+toy+3d+model-optimized.glb
+Playable import (height 1.2, textures ≤768px JPEG q85, opaque, simplify ratio 0.18).

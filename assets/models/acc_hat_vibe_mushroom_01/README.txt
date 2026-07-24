@@ -1,4 +1,3 @@
 acc_hat_vibe_mushroom_01
-Tripo full-figure import (character-look accessory + Nest NPC).
-Floor-pivoted ~1.2 m, opaque JPEG, UV-aware simplify ~0.22.
-Equipping character-looks swaps the player mesh (not socket prop).
+Source: mushroom-cap+hat+3d+model (1)-optimized.glb
+Playable import (height 0.3, textures ≤768px JPEG q85, opaque, simplify ratio 0.18).

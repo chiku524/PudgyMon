@@ -10,6 +10,11 @@
       "id": "char_pudgy_stylized_01",
       "label": "Cartoon Creature",
       "blurb": "Stylized cartoon creature — soft matte party mascot"
+    },
+    {
+      "id": "char_pudgy_forest_01",
+      "label": "Forest Creature",
+      "blurb": "Studio forest Pudgy — static mesh (rig later for full locomotion)"
     }
   ]
 }

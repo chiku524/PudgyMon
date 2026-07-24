@@ -245,7 +245,14 @@ def _optimize_mesh(glb: Path, *, ratio: float, error: float) -> None:
         simp.unlink(missing_ok=True)
 
 
-def _register(asset_id: str, notes: str) -> None:
+def _register(
+    asset_id: str,
+    notes: str,
+    *,
+    height: float,
+    width: float | None = None,
+    uniform_scale: float | None = 1.0,
+) -> None:
     registry = {"import_root": "res://assets/models", "assets": []}
     if _REGISTRY.is_file():
         registry = json.loads(_REGISTRY.read_text(encoding="utf-8"))
@@ -254,12 +261,16 @@ def _register(asset_id: str, notes: str) -> None:
         for a in registry.get("assets", [])
         if isinstance(a, dict) and a.get("asset_id")
     }
-    by_id[asset_id] = {
+    entry: dict = {
         "asset_id": asset_id,
-        "target_height": 1.2,
-        "uniform_scale": 1.0,
+        "target_height": float(height),
         "notes": notes,
     }
+    if width is not None:
+        entry["target_width"] = float(width)
+    if uniform_scale is not None:
+        entry["uniform_scale"] = float(uniform_scale)
+    by_id[asset_id] = entry
     registry["assets"] = sorted(by_id.values(), key=lambda x: x["asset_id"])
     _REGISTRY.write_text(json.dumps(registry, indent=2) + "\n", encoding="utf-8")
 
@@ -298,6 +309,17 @@ def main() -> int:
     parser.add_argument(
         "--notes",
         default="Imported dense creature GLB (opaque textures + UV-aware simplify).",
+    )
+    parser.add_argument(
+        "--width",
+        type=float,
+        default=None,
+        help="Optional target_width for floor pads (stored in registry).",
+    )
+    parser.add_argument(
+        "--no-uniform-scale",
+        action="store_true",
+        help="Omit registry uniform_scale (use target_width / target_height spawn rules).",
     )
     args = parser.parse_args()
 
@@ -348,7 +370,13 @@ def main() -> int:
         f"JPEG q{args.jpeg_quality}, opaque, simplify ratio {args.simplify_ratio}).\n",
         encoding="utf-8",
     )
-    _register(aid, args.notes)
+    _register(
+        aid,
+        args.notes,
+        height=args.height,
+        width=args.width,
+        uniform_scale=None if args.no_uniform_scale else 1.0,
+    )
     print(f"glb -> {out.relative_to(_REPO)} ({out.stat().st_size} bytes)")
     return 0
 

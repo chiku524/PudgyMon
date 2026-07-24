@@ -1,3 +1,3 @@
 prop_target_star_01
-Procedural Blender party asset.
-Rebuild: python scripts/build_procedural_party_assets.py --only prop_target_star_01
+Source: star+shaped+candy+3d+model-optimized.glb
+Playable import (height 1.0, textures ≤768px JPEG q85, opaque, simplify ratio 0.18).
