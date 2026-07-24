@@ -110,6 +110,58 @@ impl Plugin for HubPlugin {
     }
 }
 
+fn spawn_mode_pad_showcase(
+    commands: &mut Commands,
+    asset_server: &AssetServer,
+    registry: &StudioRegistry,
+    pad_name: &str,
+    pad_pos: Vec3,
+) {
+    let props: &[(&str, Vec3, f32)] = match pad_name {
+        "Race" => &[
+            ("prop_race_cone_01", Vec3::new(-3.5, 0.0, 1.5), 0.0),
+            ("prop_race_cone_01", Vec3::new(3.5, 0.0, 1.5), 0.0),
+            ("prop_race_banner_01", Vec3::new(0.0, 0.0, 4.0), 0.0),
+            ("env_race_ramp_01", Vec3::new(-5.5, 0.0, -1.0), 90.0),
+        ],
+        "Vibe" => &[
+            ("prop_vibe_orb_01", Vec3::new(-3.0, 0.0, 2.0), 0.0),
+            ("prop_vibe_orb_01", Vec3::new(3.0, 0.0, 2.0), 0.0),
+            ("prop_vibe_flower_01", Vec3::new(-4.5, 0.0, -1.5), 25.0),
+            ("prop_vibe_crystal_01", Vec3::new(4.5, 0.0, -1.5), -25.0),
+        ],
+        "Shooter" => &[
+            ("prop_cover_block_01", Vec3::new(-3.5, 0.0, 2.0), 15.0),
+            ("prop_target_star_01", Vec3::new(3.5, 0.0, 2.0), -20.0),
+            ("prop_blaster_toy_01", Vec3::new(0.0, 0.0, 4.0), 180.0),
+        ],
+        "PartySaga" => &[
+            ("prop_race_cone_01", Vec3::new(-4.0, 0.0, 2.5), 0.0),
+            ("prop_vibe_orb_01", Vec3::new(0.0, 0.0, 3.5), 0.0),
+            ("prop_target_star_01", Vec3::new(4.0, 0.0, 2.5), 0.0),
+        ],
+        _ => &[],
+    };
+    for (i, (asset_id, offset, yaw_deg)) in props.iter().enumerate() {
+        if !studio_asset_exists(registry, asset_id) {
+            continue;
+        }
+        let tf = Transform::from_translation(pad_pos + *offset)
+            .with_rotation(Quat::from_rotation_y(yaw_deg.to_radians()));
+        let _ = spawn_studio_prop(
+            commands,
+            asset_server,
+            registry,
+            asset_id,
+            tf,
+            (
+                HubProp,
+                Name::new(format!("PadShowcase_{pad_name}_{i}_{asset_id}")),
+            ),
+        );
+    }
+}
+
 fn spawn_social_hub(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
@@ -194,17 +246,8 @@ fn spawn_social_hub(
         }
     }
 
-    // Ambient Nest NPCs — Tripo accessory jobs that arrived as full dressed figures.
-    let nest_npcs: [(&str, Vec3, f32); 14] = [
-        ("acc_hat_party_crown_01", Vec3::new(-6.0, 0.0, -1.0), 25.0),
-        ("acc_hat_chef_01", Vec3::new(6.0, 0.0, -1.0), -25.0),
-        ("acc_hat_flower_01", Vec3::new(-10.0, 0.0, 4.0), 40.0),
-        ("acc_hat_vibe_mushroom_01", Vec3::new(10.0, 0.0, 4.0), -40.0),
-        ("acc_hat_propeller_01", Vec3::new(-4.0, 0.0, 8.0), 160.0),
-        ("acc_hat_racer_cap_01", Vec3::new(4.0, 0.0, 8.0), -160.0),
-        ("acc_necklace_shell_01", Vec3::new(-12.0, 0.0, -6.0), 55.0),
-        ("acc_necklace_beads_01", Vec3::new(12.0, 0.0, -6.0), -55.0),
-        ("acc_necklace_medal_01", Vec3::new(0.0, 0.0, -9.0), 0.0),
+    // Ambient Nest NPCs (full figures only — accessory GLBs are wearables now).
+    let nest_npcs: [(&str, Vec3, f32); 5] = [
         ("npc_nest_pink_01", Vec3::new(-16.0, 0.0, 2.0), 70.0),
         ("npc_nest_crew_a_01", Vec3::new(16.0, 0.0, 2.0), -70.0),
         ("npc_nest_crew_b_01", Vec3::new(-14.0, 0.0, 10.0), 120.0),
@@ -371,6 +414,46 @@ fn spawn_social_hub(
                 Transform::from_translation(sign_pos + Vec3::Y * 2.2),
                 Name::new(format!("ModeSign_{name}")),
             ));
+        }
+
+        // Stage-prop showcases around each mode pad (Party Saga preview).
+        if let Some(reg) = registry {
+            spawn_mode_pad_showcase(
+                &mut commands,
+                &asset_server,
+                reg,
+                name,
+                pos,
+            );
+        }
+    }
+
+    // Extra Nest décor ring — leftover stage props for Party Saga flavor.
+    if let Some(reg) = registry {
+        let deco: [(&str, Vec3, f32); 8] = [
+            ("prop_race_banner_01", Vec3::new(-16.0, 0.0, -16.0), 20.0),
+            ("env_race_ramp_01", Vec3::new(-22.0, 0.0, -10.0), 90.0),
+            ("prop_vibe_flower_01", Vec3::new(6.0, 0.0, -24.0), -30.0),
+            ("prop_vibe_crystal_01", Vec3::new(-6.0, 0.0, -24.0), 30.0),
+            ("prop_vibe_orb_01", Vec3::new(0.0, 0.0, -26.0), 0.0),
+            ("prop_target_star_01", Vec3::new(20.0, 0.0, -14.0), -45.0),
+            ("prop_cover_block_01", Vec3::new(18.0, 0.0, -8.0), 15.0),
+            ("prop_blaster_toy_01", Vec3::new(14.0, 0.0, -16.0), -90.0),
+        ];
+        for (i, (asset_id, offset, yaw_deg)) in deco.into_iter().enumerate() {
+            if !studio_asset_exists(reg, asset_id) {
+                continue;
+            }
+            let tf = Transform::from_translation(hub + offset)
+                .with_rotation(Quat::from_rotation_y(yaw_deg.to_radians()));
+            let _ = spawn_studio_prop(
+                &mut commands,
+                &asset_server,
+                reg,
+                asset_id,
+                tf,
+                (HubProp, Name::new(format!("NestDeco_{i}_{asset_id}"))),
+            );
         }
     }
 

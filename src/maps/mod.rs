@@ -626,11 +626,21 @@ fn write_json<T: Serialize>(dir: PathBuf, slug: &str, value: &T) -> Result<PathB
 
 /// Decorative prop ids preferred in the map editor GLB palette.
 pub const EDITOR_DECO_IDS: &[&str] = &[
+    "prop_race_cone_01",
+    "prop_race_banner_01",
+    "prop_race_checkpoint_01",
+    "env_race_ramp_01",
+    "prop_vibe_orb_01",
+    "prop_vibe_flower_01",
+    "prop_vibe_crystal_01",
+    "prop_vibe_mushroom_01",
+    "prop_cover_block_01",
+    "prop_target_star_01",
+    "prop_blaster_toy_01",
+    "env_nest_bench_01",
     "env_freight_crate_01",
     "prop_cartoon_vending_machine",
     "prop_alien_slot_machine",
-    "duct_tape_dispenser_cart_01",
-    "prop_janitor_mop_bucket_cart_01",
 ];
 
 #[cfg(test)]

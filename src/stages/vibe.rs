@@ -23,6 +23,8 @@ pub fn setup_vibe(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
+    asset_server: &AssetServer,
+    registry: Option<&crate::data::StudioRegistry>,
     mut state: ResMut<VibeState>,
     spawn: Res<PartySpawn>,
     active: &ActiveStageMaps,
@@ -60,36 +62,101 @@ pub fn setup_vibe(
         }
     }
 
+    let hub = spawn.hub;
     for (i, pos) in orbs.iter().enumerate() {
-        commands.spawn((
-            StageProp,
-            VibeOrb,
-            GameplayEntity,
-            Mesh3d(meshes.add(Sphere::new(0.45))),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::srgb(1.0, 0.9, 0.2),
-                emissive: LinearRgba::rgb(2.5, 2.0, 0.3),
-                unlit: true,
-                ..Default::default()
-            })),
-            Transform::from_translation(Vec3::new(pos[0], pos[1], pos[2])),
-            Name::new(format!("Vibe_{i}")),
-        ));
+        let world = if active.vibe.is_some() {
+            Vec3::new(pos[0], pos[1], pos[2])
+        } else {
+            hub + Vec3::new(pos[0], pos[1], pos[2])
+        };
+        let tf = Transform::from_translation(world);
+        let spawned = registry.and_then(|reg| {
+            crate::assets::spawn_studio_prop(
+                &mut commands,
+                asset_server,
+                reg,
+                "prop_vibe_orb_01",
+                tf,
+                (StageProp, VibeOrb, Name::new(format!("Vibe_{i}"))),
+            )
+        });
+        if spawned.is_none() {
+            commands.spawn((
+                StageProp,
+                VibeOrb,
+                GameplayEntity,
+                Mesh3d(meshes.add(Sphere::new(0.45))),
+                MeshMaterial3d(materials.add(StandardMaterial {
+                    base_color: Color::srgb(1.0, 0.9, 0.2),
+                    emissive: LinearRgba::rgb(2.5, 2.0, 0.3),
+                    unlit: true,
+                    ..Default::default()
+                })),
+                tf,
+                Name::new(format!("Vibe_{i}")),
+            ));
+        }
+    }
+
+    // Arena flora accents.
+    if let Some(reg) = registry {
+        for (i, (asset_id, offset)) in [
+            ("prop_vibe_flower_01", Vec3::new(-10.0, 0.0, -8.0)),
+            ("prop_vibe_flower_01", Vec3::new(10.0, 0.0, -8.0)),
+            ("prop_vibe_crystal_01", Vec3::new(-8.0, 0.0, 10.0)),
+            ("prop_vibe_crystal_01", Vec3::new(8.0, 0.0, 10.0)),
+            ("prop_vibe_mushroom_01", Vec3::new(0.0, 0.0, -14.0)),
+        ]
+        .into_iter()
+        .enumerate()
+        {
+            let origin = if active.vibe.is_some() {
+                Vec3::ZERO
+            } else {
+                hub
+            };
+            let _ = crate::assets::spawn_studio_prop(
+                &mut commands,
+                asset_server,
+                reg,
+                asset_id,
+                Transform::from_translation(origin + offset),
+                (StageProp, Name::new(format!("VibeDeco_{i}"))),
+            );
+        }
     }
 
     for (i, block) in blocks.iter().enumerate() {
         let [sx, sy, sz] = block.size;
-        commands.spawn((
-            StageProp,
-            GameplayEntity,
-            Mesh3d(meshes.add(Cuboid::new(sx.max(0.5), sy.max(0.5), sz.max(0.5)))),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::srgb(0.55, 0.4, 0.3),
-                ..Default::default()
-            })),
-            Transform::from_translation(Vec3::new(block.pos[0], block.pos[1], block.pos[2])),
-            Name::new(format!("VibeBlock_{i}")),
-        ));
+        let tf = Transform::from_translation(Vec3::new(block.pos[0], block.pos[1], block.pos[2]));
+        let deco_id = block.asset_id.as_deref().unwrap_or("prop_vibe_crystal_01");
+        let spawned = registry.and_then(|reg| {
+            if crate::assets::studio_asset_exists(reg, deco_id) {
+                crate::assets::spawn_studio_prop(
+                    &mut commands,
+                    asset_server,
+                    reg,
+                    deco_id,
+                    tf,
+                    (StageProp, Name::new(format!("VibeBlock_{i}"))),
+                )
+            } else {
+                None
+            }
+        });
+        if spawned.is_none() {
+            commands.spawn((
+                StageProp,
+                GameplayEntity,
+                Mesh3d(meshes.add(Cuboid::new(sx.max(0.5), sy.max(0.5), sz.max(0.5)))),
+                MeshMaterial3d(materials.add(StandardMaterial {
+                    base_color: Color::srgb(0.55, 0.4, 0.3),
+                    ..Default::default()
+                })),
+                tf,
+                Name::new(format!("VibeBlock_{i}")),
+            ));
+        }
     }
 }
 

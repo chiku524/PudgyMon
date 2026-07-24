@@ -31,6 +31,8 @@ pub fn setup_race(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
+    asset_server: &AssetServer,
+    registry: Option<&crate::data::StudioRegistry>,
     mut race: ResMut<RaceState>,
     spawn: Res<PartySpawn>,
     active: &ActiveStageMaps,
@@ -75,38 +77,122 @@ pub fn setup_race(
         }
     }
 
+    let hub = spawn.hub;
     for (i, pos) in gate_positions.iter().enumerate() {
-        commands.spawn((
-            StageProp,
-            RaceGate { index: i as u8 },
-            GameplayEntity,
-            Mesh3d(meshes.add(Cuboid::new(3.0, 2.5, 0.4))),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::srgb(0.2, 0.85, 1.0),
-                emissive: LinearRgba::rgb(0.2, 1.2, 1.8),
-                unlit: true,
-                ..Default::default()
-            })),
-            Transform::from_translation(*pos),
-            Name::new(format!("RaceGate_{i}")),
-        ));
+        let world = if active.race.is_some() {
+            *pos
+        } else {
+            hub + *pos
+        };
+        let tf = Transform::from_translation(world);
+        let spawned = registry.and_then(|reg| {
+            crate::assets::spawn_studio_prop(
+                &mut commands,
+                asset_server,
+                reg,
+                "prop_race_checkpoint_01",
+                tf,
+                (
+                    StageProp,
+                    RaceGate { index: i as u8 },
+                    Name::new(format!("RaceGate_{i}")),
+                ),
+            )
+        });
+        if spawned.is_none() {
+            commands.spawn((
+                StageProp,
+                RaceGate { index: i as u8 },
+                GameplayEntity,
+                Mesh3d(meshes.add(Cuboid::new(3.0, 2.5, 0.4))),
+                MeshMaterial3d(materials.add(StandardMaterial {
+                    base_color: Color::srgb(0.2, 0.85, 1.0),
+                    emissive: LinearRgba::rgb(0.2, 1.2, 1.8),
+                    unlit: true,
+                    ..Default::default()
+                })),
+                tf,
+                Name::new(format!("RaceGate_{i}")),
+            ));
+        }
+        // Cone markers flanking each gate when available.
+        if let Some(reg) = registry {
+            for (side, x) in [("L", -2.2_f32), ("R", 2.2)] {
+                let cone_tf = Transform::from_translation(world + Vec3::new(x, 0.0, 0.0));
+                let _ = crate::assets::spawn_studio_prop(
+                    &mut commands,
+                    asset_server,
+                    reg,
+                    "prop_race_cone_01",
+                    cone_tf,
+                    (
+                        StageProp,
+                        Name::new(format!("RaceCone_{i}_{side}")),
+                    ),
+                );
+            }
+        }
+    }
+
+    // Finish banner near last gate.
+    if let (Some(reg), Some(last)) = (registry, gate_positions.last()) {
+        let world = if active.race.is_some() {
+            *last
+        } else {
+            hub + *last
+        };
+        let _ = crate::assets::spawn_studio_prop(
+            &mut commands,
+            asset_server,
+            reg,
+            "prop_race_banner_01",
+            Transform::from_translation(world + Vec3::new(0.0, 0.0, 3.0)),
+            (StageProp, Name::new("RaceBanner")),
+        );
+        let _ = crate::assets::spawn_studio_prop(
+            &mut commands,
+            asset_server,
+            reg,
+            "env_race_ramp_01",
+            Transform::from_translation(world + Vec3::new(-6.0, 0.0, -2.0))
+                .with_rotation(Quat::from_rotation_y(90f32.to_radians())),
+            (StageProp, Name::new("RaceRamp")),
+        );
     }
 
     for (i, block) in blocks.iter().enumerate() {
         let [sx, sy, sz] = block.size;
         let [px, py, pz] = block.pos;
-        commands.spawn((
-            StageProp,
-            RaceBlock,
-            GameplayEntity,
-            Mesh3d(meshes.add(Cuboid::new(sx.max(0.5), sy.max(0.5), sz.max(0.5)))),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::srgb(0.55, 0.4, 0.3),
-                ..Default::default()
-            })),
-            Transform::from_translation(Vec3::new(px, py, pz)),
-            Name::new(format!("RaceBlock_{i}")),
-        ));
+        let tf = Transform::from_translation(Vec3::new(px, py, pz));
+        let deco_id = block.asset_id.as_deref().unwrap_or("env_race_ramp_01");
+        let spawned = registry.and_then(|reg| {
+            if crate::assets::studio_asset_exists(reg, deco_id) {
+                crate::assets::spawn_studio_prop(
+                    &mut commands,
+                    asset_server,
+                    reg,
+                    deco_id,
+                    tf,
+                    (StageProp, RaceBlock, Name::new(format!("RaceBlock_{i}"))),
+                )
+            } else {
+                None
+            }
+        });
+        if spawned.is_none() {
+            commands.spawn((
+                StageProp,
+                RaceBlock,
+                GameplayEntity,
+                Mesh3d(meshes.add(Cuboid::new(sx.max(0.5), sy.max(0.5), sz.max(0.5)))),
+                MeshMaterial3d(materials.add(StandardMaterial {
+                    base_color: Color::srgb(0.55, 0.4, 0.3),
+                    ..Default::default()
+                })),
+                tf,
+                Name::new(format!("RaceBlock_{i}")),
+            ));
+        }
     }
 }
 

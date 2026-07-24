@@ -36,6 +36,8 @@ pub fn setup_shooter(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
+    asset_server: &AssetServer,
+    registry: Option<&crate::data::StudioRegistry>,
     mut state: ResMut<ShooterState>,
     spawn: Res<PartySpawn>,
     active: &ActiveStageMaps,
@@ -62,19 +64,63 @@ pub fn setup_shooter(
         }
     }
 
+    let hub = spawn.hub;
+    if cover.is_empty() {
+        // Default arena cover + targets when no custom map.
+        let defaults: [(&str, Vec3, f32); 6] = [
+            ("prop_cover_block_01", Vec3::new(-6.0, 0.0, -6.0), 20.0),
+            ("prop_cover_block_01", Vec3::new(6.0, 0.0, -6.0), -20.0),
+            ("prop_cover_block_01", Vec3::new(0.0, 0.0, -12.0), 0.0),
+            ("prop_target_star_01", Vec3::new(-10.0, 0.0, -10.0), 45.0),
+            ("prop_target_star_01", Vec3::new(10.0, 0.0, -10.0), -45.0),
+            ("prop_blaster_toy_01", Vec3::new(0.0, 0.0, -4.0), 180.0),
+        ];
+        if let Some(reg) = registry {
+            for (i, (asset_id, offset, yaw)) in defaults.into_iter().enumerate() {
+                let _ = crate::assets::spawn_studio_prop(
+                    &mut commands,
+                    asset_server,
+                    reg,
+                    asset_id,
+                    Transform::from_translation(hub + offset)
+                        .with_rotation(Quat::from_rotation_y(yaw.to_radians())),
+                    (StageProp, Name::new(format!("ShooterDefault_{i}"))),
+                );
+            }
+        }
+    }
+
     for (i, block) in cover.iter().enumerate() {
         let [sx, sy, sz] = block.size;
-        commands.spawn((
-            StageProp,
-            GameplayEntity,
-            Mesh3d(meshes.add(Cuboid::new(sx.max(0.5), sy.max(0.5), sz.max(0.5)))),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::srgb(0.45, 0.5, 0.55),
-                ..Default::default()
-            })),
-            Transform::from_translation(Vec3::new(block.pos[0], block.pos[1], block.pos[2])),
-            Name::new(format!("ShooterCover_{i}")),
-        ));
+        let tf = Transform::from_translation(Vec3::new(block.pos[0], block.pos[1], block.pos[2]));
+        let deco_id = block.asset_id.as_deref().unwrap_or("prop_cover_block_01");
+        let spawned = registry.and_then(|reg| {
+            if crate::assets::studio_asset_exists(reg, deco_id) {
+                crate::assets::spawn_studio_prop(
+                    &mut commands,
+                    asset_server,
+                    reg,
+                    deco_id,
+                    tf,
+                    (StageProp, Name::new(format!("ShooterCover_{i}"))),
+                )
+            } else {
+                None
+            }
+        });
+        if spawned.is_none() {
+            commands.spawn((
+                StageProp,
+                GameplayEntity,
+                Mesh3d(meshes.add(Cuboid::new(sx.max(0.5), sy.max(0.5), sz.max(0.5)))),
+                MeshMaterial3d(materials.add(StandardMaterial {
+                    base_color: Color::srgb(0.45, 0.5, 0.55),
+                    ..Default::default()
+                })),
+                tf,
+                Name::new(format!("ShooterCover_{i}")),
+            ));
+        }
     }
 }
 

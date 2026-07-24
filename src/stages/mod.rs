@@ -75,6 +75,8 @@ fn boot_stages(
     commands: Commands,
     meshes: ResMut<Assets<Mesh>>,
     materials: ResMut<Assets<StandardMaterial>>,
+    asset_server: Res<AssetServer>,
+    registry: Option<Res<crate::data::StudioRegistry>>,
     race: ResMut<race::RaceState>,
     vibe: ResMut<vibe::VibeState>,
     shooter: ResMut<shooter::ShooterState>,
@@ -105,11 +107,14 @@ fn boot_stages(
     }
 
     let maps = active.clone();
+    let registry = registry.as_deref();
     match phase {
         PartyPhase::Race => race::setup_race(
             commands,
             meshes,
             materials,
+            &asset_server,
+            registry,
             race,
             spawn,
             &maps,
@@ -120,6 +125,8 @@ fn boot_stages(
             commands,
             meshes,
             materials,
+            &asset_server,
+            registry,
             vibe,
             spawn,
             &maps,
@@ -130,6 +137,8 @@ fn boot_stages(
             commands,
             meshes,
             materials,
+            &asset_server,
+            registry,
             shooter,
             spawn,
             &maps,

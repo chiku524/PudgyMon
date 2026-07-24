@@ -138,6 +138,26 @@ struct AccessoryRowLabel {
 }
 
 #[derive(Component)]
+struct AccessoryCategoryButton {
+    slot: String,
+}
+
+#[derive(Component)]
+struct AccessoryCategoryPanel {
+    slot: String,
+}
+
+/// Which accessory slot category is focused in the Nest menu sidebar.
+#[derive(Resource, Debug, Clone)]
+struct AccessoryMenuSlot(String);
+
+impl Default for AccessoryMenuSlot {
+    fn default() -> Self {
+        Self("hat".into())
+    }
+}
+
+#[derive(Component)]
 struct MarketBoingButton(BoingAction);
 
 #[derive(Component, Clone, Copy, PartialEq, Eq)]
@@ -279,6 +299,7 @@ impl Plugin for SettingsPlugin {
             .init_resource::<PauseState>()
             .init_resource::<MenuPage>()
             .init_resource::<NestAuthForm>()
+            .init_resource::<AccessoryMenuSlot>()
             .add_systems(Startup, (apply_fullscreen_on_boot, spawn_nest_menu).chain())
             .add_systems(
                 Update,
@@ -288,12 +309,19 @@ impl Plugin for SettingsPlugin {
                     update_pause_visibility,
                     sync_menu_page_visibility,
                     sync_top_nav_highlight,
+                    sync_accessory_category_ui,
                     menu_button_hover,
                     handle_menu_nav,
                     handle_settings_buttons,
                     handle_market_equip,
                     handle_character_select,
                     handle_accessory_select,
+                ),
+            )
+            .add_systems(
+                Update,
+                (
+                    handle_accessory_category_select,
                     handle_market_buy,
                     handle_market_boing,
                     handle_account_buttons,
@@ -746,8 +774,11 @@ fn spawn_page_accessories(parent: &mut ChildSpawnerCommands, catalog: &Accessory
             MenuPageRoot(MenuPage::Accessories),
             Node {
                 width: Val::Percent(100.0),
+                height: Val::Percent(100.0),
+                flex_grow: 1.0,
                 flex_direction: FlexDirection::Column,
-                row_gap: Val::Px(8.0),
+                row_gap: Val::Px(10.0),
+                min_height: Val::Px(0.0),
                 ..Default::default()
             },
             Visibility::Hidden,
@@ -770,92 +801,192 @@ fn spawn_page_accessories(parent: &mut ChildSpawnerCommands, catalog: &Accessory
                 },
                 TextColor(MUTED),
             ));
-            for slot in &catalog.slots {
-                page.spawn((
-                    Text::new(slot.label.clone()),
-                    TextFont {
-                        font_size: FontSize::Px(15.0),
-                        ..Default::default()
-                    },
-                    TextColor(ACCENT),
-                ));
-                // Clear slot
-                let slot_id = slot.id.clone();
-                page.spawn((
-                    Button,
-                    AccessorySelectButton {
-                        slot: slot_id.clone(),
-                        id: None,
-                    },
+
+            page.spawn((
+                Node {
+                    width: Val::Percent(100.0),
+                    flex_grow: 1.0,
+                    flex_direction: FlexDirection::Row,
+                    column_gap: Val::Px(14.0),
+                    min_height: Val::Px(280.0),
+                    align_items: AlignItems::Stretch,
+                    ..Default::default()
+                },
+            ))
+            .with_children(|row| {
+                // Left category menu
+                row.spawn((
                     Node {
-                        padding: UiRect::axes(Val::Px(10.0), Val::Px(6.0)),
-                        border_radius: BorderRadius::all(Val::Px(8.0)),
+                        width: Val::Px(160.0),
+                        flex_direction: FlexDirection::Column,
+                        row_gap: Val::Px(6.0),
+                        padding: UiRect::all(Val::Px(8.0)),
+                        border_radius: BorderRadius::all(Val::Px(10.0)),
+                        overflow: Overflow::scroll_y(),
                         ..Default::default()
                     },
-                    BackgroundColor(BTN_BG),
-                    children![(
-                        Text::new(format!("Clear {}", slot.label)),
+                    BackgroundColor(Color::srgba(0.06, 0.12, 0.11, 0.95)),
+                ))
+                .with_children(|sidebar| {
+                    sidebar.spawn((
+                        Text::new("Categories"),
                         TextFont {
                             font_size: FontSize::Px(12.0),
                             ..Default::default()
                         },
-                        TextColor(Color::srgb(0.95, 0.95, 0.9)),
-                    )],
-                ));
-                for item in catalog.available_in_slot(&slot.id) {
-                    let id = item.id.clone();
-                    let label = item.label.clone();
-                    page.spawn((
-                        Node {
-                            width: Val::Percent(100.0),
-                            flex_direction: FlexDirection::Row,
-                            column_gap: Val::Px(8.0),
-                            align_items: AlignItems::Center,
-                            justify_content: JustifyContent::SpaceBetween,
-                            ..Default::default()
-                        },
-                        children![
-                            (
-                                AccessoryRowLabel {
-                                    slot: slot_id.clone(),
-                                    id: id.clone(),
-                                },
-                                Text::new(label),
+                        TextColor(MUTED),
+                    ));
+                    for slot in &catalog.slots {
+                        sidebar.spawn((
+                            Button,
+                            AccessoryCategoryButton {
+                                slot: slot.id.clone(),
+                            },
+                            Node {
+                                width: Val::Percent(100.0),
+                                padding: UiRect::axes(Val::Px(10.0), Val::Px(8.0)),
+                                border_radius: BorderRadius::all(Val::Px(8.0)),
+                                border: UiRect::all(Val::Px(1.0)),
+                                ..Default::default()
+                            },
+                            BackgroundColor(BTN_BG),
+                            BorderColor::all(Color::srgba(0.2, 0.35, 0.32, 0.6)),
+                            children![(
+                                Text::new(slot.label.clone()),
                                 TextFont {
-                                    font_size: FontSize::Px(13.0),
+                                    font_size: FontSize::Px(14.0),
                                     ..Default::default()
                                 },
-                                TextColor(MUTED),
-                                Node {
-                                    flex_grow: 1.0,
-                                    ..Default::default()
-                                },
-                            ),
-                            (
-                                Button,
-                                AccessorySelectButton {
+                                TextColor(Color::srgb(0.95, 0.95, 0.9)),
+                            )],
+                        ));
+                    }
+                });
+
+                // Right scrollable item list (one panel per category)
+                row.spawn((
+                    Node {
+                        width: Val::Percent(100.0),
+                        flex_grow: 1.0,
+                        flex_direction: FlexDirection::Column,
+                        min_height: Val::Px(0.0),
+                        overflow: Overflow::clip(),
+                        ..Default::default()
+                    },
+                ))
+                .with_children(|content| {
+                    for (idx, slot) in catalog.slots.iter().enumerate() {
+                        let slot_id = slot.id.clone();
+                        content
+                            .spawn((
+                                AccessoryCategoryPanel {
                                     slot: slot_id.clone(),
-                                    id: Some(id),
                                 },
                                 Node {
-                                    padding: UiRect::axes(Val::Px(12.0), Val::Px(6.0)),
-                                    border_radius: BorderRadius::all(Val::Px(8.0)),
+                                    display: if idx == 0 {
+                                        Display::Flex
+                                    } else {
+                                        Display::None
+                                    },
+                                    width: Val::Percent(100.0),
+                                    height: Val::Percent(100.0),
+                                    flex_direction: FlexDirection::Column,
+                                    row_gap: Val::Px(8.0),
+                                    padding: UiRect::all(Val::Px(10.0)),
+                                    border_radius: BorderRadius::all(Val::Px(10.0)),
+                                    overflow: Overflow::scroll_y(),
                                     ..Default::default()
                                 },
-                                BackgroundColor(BTN_BG),
-                                children![(
-                                    Text::new("Wear"),
+                                BackgroundColor(Color::srgba(0.05, 0.1, 0.09, 0.9)),
+                            ))
+                            .with_children(|panel| {
+                                panel.spawn((
+                                    Text::new(slot.label.clone()),
                                     TextFont {
-                                        font_size: FontSize::Px(13.0),
+                                        font_size: FontSize::Px(16.0),
                                         ..Default::default()
                                     },
-                                    TextColor(Color::srgb(0.95, 0.95, 0.9)),
-                                )],
-                            ),
-                        ],
-                    ));
-                }
-            }
+                                    TextColor(ACCENT),
+                                ));
+                                panel.spawn((
+                                    Button,
+                                    AccessorySelectButton {
+                                        slot: slot_id.clone(),
+                                        id: None,
+                                    },
+                                    Node {
+                                        padding: UiRect::axes(Val::Px(10.0), Val::Px(6.0)),
+                                        border_radius: BorderRadius::all(Val::Px(8.0)),
+                                        ..Default::default()
+                                    },
+                                    BackgroundColor(BTN_BG),
+                                    children![(
+                                        Text::new(format!("Clear {}", slot.label)),
+                                        TextFont {
+                                            font_size: FontSize::Px(12.0),
+                                            ..Default::default()
+                                        },
+                                        TextColor(Color::srgb(0.95, 0.95, 0.9)),
+                                    )],
+                                ));
+                                for item in catalog.available_in_slot(&slot.id) {
+                                    let id = item.id.clone();
+                                    let label = item.label.clone();
+                                    panel.spawn((
+                                        Node {
+                                            width: Val::Percent(100.0),
+                                            flex_direction: FlexDirection::Row,
+                                            column_gap: Val::Px(8.0),
+                                            align_items: AlignItems::Center,
+                                            justify_content: JustifyContent::SpaceBetween,
+                                            flex_shrink: 0.0,
+                                            ..Default::default()
+                                        },
+                                        children![
+                                            (
+                                                AccessoryRowLabel {
+                                                    slot: slot_id.clone(),
+                                                    id: id.clone(),
+                                                },
+                                                Text::new(label),
+                                                TextFont {
+                                                    font_size: FontSize::Px(13.0),
+                                                    ..Default::default()
+                                                },
+                                                TextColor(MUTED),
+                                                Node {
+                                                    flex_grow: 1.0,
+                                                    ..Default::default()
+                                                },
+                                            ),
+                                            (
+                                                Button,
+                                                AccessorySelectButton {
+                                                    slot: slot_id.clone(),
+                                                    id: Some(id),
+                                                },
+                                                Node {
+                                                    padding: UiRect::axes(Val::Px(12.0), Val::Px(6.0)),
+                                                    border_radius: BorderRadius::all(Val::Px(8.0)),
+                                                    ..Default::default()
+                                                },
+                                                BackgroundColor(BTN_BG),
+                                                children![(
+                                                    Text::new("Wear"),
+                                                    TextFont {
+                                                        font_size: FontSize::Px(13.0),
+                                                        ..Default::default()
+                                                    },
+                                                    TextColor(Color::srgb(0.95, 0.95, 0.9)),
+                                                )],
+                                            ),
+                                        ],
+                                    ));
+                                }
+                            });
+                    }
+                });
+            });
         });
 }
 
@@ -1611,6 +1742,63 @@ fn handle_accessory_select(
             None => format!("Cleared {} slot", btn.slot),
         };
         banner.show(note, 2.0);
+    }
+}
+
+fn handle_accessory_category_select(
+    pause: Res<PauseState>,
+    page: Res<MenuPage>,
+    mut focus: ResMut<AccessoryMenuSlot>,
+    interactions: Query<(&Interaction, &AccessoryCategoryButton), Changed<Interaction>>,
+) {
+    if !pause.paused || *page != MenuPage::Accessories {
+        return;
+    }
+    for (interaction, btn) in &interactions {
+        if *interaction != Interaction::Pressed {
+            continue;
+        }
+        focus.0 = btn.slot.clone();
+    }
+}
+
+fn sync_accessory_category_ui(
+    pause: Res<PauseState>,
+    page: Res<MenuPage>,
+    focus: Res<AccessoryMenuSlot>,
+    mut panels: Query<(&AccessoryCategoryPanel, &mut Node)>,
+    mut tabs: Query<(
+        &AccessoryCategoryButton,
+        &Interaction,
+        &mut BackgroundColor,
+        &mut BorderColor,
+    )>,
+) {
+    if !pause.paused || *page != MenuPage::Accessories {
+        return;
+    }
+
+    for (panel, mut node) in &mut panels {
+        let active = panel.slot == focus.0;
+        node.display = if active {
+            Display::Flex
+        } else {
+            Display::None
+        };
+    }
+
+    for (tab, interaction, mut bg, mut border) in &mut tabs {
+        let selected = tab.slot == focus.0;
+        *bg = BackgroundColor(match (*interaction, selected) {
+            (Interaction::Pressed, _) | (_, true) => Color::srgba(0.15, 0.45, 0.4, 0.95),
+            (Interaction::Hovered, _) => Color::srgba(0.12, 0.28, 0.26, 0.95),
+            _ => BTN_BG,
+        });
+        *border = BorderColor::all(if selected {
+            TEAL
+        } else {
+            Color::srgba(0.2, 0.35, 0.32, 0.6)
+        });
     }
 }
 
