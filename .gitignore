@@ -33,3 +33,5 @@ scripts/boing/local-node-data/
 *.pre_polish.glb
 *.glb.pre_opt
 *.pre_opt.glb
+__pycache__/
+*.py[cod]
