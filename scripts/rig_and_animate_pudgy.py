@@ -173,29 +173,29 @@ print(
     f"foot=({foot_xmin:.3f},{foot_xmax:.3f})",
 )
 
-# Flipper stubs — sit on each side's actual silhouette, not AABB halves.
+# Flipper stubs — mid-body lateral tips (not up into the hood/collar).
 l_arm = add_bone(
     "L_Arm",
-    (cx + w * 0.5 * arm_xmax * 0.55, cy, h * 0.52),
-    (cx + w * 0.5 * arm_xmax * 0.82, cy, h * 0.48),
+    (cx + w * 0.5 * arm_xmax * 0.58, cy, h * 0.46),
+    (cx + w * 0.5 * arm_xmax * 0.82, cy, h * 0.44),
     spine,
 )
 l_fore = add_bone(
     "L_Forearm",
-    (cx + w * 0.5 * arm_xmax * 0.82, cy, h * 0.48),
-    (cx + w * 0.5 * arm_xmax * 0.95, cy, h * 0.44),
+    (cx + w * 0.5 * arm_xmax * 0.82, cy, h * 0.44),
+    (cx + w * 0.5 * arm_xmax * 0.96, cy, h * 0.42),
     l_arm,
 )
 r_arm = add_bone(
     "R_Arm",
-    (cx + w * 0.5 * arm_xmin * 0.55, cy, h * 0.52),
-    (cx + w * 0.5 * arm_xmin * 0.82, cy, h * 0.48),
+    (cx + w * 0.5 * arm_xmin * 0.58, cy, h * 0.46),
+    (cx + w * 0.5 * arm_xmin * 0.82, cy, h * 0.44),
     spine,
 )
 r_fore = add_bone(
     "R_Forearm",
-    (cx + w * 0.5 * arm_xmin * 0.82, cy, h * 0.48),
-    (cx + w * 0.5 * arm_xmin * 0.95, cy, h * 0.44),
+    (cx + w * 0.5 * arm_xmin * 0.82, cy, h * 0.44),
+    (cx + w * 0.5 * arm_xmin * 0.96, cy, h * 0.42),
     r_arm,
 )
 
@@ -294,8 +294,8 @@ mw = body.matrix_world
 hw = max(w * 0.5, 1e-4)
 hd = max(d * 0.5, 1e-4)
 # Outer tip of each side's silhouette is limb; armpit/crotch stay on torso.
-arm_L0 = arm_xmax * 0.48
-arm_R0 = arm_xmin * 0.48  # negative
+arm_L0 = arm_xmax * 0.55
+arm_R0 = arm_xmin * 0.55  # negative
 foot_L0 = foot_xmax * 0.26
 foot_R0 = foot_xmin * 0.26
 regioned = 0
@@ -314,21 +314,21 @@ for vert in body.data.vertices:
         # Thin soft collar between rigid head and dumpling body.
         t = (nz - 0.50) / 0.08
         set_vert(vert.index, {"Head": 0.35 + 0.45 * t, "Root": 0.65 - 0.45 * t})
-    elif nx > arm_L0 and nz > 0.40:
+    elif nx > arm_L0 and 0.38 < nz < 0.52:
         tip = min(1.0, max(0.0, (nx - arm_L0) / max(arm_xmax - arm_L0, 1e-4)))
-        tip = tip ** 1.15
+        tip = tip ** 1.1
         set_vert(vert.index, {
-            "L_Forearm": 0.20 + 0.55 * tip,
-            "L_Arm": 0.35 - 0.05 * tip,
-            "Spine": max(0.05, 0.45 - 0.50 * tip),
+            "L_Forearm": 0.25 + 0.55 * tip,
+            "L_Arm": 0.40 - 0.10 * tip,
+            "Root": max(0.05, 0.35 - 0.45 * tip),
         })
-    elif nx < arm_R0 and nz > 0.40:
+    elif nx < arm_R0 and 0.38 < nz < 0.52:
         tip = min(1.0, max(0.0, (arm_R0 - nx) / max(arm_R0 - arm_xmin, 1e-4)))
-        tip = tip ** 1.15
+        tip = tip ** 1.1
         set_vert(vert.index, {
-            "R_Forearm": 0.20 + 0.55 * tip,
-            "R_Arm": 0.35 - 0.05 * tip,
-            "Spine": max(0.05, 0.45 - 0.50 * tip),
+            "R_Forearm": 0.25 + 0.55 * tip,
+            "R_Arm": 0.40 - 0.10 * tip,
+            "Root": max(0.05, 0.35 - 0.45 * tip),
         })
     elif nz <= 0.12 and nx > foot_L0:
         # Extreme foot tips only — keeps ankles from melting into the dumpling.
@@ -449,44 +449,16 @@ for vert in body.data.vertices:
         stripped += 1
 print("CORE_STRIP_LIMBS", stripped, "armpit", armpit_stripped)
 
-# Collar must not keep arm/leg envelope weights (wrinkles bottom-of-head seam).
+# Collar must stay Head/Root only — never arm (arm keys were melting the neck).
 collar_stripped = 0
 for vert in body.data.vertices:
     wp = mw @ vert.co
-    nx = (wp.x - cx) / hw
     nz = (wp.z - minv.z) / h
     if not (0.48 <= nz < 0.58):
         continue
-    had = False
-    for vg_name in LIMB_GROUPS:
-        vg = vgs[vg_name]
-        try:
-            if vg.weight(vert.index) > 1e-4:
-                had = True
-            vg.add([vert.index], 0.0, "REPLACE")
-        except RuntimeError:
-            pass
-    if had or True:
-        # Always reassert a clean Head/Root collar (no limb leftovers).
-        t = (nz - 0.48) / 0.10
-        # Extreme side tips in the collar band can stay lightly on arm roots.
-        if nx > arm_L0 and nz > 0.52:
-            tip = min(1.0, (nx - arm_L0) / max(arm_xmax - arm_L0, 1e-4))
-            set_vert(vert.index, {
-                "L_Arm": 0.25 * tip,
-                "Head": 0.40 + 0.20 * (1.0 - tip),
-                "Root": 0.60 - 0.20 * tip - 0.25 * tip,
-            })
-        elif nx < arm_R0 and nz > 0.52:
-            tip = min(1.0, (arm_R0 - nx) / max(arm_R0 - arm_xmin, 1e-4))
-            set_vert(vert.index, {
-                "R_Arm": 0.25 * tip,
-                "Head": 0.40 + 0.20 * (1.0 - tip),
-                "Root": 0.60 - 0.20 * tip - 0.25 * tip,
-            })
-        else:
-            set_vert(vert.index, {"Head": 0.30 + 0.50 * t, "Root": 0.70 - 0.50 * t})
-        collar_stripped += 1
+    t = (nz - 0.48) / 0.10
+    set_vert(vert.index, {"Head": 0.30 + 0.55 * t, "Root": 0.70 - 0.55 * t})
+    collar_stripped += 1
 print("COLLAR_STRIP_LIMBS", collar_stripped)
 
 # Re-assert foot tip weights after strips (asymmetric meshes lose the short side).
@@ -527,39 +499,87 @@ for vert in body.data.vertices:
         foot_boost += 1
 print("FOOT_TIP_BOOST", foot_boost)
 
-# Re-assert flipper tip weights so arm flaps actually read (keep armpit on torso).
+# Flipper tips only — mid-height + far lateral. Never paint into collar/hood.
 arm_boost = 0
 for vert in body.data.vertices:
     wp = mw @ vert.co
     nx = (wp.x - cx) / hw
     nz = (wp.z - minv.z) / h
-    if not (0.40 < nz < 0.68):
+    if not (0.36 < nz < 0.54):
         continue
-    l0 = arm_xmax * 0.45
-    r0 = arm_xmin * 0.45
+    l0 = arm_xmax * 0.52
+    r0 = arm_xmin * 0.52
     if nx > l0:
         tip = min(1.0, max(0.0, (nx - l0) / max(arm_xmax - l0, 1e-4)))
-        tip = tip ** 1.1
+        tip = tip ** 1.05
         if tip < 0.12:
             continue
         set_vert(vert.index, {
-            "L_Forearm": 0.20 + 0.55 * tip,
-            "L_Arm": 0.40 - 0.10 * tip,
-            "Spine": max(0.05, 0.40 - 0.45 * tip),
+            "L_Forearm": 0.30 + 0.55 * tip,
+            "L_Arm": 0.50 - 0.20 * tip,
+            "Root": max(0.05, 0.20 - 0.35 * tip),
         })
         arm_boost += 1
     elif nx < r0:
         tip = min(1.0, max(0.0, (r0 - nx) / max(r0 - arm_xmin, 1e-4)))
-        tip = tip ** 1.1
+        tip = tip ** 1.05
         if tip < 0.12:
             continue
         set_vert(vert.index, {
-            "R_Forearm": 0.20 + 0.55 * tip,
-            "R_Arm": 0.40 - 0.10 * tip,
-            "Spine": max(0.05, 0.40 - 0.45 * tip),
+            "R_Forearm": 0.30 + 0.55 * tip,
+            "R_Arm": 0.50 - 0.20 * tip,
+            "Root": max(0.05, 0.20 - 0.35 * tip),
         })
         arm_boost += 1
 print("ARM_TIP_BOOST", arm_boost)
+
+# Final safety: head + inner collar never keep limb weights.
+# Far-lateral mid-height tips are real flippers — leave them alone.
+safe_head = 0
+for vert in body.data.vertices:
+    wp = mw @ vert.co
+    nx = (wp.x - cx) / hw
+    nz = (wp.z - minv.z) / h
+    if nz >= 0.55:
+        set_vert(vert.index, {"Head": 1.0})
+        safe_head += 1
+    elif 0.48 <= nz < 0.55:
+        # Don't clobber flipper tips in this band.
+        if nx > arm_xmax * 0.55 or nx < arm_xmin * 0.55:
+            continue
+        t = (nz - 0.48) / 0.07
+        set_vert(vert.index, {"Head": 0.25 + 0.55 * t, "Root": 0.75 - 0.55 * t})
+        safe_head += 1
+print("SAFE_HEAD_COLLAR", safe_head)
+
+# Strip any remaining arm weight near the torso midline / armpit.
+armpit_clear = 0
+for vert in body.data.vertices:
+    wp = mw @ vert.co
+    nx = (wp.x - cx) / hw
+    nz = (wp.z - minv.z) / h
+    if not (0.35 <= nz < 0.55):
+        continue
+    # Keep only far lateral tips.
+    if nx > arm_xmax * 0.55 or nx < arm_xmin * 0.55:
+        continue
+    had = False
+    for vg_name in ARM_GROUPS:
+        vg = vgs[vg_name]
+        try:
+            if vg.weight(vert.index) > 1e-4:
+                had = True
+            vg.add([vert.index], 0.0, "REPLACE")
+        except RuntimeError:
+            pass
+    if had:
+        if nz >= 0.48:
+            t = (nz - 0.48) / 0.07
+            set_vert(vert.index, {"Head": 0.25 + 0.55 * t, "Root": 0.75 - 0.55 * t})
+        else:
+            set_vert(vert.index, {"Root": 0.90, "Spine": 0.10})
+        armpit_clear += 1
+print("ARMPIT_CLEAR", armpit_clear)
 
 # Normalize weights per vertex (mesh must be active).
 bpy.ops.object.select_all(action="DESELECT")
