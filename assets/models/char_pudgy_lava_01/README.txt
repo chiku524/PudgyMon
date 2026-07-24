@@ -1,6 +1,4 @@
 char_pudgy_lava_01
-Skinned Pudgy character (shared armature contract).
-Clips: idle, walk, run, jump, emote_wave, emote_dance
-Bones: Root, Hips, Spine, Head, L_Arm, R_Arm, L_Forearm, R_Forearm, L_Leg, R_Leg, L_Shin, R_Shin
-Sockets parented to bones. Bevy-safe (no Draco/WebP).
-Rebuild: python scripts/rig_and_animate_pudgy.py --asset-id char_pudgy_lava_01
+Source: pudgymon+character+3d+model (4)-optimized.glb
+Lava Pudgy — Studio 41-bone rig with idle/walk/run/jump/emote
+Rebuild: python scripts/import_rigged_character_glb.py --src "<src>" --asset-id char_pudgy_lava_01

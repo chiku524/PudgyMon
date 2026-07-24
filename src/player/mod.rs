@@ -50,9 +50,11 @@ fn character_mesh_yaw_offset(model_id: &str) -> f32 {
         // Studio Tripo 41-bone rigs face +Z → 180° so local +Z aligns with parent −Z.
         "char_pudgy_base_01"
         | "oceanic_pudgymon_01"
+        | "char_pudgy_forest_01"
+        | "char_pudgy_lava_01"
         | "char_pudgy_water_01"
         | "char_pudgy_pink_01" => std::f32::consts::PI,
-        // Stubby contract (forest / lava / sky Tripo imports): glTF +X forward → +90°.
+        // Stubby contract (sky Tripo import until Studio-rigged): glTF +X forward → +90°.
         _ => std::f32::consts::FRAC_PI_2,
     }
 }

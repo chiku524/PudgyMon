@@ -10,13 +10,13 @@ Selectable crew matches [STUDIO_PROMPTS.md](STUDIO_PROMPTS.md) Priority 0 (**5 c
 |----|-------|-------|
 | `char_pudgy_base_01` | Base Pudgy | Shared coral-peach base (default) |
 | `oceanic_pudgymon_01` | Ocean Pudgy | Ocean species — Studio locomotion + emotes |
-| `char_pudgy_forest_01` | Forest Pudgy | Forest/leaf Tripo — stubby re-rig + procedural clips |
-| `char_pudgy_lava_01` | Lava Pudgy | Lava Tripo — stubby re-rig + height-scaled clips |
+| `char_pudgy_forest_01` | Forest Pudgy | Forest/leaf — Studio 41-bone rig + walk/run clips |
+| `char_pudgy_lava_01` | Lava Pudgy | Lava — Studio 41-bone rig + walk/run clips |
 | `char_pudgy_sky_01` | Sky Pudgy | Sky Tripo — stubby re-rig + height-scaled clips |
 
 Default crew id: [`data/player_defaults.json`](../data/player_defaults.json). Roster: [`data/characters/roster.json`](../data/characters/roster.json). Switch live in Esc Nest → **Characters**.
 
-Short vs tall: `auto_rig_glb.py --height 0.95` / `--height 1.35` bakes playable size. Stubby bones, envelopes, and clips scale from the mesh AABB (width × height × depth) vs a canonical stubby; `transfer_crew_clips.py` rescales donor motion the same way.
+Short vs tall: `auto_rig_glb.py --height 0.95` / `--height 1.35` bakes playable size for stubby bodies. Studio-rigged imports (`import_rigged_character_glb.py`) scale to ~1.2 m and rename NLA tracks to the shared clip names. `transfer_crew_clips.py` copies locomotion between matching 41-bone Studio bodies.
 
 ## Sync + tooling
 
@@ -24,8 +24,11 @@ Short vs tall: `auto_rig_glb.py --height 0.95` / `--height 1.35` bakes playable 
 # Align assets/models to STUDIO_PROMPTS.md (prune extras, materialize the 5 crew)
 python scripts/sync_studio_prompt_assets.py
 
-# Static body → stubby rig + clips
-python scripts/auto_rig_glb.py --src path.glb --asset-id char_pudgy_forest_01 --force stubby
+# Pre-rigged Studio body (41-bone + NLA) → party clip names + Bevy-safe GLB
+python scripts/import_rigged_character_glb.py --src path.glb --asset-id char_pudgy_forest_01
+
+# Static body → stubby rig + clips (sky / bodies without Studio animation)
+python scripts/auto_rig_glb.py --src path.glb --asset-id char_pudgy_sky_01 --force stubby
 
 # Copy clips between same-rig Studio bodies
 python scripts/transfer_crew_clips.py --from oceanic_pudgymon_01 --to char_pudgy_base_01

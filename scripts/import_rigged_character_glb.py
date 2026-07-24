@@ -383,7 +383,8 @@ export_kwargs = dict(
     export_animations=True,
     export_nla_strips=True,
     export_def_bones=False,
-    export_optimize_animation_size=True,
+    # False: Blender's anim optimizer can emit zero accessors Bevy rejects.
+    export_optimize_animation_size=False,
 )
 try:
     bpy.ops.export_scene.gltf(**export_kwargs, export_jpeg_quality=JPEG_QUALITY)
