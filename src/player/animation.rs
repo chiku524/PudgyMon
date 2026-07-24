@@ -72,6 +72,8 @@ pub struct CrewAnimPlayback {
     pub player_entity: Entity,
     /// Elapsed time when the avatar last became still (unused settle; kept for debug).
     pub still_since: Option<f32>,
+    /// Last `PlayerMotion::jump_count` we played a jump clip for.
+    pub last_jump_count: u32,
 }
 
 impl CrewAnimPlayback {
@@ -128,8 +130,8 @@ impl CrewAnimPlayback {
 
     pub fn trigger_jump_anim(&mut self, now: f32) {
         self.kind = CrewAnimKind::Jump;
-        // Longer hang so the clip covers exaggerated hops.
-        self.lock_until = now + 0.85;
+        // Cover ascent; fall can hold the last jump pose until land / loco.
+        self.lock_until = now + 0.75;
         self.applied = None;
         self.still_since = None;
     }
@@ -143,6 +145,8 @@ pub struct PlayerMotion {
     pub grounded: bool,
     /// Air jumps remaining after leaving the ground (double-jump).
     pub air_jumps_left: u8,
+    /// Increments on each successful jump / double-jump (drives jump clip restart).
+    pub jump_count: u32,
 }
 
 impl Default for PlayerMotion {
@@ -153,6 +157,7 @@ impl Default for PlayerMotion {
             vertical_velocity: 0.0,
             grounded: true,
             air_jumps_left: crate::core::PLAYER_MAX_AIR_JUMPS,
+            jump_count: 0,
         }
     }
 }
@@ -362,6 +367,7 @@ fn finish_crew_animation_setup(
             lock_until: 0.0,
             player_entity,
             still_since: Some(0.0),
+            last_jump_count: 0,
         });
         commands.entity(entity).remove::<CrewSceneReady>();
     }
@@ -428,11 +434,10 @@ fn choose_crew_anim_kind(
             }
         }
 
-        // Jump anim follows physics jump (rising).
-        if airborne && motion.vertical_velocity > 0.5 {
-            if anim.kind != CrewAnimKind::Jump {
-                anim.trigger_jump_anim(now);
-            }
+        // Play / restart the crew `jump` clip on each jump impulse (ground + double).
+        if motion.jump_count != anim.last_jump_count {
+            anim.last_jump_count = motion.jump_count;
+            anim.trigger_jump_anim(now);
         }
 
         if locked {

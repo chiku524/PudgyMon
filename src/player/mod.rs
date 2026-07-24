@@ -260,9 +260,11 @@ fn apply_player_move(
             motion.vertical_velocity = PLAYER_JUMP_VELOCITY;
             motion.grounded = false;
             motion.air_jumps_left = PLAYER_MAX_AIR_JUMPS;
+            motion.jump_count = motion.jump_count.wrapping_add(1);
         } else if motion.air_jumps_left > 0 {
             motion.vertical_velocity = PLAYER_DOUBLE_JUMP_VELOCITY;
             motion.air_jumps_left = motion.air_jumps_left.saturating_sub(1);
+            motion.jump_count = motion.jump_count.wrapping_add(1);
         }
     }
 
