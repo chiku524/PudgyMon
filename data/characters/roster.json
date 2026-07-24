@@ -19,12 +19,12 @@
     {
       "id": "char_pudgy_lava_01",
       "label": "Lava Pudgy",
-      "blurb": "Lava species \u2014 ember freckles (stand-in mesh until Studio export)"
+      "blurb": "Lava species \u2014 ember freckles and charcoal crust"
     },
     {
       "id": "char_pudgy_sky_01",
       "label": "Sky Pudgy",
-      "blurb": "Sky species \u2014 puffball cheeks (stand-in mesh until Studio export)"
+      "blurb": "Sky species \u2014 puffball cheeks and sky-blue coat"
     }
   ]
 }

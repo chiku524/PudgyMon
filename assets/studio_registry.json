@@ -166,14 +166,14 @@
     {
       "asset_id": "char_pudgy_lava_01",
       "target_height": 1.2,
-      "uniform_scale": 1.0,
-      "notes": "Lava species \u2014 ember freckles (stand-in mesh until Studio export)"
+      "notes": "Skinned Pudgy contract + clips (idle, walk, run, jump, emote_wave, emote_dance); game-res ~100k; Bevy-safe JPEG.",
+      "uniform_scale": 1.0
     },
     {
       "asset_id": "char_pudgy_sky_01",
       "target_height": 1.2,
-      "uniform_scale": 1.0,
-      "notes": "Sky species \u2014 puffball cheeks (stand-in mesh until Studio export)"
+      "notes": "Skinned Pudgy contract + clips (idle, walk, run, jump, emote_wave, emote_dance); game-res ~100k; Bevy-safe JPEG.",
+      "uniform_scale": 1.0
     },
     {
       "asset_id": "env_nest_bench_01",

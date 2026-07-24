@@ -10,9 +10,9 @@ Selectable crew matches [STUDIO_PROMPTS.md](STUDIO_PROMPTS.md) Priority 0 (**5 c
 |----|-------|-------|
 | `char_pudgy_base_01` | Base Pudgy | Shared coral-peach base (default) |
 | `oceanic_pudgymon_01` | Ocean Pudgy | Ocean species — Studio locomotion + emotes |
-| `char_pudgy_forest_01` | Forest Pudgy | Forest species — stubby re-rig + procedural clips |
-| `char_pudgy_lava_01` | Lava Pudgy | Stand-in mesh until dedicated Studio export |
-| `char_pudgy_sky_01` | Sky Pudgy | Stand-in mesh until dedicated Studio export |
+| `char_pudgy_forest_01` | Forest Pudgy | Forest/leaf Tripo — stubby re-rig + procedural clips |
+| `char_pudgy_lava_01` | Lava Pudgy | Lava Tripo — stubby re-rig + procedural clips |
+| `char_pudgy_sky_01` | Sky Pudgy | Sky Tripo — stubby re-rig + procedural clips |
 
 Default crew id: [`data/player_defaults.json`](../data/player_defaults.json). Roster: [`data/characters/roster.json`](../data/characters/roster.json). Switch live in Esc Nest → **Characters**.
 

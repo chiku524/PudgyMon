@@ -33,8 +33,8 @@ _CREW = [
     ("char_pudgy_base_01", "Base Pudgy", "Shared coral-peach party base"),
     ("oceanic_pudgymon_01", "Ocean Pudgy", "Ocean species — fins and teal candy palette"),
     ("char_pudgy_forest_01", "Forest Pudgy", "Forest species — leaf tufts and lime palette"),
-    ("char_pudgy_lava_01", "Lava Pudgy", "Lava species — ember freckles (stand-in mesh until Studio export)"),
-    ("char_pudgy_sky_01", "Sky Pudgy", "Sky species — puffball cheeks (stand-in mesh until Studio export)"),
+    ("char_pudgy_lava_01", "Lava Pudgy", "Lava species — ember freckles and charcoal crust"),
+    ("char_pudgy_sky_01", "Sky Pudgy", "Sky species — puffball cheeks and sky-blue coat"),
 ]
 
 
@@ -87,7 +87,6 @@ def main() -> int:
 
     pink = _MODELS / "char_pudgy_pink_01"
     water = _MODELS / "char_pudgy_water_01"
-    forest = _MODELS / "char_pudgy_forest_01"
     if not pink.is_dir() and not (_MODELS / "char_pudgy_base_01").is_dir():
         print("error: missing pink/base source mesh", file=sys.stderr)
         return 1
@@ -95,17 +94,15 @@ def main() -> int:
         print("error: missing water/oceanic source mesh", file=sys.stderr)
         return 1
 
-    # 1) Materialize the five selectable crew folders.
+    # 1) Materialize base + ocean from known sources; species bodies are imported separately.
     base_src = pink if pink.is_dir() else _MODELS / "char_pudgy_base_01"
     ocean_src = water if water.is_dir() else _MODELS / "oceanic_pudgymon_01"
     ensure_dir_copy(base_src, "char_pudgy_base_01", dry=dry)
     ensure_dir_copy(ocean_src, "oceanic_pudgymon_01", dry=dry)
-    if not forest.is_dir() and not dry:
-        print("error: missing char_pudgy_forest_01", file=sys.stderr)
-        return 1
-    # Lava / sky stand-ins from base until dedicated Studio GLBs arrive.
-    ensure_dir_copy(base_src, "char_pudgy_lava_01", dry=dry)
-    ensure_dir_copy(base_src, "char_pudgy_sky_01", dry=dry)
+    for crew_id in ("char_pudgy_forest_01", "char_pudgy_lava_01", "char_pudgy_sky_01"):
+        if not (_MODELS / crew_id).is_dir() and not dry:
+            print(f"error: missing {crew_id} (import via auto_rig_glb.py)", file=sys.stderr)
+            return 1
 
     # 2) Delete folders not in the prompt allowlist.
     removed = []
