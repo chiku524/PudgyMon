@@ -26,9 +26,9 @@ pub const EMOTE_LIBRARY: &[(&str, &str, f32, bool)] = &[
 ];
 
 pub const EMOTE_SLOT_COUNT: usize = 5;
-/// Soft blend into idle; locomotion is frozen first so the walk cycle does not keep striding.
-const IDLE_CROSSFADE: Duration = Duration::from_millis(320);
-const CROSSFADE: Duration = Duration::from_millis(160);
+/// Walk/run → idle blend. Long enough to hide pose pops; short enough that feet don't keep striding.
+const IDLE_CROSSFADE: Duration = Duration::from_millis(520);
+const CROSSFADE: Duration = Duration::from_millis(180);
 const WALK_SPEED_EPS: f32 = 0.05;
 
 #[derive(Component, Debug, Clone)]
@@ -513,9 +513,9 @@ fn apply_crew_anim_kind(
 
         let to_idle = anim.kind == CrewAnimKind::Idle;
         if to_idle {
-            // Freeze the current walk/run frame so feet don't keep cycling during the blend.
+            // Ease locomotion down instead of a hard freeze (hard 0-speed snaps look "clicky").
             for (_, playing) in player.playing_animations_mut() {
-                playing.set_speed(0.0);
+                playing.set_speed(0.2);
             }
         } else {
             for (_, playing) in player.playing_animations_mut() {

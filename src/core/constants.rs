@@ -10,9 +10,9 @@ pub const INTERACT_RADIUS: f32 = 3.5;
 pub const PLAYER_SPEED: f32 = 7.0;
 pub const PLAYER_SPRINT_MULTIPLIER: f32 = 1.6;
 pub const PLAYER_FLOOR_Y: f32 = 1.0;
-/// Cartoon / party-game hop — peak ~8 units above the floor.
-pub const PLAYER_JUMP_VELOCITY: f32 = 20.0;
-pub const PLAYER_DOUBLE_JUMP_VELOCITY: f32 = 18.0;
+/// Cartoon / party-game hop — peak ~6.5 units above the floor.
+pub const PLAYER_JUMP_VELOCITY: f32 = 17.5;
+pub const PLAYER_DOUBLE_JUMP_VELOCITY: f32 = 16.0;
 pub const PLAYER_GRAVITY: f32 = 24.0;
 pub const PLAYER_MAX_AIR_JUMPS: u8 = 1;
 
