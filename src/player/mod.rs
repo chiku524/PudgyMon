@@ -40,11 +40,11 @@ use crate::{
 pub const HOST_OWNER_ID: u64 = 0;
 
 /// Extra yaw on character GLB children so mesh forward matches Bevy −Z.
-/// Pink/stylized Tripo exports face +X; water Studio rig faces +Z.
+/// Studio Tripo rigs (water / pink) face +Z; older shared-rig exports face +X.
 fn character_mesh_yaw_offset(model_id: &str) -> f32 {
     match model_id {
-        // glTF +Z forward → need 180° so local +Z aligns with parent −Z (movement).
-        "char_pudgy_water_01" => std::f32::consts::PI,
+        // glTF +Z forward → 180° so local +Z aligns with parent −Z (movement).
+        "char_pudgy_water_01" | "char_pudgy_pink_01" => std::f32::consts::PI,
         // glTF +X forward → +90° maps +X onto parent −Z.
         _ => std::f32::consts::FRAC_PI_2,
     }

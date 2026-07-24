@@ -5,20 +5,20 @@ Chunky party creatures for **PudgyMon: Party Saga**. One shared base figure, spe
 ## Playable roster
 
 ### `char_pudgy_pink_01` — Pink Creature
-- Soft stylized pink cartoon creature (user-optimized Tripo download)
-- **Skinned** shared Pudgy armature + clips (`idle`, `walk`, `run`, `jump`, `emote_wave`, `emote_dance`)
-- Game-res mesh (~100k faces), opaque JPEG, accessory sockets on bones
+- Soft stylized pink cartoon creature (Studio-authored armature + clips)
+- Clips: `idle`, `walk`, `run`, `jump`, `emote_wave` (+ hold `emote_dance`)
+- Game-res mesh (~400k faces after UV simplify), opaque JPEG, accessory sockets on bones
 - GLB: `assets/models/char_pudgy_pink_01/char_pudgy_pink_01.glb`
-- Rebuild: `python scripts/rig_and_animate_pudgy.py --asset-id char_pudgy_pink_01`
+- Rebuild: `python scripts/import_rigged_character_glb.py --src "<download>.glb" --asset-id char_pudgy_pink_01`
 
 ### `char_pudgy_stylized_01` — Cartoon Creature
-- Soft stylized cartoon creature (same shared rig + clip set as pink)
+- Soft stylized cartoon creature (legacy shared stubby rig + clip set)
 - GLB: `assets/models/char_pudgy_stylized_01/char_pudgy_stylized_01.glb`
 - Rebuild: `python scripts/rig_and_animate_pudgy.py --asset-id char_pudgy_stylized_01`
 
 ### `char_pudgy_water_01` — Water Creature
-- Ocean / water Pudgy with **Studio-authored** walk + run (own armature; not the shared stubby rig)
-- Clips remapped to contract names (`idle`, `walk`, `run`, plus hold placeholders for jump/emotes)
+- Ocean / water Pudgy with Studio-authored armature (same family as pink)
+- Clips: `idle`, `walk`, `run` (+ hold jump/emotes when missing from pack)
 - GLB: `assets/models/char_pudgy_water_01/char_pudgy_water_01.glb`
 - Rebuild: `python scripts/import_rigged_character_glb.py --src "<download>.glb" --asset-id char_pudgy_water_01`
 

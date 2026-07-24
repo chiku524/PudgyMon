@@ -10,8 +10,8 @@ Related: [CHARACTERS.md](CHARACTERS.md) · [STUDIO_ASSETS.md](STUDIO_ASSETS.md) 
 
 | What | Drop path | Then |
 |------|-----------|------|
-| Pink Pudgy | `assets/models/char_pudgy_pink_01/char_pudgy_pink_01.glb` | `python scripts/import_dense_character_glb.py … --asset-id char_pudgy_pink_01` |
-| Cartoon Pudgy | `assets/models/char_pudgy_stylized_01/char_pudgy_stylized_01.glb` | same import path |
+| Pink Pudgy | `assets/models/char_pudgy_pink_01/char_pudgy_pink_01.glb` | `python scripts/import_rigged_character_glb.py … --asset-id char_pudgy_pink_01` |
+| Cartoon Pudgy | `assets/models/char_pudgy_stylized_01/char_pudgy_stylized_01.glb` | `python scripts/import_dense_character_glb.py` then `rig_and_animate_pudgy.py` |
 | Water Pudgy | `assets/models/char_pudgy_water_01/char_pudgy_water_01.glb` | `python scripts/import_rigged_character_glb.py … --asset-id char_pudgy_water_01` |
 | Species skin | `assets/models/<species_id>/<species_id>.glb` | Same scale as base; see CHARACTERS.md |
 | Accessories | `assets/models/acc_hat_*/…`, `acc_necklace_*`, `acc_shoes_*`, … | Register; equip via `PlayerVisualSpec.accessories` |

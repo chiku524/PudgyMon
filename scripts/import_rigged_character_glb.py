@@ -166,7 +166,8 @@ if arm.animation_data is None:
     arm.animation_data_create()
 
 tracks = list(arm.animation_data.nla_tracks)
-# Prefer length heuristic: longer cycle = walk, shorter = run.
+# Length heuristic (longest → shortest) mapped to party contract names.
+# Studio packs vary: 5 clips ≈ idle/emote/jump/walk/run; 3 ≈ idle/walk/run.
 strips_meta = []
 for t in tracks:
     for s in t.strips:
@@ -174,12 +175,22 @@ for t in tracks:
         strips_meta.append((length, t, s))
 strips_meta.sort(key=lambda x: -x[0])
 
+_CONTRACT_BY_COUNT = {
+    1: ("walk",),
+    2: ("walk", "run"),
+    3: ("idle", "walk", "run"),
+    4: ("idle", "jump", "walk", "run"),
+    5: ("idle", "emote_wave", "jump", "walk", "run"),
+    6: ("idle", "emote_dance", "emote_wave", "jump", "walk", "run"),
+}
+names = _CONTRACT_BY_COUNT.get(
+    len(strips_meta),
+    ("idle", "emote_dance", "emote_wave", "jump", "walk", "run")[: len(strips_meta)],
+)
 rename_plan = {}
-if len(strips_meta) >= 2:
-    rename_plan[strips_meta[0][1].name] = "walk"
-    rename_plan[strips_meta[1][1].name] = "run"
-elif len(strips_meta) == 1:
-    rename_plan[strips_meta[0][1].name] = "walk"
+for name, (length, track, _strip) in zip(names, strips_meta):
+    rename_plan[track.name] = name
+    print("MAP_CLIP", track.name, f"len={length:.0f}", "->", name)
 
 for t in tracks:
     new_name = rename_plan.get(t.name)
@@ -214,7 +225,7 @@ def zero_root_motion_location(action, bone_names=("Root", "Hip", "Pelvis", "Hips
     except Exception as err:
         print("ZERO_ROOT_LOC_ERR", action.name, err)
 
-for clip_name in ("walk", "run"):
+for clip_name in ("walk", "run", "jump", "idle", "emote_wave", "emote_dance"):
     action = bpy.data.actions.get(clip_name)
     if action:
         zero_root_motion_location(action)
