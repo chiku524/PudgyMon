@@ -52,9 +52,10 @@ fn character_mesh_yaw_offset(model_id: &str) -> f32 {
         | "oceanic_pudgymon_01"
         | "char_pudgy_forest_01"
         | "char_pudgy_lava_01"
+        | "char_pudgy_sky_01"
         | "char_pudgy_water_01"
         | "char_pudgy_pink_01" => std::f32::consts::PI,
-        // Stubby contract (sky Tripo import until Studio-rigged): glTF +X forward → +90°.
+        // Legacy stubby / +X-forward exports → +90°.
         _ => std::f32::consts::FRAC_PI_2,
     }
 }

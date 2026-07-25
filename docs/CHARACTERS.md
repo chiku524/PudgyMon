@@ -12,7 +12,7 @@ Selectable crew matches [STUDIO_PROMPTS.md](STUDIO_PROMPTS.md) Priority 0 (**5 c
 | `oceanic_pudgymon_01` | Ocean Pudgy | Ocean species — Studio locomotion + emotes |
 | `char_pudgy_forest_01` | Forest Pudgy | Forest/leaf — Studio 41-bone rig + walk/run clips |
 | `char_pudgy_lava_01` | Lava Pudgy | Lava — Studio 41-bone rig + walk/run clips |
-| `char_pudgy_sky_01` | Sky Pudgy | Sky Tripo — stubby re-rig + height-scaled clips |
+| `char_pudgy_sky_01` | Sky Pudgy | Sky Tripo mesh on Studio 41-bone (lava donor clips) |
 
 Default crew id: [`data/player_defaults.json`](../data/player_defaults.json). Roster: [`data/characters/roster.json`](../data/characters/roster.json). Switch live in Esc Nest → **Characters**.
 
@@ -27,7 +27,10 @@ python scripts/sync_studio_prompt_assets.py
 # Pre-rigged Studio body (41-bone + NLA) → party clip names + Bevy-safe GLB
 python scripts/import_rigged_character_glb.py --src path.glb --asset-id char_pudgy_forest_01
 
-# Static body → stubby rig + clips (sky / bodies without Studio animation)
+# Static mesh + donor Studio rig/clips (when Tripo didn't ship animation)
+python scripts/bind_mesh_to_studio_rig.py --mesh sky.glb --donor char_pudgy_lava_01 --asset-id char_pudgy_sky_01
+
+# Static body → stubby rig + clips (legacy fallback)
 python scripts/auto_rig_glb.py --src path.glb --asset-id char_pudgy_sky_01 --force stubby
 
 # Copy clips between same-rig Studio bodies
