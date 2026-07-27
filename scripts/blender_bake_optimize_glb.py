@@ -3,11 +3,14 @@
 
 Restores from `.glb.pre_opt` when present, then runs Blender:
   - Static props/acc/env: voxel remesh → decimate → smart UV → bake DIFFUSE → toon mat
-  - Skinned characters: hole-fill + mild decimate (keeps weights/clips/UVs)
+  - Skinned characters: prefer `scripts/blender_char_optimize_glb.py` (remesh + bake +
+    weight transfer). This script's skinned branch only hole-fills + mild-decimates and
+    can still tear Tripo topology.
 
 Usage:
   python scripts/blender_bake_optimize_glb.py --batch assets/models --glob "*/*.glb" --from-pre-opt
   python scripts/blender_bake_optimize_glb.py assets/models/env_nest_bench_01/env_nest_bench_01.glb --from-pre-opt
+  python scripts/blender_char_optimize_glb.py --all --from-pre-opt
 """
 
 from __future__ import annotations

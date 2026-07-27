@@ -57,9 +57,15 @@ python scripts/blender_bake_optimize_glb.py assets/models/env_nest_bench_01/env_
 ```
 
 - **Static props / accessories / env:** voxel remesh → ~6–10k tris → bake painted diffuse → matte toon material  
-- **Skinned characters:** hole-fill + mild decimate (keeps weights/clips); do not remesh  
+- **Skinned characters:** use the dedicated remesh + bake + **weight-transfer** path (keeps armature clips, closed mesh):
 
-Fallback UV-only decimate (no bake): `scripts/blender_decimate_glb.py` — can leave holes on Tripo topology; prefer bake-optimize.
+```bash
+python scripts/blender_char_optimize_glb.py --all --from-pre-opt
+```
+
+Do not skin-preserve Decimate characters alone — Tripo topology tears into holes. The char path remeshes a cage, bakes candy diffuse, then transfers `VGROUP_WEIGHTS` from the dense donor.
+
+Fallback UV-only decimate (no bake): `scripts/blender_decimate_glb.py` — can leave holes on Tripo topology; prefer bake-optimize (props) / char-optimize (skins).
 ## Place in a room (required for playable)
 
 Edit the vault JSON under `data/rooms/` (or `arena.json` for the persistent shell).
