@@ -175,18 +175,21 @@ for t in tracks:
         strips_meta.append((length, t, s))
 strips_meta.sort(key=lambda x: -x[0])
 
+# Length heuristic (longest → shortest). Studio 5-packs put the long looping
+# performance first — that is emote_dance, NOT idle. Rest-pose idle is synthesized
+# below via ensure_hold_clip when missing.
 _CONTRACT_BY_COUNT = {
     1: ("walk",),
     2: ("walk", "run"),
     # Packs without a long ambient idle: longest performance clip + locomotion.
     3: ("emote_scared", "walk", "run"),
-    4: ("idle", "jump", "walk", "run"),
-    5: ("idle", "emote_wave", "jump", "walk", "run"),
-    6: ("idle", "emote_dance", "emote_wave", "jump", "walk", "run"),
+    4: ("emote_dance", "jump", "walk", "run"),
+    5: ("emote_dance", "emote_wave", "jump", "walk", "run"),
+    6: ("emote_dance", "idle", "emote_wave", "jump", "walk", "run"),
 }
 names = _CONTRACT_BY_COUNT.get(
     len(strips_meta),
-    ("idle", "emote_dance", "emote_wave", "jump", "walk", "run")[: len(strips_meta)],
+    ("emote_dance", "idle", "emote_wave", "jump", "walk", "run")[: len(strips_meta)],
 )
 rename_plan = {}
 for name, (length, track, _strip) in zip(names, strips_meta):

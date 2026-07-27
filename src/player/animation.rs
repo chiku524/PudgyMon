@@ -30,6 +30,9 @@ pub const EMOTE_SLOT_COUNT: usize = 5;
 const IDLE_CROSSFADE: Duration = Duration::from_millis(520);
 const CROSSFADE: Duration = Duration::from_millis(180);
 const WALK_SPEED_EPS: f32 = 0.05;
+/// How long the avatar must stay still before the looping `idle` clip starts.
+/// Until then locomotion is frozen in place — no auto-emote.
+const IDLE_SETTLE_SECS: f32 = 3.0;
 
 #[derive(Component, Debug, Clone)]
 pub struct CrewAnimationSetup {
@@ -70,7 +73,8 @@ pub struct CrewAnimPlayback {
     pub library: Vec<CrewEmoteDef>,
     pub lock_until: f32,
     pub player_entity: Entity,
-    /// Elapsed time when the avatar last became still (unused settle; kept for debug).
+    /// Elapsed seconds when the avatar last became grounded-and-still.
+    /// `None` while moving / airborne / emoting. Idle starts after [`IDLE_SETTLE_SECS`].
     pub still_since: Option<f32>,
     /// Last `PlayerMotion::jump_count` we played a jump clip for.
     pub last_jump_count: u32,
@@ -493,8 +497,24 @@ fn choose_crew_anim_kind(
             continue;
         }
 
-        // Keys released — stop locomotion immediately and ease into idle.
-        anim.still_since = None;
+        // Grounded and still — never auto-play an emote. Settle briefly, then idle.
+        if anim.still_since.is_none() {
+            anim.still_since = Some(now);
+            // Leaving locomotion / a finished one-shot: freeze in place until idle settles.
+            if matches!(
+                anim.kind,
+                CrewAnimKind::Walk | CrewAnimKind::Run | CrewAnimKind::Jump | CrewAnimKind::Emote(_)
+            ) {
+                anim.applied = None;
+            }
+        }
+
+        let still_for = now - anim.still_since.unwrap_or(now);
+        if still_for < IDLE_SETTLE_SECS {
+            // Hold the current non-idle clip frozen; idle starts only after the settle window.
+            continue;
+        }
+
         if anim.kind != CrewAnimKind::Idle {
             anim.kind = CrewAnimKind::Idle;
             anim.applied = None;
@@ -504,12 +524,28 @@ fn choose_crew_anim_kind(
 
 fn apply_crew_anim_kind(
     mut commands: Commands,
+    time: Res<Time>,
     bindings: Res<crate::settings::EmoteBindings>,
     mut visuals: Query<(Entity, &mut CrewAnimPlayback)>,
     mut players: Query<(&mut AnimationPlayer, &mut AnimationTransitions)>,
 ) {
+    let now = time.elapsed_secs();
     for (entity, mut anim) in &mut visuals {
+        let settling = anim
+            .still_since
+            .is_some_and(|since| now - since < IDLE_SETTLE_SECS)
+            && !matches!(anim.kind, CrewAnimKind::Idle)
+            && now >= anim.lock_until;
+
         if anim.applied == Some(anim.kind) {
+            // Keep locomotion frozen while waiting for the idle settle timer.
+            if settling {
+                if let Ok((mut player, _)) = players.get_mut(anim.player_entity) {
+                    for (_, playing) in player.playing_animations_mut() {
+                        playing.set_speed(0.0);
+                    }
+                }
+            }
             continue;
         }
         let Ok((mut player, mut transitions)) = players.get_mut(anim.player_entity) else {
@@ -526,6 +562,10 @@ fn apply_crew_anim_kind(
             for (_, playing) in player.playing_animations_mut() {
                 playing.set_speed(0.2);
             }
+        } else if settling {
+            for (_, playing) in player.playing_animations_mut() {
+                playing.set_speed(0.0);
+            }
         } else {
             for (_, playing) in player.playing_animations_mut() {
                 playing.set_speed(1.0);
@@ -535,7 +575,11 @@ fn apply_crew_anim_kind(
         let fade = if to_idle { IDLE_CROSSFADE } else { CROSSFADE };
         let node = anim.node(anim.kind, &bindings);
         let active = transitions.play(&mut player, node, fade);
-        active.set_speed(1.0);
+        if settling {
+            active.set_speed(0.0);
+        } else {
+            active.set_speed(1.0);
+        }
         if anim.loops(anim.kind, &bindings) {
             active.repeat();
         }
