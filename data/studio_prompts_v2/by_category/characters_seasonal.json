@@ -1,0 +1,84 @@
+{
+  "category": "characters_seasonal",
+  "count": 6,
+  "assets": [
+    {
+      "asset_id": "char_pudgy_ocean_winter_01",
+      "category": "characters_seasonal",
+      "priority": 0,
+      "kind": "character",
+      "label": "Ocean winter",
+      "prompt": "Stylized cartoon 3D PudgyMon Party Saga. Soft Pok\u00e9mon/Kirby painted matte look \u2014 NOT clay, vinyl, shiny plastic, or photoreal. Match shared base: ~1.2 m, stubby equal limbs, round dumpling torso, oversized head, A-pose arms out feet flat, floor pivot, faces camera-forward. Clear wear volumes (crown, neck, feet, back, face, hands) \u2014 no baked accessories. Single character, idle A-pose only, no weapons/text/plinth, family-friendly, low-mid poly. Only biome differs: ocean fins plus soft snow freckles, teal/white candy palette.",
+      "target_height": 1.2,
+      "target_width": null,
+      "slot": null,
+      "notes": "Seasonal species skin",
+      "job_batch": "characters"
+    },
+    {
+      "asset_id": "char_pudgy_forest_autumn_01",
+      "category": "characters_seasonal",
+      "priority": 0,
+      "kind": "character",
+      "label": "Forest autumn",
+      "prompt": "Stylized cartoon 3D PudgyMon Party Saga. Soft Pok\u00e9mon/Kirby painted matte look \u2014 NOT clay, vinyl, shiny plastic, or photoreal. Match shared base: ~1.2 m, stubby equal limbs, round dumpling torso, oversized head, A-pose arms out feet flat, floor pivot, faces camera-forward. Clear wear volumes (crown, neck, feet, back, face, hands) \u2014 no baked accessories. Single character, idle A-pose only, no weapons/text/plinth, family-friendly, low-mid poly. Only biome differs: leaf tufts in warm orange-lime candy, soft maple freckles.",
+      "target_height": 1.2,
+      "target_width": null,
+      "slot": null,
+      "notes": "Seasonal species skin",
+      "job_batch": "characters"
+    },
+    {
+      "asset_id": "char_pudgy_lava_party_01",
+      "category": "characters_seasonal",
+      "priority": 0,
+      "kind": "character",
+      "label": "Lava party",
+      "prompt": "Stylized cartoon 3D PudgyMon Party Saga. Soft Pok\u00e9mon/Kirby painted matte look \u2014 NOT clay, vinyl, shiny plastic, or photoreal. Match shared base: ~1.2 m, stubby equal limbs, round dumpling torso, oversized head, A-pose arms out feet flat, floor pivot, faces camera-forward. Clear wear volumes (crown, neck, feet, back, face, hands) \u2014 no baked accessories. Single character, idle A-pose only, no weapons/text/plinth, family-friendly, low-mid poly. Only biome differs: ember freckles plus tiny party sparkles, coral-orange/gold candy palette; no fire.",
+      "target_height": 1.2,
+      "target_width": null,
+      "slot": null,
+      "notes": "Seasonal species skin",
+      "job_batch": "characters"
+    },
+    {
+      "asset_id": "char_pudgy_sky_sunset_01",
+      "category": "characters_seasonal",
+      "priority": 0,
+      "kind": "character",
+      "label": "Sky sunset",
+      "prompt": "Stylized cartoon 3D PudgyMon Party Saga. Soft Pok\u00e9mon/Kirby painted matte look \u2014 NOT clay, vinyl, shiny plastic, or photoreal. Match shared base: ~1.2 m, stubby equal limbs, round dumpling torso, oversized head, A-pose arms out feet flat, floor pivot, faces camera-forward. Clear wear volumes (crown, neck, feet, back, face, hands) \u2014 no baked accessories. Single character, idle A-pose only, no weapons/text/plinth, family-friendly, low-mid poly. Only biome differs: cloud tufts with peach/rose candy sunset palette.",
+      "target_height": 1.2,
+      "target_width": null,
+      "slot": null,
+      "notes": "Seasonal species skin",
+      "job_batch": "characters"
+    },
+    {
+      "asset_id": "char_pudgy_ocean_festival_01",
+      "category": "characters_seasonal",
+      "priority": 0,
+      "kind": "character",
+      "label": "Ocean festival",
+      "prompt": "Stylized cartoon 3D PudgyMon Party Saga. Soft Pok\u00e9mon/Kirby painted matte look \u2014 NOT clay, vinyl, shiny plastic, or photoreal. Match shared base: ~1.2 m, stubby equal limbs, round dumpling torso, oversized head, A-pose arms out feet flat, floor pivot, faces camera-forward. Clear wear volumes (crown, neck, feet, back, face, hands) \u2014 no baked accessories. Single character, idle A-pose only, no weapons/text/plinth, family-friendly, low-mid poly. Only biome differs: soft fins plus confetti freckles, teal/coral festival palette.",
+      "target_height": 1.2,
+      "target_width": null,
+      "slot": null,
+      "notes": "Seasonal species skin",
+      "job_batch": "characters"
+    },
+    {
+      "asset_id": "char_pudgy_forest_bloom_01",
+      "category": "characters_seasonal",
+      "priority": 0,
+      "kind": "character",
+      "label": "Forest bloom",
+      "prompt": "Stylized cartoon 3D PudgyMon Party Saga. Soft Pok\u00e9mon/Kirby painted matte look \u2014 NOT clay, vinyl, shiny plastic, or photoreal. Match shared base: ~1.2 m, stubby equal limbs, round dumpling torso, oversized head, A-pose arms out feet flat, floor pivot, faces camera-forward. Clear wear volumes (crown, neck, feet, back, face, hands) \u2014 no baked accessories. Single character, idle A-pose only, no weapons/text/plinth, family-friendly, low-mid poly. Only biome differs: leaf tufts plus flower freckles, lime/pink candy palette.",
+      "target_height": 1.2,
+      "target_width": null,
+      "slot": null,
+      "notes": "Seasonal species skin",
+      "job_batch": "characters"
+    }
+  ]
+}

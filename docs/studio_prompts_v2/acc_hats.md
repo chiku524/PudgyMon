@@ -1,0 +1,3117 @@
+# Studio prompts V2 — Acc Hats
+
+**389** copy-paste jobs. Each fenced block is a complete prompt (≤1000 chars). Studio does not cache prior jobs.
+
+Parent index: [STUDIO_PROMPTS_V2.md](../STUDIO_PROMPTS_V2.md) · Pack 1: [STUDIO_PROMPTS.md](../STUDIO_PROMPTS.md)
+
+### `acc_hat_ocean_shell_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft ocean shell helmet hat, teal and cream candy, stubby ridges. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_forest_leaf_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft layered leaf crown hat, lime and olive candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_lava_ember_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rounded ember crown hat, coral-orange and charcoal candy; no fire. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_sky_cloud_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft puffy cloud beret, sky-blue and cream candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_ice_crown_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft frosty candy crown, pale blue and white, rounded points; not sharp ice. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_candy_scoop_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft ice-cream scoop hat with sprinkle rim, pink and cream. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_desert_cactus_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: cute stubby cactus hat with soft spines as candy nubs, sand and teal. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_meadow_wreath_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft flower wreath hat, pink and lime candy petals. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_storm_cap_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft thundercloud cap with tiny candy bolt, indigo and cream; not scary. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_crystal_tiara_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rounded crystal tiara, teal and lilac candy gems. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_berry_bowl_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft berry-bowl hat overflowing with candy berries, magenta and cream. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_bubble_helm_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft translucent-look bubble helmet (matte painted), aqua and pink. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_aurora_halo_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft aurora ribbon halo hat, mint and violet candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_honey_pot_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft honey-pot hat with candy drip rim, amber and cream. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_mint_leaf_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft mint-leaf beret, cool green and white candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_night_moon_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft crescent-moon hat, indigo and cream candy; cute not scary. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_race_helmet_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: chunky soft racing helmet with cyan speed stripe, rounded toy look. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_vibe_sun_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft smiling sun-disk hat, yellow and orange candy glow. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_shooter_star_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized star beret, pink and magenta candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_party_top_01` · height **0.34** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: chunky candy top hat with coral band and blank face (no text). Pivot at crown wear origin. About 0.34 m tall.
+```
+
+### `acc_hat_bowler_party_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft round bowler hat with star pin, gold and coral. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_visor_racer_01` · height **0.14** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft candy racing visor, cyan and white. Pivot at crown wear origin. About 0.14 m tall.
+```
+
+### `acc_hat_bandana_party_01` · height **0.16** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft folded bandana hat, rainbow candy stripes. Pivot at crown wear origin. About 0.16 m tall.
+```
+
+### `acc_hat_earmuff_cloud_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: connected soft cloud earmuffs as one hat mesh, cream and sky. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_frog_hood_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft friendly frog hood (hood only, no face/body), lime candy. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_bunny_hood_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft bunny-ear hood (hood only), cream and pink candy. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_cat_hood_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft cat-ear beanie (beanie only), coral and cream. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_dino_hood_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby dino-spike hood (hood only), teal candy. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_wizard_cute_01` · height **0.34** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby wizard hat with star tip, purple and cream; cute not scary. Pivot at crown wear origin. About 0.34 m tall.
+```
+
+### `acc_hat_pirate_cute_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rounded pirate hat with candy plume, indigo and coral; family-friendly. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_safari_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft safari hat with rounded brim, sand and olive candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_bucket_beach_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft beach bucket hat, aqua and yellow candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_pom_rainbow_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft beanie with oversized rainbow pom-pom, multi candy colors. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_halo_angel_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft candy angel halo ring hat, cream and gold. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_horn_candy_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: pair of soft candy party horns as one hat mesh, coral and gold. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_antler_soft_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby candy antlers hat, cream and coral. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_tophat_mini_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: tiny soft mini top hat on a clip base, black and gold candy matte. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_flat_cap_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft newsboy flat cap, teal and cream candy. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_beret_artist_01` · height **0.16** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft artist beret, magenta and cream. Pivot at crown wear origin. About 0.16 m tall.
+```
+
+### `acc_hat_crown_gold_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rounded gold candy crown with blank gem faces, coral accents. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_crown_silver_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rounded silver-candy crown with teal gems, matte not chrome. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_crown_rainbow_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rainbow candy crown with stubby points. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_helmet_star_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft star-knight helmet toy, pink and cream; not military. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_helmet_bubble_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft bubble-knight helmet toy, aqua candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_cap_trucker_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft candy trucker cap with blank foam front, yellow and cyan. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_cap_snap_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft snapback candy cap with speed stripe, white and coral. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_witch_cute_01` · height **0.34** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby witch hat with star buckle, purple and cream; cute. Pivot at crown wear origin. About 0.34 m tall.
+```
+
+### `acc_hat_hat_santa_cute_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby santa hat, coral and cream; party not holiday-cluttered. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_elf_cute_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft elf hat with curled tip, lime and cream. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_pumpkin_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rounded pumpkin hat, orange and cream; cute Jack blank face no carve scary. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_heart_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized heart beret, pink and cream candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_clover_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft four-leaf clover hat, lime candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_egg_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft speckled egg shell hat, pastel cream and coral. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_gift_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft gift-box hat with candy bow, coral and gold. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_lamp_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft party lampshade hat, yellow and teal candy. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_teapot_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft teapot hat with stubby spout, cream and coral. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_cupcake_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft cupcake hat with frosting swirl, pink and cream. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_donut_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft frosted donut hat with sprinkles, coral and cream. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_waffle_01` · height **0.34** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft waffle cone hat with scoop top, amber and pink. Pivot at crown wear origin. About 0.34 m tall.
+```
+
+### `acc_hat_hat_sushi_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft sushi-roll hat, teal and cream candy; cute food toy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_taco_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft taco hat with candy filling nubs, yellow and coral. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_burger_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft burger hat with candy layers, warm browns and green (matte). Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_pizza_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft pizza-slice hat, coral and cream candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_banana_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft banana peel hat, yellow and cream candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_mushroom_red_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft red mushroom-cap hat with cream spots. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_mushroom_blue_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft blue mushroom-cap hat with cream spots. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_acorn_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft acorn hat, warm brown and cream candy matte. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_pine_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft pinecone hat with rounded scales, olive and cream. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_sunflower_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft sunflower hat with big petals, yellow and brown candy. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_rose_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rose blossom hat, pink candy petals. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_tulip_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft tulip cup hat, coral and green candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_lotus_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft lotus bloom hat, cream and lilac candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_lightning_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rounded lightning-bolt hat, yellow and indigo candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_raindrop_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft raindrop hat, aqua and white candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_snowflake_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rounded snowflake hat, white and sky candy; not sharp. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_comet_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft comet hat with stubby trail, gold and indigo candy. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_planet_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft planet hat with candy ring, teal and cream. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_rocket_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby toy rocket hat, coral and cyan candy; family toy. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_ufo_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft UFO saucer hat, silver-candy matte and teal lights. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_robot_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rounded robot dome hat, cyan and cream; cute toy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_tv_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft retro TV hat with blank screen, cream and coral. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_boombox_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft boombox hat, magenta and yellow candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_headphones_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized headphone hat (band+cups as one mesh), indigo and coral. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_camera_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft toy camera hat, cream and teal candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_trophy_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft mini trophy cup hat, gold candy matte and coral. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_medal_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized medal hat on ribbon base, gold and cyan. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_flag_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft checkered race flag hat, cyan and white candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_whistle_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized whistle hat, yellow and coral candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_megaphone_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft megaphone hat, coral and cream candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_confetti_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft confetti-burst hat with stubby streamers, rainbow candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_balloon_01` · height **0.34** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft balloon-cluster hat, coral pink yellow candy balloons. Pivot at crown wear origin. About 0.34 m tall.
+```
+
+### `acc_hat_hat_party_popper_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft party-popper hat with candy streamers, yellow and pink. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_dice_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rounded dice hat with blank soft pips, cream and coral. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_controller_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft game-controller hat, teal and cream candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_arcade_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft arcade-cabinet hat, magenta and cyan candy. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_ticket_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft folded ticket hat, coral and cream with blank face. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_popcorn_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft popcorn bucket hat overflowing candy kernels, red-white stripes. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_cotton_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft cotton-candy swirl hat, pink and blue candy. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_lollipop_01` · height **0.34** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized lollipop hat, swirl coral and cream. Pivot at crown wear origin. About 0.34 m tall.
+```
+
+### `acc_hat_hat_gumball_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft gumball-machine dome hat, teal glass-look matte and cream. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_pretzel_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft pretzel hat, amber candy twist. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_cookie_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft cookie hat with candy chips, warm brown and cream. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_jam_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft jam-jar hat, magenta and cream candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_milk_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft milk-carton hat, cream and sky with blank face. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_toast_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft toast-slice hat with candy butter pat, cream and gold. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_egg_fried_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft sunny-side-up egg hat, cream and yellow candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_bacon_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft candy bacon-strip hat, coral and cream stripes. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_hat_avocado_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft avocado half hat with candy pit, lime and cream. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_strawberry_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft strawberry hat with leaf top, pink and green candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_blueberry_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft blueberry cluster hat, indigo and cream. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_watermelon_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft watermelon-slice hat, pink green and cream candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_kiwi_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft kiwi-slice hat, lime and cream candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_dragonfruit_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft dragonfruit hat, magenta and cream candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_peach_fruit_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft peach fruit hat with leaf, peach and green candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_cherry_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft twin-cherry hat on stems, coral and green candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_grape_bunch_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft grape-bunch hat, purple and green candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_lemon_fruit_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft lemon fruit hat with leaf, yellow and lime candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_coconut_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft coconut half hat, cream and brown candy matte. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_pineapple_01` · height **0.34** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft pineapple hat with leafy top, yellow and green candy. Pivot at crown wear origin. About 0.34 m tall.
+```
+
+### `acc_hat_hat_chili_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft chili-pepper hat, coral and green candy; cute not spicy-scary. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_olive_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft olive hat with toothpick bow, olive and cream. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_cheese_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft Swiss-cheese wedge hat, yellow candy with soft holes. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_bread_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft loaf-bread hat, warm cream candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_baguette_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft curved baguette hat, cream and gold candy. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_croissant_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft croissant hat, amber candy flaky look (matte painted). Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_macaron_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft macaron hat, pastel pink and cream sandwich. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_pudding_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft pudding cup hat with candy cream dollop, caramel and cream. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_jelly_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft jelly-mold hat, translucent-look matte coral candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_mochi_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft mochi cube hat, pastel pink candy. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_taiaki_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft fish-shaped pastry hat, gold and cream candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_onigiri_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft onigiri triangle hat with seaweed band, cream and charcoal candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_bento_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft bento-box hat with candy food nubs, cream and coral. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_ramen_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft ramen-bowl hat with candy noodle swirls, cream and coral. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_tea_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft teacup hat with candy steam nubs, cream and teal. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_coffee_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft coffee-cup hat with candy lid, cream and brown matte. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_smoothie_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft smoothie cup hat with candy straw, pink and teal. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_soda_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft soda-can hat with blank label, coral and cream. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_juice_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft juice-box hat with candy straw, orange and cream. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_water_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft water-bottle hat, aqua and cream candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_thermos_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft thermos bottle hat, yellow and teal candy. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_lantern_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft paper-lantern hat, coral and cream candy glow. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_candle_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft birthday-candle hat with soft flame candy tip (not real fire). Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_cake_slice_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft cake-slice hat with frosting, pink and cream. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_birthday_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft birthday party hat cone, rainbow candy stripes. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_graduation_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby graduation cap, indigo and gold candy; blank. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_nurse_cute_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rounded nurse hat, white and coral candy cross blank. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_hat_builder_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft toy hard-hat, yellow candy; family construction toy look. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_firefighter_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft toy firefighter helmet, coral candy; cute toy not realistic. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_astronaut_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby astronaut helmet dome, white and cyan candy. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_pilot_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft pilot cap with candy goggles band, teal and cream. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_sailor_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft sailor hat, white and navy candy matte. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_cowboy_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby cowboy hat, sand and coral candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_sombrero_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft wide sombrero, yellow and coral candy trim. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_fez_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft candy fez with tassel, coral and gold. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_turban_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft wrapped turban hat, teal and gold candy; respectful stylized toy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_kimono_ribbon_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized kimono bow hat, pink and cream candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_lei_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft flower lei worn as crown hat, rainbow candy petals. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_lei_shell_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft shell lei crown hat, teal and cream candy. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_viking_cute_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby viking hat with candy horns, cream and coral; cute. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_samurai_cute_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby samurai kabuto toy, teal and gold candy; family toy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_knight_cute_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby knight helm toy, silver-candy matte and coral plume. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_pharaoh_cute_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby pharaoh crown toy, gold and teal candy; respectful stylized. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_jester_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft jester hat with three stubby points and bells, rainbow candy. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_clown_cute_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft clown hat cone with pom, coral and cream; cute not creepy. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_mime_01` · height **0.16** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rounded mime beret, black and white candy matte. Pivot at crown wear origin. About 0.16 m tall.
+```
+
+### `acc_hat_hat_superhero_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby superhero cowl (mask-hat only), coral and cream. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_sidekick_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft sidekick ear-hood, yellow and cyan candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_ninja_cute_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft ninja headwrap hat, indigo candy; cute toy not scary. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_hat_spy_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft spy fedora, charcoal and cream candy matte. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_detective_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft deerstalker hat, brown and cream candy matte. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_librarian_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft book-stack hat, cream and coral candy spines blank. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_scientist_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft beaker hat with candy bubble nubs, teal and cream. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_gamer_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft headset-crown hat, magenta and cyan candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_streamer_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft glow-ring hat, coral and cream candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_influencer_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft phone-shaped hat with blank screen, cream and teal. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_tourist_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft camera-strap bucket combo hat, yellow and teal. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_camper_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft camping beanie with tiny candy patch, olive and cream. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_fisher_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft fishing hat with candy lure blank, teal and sand. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_gardener_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft gardener sun hat with candy flower pin, lime and cream. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_baker_01` · height **0.16** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft baker skullcap, white and coral candy. Pivot at crown wear origin. About 0.16 m tall.
+```
+
+### `acc_hat_hat_butcher_cute_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft striped butcher-toy hat, coral and cream; cute food party. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_waiter_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft waiter bow-hat, black and white candy matte. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_hat_mail_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft mail-bag cap, teal and cream candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_post_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stamp hat with blank face, coral and cream. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_train_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft toy train-engine hat, cyan and yellow candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_car_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby race-car hat, coral and cyan candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_bike_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft bike-helmet candy toy, yellow and teal. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_skate_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft skateboard hat deck-up, magenta and cyan candy. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_hat_surf_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft surfboard hat, aqua and coral candy. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_ski_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft ski-beanie with candy goggle band, white and sky. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_snowboard_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft snowboard hat, indigo and yellow candy. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_hat_soccer_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft soccer-ball hat, white and coral candy pentagons soft. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_basketball_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft basketball hat, coral and cream candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_tennis_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft tennis-ball hat, lime candy with soft curve. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_baseball_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft baseball-cap with blank front, white and coral. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_football_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft football helmet toy, brown and white candy; family toy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_hockey_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft hockey helmet toy, teal and cream candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_golf_01` · height **0.14** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft golf-visor hat, white and lime candy. Pivot at crown wear origin. About 0.14 m tall.
+```
+
+### `acc_hat_hat_bowling_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft bowling-ball hat with soft finger holes, indigo and cream. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_dart_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft dartboard hat with blank soft rings, coral and cream. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_chess_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft chess-king piece hat, cream and coral candy. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_pawn_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft chess-pawn hat, teal candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_card_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft playing-card hat with blank face, cream and coral. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_joker_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft joker-card hat cute, purple and gold candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_domino_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft domino tile hat with soft pips, cream and indigo. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_puzzle_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft puzzle-piece hat, yellow and teal candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_rubik_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rounded cube puzzle hat, rainbow candy faces blank. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_yoyo_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft yo-yo hat, coral and cream candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_kite_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft kite hat with stubby tail, cyan and yellow candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_pinwheel_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft pinwheel hat, rainbow candy blades. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_windmill_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby windmill hat, cream and teal candy. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_lighthouse_01` · height **0.34** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft lighthouse hat, coral and white candy stripes. Pivot at crown wear origin. About 0.34 m tall.
+```
+
+### `acc_hat_hat_castle_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby castle-turret hat, cream and coral candy. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_tent_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft camping-tent hat, yellow and teal candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_igloo_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft igloo dome hat, white and sky candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_pyramid_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rounded pyramid hat, sand and gold candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_temple_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby temple-roof hat, teal and cream candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_pagoda_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft pagoda-tier hat, coral and cream candy. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_totem_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft friendly totem-face hat blank cute, teal and coral. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_mask_tribal_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft friendly tribal-pattern hat blank, lime and cream; respectful stylized. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_feather_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft feather-plume hat, coral and cream candy. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_peacock_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft peacock-fan hat, teal and gold candy; cute. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_owl_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft owl-hood hat (hood only), cream and brown candy; cute. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_fox_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft fox-ear hood (hood only), coral and cream. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_bear_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft bear-ear beanie, warm brown and cream candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_panda_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft panda-ear beanie, cream and charcoal candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_penguin_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft penguin hood (hood only), indigo and cream candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_chick_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft chick hood (hood only), yellow and cream candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_duckling_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft duckling hood, yellow and orange candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_piglet_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft piglet-ear beanie, pink candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_lamb_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft lamb-ear beanie, cream candy fluff look (matte painted). Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_cow_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft cow-ear beanie with soft spots, cream and brown. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_horse_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft horse-ear beanie, brown and cream candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_unicorn_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft unicorn-horn hat with candy mane nubs, cream and pink. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_dragon_cute_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby dragon-horn hat, teal and coral candy; cute. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_phoenix_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft phoenix-plume hat, coral and gold candy; no real fire. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_griffin_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft griffin-ear hat, cream and gold candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_mermaid_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft mermaid-crown shell hat, teal and pink candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_trident_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby trident crown, gold and teal candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_anchor_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft anchor hat, navy and cream candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_wheel_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft ship-wheel hat, wood-candy brown and cream. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_compass_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft compass hat with blank face, gold and teal candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_map_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft folded map hat, cream and coral candy blank. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_binoculars_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft binoculars hat, teal and cream candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_telescope_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby telescope hat, indigo and gold candy. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_hourglass_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft hourglass hat, cream and coral candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_clock_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft clock hat with blank soft hands, cream and gold. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_alarm_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft alarm-clock hat, coral and cream candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_bell_big_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized bell hat, gold and cream candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_gong_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft gong hat, gold and teal candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_drum_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft drum hat, coral and cream candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_guitar_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby guitar hat, wood-candy and coral. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_piano_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft piano-key hat strip, cream and charcoal candy. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_hat_mic_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft microphone hat, silver-candy matte and coral. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_vinyl_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft vinyl-record hat, charcoal and coral candy. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_hat_cd_01` · height **0.16** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft disc hat with candy rainbow sheen matte, silver-candy. Pivot at crown wear origin. About 0.16 m tall.
+```
+
+### `acc_hat_hat_cassette_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft cassette-tape hat, yellow and cream candy. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_hat_radio_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft radio hat with candy dial, teal and coral. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_walkie_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft walkie-talkie hat, yellow and charcoal candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_phone_old_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rotary-phone hat, coral and cream candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_typewriter_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft typewriter hat, cream and coral candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_pencil_01` · height **0.34** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized pencil hat, yellow and pink candy eraser. Pivot at crown wear origin. About 0.34 m tall.
+```
+
+### `acc_hat_hat_crayon_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft crayon hat, rainbow candy wrapper. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_paintbrush_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft paintbrush hat with candy bristle tip, wood and coral. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_palette_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft paint-palette hat with candy blobs, cream and rainbow. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_scissors_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft toy scissors hat closed, teal and cream; blunt cute. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_ruler_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft ruler hat, yellow candy with blank marks. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_hat_globe_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft globe hat, teal and cream candy continents soft. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_atom_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft atom-orbit hat, cyan and cream candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_dna_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft DNA-helix hat, pink and teal candy twist. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_heart_pixel_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft pixel-heart hat, coral candy chunky pixels. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_star_pixel_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft pixel-star hat, yellow candy chunky pixels. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_gem_pixel_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft pixel-gem hat, teal candy chunky pixels. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_coin_pixel_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft pixel-coin hat, gold candy chunky pixels. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_sword_toy_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft toy sword hilt hat, coral and gold candy; blunt family toy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_shield_toy_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft toy shield hat, teal and cream candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_bow_toy_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft toy bow hat, wood-candy and coral string. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_wand_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby magic wand hat, gold and star tip candy. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_potion_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft potion-bottle hat with candy swirl, purple and teal. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_cauldron_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft cute cauldron hat, charcoal and green candy glow; not scary. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_crystal_ball_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft crystal-ball hat on stubby base, teal candy glow. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_tarot_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft tarot-card hat blank cute, indigo and gold candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_ouija_cute_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft planchette hat cute blank, cream and coral; playful not occult-scary. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_ghost_cute_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft ghost-sheet hat cute, cream candy; friendly not scary. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_bat_cute_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft bat-wing hat cute, indigo and cream; friendly. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_spider_cute_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft spider-charm hat cute, charcoal and coral; friendly toy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_web_cute_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft candy web beret, cream and teal; cute. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_skull_candy_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft candy skull hat cute blank smile, cream and pink; not scary. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_bone_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft candy bone hat, cream candy. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_zombie_cute_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft mismatched candy stitch hat, lime and cream; cute not gore. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_mummy_cute_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft bandage-wrap hat, cream candy; cute not scary. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_vampire_cute_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft vampire widow-peak hat, indigo and cream; cute. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_werewolf_cute_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft wolf-ear hat, brown and cream; cute. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_alien_cute_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft alien antenna hat, lime and cream candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_monster_cute_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft one soft-horn monster hat, teal and coral; cute. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_slime_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft slime-drip hat, lime candy translucent-look matte. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_goo_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft goo-blob hat, magenta candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_gelatin_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft gelatin cube hat, coral translucent-look matte. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_neon_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft neon-tube halo hat, cyan candy glow matte. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_glowstick_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft glowstick crown, rainbow candy sticks. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_disco_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft disco-ball hat, silver-candy facets matte not chrome mirror. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_mirror_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft hand-mirror hat, gold and cream candy blank face. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_comb_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized comb hat, coral candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_brush_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft hairbrush hat, pink and cream candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_soap_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft soap-bar hat with candy bubbles, cream and aqua. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_hat_sponge_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft sponge hat, yellow candy. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_towel_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft wrapped towel turban hat, coral and cream. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_shower_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft shower-cap hat, clear-look matte aqua candy. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_rubber_duck_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft rubber-duck hat, yellow candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_bathtub_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby bathtub hat, cream and coral candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_toilet_cute_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft cute toilet-lid hat joke prop, white and teal; tasteful silly. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_plunger_cute_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft plunger hat joke, coral and cream; silly party. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_boot_single_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized single boot hat, yellow candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_sock_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft mismatched sock hat, rainbow candy stripes. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_glove_single_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized mitten hat, coral candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_scarf_wrap_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft scarf-wrap hat, teal and cream candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_tie_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized necktie hat, indigo and coral candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_bowtie_big_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized bowtie hat, gold and coral candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_suspenders_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft suspenders-arch hat, yellow and cream candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_belt_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft coiled belt hat with candy buckle blank, brown and gold. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_watch_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized watch hat, gold and cream candy blank face. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_ring_big_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized gem ring hat, gold and teal candy. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_key_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oversized key hat, gold candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_lock_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft padlock hat, silver-candy and coral. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_safe_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby safe hat, charcoal and gold candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_piggy_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft piggy-bank hat, pink candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_wallet_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft wallet hat, brown and cream candy. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_hat_purse_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft purse hat, coral and gold candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_backpack_mini_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft mini backpack hat, teal and yellow candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_suitcase_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft suitcase hat, cream and coral candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_umbrella_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft open umbrella hat, yellow and teal candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_parasol_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft parasol hat, pink and cream candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_fan_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft folding fan hat open, coral and cream candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_flag_party_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft party pennant hat, rainbow candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_banner_mini_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft mini banner hat on posts, cyan and cream blank. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_ribbon_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft giant ribbon bow hat, magenta candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_gift_bow_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft gift-bow explosion hat, gold and coral candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_tag_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft price-tag hat blank, cream and coral. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_barcode_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft barcode-stripe hat blank, cream and charcoal. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_hat_qr_cute_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft chunky QR-look square hat blank cute pattern, cream and teal. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_wifi_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft wifi-signal arc hat, cyan candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_battery_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft battery hat, yellow and cream candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_plug_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft electrical-plug hat, coral and cream; toy safe look. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_lightbulb_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft lightbulb hat, yellow and cream candy glow. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_candle_jar_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft candle-jar hat, cream and coral candy soft flame tip. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_fireplace_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stubby fireplace mantel hat, coral and cream; no real fire. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_chimney_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft chimney hat with soft smoke puff nubs, brick-candy coral. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_roof_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft house-roof hat, teal and cream candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_door_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft door hat with candy knob, coral and cream. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_window_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft window-frame hat, teal and cream candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_fence_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft picket-fence hat arc, cream candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_mailbox_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft mailbox hat, coral and cream candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_hydrant_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft fire-hydrant hat, coral candy toy. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_traffic_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft traffic-light hat, charcoal with soft candy lights. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_stop_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft octagon stop-sign hat blank, coral candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_yield_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft yield-triangle hat blank, yellow candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_arrow_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft arrow-sign hat blank, cyan candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_parking_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft parking-meter hat, teal and cream candy. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_meter_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft coin-meter hat, gold and charcoal candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_gas_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft toy gas-pump hat, yellow and teal candy; cute. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_ev_01` · height **0.3** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft EV-charger hat, cyan and cream candy. Pivot at crown wear origin. About 0.30 m tall.
+```
+
+### `acc_hat_hat_solar_01` · height **0.18** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft solar-panel hat, indigo and cream candy. Pivot at crown wear origin. About 0.18 m tall.
+```
+
+### `acc_hat_hat_wind_01` · height **0.32** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft wind-turbine hat, white and teal candy. Pivot at crown wear origin. About 0.32 m tall.
+```
+
+### `acc_hat_hat_recycle_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft recycle-arrows loop hat, lime candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_leaf_eco_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft eco-leaf hat, green candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_earth_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft earth-globe hat, teal and green candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_moon_full_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft full-moon hat, cream candy crater soft. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_sun_simple_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft simple sun hat, yellow candy rays soft. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_eclipse_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft eclipse hat, indigo and gold candy ring. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_milky_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft milky-way swirl hat, indigo and cream candy. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_blackhole_cute_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft swirl portal hat cute, indigo and pink candy; not scary. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_portal_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft oval portal-frame hat, teal and magenta candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_wormhole_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft twisted ring hat, purple and cyan candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_dimension_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft stacked-square hat, rainbow candy frames. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_glitch_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft glitch-slice hat, magenta and cyan candy offsets. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_error_cute_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft error-popup hat blank cute, cream and coral. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_loading_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft loading-spinner hat, teal candy ring. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_cursor_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft mouse-cursor arrow hat, cream candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_pointer_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft hand-pointer hat, cream and coral candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_click_01` · height **0.2** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft click-ripple hat, cyan candy rings. Pivot at crown wear origin. About 0.20 m tall.
+```
+
+### `acc_hat_hat_like_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft thumbs-up hat, coral candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_love_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft double-heart hat, pink candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_fire_emoji_01` · height **0.26** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft cartoon fire emoji hat, coral and gold; no real fire. Pivot at crown wear origin. About 0.26 m tall.
+```
+
+### `acc_hat_hat_100_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft chunky 100 badge hat blank stylized, coral and cream. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_star_eyes_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft star-eyes emoji hat, yellow candy. Pivot at crown wear origin. About 0.22 m tall.
+```
+
+### `acc_hat_hat_sparkles_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft sparkles burst hat, gold and pink candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_zzz_01` · height **0.24** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft ZZZ sleep hat, indigo and cream candy. Pivot at crown wear origin. About 0.24 m tall.
+```
+
+### `acc_hat_hat_music_note_01` · height **0.28** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft music-note hat, magenta candy. Pivot at crown wear origin. About 0.28 m tall.
+```
+
+### `acc_hat_hat_eightbit_01` · height **0.22** · slot `hat`
+
+_Socket_Hat_
+
+```
+OBJECT ONLY — single isolated wearable prop on empty background. NO character, creature, mascot, head, face, body, limbs, mannequin, dummy, or avatar. NO one wearing it. Product turntable shot of the item alone. Stylized cartoon 3D game prop, soft matte candy colors, rounded toy edges, not clay, not glossy vinyl, not photoreal. Game-ready low poly. No base, plinth, or text. Item: soft 8-bit smile hat, cream and coral chunky pixels. Pivot at crown wear origin. About 0.22 m tall.
+```

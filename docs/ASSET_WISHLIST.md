@@ -2,7 +2,7 @@
 
 Stand-ins keep The Nest and stages playable. Replace these when dedicated Tripo meshes land — prefer swapping `asset_id` (and maybe `scale`) without renaming stable marker ids.
 
-**Copy-paste Tripo / Immersive Studio prompts:** [STUDIO_PROMPTS.md](STUDIO_PROMPTS.md)  
+**Copy-paste Tripo / Immersive Studio prompts:** [STUDIO_PROMPTS.md](STUDIO_PROMPTS.md) (core) · [STUDIO_PROMPTS_V2.md](STUDIO_PROMPTS_V2.md) (volume ~2500)  
 **Shared figure + accessory sockets:** [CHARACTERS.md](CHARACTERS.md)
 
 ---

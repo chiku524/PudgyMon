@@ -112,4 +112,4 @@ Older packs may use ComfyUI sidecars or placeholder meshes. Re-run Studio jobs w
 
 See [ASSET_WISHLIST.md](ASSET_WISHLIST.md) for Nest props, stage props, species skins, and accessory batches that still use stand-ins.
 
-**Ready-to-paste Immersive Studio / Tripo prompts:** [STUDIO_PROMPTS.md](STUDIO_PROMPTS.md)
+**Ready-to-paste Immersive Studio / Tripo prompts:** [STUDIO_PROMPTS.md](STUDIO_PROMPTS.md) (core ~47) · [STUDIO_PROMPTS_V2.md](STUDIO_PROMPTS_V2.md) (volume ~2500)

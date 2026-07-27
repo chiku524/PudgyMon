@@ -2,6 +2,8 @@
 
 Copy-paste prompts for [Immersive Labs Studio](https://github.com/chiku524/immersive.labs) / Tripo jobs.
 
+**Pack 2 (volume):** ~2500 additional assets — [STUDIO_PROMPTS_V2.md](STUDIO_PROMPTS_V2.md) · chapters in [`studio_prompts_v2/`](studio_prompts_v2/) · catalog [`data/studio_prompts_v2/catalog.json`](../data/studio_prompts_v2/catalog.json).
+
 **Important:** Studio does **not** cache prior prompts. Every job is independent. Each fenced block below is a **complete** prompt — paste it alone. Do not rely on a shared style block, a previous job, or a “prepend this” wrapper. **Hard limit: each prompt ≤ 1000 characters.**
 
 After generation → import → place (see [STUDIO_ASSETS.md](STUDIO_ASSETS.md)). Stand-in map: [ASSET_WISHLIST.md](ASSET_WISHLIST.md). Character + accessory contract: [CHARACTERS.md](CHARACTERS.md).
