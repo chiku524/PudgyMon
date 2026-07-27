@@ -74,11 +74,9 @@ pub fn load_studio_registry(mut commands: Commands) {
     }
 }
 
-/// True when `assets/models/{id}/{id}.glb` exists on disk.
-pub fn studio_asset_exists(registry: &StudioRegistry, asset_id: &str) -> bool {
-    let glb_path = registry.glb_asset_path(asset_id);
-    let full_path = format!("{}/assets/{glb_path}", env!("CARGO_MANIFEST_DIR"));
-    std::path::Path::new(&full_path).exists()
+/// True when `assets/models/{id}/{id}.glb` exists on disk (cached at process start).
+pub fn studio_asset_exists(_registry: &StudioRegistry, asset_id: &str) -> bool {
+    crate::data::studio_glb_on_disk(asset_id)
 }
 
 /// Spawns a GLB scene scaled from the registry, or returns `None` if the file is missing.

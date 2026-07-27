@@ -820,11 +820,7 @@ fn available_deco_ids(registry: Option<&StudioRegistry>) -> Vec<String> {
     let present: Vec<String> = EDITOR_DECO_IDS
         .iter()
         .filter(|id| {
-            let disk = format!(
-                "{}/assets/models/{id}/{id}.glb",
-                env!("CARGO_MANIFEST_DIR")
-            );
-            std::path::Path::new(&disk).is_file()
+            crate::data::studio_glb_on_disk(id)
                 || registry.map(|r| r.contains(id)).unwrap_or(false)
         })
         .map(|s| (*s).to_string())

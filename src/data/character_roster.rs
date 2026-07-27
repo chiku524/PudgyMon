@@ -69,11 +69,7 @@ impl CharacterRoster {
 }
 
 pub fn character_glb_exists(model_id: &str) -> bool {
-    let path = format!(
-        "{}/assets/models/{model_id}/{model_id}.glb",
-        env!("CARGO_MANIFEST_DIR")
-    );
-    Path::new(&path).is_file()
+    crate::data::studio_glb_on_disk(model_id)
 }
 
 pub fn load_character_roster(mut commands: Commands) {

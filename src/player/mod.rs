@@ -530,16 +530,13 @@ fn sync_player_visuals(
     visual_roots: Query<(), With<PlayerVisualRoot>>,
 ) {
     for (entity, color, visual, children, mounted) in &players {
-        let want_model = visual.and_then(|v| v.model_id.as_deref()).filter(|id| {
-            let disk = format!(
-                "{}/assets/models/{id}/{id}.glb",
-                env!("CARGO_MANIFEST_DIR")
-            );
-            std::path::Path::new(&disk).is_file()
-        });
-        let want_key = want_model.map(|s| s.to_string());
         // Remount only when the crew model id changes (or the visual root is missing).
         // Accessory-only PlayerVisualSpec edits must not wipe sockets / restart GLB loads.
+        // Existence uses a process-start cache (no per-frame disk I/O).
+        let want_model = visual
+            .and_then(|v| v.model_id.as_deref())
+            .filter(|id| crate::data::character_glb_exists(id));
+        let want_key = want_model.map(|s| s.to_string());
         if mounted.is_some_and(|m| m.0 == want_key) {
             let has_visual =
                 children.is_some_and(|kids| kids.iter().any(|c| visual_roots.contains(c)));
@@ -555,6 +552,11 @@ fn sync_player_visuals(
                 }
             }
         }
+
+        // Force accessory re-attach after a crew remount.
+        commands
+            .entity(entity)
+            .remove::<accessories::MountedAccessoryLoadout>();
 
         commands.entity(entity).insert((
             GameplayEntity,

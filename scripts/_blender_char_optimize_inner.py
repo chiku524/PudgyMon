@@ -353,20 +353,20 @@ def main() -> None:
             return "Root"
         return next(iter(bone_names)) if bone_names else ""
 
-    socket_bones = {
-        "Socket_Hat": _pick_bone("Head"),
-        "Socket_Face": _pick_bone("Head"),
-        "Socket_Necklace": _pick_bone("Spine02", "Spine01", "Waist", "NeckTwist01"),
-        "Socket_Back": _pick_bone("Spine02", "Spine01", "Waist"),
-        "Socket_Hands": _pick_bone("Spine01", "Waist", "Spine02"),
-        "Socket_Shoes": _pick_bone("Root", "Hip", "Pelvis"),
-    }
+        socket_bones = {
+            "Socket_Hat": _pick_bone("Head"),
+            "Socket_Face": _pick_bone("Head"),
+            "Socket_Necklace": _pick_bone("NeckTwist01", "NeckTwist02", "Spine02", "Spine01"),
+            "Socket_Back": _pick_bone("Spine02", "Spine01", "Waist"),
+            "Socket_Hands": _pick_bone("Spine01", "Waist", "Spine02"),
+            "Socket_Shoes": _pick_bone("Root", "Hip", "Pelvis"),
+        }
     socket_local = {
-        "Socket_Hat": (0.0, 0.0, 0.12),
-        "Socket_Face": (0.0, -0.08, 0.02),
-        "Socket_Necklace": (0.0, -0.04, 0.06),
-        "Socket_Back": (0.0, 0.08, 0.0),
-        "Socket_Hands": (0.0, 0.0, 0.0),
+        "Socket_Hat": (0.0, 0.10, 0.0),  # along bone (+Y)
+        "Socket_Face": (0.0, 0.02, -0.11),
+        "Socket_Necklace": (0.0, -0.02, -0.05),
+        "Socket_Back": (0.0, 0.04, 0.12),
+        "Socket_Hands": (0.0, -0.05, -0.18),
         "Socket_Shoes": (0.0, 0.0, 0.0),
     }
     for sname, bname in socket_bones.items():

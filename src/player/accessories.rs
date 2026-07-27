@@ -7,6 +7,7 @@ use bevy_replicon::prelude::*;
 use serde::{Deserialize, Serialize};
 
 use crate::{
+    data::studio_glb_on_disk,
     network::OwnedPlayer,
     player::{AccessorySlots, NetworkPlayer, PlayerVisualRoot, PlayerVisualSpec},
 };
@@ -76,11 +77,7 @@ impl AccessoryCatalog {
 }
 
 pub fn accessory_glb_exists(asset_id: &str) -> bool {
-    let path = format!(
-        "{}/assets/models/{asset_id}/{asset_id}.glb",
-        env!("CARGO_MANIFEST_DIR")
-    );
-    Path::new(&path).is_file()
+    studio_glb_on_disk(asset_id)
 }
 
 #[derive(Component, Debug, Clone)]
@@ -88,6 +85,14 @@ pub struct EquippedAccessoryVisual {
     pub slot: String,
     pub asset_id: String,
 }
+
+/// Marks that contract `Socket_*` empties have been ensured under this visual root.
+#[derive(Component, Debug, Clone, Copy, Default)]
+pub struct AccessorySocketsReady;
+
+/// Last loadout we fully synced onto sockets (skip redundant Update work).
+#[derive(Component, Debug, Clone, PartialEq, Eq, Default)]
+pub struct MountedAccessoryLoadout(pub AccessorySlots);
 
 #[derive(Event, Serialize, Deserialize, Clone, Debug)]
 pub struct EquipAccessoryRequest {
@@ -106,7 +111,17 @@ impl Plugin for AccessoriesPlugin {
         app.insert_resource(AccessoryCatalog::load(path))
             .add_client_event::<EquipAccessoryRequest>(Channel::Unordered)
             .add_observer(handle_equip_accessory)
-            .add_systems(Update, sync_accessory_meshes);
+            .add_systems(
+                Update,
+                (
+                    sync_accessory_meshes,
+                    retarget_pair_sockets.after(sync_accessory_meshes),
+                ),
+            )
+            .add_systems(
+                PostUpdate,
+                apply_wear_volume_scales.before(TransformSystems::Propagate),
+            );
     }
 }
 
@@ -173,8 +188,6 @@ pub fn apply_accessory_choice(
         }
     });
 
-    // Clearing a character-look slot restores the default crew body unless
-    // another character-look remains equipped in a different slot.
     let clearing_look = cleaned.is_none()
         && slot_value(&visual.accessories, slot)
             .is_some_and(|id| catalog.is_character_look(id));
@@ -228,25 +241,27 @@ fn socket_name(slot: &str) -> &'static str {
     }
 }
 
-/// Contract sockets + preferred bone parents (Studio 41-bone names) + local offset.
-/// Offsets match `import_rigged_character_glb.py` / `bind_mesh_to_studio_rig.py`.
+/// Contract sockets + preferred bone parents + bone-local offset (Bevy Y-up).
+///
+/// Hat/face sit on `Head` (Y along bone ≈ up the skull). Pair shoes/hands start
+/// on a torso/root bone and are retargeted each frame to the limb midpoint.
 const ACCESSORY_SOCKETS: &[(&str, &[&str], Vec3)] = &[
-    ("Socket_Hat", &["Head"], Vec3::new(0.0, 0.12, 0.0)),
-    ("Socket_Face", &["Head"], Vec3::new(0.0, 0.02, -0.08)),
+    ("Socket_Hat", &["Head"], Vec3::new(0.0, 0.1, 0.0)),
+    ("Socket_Face", &["Head"], Vec3::new(0.0, 0.02, -0.11)),
     (
         "Socket_Necklace",
-        &["Spine02", "Spine01", "Waist", "NeckTwist01"],
-        Vec3::new(0.0, 0.06, -0.04),
+        &["NeckTwist01", "NeckTwist02", "Spine02", "Spine01"],
+        Vec3::new(0.0, -0.02, -0.05),
     ),
     (
         "Socket_Back",
         &["Spine02", "Spine01", "Waist"],
-        Vec3::new(0.0, 0.0, 0.08),
+        Vec3::new(0.0, 0.04, 0.12),
     ),
     (
         "Socket_Hands",
         &["Spine01", "Waist", "Spine02"],
-        Vec3::ZERO,
+        Vec3::new(0.0, -0.05, -0.18),
     ),
     (
         "Socket_Shoes",
@@ -254,6 +269,10 @@ const ACCESSORY_SOCKETS: &[(&str, &[&str], Vec3)] = &[
         Vec3::ZERO,
     ),
 ];
+
+/// Bones collapsed when a covering accessory is worn (monolithic body mesh).
+const SHOE_HIDE_BONES: &[&str] = &["L_Foot", "R_Foot", "L_ToeBase", "R_ToeBase"];
+const HAND_HIDE_BONES: &[&str] = &["L_Hand", "R_Hand"];
 
 fn find_named(
     root: Entity,
@@ -278,22 +297,30 @@ fn find_named(
     None
 }
 
-/// Crew GLBs often ship armature + mesh without `Socket_*` empties. Spawn them
-/// under the matching bone so Esc → Wear can parent accessories.
 fn ensure_accessory_sockets(
     commands: &mut Commands,
     root: Entity,
     names: &Query<&Name>,
     children: &Query<&Children>,
-) {
+    transforms: &mut Query<&mut Transform>,
+) -> bool {
+    let mut ready = true;
     for (socket, bone_candidates, local) in ACCESSORY_SOCKETS {
-        if find_named(root, socket, names, children).is_some() {
+        if let Some(existing) = find_named(root, socket, names, children) {
+            // Refresh authored offsets for static sockets. Pair sockets are
+            // driven by `retarget_pair_sockets` instead.
+            if !matches!(*socket, "Socket_Shoes" | "Socket_Hands") {
+                if let Ok(mut xf) = transforms.get_mut(existing) {
+                    xf.translation = *local;
+                }
+            }
             continue;
         }
         let Some(bone) = bone_candidates
             .iter()
             .find_map(|b| find_named(root, b, names, children))
         else {
+            ready = false;
             continue;
         };
         commands.entity(bone).with_children(|p| {
@@ -303,7 +330,10 @@ fn ensure_accessory_sockets(
                 Visibility::default(),
             ));
         });
+        // Spawned via commands — visible next frame.
+        ready = false;
     }
+    ready
 }
 
 fn is_under(ancestor: Entity, node: Entity, children: &Query<&Children>) -> bool {
@@ -324,18 +354,104 @@ fn is_under(ancestor: Entity, node: Entity, children: &Query<&Children>) -> bool
     false
 }
 
-fn sync_accessory_meshes(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-    catalog: Res<AccessoryCatalog>,
-    registry: Option<Res<crate::data::StudioRegistry>>,
-    players: Query<(Entity, &PlayerVisualSpec, Option<&Children>), With<NetworkPlayer>>,
+/// Pair props (shoes / mittens) are authored as one mesh — keep the socket between
+/// the matching L/R bones so stance and animation stay centered.
+fn retarget_pair_sockets(
+    roots: Query<Entity, (With<PlayerVisualRoot>, With<AccessorySocketsReady>)>,
+    names: Query<&Name>,
+    children: Query<&Children>,
+    parents: Query<&ChildOf>,
+    global_xf: Query<&GlobalTransform>,
+    mut transforms: Query<&mut Transform>,
+) {
+    for root in &roots {
+        retarget_midpoint_socket(
+            root,
+            "Socket_Shoes",
+            "L_Foot",
+            "R_Foot",
+            true,
+            &names,
+            &children,
+            &parents,
+            &global_xf,
+            &mut transforms,
+        );
+        retarget_midpoint_socket(
+            root,
+            "Socket_Hands",
+            "L_Hand",
+            "R_Hand",
+            false,
+            &names,
+            &children,
+            &parents,
+            &global_xf,
+            &mut transforms,
+        );
+    }
+}
+
+fn retarget_midpoint_socket(
+    root: Entity,
+    socket_name: &str,
+    left: &str,
+    right: &str,
+    floor_y: bool,
+    names: &Query<&Name>,
+    children: &Query<&Children>,
+    parents: &Query<&ChildOf>,
+    global_xf: &Query<&GlobalTransform>,
+    transforms: &mut Query<&mut Transform>,
+) {
+    let (Some(sock), Some(l), Some(r)) = (
+        find_named(root, socket_name, names, children),
+        find_named(root, left, names, children),
+        find_named(root, right, names, children),
+    ) else {
+        return;
+    };
+    let Ok(lg) = global_xf.get(l) else {
+        return;
+    };
+    let Ok(rg) = global_xf.get(r) else {
+        return;
+    };
+    let mut mid = (lg.translation() + rg.translation()) * 0.5;
+    if floor_y {
+        mid.y = lg.translation().y.min(rg.translation().y);
+    }
+    let Ok(parent) = parents.get(sock) else {
+        return;
+    };
+    let Ok(parent_gt) = global_xf.get(parent.parent()) else {
+        return;
+    };
+    let local = parent_gt.affine().inverse().transform_point3(mid);
+    if let Ok(mut xf) = transforms.get_mut(sock) {
+        xf.translation = local;
+        // Face the average limb forward projected onto XZ so pairs stay aligned.
+        let l_fwd = lg.forward();
+        let r_fwd = rg.forward();
+        let avg = Vec3::new(l_fwd.x + r_fwd.x, 0.0, l_fwd.z + r_fwd.z);
+        if avg.length_squared() > 1e-6 {
+            let world_rot = Quat::from_rotation_arc(Vec3::NEG_Z, avg.normalize());
+            let parent_rot = parent_gt.rotation();
+            xf.rotation = parent_rot.inverse() * world_rot;
+        }
+    }
+}
+
+/// After animation writes bone transforms, squash covered wear volumes so big
+/// pudgy feet/hands don't poke through shoes/gloves.
+fn apply_wear_volume_scales(
+    players: Query<(&PlayerVisualSpec, Option<&Children>), With<NetworkPlayer>>,
     visual_roots: Query<(), With<PlayerVisualRoot>>,
     names: Query<&Name>,
     children_q: Query<&Children>,
-    equipped: Query<(Entity, &EquippedAccessoryVisual)>,
+    mut transforms: Query<&mut Transform>,
 ) {
-    for (_player, visual, player_children) in &players {
+    for (visual, player_children) in &players {
         let Some(kids) = player_children else {
             continue;
         };
@@ -343,7 +459,126 @@ fn sync_accessory_meshes(
             continue;
         };
 
-        ensure_accessory_sockets(&mut commands, root, &names, &children_q);
+        let hide_feet = visual
+            .accessories
+            .shoes
+            .as_deref()
+            .is_some_and(accessory_glb_exists);
+        let hide_hands = visual
+            .accessories
+            .hands
+            .as_deref()
+            .is_some_and(accessory_glb_exists);
+
+        set_bone_scales(
+            root,
+            SHOE_HIDE_BONES,
+            if hide_feet {
+                Vec3::splat(0.02)
+            } else {
+                Vec3::ONE
+            },
+            &names,
+            &children_q,
+            &mut transforms,
+        );
+        set_bone_scales(
+            root,
+            HAND_HIDE_BONES,
+            if hide_hands {
+                Vec3::splat(0.02)
+            } else {
+                Vec3::ONE
+            },
+            &names,
+            &children_q,
+            &mut transforms,
+        );
+    }
+}
+
+fn set_bone_scales(
+    root: Entity,
+    bones: &[&str],
+    scale: Vec3,
+    names: &Query<&Name>,
+    children: &Query<&Children>,
+    transforms: &mut Query<&mut Transform>,
+) {
+    for bone in bones {
+        let Some(entity) = find_named(root, bone, names, children) else {
+            continue;
+        };
+        if let Ok(mut xf) = transforms.get_mut(entity) {
+            xf.scale = scale;
+        }
+    }
+}
+
+/// Local accessory transform (registry scale). Pair sockets are retargeted to
+/// limb forward; static sockets inherit bone orientation from the crew armature.
+fn accessory_attach_transform(_slot: &str, scale: Vec3) -> Transform {
+    Transform {
+        translation: Vec3::ZERO,
+        rotation: Quat::IDENTITY,
+        scale,
+    }
+}
+
+fn sync_accessory_meshes(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    catalog: Res<AccessoryCatalog>,
+    registry: Option<Res<crate::data::StudioRegistry>>,
+    players: Query<
+        (
+            Entity,
+            &PlayerVisualSpec,
+            Option<&Children>,
+            Option<&MountedAccessoryLoadout>,
+        ),
+        With<NetworkPlayer>,
+    >,
+    visual_roots: Query<(Entity, Option<&AccessorySocketsReady>), With<PlayerVisualRoot>>,
+    names: Query<&Name>,
+    children_q: Query<&Children>,
+    mut transforms: Query<&mut Transform>,
+    equipped: Query<(Entity, &EquippedAccessoryVisual)>,
+) {
+    for (_player, visual, player_children, mounted_loadout) in &players {
+        let Some(kids) = player_children else {
+            continue;
+        };
+        let Some(root) = kids
+            .iter()
+            .find_map(|c| visual_roots.get(c).ok().map(|(e, ready)| (e, ready)))
+        else {
+            continue;
+        };
+        let (root, sockets_ready_marker) = root;
+
+        let sockets_ready = if sockets_ready_marker.is_some() {
+            true
+        } else if ensure_accessory_sockets(
+            &mut commands,
+            root,
+            &names,
+            &children_q,
+            &mut transforms,
+        ) {
+            commands.entity(root).insert(AccessorySocketsReady);
+            true
+        } else {
+            false
+        };
+
+        if !sockets_ready {
+            continue;
+        }
+
+        if mounted_loadout.is_some_and(|m| m.0 == visual.accessories) {
+            continue;
+        }
 
         let desired = [
             ("hat", visual.accessories.hat.as_deref()),
@@ -354,6 +589,7 @@ fn sync_accessory_meshes(
             ("hands", visual.accessories.hands.as_deref()),
         ];
 
+        let mut all_ok = true;
         for (slot, want_id) in desired {
             let existing: Vec<(Entity, String)> = equipped
                 .iter()
@@ -361,8 +597,6 @@ fn sync_accessory_meshes(
                 .map(|(e, mark)| (e, mark.asset_id.clone()))
                 .collect();
 
-            // Full-figure Tripo looks already swapped the body mesh — don't also
-            // parent a second copy onto a socket.
             let want = want_id
                 .filter(|id| accessory_glb_exists(id))
                 .filter(|id| !catalog.is_character_look(id));
@@ -383,9 +617,8 @@ fn sync_accessory_meshes(
                 continue;
             };
             let socket = socket_name(slot);
-            // Wait until the crew GLB instance exposes sockets — parenting to the
-            // visual root hid accessories at the feet / inside the body.
             let Some(parent) = find_named(root, socket, &names, &children_q) else {
+                all_ok = false;
                 continue;
             };
             let scale = registry
@@ -402,14 +635,17 @@ fn sync_accessory_meshes(
                         asset_id: asset_id.to_string(),
                     },
                     WorldAssetRoot(scene),
-                    Transform {
-                        scale,
-                        ..Default::default()
-                    },
+                    accessory_attach_transform(slot, scale),
                     Visibility::default(),
                     Name::new(format!("Acc:{slot}:{asset_id}")),
                 ));
             });
+        }
+
+        if all_ok {
+            commands
+                .entity(_player)
+                .insert(MountedAccessoryLoadout(visual.accessories.clone()));
         }
     }
 }
