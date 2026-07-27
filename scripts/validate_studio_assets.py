@@ -24,8 +24,13 @@ def main() -> int:
         if isinstance(a, dict) and a.get("asset_id")
     }
 
+    # Placeholder folder only — no GLB expected.
+    skip_missing = {"_TEMPLATE"}
+
     missing_glb: list[str] = []
     for aid in sorted(assets):
+        if aid in skip_missing:
+            continue
         glb = _MODELS / aid / f"{aid}.glb"
         if not glb.is_file():
             missing_glb.append(aid)
@@ -42,7 +47,8 @@ def main() -> int:
         for marker in data.get("markers", []):
             aid = marker.get("asset_id")
             if isinstance(aid, str) and aid and aid not in assets:
-                unknown_refs.append(f"{path.name}::{marker.get('id')} → {aid}")
+                # ASCII arrow — Windows cp1252 consoles choke on Unicode →.
+                unknown_refs.append(f"{path.name}::{marker.get('id')} -> {aid}")
 
     problems = False
     if missing_glb:
@@ -61,7 +67,8 @@ def main() -> int:
             print(f"  - {aid}")
 
     if not problems:
-        print(f"OK: {len(assets)} registry assets, room refs valid")
+        playable = len(assets) - len(skip_missing & assets)
+        print(f"OK: {playable} registry assets with GLBs, room refs valid")
         return 0
     return 1
 

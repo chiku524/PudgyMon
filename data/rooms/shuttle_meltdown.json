@@ -2,161 +2,435 @@
   "schema_version": 1,
   "room_id": "shuttle_meltdown",
   "label": "Shuttle Bay Meltdown",
-  "player_spawn": [0.0, 1.0, 10.0],
+  "player_spawn": [
+    0.0,
+    1.0,
+    10.0
+  ],
   "markers": [
     {
       "id": "room_sign",
       "role": "sign",
-      "asset_id": "env_blue_yellow_welcome_sign_01",
-      "position": [0.0, 0.0, -14.0],
+      "asset_id": null,
+      "position": [
+        0.0,
+        0.0,
+        -14.0
+      ],
       "greybox": {
-        "size": [8.0, 1.0, 0.3],
-        "color": [0.95, 0.35, 0.25],
-        "label": "SHUTTLE BAY MELTDOWN — coolant + load + seal"
+        "size": [
+          8.0,
+          1.0,
+          0.3
+        ],
+        "color": [
+          0.95,
+          0.35,
+          0.25
+        ],
+        "label": "SHUTTLE BAY MELTDOWN \u2014 coolant + load + seal"
       }
     },
     {
       "id": "shuttle_bay",
       "role": "station",
-      "asset_id": "shuttle_bay_escape_zone_01",
-      "position": [0.0, 0.0, -10.0],
-      "interactable": { "kind": "vault_objective" },
-      "greybox": { "size": [3.0, 2.0, 2.0], "color": [0.5, 0.55, 0.6] }
+      "asset_id": null,
+      "position": [
+        0.0,
+        0.0,
+        -10.0
+      ],
+      "interactable": {
+        "kind": "vault_objective"
+      },
+      "greybox": {
+        "size": [
+          3.0,
+          2.0,
+          2.0
+        ],
+        "color": [
+          0.5,
+          0.55,
+          0.6
+        ]
+      }
     },
     {
       "id": "coolant_console_left",
       "role": "station",
-      "asset_id": "prop_coolant_console_01",
-      "position": [-6.0, 0.0, -2.0],
-      "interactable": { "kind": "coolant_valve", "index": 0 },
+      "asset_id": null,
+      "position": [
+        -6.0,
+        0.0,
+        -2.0
+      ],
+      "interactable": {
+        "kind": "coolant_valve",
+        "index": 0
+      },
       "motion": {
         "preset": "valve_turn",
         "duration_secs": 0.55,
         "glb_clip": "wheel_turn"
       },
-      "greybox": { "size": [1.0, 1.2, 0.8], "color": [0.2, 0.75, 0.85] }
+      "greybox": {
+        "size": [
+          1.0,
+          1.2,
+          0.8
+        ],
+        "color": [
+          0.2,
+          0.75,
+          0.85
+        ]
+      }
     },
     {
       "id": "coolant_console_right",
       "role": "station",
-      "asset_id": "prop_coolant_console_01",
-      "position": [6.0, 0.0, -2.0],
-      "interactable": { "kind": "coolant_valve", "index": 1 },
-      "greybox": { "size": [1.0, 1.2, 0.8], "color": [0.2, 0.75, 0.85] }
+      "asset_id": null,
+      "position": [
+        6.0,
+        0.0,
+        -2.0
+      ],
+      "interactable": {
+        "kind": "coolant_valve",
+        "index": 1
+      },
+      "greybox": {
+        "size": [
+          1.0,
+          1.2,
+          0.8
+        ],
+        "color": [
+          0.2,
+          0.75,
+          0.85
+        ]
+      }
     },
     {
       "id": "coolant_wheel_left",
       "role": "decoration",
-      "asset_id": "prop_coolant_pipe_wheel_01",
-      "position": [-6.0, 1.0, -0.8],
+      "asset_id": null,
+      "position": [
+        -6.0,
+        1.0,
+        -0.8
+      ],
       "rotation_y_deg": 11.0,
-      "greybox": { "size": [0.5, 0.5, 0.5], "color": [0.85, 0.25, 0.2] }
+      "greybox": {
+        "size": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "color": [
+          0.85,
+          0.25,
+          0.2
+        ]
+      }
     },
     {
       "id": "coolant_wheel_right",
       "role": "decoration",
-      "asset_id": "prop_coolant_pipe_wheel_02",
-      "position": [6.0, 1.0, -0.8],
+      "asset_id": null,
+      "position": [
+        6.0,
+        1.0,
+        -0.8
+      ],
       "rotation_y_deg": -11.0,
-      "greybox": { "size": [0.5, 0.5, 0.5], "color": [0.85, 0.25, 0.2] }
+      "greybox": {
+        "size": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "color": [
+          0.85,
+          0.25,
+          0.2
+        ]
+      }
     },
     {
       "id": "meltdown_door_left",
       "role": "station",
-      "asset_id": "env_break_glass_panel_01",
-      "position": [-4.0, 0.0, 3.0],
+      "asset_id": null,
+      "position": [
+        -4.0,
+        0.0,
+        3.0
+      ],
       "rotation_y_deg": 90.0,
-      "interactable": { "kind": "meltdown_door", "index": 0 },
+      "interactable": {
+        "kind": "meltdown_door",
+        "index": 0
+      },
       "motion": {
         "preset": "door_seal",
         "duration_secs": 0.45
       },
-      "greybox": { "size": [0.8, 1.2, 0.4], "color": [0.7, 0.85, 0.95] }
+      "greybox": {
+        "size": [
+          0.8,
+          1.2,
+          0.4
+        ],
+        "color": [
+          0.7,
+          0.85,
+          0.95
+        ]
+      }
     },
     {
       "id": "meltdown_door_right",
       "role": "station",
-      "asset_id": "env_break_glass_panel_01",
-      "position": [4.0, 0.0, 3.0],
+      "asset_id": null,
+      "position": [
+        4.0,
+        0.0,
+        3.0
+      ],
       "rotation_y_deg": 90.0,
-      "interactable": { "kind": "meltdown_door", "index": 1 },
-      "greybox": { "size": [0.8, 1.2, 0.4], "color": [0.7, 0.85, 0.95] }
+      "interactable": {
+        "kind": "meltdown_door",
+        "index": 1
+      },
+      "greybox": {
+        "size": [
+          0.8,
+          1.2,
+          0.4
+        ],
+        "color": [
+          0.7,
+          0.85,
+          0.95
+        ]
+      }
     },
     {
       "id": "delivery_zone",
       "role": "zone",
-      "asset_id": "safety_mat_floor_pad_01",
-      "position": [0.0, 0.0, 8.0],
-      "interactable": { "kind": "vault_objective" },
+      "asset_id": null,
+      "position": [
+        0.0,
+        0.0,
+        8.0
+      ],
+      "interactable": {
+        "kind": "vault_objective"
+      },
       "greybox": {
-        "size": [3.0, 0.15, 3.0],
-        "color": [0.2, 0.85, 0.45],
-        "emissive": [0.1, 0.4, 0.2],
+        "size": [
+          3.0,
+          0.15,
+          3.0
+        ],
+        "color": [
+          0.2,
+          0.85,
+          0.45
+        ],
+        "emissive": [
+          0.1,
+          0.4,
+          0.2
+        ],
         "label": "DeliveryZone"
       }
     },
     {
       "id": "escape_crate_left",
       "role": "decoration",
-      "asset_id": "env_freight_crate_01",
-      "position": [-3.0, 0.0, 7.0],
-      "greybox": { "size": [1.0, 1.0, 1.0], "color": [0.55, 0.4, 0.25] }
+      "asset_id": null,
+      "position": [
+        -3.0,
+        0.0,
+        7.0
+      ],
+      "greybox": {
+        "size": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "color": [
+          0.55,
+          0.4,
+          0.25
+        ]
+      }
     },
     {
       "id": "escape_crate_right",
       "role": "decoration",
-      "asset_id": "env_freight_crate_01",
-      "position": [3.0, 0.0, 7.5],
+      "asset_id": null,
+      "position": [
+        3.0,
+        0.0,
+        7.5
+      ],
       "rotation_y_deg": 34.0,
-      "greybox": { "size": [1.0, 1.0, 1.0], "color": [0.55, 0.4, 0.25] }
+      "greybox": {
+        "size": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "color": [
+          0.55,
+          0.4,
+          0.25
+        ]
+      }
     },
     {
       "id": "prop_satellite_dish",
       "role": "decoration",
-      "asset_id": "prop_satellite_dish_array_01",
-      "position": [-12.0, 0.0, -8.0],
+      "asset_id": null,
+      "position": [
+        -12.0,
+        0.0,
+        -8.0
+      ],
       "rotation_y_deg": 52.0,
-      "greybox": { "size": [2.5, 2.5, 2.5], "color": [0.45, 0.5, 0.55] }
+      "greybox": {
+        "size": [
+          2.5,
+          2.5,
+          2.5
+        ],
+        "color": [
+          0.45,
+          0.5,
+          0.55
+        ]
+      }
     },
     {
       "id": "prop_dish_crank",
       "role": "decoration",
-      "asset_id": "satellite_dish_maintenance_wheel_crank_01",
-      "position": [-10.0, 0.0, -6.0],
-      "greybox": { "size": [0.5, 0.5, 0.5], "color": [0.6, 0.55, 0.4] }
+      "asset_id": null,
+      "position": [
+        -10.0,
+        0.0,
+        -6.0
+      ],
+      "greybox": {
+        "size": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "color": [
+          0.6,
+          0.55,
+          0.4
+        ]
+      }
     },
     {
       "id": "prop_hull_breach",
       "role": "decoration",
-      "asset_id": "wall_panel_breach_hole_01",
-      "position": [12.0, 1.0, -4.0],
+      "asset_id": null,
+      "position": [
+        12.0,
+        1.0,
+        -4.0
+      ],
       "rotation_y_deg": -90.0,
-      "greybox": { "size": [1.5, 1.5, 0.3], "color": [0.35, 0.3, 0.3] }
+      "greybox": {
+        "size": [
+          1.5,
+          1.5,
+          0.3
+        ],
+        "color": [
+          0.35,
+          0.3,
+          0.3
+        ]
+      }
     },
     {
       "id": "prop_hull_patch",
       "role": "decoration",
-      "asset_id": "prop_hull_patch_plate_01",
-      "position": [10.0, 1.0, -6.0],
+      "asset_id": null,
+      "position": [
+        10.0,
+        1.0,
+        -6.0
+      ],
       "rotation_y_deg": -80.0,
-      "greybox": { "size": [0.8, 0.4, 0.8], "color": [0.5, 0.5, 0.55] }
+      "greybox": {
+        "size": [
+          0.8,
+          0.4,
+          0.8
+        ],
+        "color": [
+          0.5,
+          0.5,
+          0.55
+        ]
+      }
     },
     {
       "id": "prop_ladder",
       "role": "decoration",
-      "asset_id": "prop_wobbly_maintenance_ladder_01",
-      "position": [12.0, 0.0, 2.0],
-      "greybox": { "size": [1.0, 3.0, 1.0], "color": [0.55, 0.5, 0.45] }
+      "asset_id": null,
+      "position": [
+        12.0,
+        0.0,
+        2.0
+      ],
+      "greybox": {
+        "size": [
+          1.0,
+          3.0,
+          1.0
+        ],
+        "color": [
+          0.55,
+          0.5,
+          0.45
+        ]
+      }
     },
     {
       "id": "meltdown_glow",
       "role": "floor_vfx",
       "asset_id": null,
-      "position": [0.0, 0.02, 0.0],
+      "position": [
+        0.0,
+        0.02,
+        0.0
+      ],
       "greybox": {
-        "size": [20.0, 0.05, 20.0],
-        "color": [0.9, 0.2, 0.15],
-        "emissive": [0.4, 0.05, 0.05]
+        "size": [
+          20.0,
+          0.05,
+          20.0
+        ],
+        "color": [
+          0.9,
+          0.2,
+          0.15
+        ],
+        "emissive": [
+          0.4,
+          0.05,
+          0.05
+        ]
       }
     }
   ]

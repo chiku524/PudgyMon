@@ -2,156 +2,399 @@
   "schema_version": 1,
   "room_id": "hr_orientation",
   "label": "HR Orientation Bay",
-  "player_spawn": [0.0, 1.0, 8.0],
+  "player_spawn": [
+    0.0,
+    1.0,
+    8.0
+  ],
   "markers": [
     {
       "id": "room_sign",
       "role": "sign",
-      "asset_id": "env_blue_yellow_welcome_sign_01",
-      "position": [0.0, 0.0, -10.0],
+      "asset_id": null,
+      "position": [
+        0.0,
+        0.0,
+        -10.0
+      ],
       "greybox": {
-        "size": [8.0, 1.0, 0.3],
-        "color": [0.95, 0.85, 0.2],
-        "label": "HR ORIENTATION BAY — sort freight into chutes"
+        "size": [
+          8.0,
+          1.0,
+          0.3
+        ],
+        "color": [
+          0.95,
+          0.85,
+          0.2
+        ],
+        "label": "HR ORIENTATION BAY \u2014 sort freight into chutes"
       }
     },
     {
       "id": "sort_chute_hot_dogs",
       "role": "sort_chute",
-      "asset_id": "prop_pneumatic_tube_intake_funnel",
-      "position": [-7.0, 0.0, 0.0],
-      "interactable": { "kind": "sort_chute", "index": 0 },
+      "asset_id": null,
+      "position": [
+        -7.0,
+        0.0,
+        0.0
+      ],
+      "interactable": {
+        "kind": "sort_chute",
+        "index": 0
+      },
       "motion": {
         "preset": "sort_chute_pulse",
         "fail_preset": "breaker_zap",
         "duration_secs": 0.28
       },
       "greybox": {
-        "size": [2.5, 1.5, 2.5],
-        "color": [0.95, 0.45, 0.15],
+        "size": [
+          2.5,
+          1.5,
+          2.5
+        ],
+        "color": [
+          0.95,
+          0.45,
+          0.15
+        ],
         "label": "Hot Dogs"
       }
     },
     {
       "id": "sort_chute_toasters",
       "role": "sort_chute",
-      "asset_id": "prop_pneumatic_tube_intake_funnel",
-      "position": [-2.5, 0.0, 0.0],
-      "interactable": { "kind": "sort_chute", "index": 1 },
+      "asset_id": null,
+      "position": [
+        -2.5,
+        0.0,
+        0.0
+      ],
+      "interactable": {
+        "kind": "sort_chute",
+        "index": 1
+      },
       "greybox": {
-        "size": [2.5, 1.5, 2.5],
-        "color": [0.75, 0.75, 0.8],
+        "size": [
+          2.5,
+          1.5,
+          2.5
+        ],
+        "color": [
+          0.75,
+          0.75,
+          0.8
+        ],
         "label": "Toasters"
       }
     },
     {
       "id": "sort_chute_premium_air",
       "role": "sort_chute",
-      "asset_id": "prop_pneumatic_tube_intake_funnel",
-      "position": [2.5, 0.0, 0.0],
-      "interactable": { "kind": "sort_chute", "index": 2 },
+      "asset_id": null,
+      "position": [
+        2.5,
+        0.0,
+        0.0
+      ],
+      "interactable": {
+        "kind": "sort_chute",
+        "index": 2
+      },
       "greybox": {
-        "size": [2.5, 1.5, 2.5],
-        "color": [0.35, 0.7, 0.95],
+        "size": [
+          2.5,
+          1.5,
+          2.5
+        ],
+        "color": [
+          0.35,
+          0.7,
+          0.95
+        ],
         "label": "Premium Air"
       }
     },
     {
       "id": "sort_chute_writeups",
       "role": "sort_chute",
-      "asset_id": "prop_pneumatic_tube_intake_funnel",
-      "position": [7.0, 0.0, 0.0],
-      "interactable": { "kind": "sort_chute", "index": 3 },
+      "asset_id": null,
+      "position": [
+        7.0,
+        0.0,
+        0.0
+      ],
+      "interactable": {
+        "kind": "sort_chute",
+        "index": 3
+      },
       "greybox": {
-        "size": [2.5, 1.5, 2.5],
-        "color": [0.9, 0.3, 0.3],
+        "size": [
+          2.5,
+          1.5,
+          2.5
+        ],
+        "color": [
+          0.9,
+          0.3,
+          0.3
+        ],
         "label": "Write-Ups"
       }
     },
     {
       "id": "freight_pickup",
       "role": "station",
-      "asset_id": "env_freight_crate_01",
-      "position": [-4.0, 0.0, 5.0],
-      "interactable": { "kind": "vault_objective" },
-      "greybox": { "size": [1.0, 1.0, 1.0], "color": [0.55, 0.4, 0.25] }
+      "asset_id": null,
+      "position": [
+        -4.0,
+        0.0,
+        5.0
+      ],
+      "interactable": {
+        "kind": "vault_objective"
+      },
+      "greybox": {
+        "size": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "color": [
+          0.55,
+          0.4,
+          0.25
+        ]
+      }
     },
     {
       "id": "job_kiosk",
       "role": "decoration",
-      "asset_id": "blue_cartoon_sci_fi_job_terminal_kiosk_01",
-      "position": [4.0, 0.0, 6.0],
+      "asset_id": null,
+      "position": [
+        4.0,
+        0.0,
+        6.0
+      ],
       "rotation_y_deg": -25.0,
-      "greybox": { "size": [1.0, 1.5, 0.8], "color": [0.25, 0.45, 0.9] }
+      "greybox": {
+        "size": [
+          1.0,
+          1.5,
+          0.8
+        ],
+        "color": [
+          0.25,
+          0.45,
+          0.9
+        ]
+      }
     },
     {
       "id": "prop_hot_dog_crate_a",
       "role": "decoration",
-      "asset_id": "s1_galactic_hot_dog_crate_01",
-      "position": [-7.0, 0.0, -3.0],
-      "greybox": { "size": [0.8, 0.8, 0.8], "color": [0.95, 0.45, 0.15] }
+      "asset_id": null,
+      "position": [
+        -7.0,
+        0.0,
+        -3.0
+      ],
+      "greybox": {
+        "size": [
+          0.8,
+          0.8,
+          0.8
+        ],
+        "color": [
+          0.95,
+          0.45,
+          0.15
+        ]
+      }
     },
     {
       "id": "prop_hot_dog_crate_b",
       "role": "decoration",
-      "asset_id": "s1_galactic_hot_dog_crate_01",
-      "position": [-5.5, 0.0, -4.5],
+      "asset_id": null,
+      "position": [
+        -5.5,
+        0.0,
+        -4.5
+      ],
       "rotation_y_deg": 23.0,
-      "greybox": { "size": [0.8, 0.8, 0.8], "color": [0.95, 0.45, 0.15] }
+      "greybox": {
+        "size": [
+          0.8,
+          0.8,
+          0.8
+        ],
+        "color": [
+          0.95,
+          0.45,
+          0.15
+        ]
+      }
     },
     {
       "id": "prop_freight_crate_back",
       "role": "decoration",
-      "asset_id": "env_freight_crate_01",
-      "position": [5.0, 0.0, 5.5],
+      "asset_id": null,
+      "position": [
+        5.0,
+        0.0,
+        5.5
+      ],
       "rotation_y_deg": -17.0,
-      "greybox": { "size": [1.0, 1.0, 1.0], "color": [0.55, 0.4, 0.25] }
+      "greybox": {
+        "size": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "color": [
+          0.55,
+          0.4,
+          0.25
+        ]
+      }
     },
     {
       "id": "prop_cargo_scanner",
       "role": "decoration",
-      "asset_id": "prop_cargo_scanner_platform",
-      "position": [0.0, 0.0, -6.0],
-      "greybox": { "size": [2.0, 2.0, 2.0], "color": [0.4, 0.5, 0.6] }
+      "asset_id": null,
+      "position": [
+        0.0,
+        0.0,
+        -6.0
+      ],
+      "greybox": {
+        "size": [
+          2.0,
+          2.0,
+          2.0
+        ],
+        "color": [
+          0.4,
+          0.5,
+          0.6
+        ]
+      }
     },
     {
       "id": "prop_slot_machine",
       "role": "decoration",
-      "asset_id": "prop_alien_slot_machine",
-      "position": [10.0, 0.0, -4.0],
+      "asset_id": null,
+      "position": [
+        10.0,
+        0.0,
+        -4.0
+      ],
       "rotation_y_deg": -69.0,
-      "greybox": { "size": [1.0, 1.0, 1.0], "color": [0.6, 0.3, 0.8] }
+      "greybox": {
+        "size": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "color": [
+          0.6,
+          0.3,
+          0.8
+        ]
+      }
     },
     {
       "id": "prop_office_printer",
       "role": "decoration",
-      "asset_id": "office_printer_cartoon_space_station_01",
-      "position": [-10.0, 0.0, -2.0],
+      "asset_id": null,
+      "position": [
+        -10.0,
+        0.0,
+        -2.0
+      ],
       "rotation_y_deg": 40.0,
-      "greybox": { "size": [0.8, 0.8, 0.8], "color": [0.7, 0.7, 0.75] }
+      "greybox": {
+        "size": [
+          0.8,
+          0.8,
+          0.8
+        ],
+        "color": [
+          0.7,
+          0.7,
+          0.75
+        ]
+      }
     },
     {
       "id": "prop_vending_machine",
       "role": "decoration",
-      "asset_id": "prop_cartoon_vending_machine",
-      "position": [10.0, 0.0, 4.0],
+      "asset_id": null,
+      "position": [
+        10.0,
+        0.0,
+        4.0
+      ],
       "rotation_y_deg": -90.0,
-      "greybox": { "size": [1.0, 1.9, 0.8], "color": [0.9, 0.3, 0.4] }
+      "greybox": {
+        "size": [
+          1.0,
+          1.9,
+          0.8
+        ],
+        "color": [
+          0.9,
+          0.3,
+          0.4
+        ]
+      }
     },
     {
       "id": "prop_mop_cart",
       "role": "decoration",
-      "asset_id": "prop_janitor_mop_bucket_cart_01",
-      "position": [-10.0, 0.0, 4.0],
+      "asset_id": null,
+      "position": [
+        -10.0,
+        0.0,
+        4.0
+      ],
       "rotation_y_deg": 46.0,
-      "greybox": { "size": [1.1, 1.1, 1.1], "color": [0.5, 0.55, 0.6] }
+      "greybox": {
+        "size": [
+          1.1,
+          1.1,
+          1.1
+        ],
+        "color": [
+          0.5,
+          0.55,
+          0.6
+        ]
+      }
     },
     {
       "id": "prop_slime_puddle",
       "role": "decoration",
-      "asset_id": "prop_slime_puddle_floor_01",
-      "position": [-9.0, 0.0, 5.5],
-      "greybox": { "size": [1.5, 0.05, 1.5], "color": [0.3, 0.85, 0.35] }
+      "asset_id": null,
+      "position": [
+        -9.0,
+        0.0,
+        5.5
+      ],
+      "greybox": {
+        "size": [
+          1.5,
+          0.05,
+          1.5
+        ],
+        "color": [
+          0.3,
+          0.85,
+          0.35
+        ]
+      }
     }
   ]
 }

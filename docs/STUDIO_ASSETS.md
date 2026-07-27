@@ -41,9 +41,20 @@ Validate registry ↔ disk ↔ room layouts:
 
 ```bash
 python scripts/validate_studio_assets.py
-cargo test room_asset_ids_exist_in_registry_or_are_null
+cargo test --lib room_asset_ids_exist_in_registry_or_are_null
 ```
 
+## Optimize dense Tripo GLBs
+
+Tripo meshes are often 100k–300k tris (~5–14 MB). Meshopt alone often stalls on split-vertex Tripo topology — use Blender weld+decimate:
+
+```bash
+python scripts/blender_decimate_glb.py --batch assets/models --glob "*/*.glb" --skip-texture-pass
+# single asset:
+python scripts/blender_decimate_glb.py assets/models/env_nest_bench_01/env_nest_bench_01.glb
+```
+
+Writes `.glb.pre_opt` backups (gitignored). Characters keep skins/clips; props target ~8–14k tris.
 ## Place in a room (required for playable)
 
 Edit the vault JSON under `data/rooms/` (or `arena.json` for the persistent shell).

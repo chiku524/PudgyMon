@@ -206,18 +206,35 @@ def _face_count(glb: Path) -> int | None:
         )
         if proc.returncode != 0:
             return None
-        # Mesh table column glPrimitives — find TRIANGLES rows.
+        # MESHES table: # | name | mode | meshPrimitives | glPrimitives | ...
+        # Split on box-drawing or ASCII pipes.
         total = 0
         for line in proc.stdout.splitlines():
             if "TRIANGLES" not in line:
                 continue
-            parts = [p.strip() for p in line.split("│") if p.strip()]
-            # name, mode, meshPrimitives, glPrimitives, ...
-            if len(parts) >= 4 and parts[1] == "TRIANGLES":
-                total += int(parts[3].replace(",", ""))
+            raw = line.replace("|", "│")
+            parts = [p.strip() for p in raw.split("│") if p.strip()]
+            # Find the TRIANGLES column, then glPrimitives is two columns later
+            # (#, name, mode=TRIANGLES, meshPrimitives, glPrimitives).
+            try:
+                mode_i = parts.index("TRIANGLES")
+            except ValueError:
+                continue
+            prim_i = mode_i + 2
+            if prim_i >= len(parts):
+                continue
+            digits = parts[prim_i].replace(",", "").replace(" ", "")
+            if digits.isdigit():
+                total += int(digits)
         return total or None
     except Exception:
         return None
+
+
+def _restore_dense_backup(src: Path, bak: Path) -> int:
+    """Copy denser .pre_opt backup over working GLB. Returns restored byte size."""
+    shutil.copy2(bak, src)
+    return bak.stat().st_size
 
 
 def optimize_file(
@@ -257,28 +274,29 @@ def optimize_file(
         return {"path": str(src), "before": before, "after": before, "preset": preset}
 
     bak = src.with_suffix(src.suffix + ".pre_opt")
-    # If a denser original backup exists, always re-optimize from it so
-    # repeated runs cannot keep crushing an already-simplified mesh.
-    if backup and out == src and bak.is_file() and bak.stat().st_size > before * 2:
+    # Prefer denser original backup so repeated / failed passes cannot lock in
+    # a barely-touched mesh. Restore whenever backup is larger (not only 2x).
+    if backup and out == src and bak.is_file() and bak.stat().st_size > before:
         print(
             f"restoring dense source from {bak.name} "
             f"({bak.stat().st_size / 1e6:.2f} MB -> working copy)"
         )
-        shutil.copy2(bak, src)
-        before = src.stat().st_size
+        before = _restore_dense_backup(src, bak)
     elif backup and out == src and not bak.is_file():
         shutil.copy2(src, bak)
         print(f"backup -> {bak.name}")
 
     faces = _face_count(src)
     do_simplify = True
-    if faces is not None and faces < skip_simplify_below and not force:
+    if faces is None:
+        print("mesh face count unknown; simplifying anyway")
+    elif faces < skip_simplify_below and not force:
         print(
             f"skip simplify ({faces:,} tris < {skip_simplify_below:,}); "
             "texture/resample only (pass --force to simplify anyway)"
         )
         do_simplify = False
-    elif faces is not None:
+    else:
         print(f"mesh {faces:,} tris before optimize")
 
     npx = _npx()

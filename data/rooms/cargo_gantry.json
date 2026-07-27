@@ -2,114 +2,306 @@
   "schema_version": 1,
   "room_id": "cargo_gantry",
   "label": "Cargo Ring Gantry",
-  "player_spawn": [0.0, 1.0, 10.0],
+  "player_spawn": [
+    0.0,
+    1.0,
+    10.0
+  ],
   "markers": [
     {
       "id": "room_sign",
       "role": "sign",
-      "asset_id": "cargo_ring_sign_01",
-      "position": [0.0, 0.0, -12.0],
+      "asset_id": null,
+      "position": [
+        0.0,
+        0.0,
+        -12.0
+      ],
       "greybox": {
-        "size": [8.0, 1.0, 0.3],
-        "color": [0.85, 0.55, 0.15],
-        "label": "CARGO RING GANTRY — deliver crates"
+        "size": [
+          8.0,
+          1.0,
+          0.3
+        ],
+        "color": [
+          0.85,
+          0.55,
+          0.15
+        ],
+        "label": "CARGO RING GANTRY \u2014 deliver crates"
       }
     },
     {
       "id": "crane_console",
       "role": "station",
-      "asset_id": "env_cargo_crane_operator_console_01",
-      "position": [0.0, 0.0, -6.0],
-      "interactable": { "kind": "crane" },
-      "greybox": { "size": [1.5, 1.2, 1.0], "color": [0.85, 0.55, 0.15] }
+      "asset_id": null,
+      "position": [
+        0.0,
+        0.0,
+        -6.0
+      ],
+      "interactable": {
+        "kind": "crane"
+      },
+      "greybox": {
+        "size": [
+          1.5,
+          1.2,
+          1.0
+        ],
+        "color": [
+          0.85,
+          0.55,
+          0.15
+        ]
+      }
     },
     {
       "id": "gantry_hook",
       "role": "station",
-      "asset_id": "env_cargo_gantry_hook_01",
-      "position": [5.0, 2.0, -2.0],
-      "interactable": { "kind": "vault_objective" },
-      "greybox": { "size": [0.8, 0.8, 0.8], "color": [0.6, 0.6, 0.65] }
+      "asset_id": null,
+      "position": [
+        5.0,
+        2.0,
+        -2.0
+      ],
+      "interactable": {
+        "kind": "vault_objective"
+      },
+      "greybox": {
+        "size": [
+          0.8,
+          0.8,
+          0.8
+        ],
+        "color": [
+          0.6,
+          0.6,
+          0.65
+        ]
+      }
     },
     {
       "id": "freight_crate_left",
       "role": "station",
-      "asset_id": "env_freight_crate_01",
-      "position": [-5.0, 0.0, 4.0],
-      "interactable": { "kind": "vault_objective" },
-      "greybox": { "size": [1.0, 1.0, 1.0], "color": [0.55, 0.4, 0.25] }
+      "asset_id": null,
+      "position": [
+        -5.0,
+        0.0,
+        4.0
+      ],
+      "interactable": {
+        "kind": "vault_objective"
+      },
+      "greybox": {
+        "size": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "color": [
+          0.55,
+          0.4,
+          0.25
+        ]
+      }
     },
     {
       "id": "freight_crate_right",
       "role": "station",
-      "asset_id": "env_freight_crate_01",
-      "position": [5.0, 0.0, 4.0],
-      "interactable": { "kind": "vault_objective" },
-      "greybox": { "size": [1.0, 1.0, 1.0], "color": [0.55, 0.4, 0.25] }
+      "asset_id": null,
+      "position": [
+        5.0,
+        0.0,
+        4.0
+      ],
+      "interactable": {
+        "kind": "vault_objective"
+      },
+      "greybox": {
+        "size": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "color": [
+          0.55,
+          0.4,
+          0.25
+        ]
+      }
     },
     {
       "id": "delivery_zone",
       "role": "zone",
-      "asset_id": "safety_mat_floor_pad_01",
-      "position": [0.0, 0.0, 8.0],
-      "interactable": { "kind": "vault_objective" },
+      "asset_id": null,
+      "position": [
+        0.0,
+        0.0,
+        8.0
+      ],
+      "interactable": {
+        "kind": "vault_objective"
+      },
       "motion": {
         "preset": "zone_pulse",
         "duration_secs": 0.35
       },
       "greybox": {
-        "size": [3.0, 0.15, 3.0],
-        "color": [0.2, 0.85, 0.45],
-        "emissive": [0.1, 0.4, 0.2],
+        "size": [
+          3.0,
+          0.15,
+          3.0
+        ],
+        "color": [
+          0.2,
+          0.85,
+          0.45
+        ],
+        "emissive": [
+          0.1,
+          0.4,
+          0.2
+        ],
         "label": "DeliveryZone"
       }
     },
     {
       "id": "prop_crate_back_left",
       "role": "decoration",
-      "asset_id": "env_freight_crate_01",
-      "position": [-8.0, 0.0, -4.0],
+      "asset_id": null,
+      "position": [
+        -8.0,
+        0.0,
+        -4.0
+      ],
       "rotation_y_deg": 29.0,
-      "greybox": { "size": [1.0, 1.0, 1.0], "color": [0.55, 0.4, 0.25] }
+      "greybox": {
+        "size": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "color": [
+          0.55,
+          0.4,
+          0.25
+        ]
+      }
     },
     {
       "id": "prop_crate_back_right",
       "role": "decoration",
-      "asset_id": "env_freight_crate_01",
-      "position": [8.0, 0.0, -3.0],
+      "asset_id": null,
+      "position": [
+        8.0,
+        0.0,
+        -3.0
+      ],
       "rotation_y_deg": -40.0,
-      "greybox": { "size": [1.0, 1.0, 1.0], "color": [0.55, 0.4, 0.25] }
+      "greybox": {
+        "size": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "color": [
+          0.55,
+          0.4,
+          0.25
+        ]
+      }
     },
     {
       "id": "prop_scanner_side",
       "role": "decoration",
-      "asset_id": "prop_cargo_scanner_platform",
-      "position": [-10.0, 0.0, 6.0],
+      "asset_id": null,
+      "position": [
+        -10.0,
+        0.0,
+        6.0
+      ],
       "rotation_y_deg": 63.0,
-      "greybox": { "size": [2.0, 2.0, 2.0], "color": [0.4, 0.5, 0.6] }
+      "greybox": {
+        "size": [
+          2.0,
+          2.0,
+          2.0
+        ],
+        "color": [
+          0.4,
+          0.5,
+          0.6
+        ]
+      }
     },
     {
       "id": "prop_maintenance_cabinet",
       "role": "decoration",
-      "asset_id": "env_freestanding_maintenance_cabinet_01",
-      "position": [10.0, 0.0, 6.0],
+      "asset_id": null,
+      "position": [
+        10.0,
+        0.0,
+        6.0
+      ],
       "rotation_y_deg": -45.0,
-      "greybox": { "size": [1.0, 1.8, 0.8], "color": [0.45, 0.5, 0.55] }
+      "greybox": {
+        "size": [
+          1.0,
+          1.8,
+          0.8
+        ],
+        "color": [
+          0.45,
+          0.5,
+          0.55
+        ]
+      }
     },
     {
       "id": "prop_ladder",
       "role": "decoration",
-      "asset_id": "prop_wobbly_maintenance_ladder_01",
-      "position": [10.0, 0.0, -8.0],
-      "greybox": { "size": [1.0, 3.0, 1.0], "color": [0.55, 0.5, 0.45] }
+      "asset_id": null,
+      "position": [
+        10.0,
+        0.0,
+        -8.0
+      ],
+      "greybox": {
+        "size": [
+          1.0,
+          3.0,
+          1.0
+        ],
+        "color": [
+          0.55,
+          0.5,
+          0.45
+        ]
+      }
     },
     {
       "id": "prop_duct_tape_cart",
       "role": "decoration",
-      "asset_id": "duct_tape_dispenser_cart_01",
-      "position": [-3.0, 0.0, -8.0],
+      "asset_id": null,
+      "position": [
+        -3.0,
+        0.0,
+        -8.0
+      ],
       "rotation_y_deg": -23.0,
-      "greybox": { "size": [1.0, 1.0, 1.0], "color": [0.7, 0.65, 0.3] }
+      "greybox": {
+        "size": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "color": [
+          0.7,
+          0.65,
+          0.3
+        ]
+      }
     }
   ]
 }
