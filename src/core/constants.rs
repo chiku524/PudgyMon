@@ -18,7 +18,7 @@ pub const PLAYER_MAX_AIR_JUMPS: u8 = 1;
 
 /// Soft playable bounds for the arena shell (XZ half-extent).
 /// Nest floor / walls should stay slightly outside this.
-pub const ARENA_BOUNDS: f32 = 36.0;
+pub const ARENA_BOUNDS: f32 = 48.0;
 
 /// Seconds of grace after a room clears before elimination/finale advance.
 pub const ROOM_CLEAR_GRACE_SECS: f32 = 1.25;

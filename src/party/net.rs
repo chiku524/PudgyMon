@@ -22,6 +22,7 @@ pub enum PartyClientCommand {
         race_map_id: String,
         vibe_map_id: String,
         shooter_map_id: String,
+        koth_map_id: String,
     },
     /// Replay current/last plan.
     Rematch,
@@ -36,6 +37,7 @@ impl PartyClientCommand {
             race_map_id: String::new(),
             vibe_map_id: String::new(),
             shooter_map_id: String::new(),
+            koth_map_id: String::new(),
         }
     }
 
@@ -54,6 +56,11 @@ impl PartyClientCommand {
                 .unwrap_or_default(),
             shooter_map_id: active
                 .shooter
+                .as_ref()
+                .map(|m| m.id.clone())
+                .unwrap_or_default(),
+            koth_map_id: active
+                .koth
                 .as_ref()
                 .map(|m| m.id.clone())
                 .unwrap_or_default(),
@@ -95,6 +102,7 @@ fn handle_party_client_command(
             race_map_id,
             vibe_map_id,
             shooter_map_id,
+            koth_map_id,
         } => {
             if director.phase != PartyPhase::Hub {
                 return;
@@ -103,6 +111,7 @@ fn handle_party_client_command(
                 &race_map_id,
                 &vibe_map_id,
                 &shooter_map_id,
+                &koth_map_id,
             );
             queued.0 = Some(plan);
             banner.show(format!("Party queued: {}", plan.label()), 2.5);
@@ -150,7 +159,7 @@ fn apply_party_snapshot_on_clients(
 fn apply_maps_from_snapshot_on_clients(
     snaps: Query<&PartySnapshot>,
     mut active: ResMut<ActiveStageMaps>,
-    mut last: Local<(String, String, String)>,
+    mut last: Local<(String, String, String, String)>,
 ) {
     let Ok(snap) = snaps.single() else {
         return;
@@ -159,6 +168,7 @@ fn apply_maps_from_snapshot_on_clients(
         snap.race_map_id.clone(),
         snap.vibe_map_id.clone(),
         snap.shooter_map_id.clone(),
+        snap.koth_map_id.clone(),
     );
     if *last == key {
         return;
@@ -168,5 +178,6 @@ fn apply_maps_from_snapshot_on_clients(
         &snap.race_map_id,
         &snap.vibe_map_id,
         &snap.shooter_map_id,
+        &snap.koth_map_id,
     );
 }

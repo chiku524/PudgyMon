@@ -162,7 +162,7 @@ fn spawn_party_arena(
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
     // Nest playground floor + soft coral walls (PudgyMon greybox).
-    // Sized for spacious hub + room for future pads / props (~72×72).
+    // Sized for the open-world Nest — plaza plus themed zones (~96×96).
     let floor_mat = materials.add(StandardMaterial {
         base_color: Color::srgb(0.16, 0.28, 0.26),
         ..Default::default()
@@ -173,16 +173,16 @@ fn spawn_party_arena(
     });
     commands.spawn((
         crate::world::ArenaPiece,
-        Mesh3d(meshes.add(Cuboid::new(72.0, 0.2, 72.0))),
+        Mesh3d(meshes.add(Cuboid::new(96.0, 0.2, 96.0))),
         MeshMaterial3d(floor_mat),
         Transform::from_xyz(0.0, -0.1, 0.0),
         Name::new("NestFloor"),
     ));
     for (name, pos, size) in [
-        ("WallL", Vec3::new(-36.0, 2.0, 0.0), Vec3::new(0.4, 4.0, 72.0)),
-        ("WallR", Vec3::new(36.0, 2.0, 0.0), Vec3::new(0.4, 4.0, 72.0)),
-        ("WallN", Vec3::new(0.0, 2.0, -36.0), Vec3::new(72.0, 4.0, 0.4)),
-        ("WallS", Vec3::new(0.0, 2.0, 36.0), Vec3::new(72.0, 4.0, 0.4)),
+        ("WallL", Vec3::new(-48.0, 2.0, 0.0), Vec3::new(0.4, 4.0, 96.0)),
+        ("WallR", Vec3::new(48.0, 2.0, 0.0), Vec3::new(0.4, 4.0, 96.0)),
+        ("WallN", Vec3::new(0.0, 2.0, -48.0), Vec3::new(96.0, 4.0, 0.4)),
+        ("WallS", Vec3::new(0.0, 2.0, 48.0), Vec3::new(96.0, 4.0, 0.4)),
     ] {
         commands.spawn((
             crate::world::ArenaPiece,

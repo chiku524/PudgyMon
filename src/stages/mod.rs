@@ -1,5 +1,6 @@
-//! Greybox mini-game stages: Race, Vibe Collect, Shooter.
+//! Greybox mini-game stages: Race, Vibe Collect, Shooter, King of the Hill.
 
+mod koth;
 mod race;
 mod shooter;
 mod vibe;
@@ -17,6 +18,7 @@ impl Plugin for StagesPlugin {
         app.init_resource::<race::RaceState>()
             .init_resource::<vibe::VibeState>()
             .init_resource::<shooter::ShooterState>()
+            .init_resource::<koth::KothState>()
             .init_resource::<StageBoot>()
             .add_client_event::<shooter::ShootRequest>(Channel::Unordered)
             .add_observer(shooter::handle_shoot_request)
@@ -49,6 +51,16 @@ impl Plugin for StagesPlugin {
                         .run_if(in_phase(PartyPhase::Shooter))
                         .run_if(in_state(AppScreen::Playing))
                         .run_if(not(crate::hub::editor_is_active)),
+                    koth::tick_koth
+                        .run_if(is_party_authority)
+                        .run_if(in_phase(PartyPhase::Koth))
+                        .run_if(in_state(AppScreen::Playing))
+                        .run_if(not(crate::hub::editor_is_active)),
+                    // Hill movement + color is deterministic — every peer runs it.
+                    koth::update_koth_hill
+                        .run_if(in_phase(PartyPhase::Koth))
+                        .run_if(in_state(AppScreen::Playing))
+                        .run_if(not(crate::hub::editor_is_active)),
                     cleanup_stage_props
                         .run_if(in_state(AppScreen::Playing))
                         .run_if(not(crate::hub::editor_is_active)),
@@ -77,9 +89,12 @@ fn boot_stages(
     materials: ResMut<Assets<StandardMaterial>>,
     asset_server: Res<AssetServer>,
     registry: Option<Res<crate::data::StudioRegistry>>,
-    race: ResMut<race::RaceState>,
-    vibe: ResMut<vibe::VibeState>,
-    shooter: ResMut<shooter::ShooterState>,
+    stage_states: (
+        ResMut<race::RaceState>,
+        ResMut<vibe::VibeState>,
+        ResMut<shooter::ShooterState>,
+        ResMut<koth::KothState>,
+    ),
     spawn: Res<crate::party::PartySpawn>,
     mut active: ResMut<crate::maps::ActiveStageMaps>,
     players: Query<(&crate::player::NetworkPlayer, &mut Transform)>,
@@ -102,12 +117,14 @@ fn boot_stages(
                 &snap.race_map_id,
                 &snap.vibe_map_id,
                 &snap.shooter_map_id,
+                &snap.koth_map_id,
             );
         }
     }
 
     let maps = active.clone();
     let registry = registry.as_deref();
+    let (race, vibe, shooter, koth) = stage_states;
     match phase {
         PartyPhase::Race => race::setup_race(
             commands,
@@ -145,6 +162,19 @@ fn boot_stages(
             players,
             teleport,
         ),
+        PartyPhase::Koth => koth::setup_koth(
+            commands,
+            meshes,
+            materials,
+            &asset_server,
+            registry,
+            koth,
+            spawn,
+            &maps,
+            players,
+            teleport,
+            director.phase_timer,
+        ),
         _ => {
             let _ = entered;
         }
@@ -160,10 +190,10 @@ fn cleanup_stage_props(
     let phase = director.phase;
     let leave_stage = matches!(
         *last,
-        Some(PartyPhase::Race | PartyPhase::Vibe | PartyPhase::Shooter)
+        Some(PartyPhase::Race | PartyPhase::Vibe | PartyPhase::Shooter | PartyPhase::Koth)
     ) && !matches!(
         phase,
-        PartyPhase::Race | PartyPhase::Vibe | PartyPhase::Shooter
+        PartyPhase::Race | PartyPhase::Vibe | PartyPhase::Shooter | PartyPhase::Koth
     );
     if leave_stage {
         for entity in &props {

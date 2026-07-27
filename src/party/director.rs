@@ -23,6 +23,7 @@ pub enum PartyPhase {
     Intermission,
     Vibe,
     Shooter,
+    Koth,
     Results,
 }
 
@@ -31,6 +32,7 @@ pub enum StageKind {
     Race,
     Vibe,
     Shooter,
+    Koth,
 }
 
 impl StageKind {
@@ -39,6 +41,7 @@ impl StageKind {
             Self::Race => "Race",
             Self::Vibe => "Vibe Collect",
             Self::Shooter => "Shooter",
+            Self::Koth => "King of the Hill",
         }
     }
 
@@ -47,6 +50,17 @@ impl StageKind {
             Self::Race => PartyPhase::Race,
             Self::Vibe => PartyPhase::Vibe,
             Self::Shooter => PartyPhase::Shooter,
+            Self::Koth => PartyPhase::Koth,
+        }
+    }
+
+    /// Stage length in seconds (single mode and Party Saga).
+    pub fn stage_secs(self) -> f32 {
+        match self {
+            Self::Race => 45.0,
+            Self::Vibe => 40.0,
+            Self::Shooter => 35.0,
+            Self::Koth => 40.0,
         }
     }
 }
@@ -64,10 +78,8 @@ impl PartyPlan {
     pub fn label(self) -> &'static str {
         match self {
             Self::Idle => "Idle",
-            Self::FullParty => "Party Saga (all 3)",
-            Self::Single(StageKind::Race) => "Race",
-            Self::Single(StageKind::Vibe) => "Vibe Collect",
-            Self::Single(StageKind::Shooter) => "Shooter",
+            Self::FullParty => "Party Saga (all 4)",
+            Self::Single(kind) => kind.label(),
         }
     }
 }
@@ -115,6 +127,7 @@ impl PartyDirector {
             PartyPhase::Race => Some(StageKind::Race),
             PartyPhase::Vibe => Some(StageKind::Vibe),
             PartyPhase::Shooter => Some(StageKind::Shooter),
+            PartyPhase::Koth => Some(StageKind::Koth),
             _ => None,
         }
     }
@@ -132,6 +145,7 @@ pub struct PartySnapshot {
     pub race_map_id: String,
     pub vibe_map_id: String,
     pub shooter_map_id: String,
+    pub koth_map_id: String,
 }
 
 pub struct PartyPlugin;
@@ -263,7 +277,7 @@ fn tick_party_director(
                     begin_stage(
                         &mut director,
                         PartyPhase::Race,
-                        45.0,
+                        StageKind::Race.stage_secs(),
                         "Party Saga — Race first!",
                     );
                     director.stage_index = 0;
@@ -272,7 +286,7 @@ fn tick_party_director(
                     begin_stage(
                         &mut director,
                         kind.phase(),
-                        45.0,
+                        kind.stage_secs(),
                         &format!("{} — go!", kind.label()),
                     );
                     director.stage_index = 0;
@@ -291,7 +305,8 @@ fn tick_party_director(
     match (director.phase, plan) {
         (PartyPhase::Race, PartyPlan::Single(StageKind::Race))
         | (PartyPhase::Vibe, PartyPlan::Single(StageKind::Vibe))
-        | (PartyPhase::Shooter, PartyPlan::Single(StageKind::Shooter)) => {
+        | (PartyPhase::Shooter, PartyPlan::Single(StageKind::Shooter))
+        | (PartyPhase::Koth, PartyPlan::Single(StageKind::Koth)) => {
             finish_match(&mut director, &mut season, &mut challenges);
         }
         (PartyPhase::Race, PartyPlan::FullParty) => {
@@ -307,7 +322,7 @@ fn tick_party_director(
             begin_stage(
                 &mut director,
                 PartyPhase::Vibe,
-                40.0,
+                StageKind::Vibe.stage_secs(),
                 "Grab the vibes — yellow orbs!",
             );
         }
@@ -316,7 +331,7 @@ fn tick_party_director(
                 &mut director,
                 PartyPhase::Intermission,
                 3.0,
-                "Shooter finale incoming…",
+                "Shooter up next…",
             );
             director.stage_index = 2;
         }
@@ -324,11 +339,28 @@ fn tick_party_director(
             begin_stage(
                 &mut director,
                 PartyPhase::Shooter,
-                35.0,
+                StageKind::Shooter.stage_secs(),
                 "Toy blasters — rack up KOs!",
             );
         }
         (PartyPhase::Shooter, PartyPlan::FullParty) => {
+            begin_stage(
+                &mut director,
+                PartyPhase::Intermission,
+                3.0,
+                "King of the Hill finale incoming…",
+            );
+            director.stage_index = 3;
+        }
+        (PartyPhase::Intermission, PartyPlan::FullParty) if director.stage_index == 3 => {
+            begin_stage(
+                &mut director,
+                PartyPhase::Koth,
+                StageKind::Koth.stage_secs(),
+                "Hold the glowing hill — it moves!",
+            );
+        }
+        (PartyPhase::Koth, PartyPlan::FullParty) => {
             finish_match(&mut director, &mut season, &mut challenges);
         }
         (PartyPhase::Results, _) => {
@@ -409,6 +441,11 @@ fn sync_party_snapshot(
         .unwrap_or_default();
     snap.shooter_map_id = active
         .shooter
+        .as_ref()
+        .map(|m| m.id.clone())
+        .unwrap_or_default();
+    snap.koth_map_id = active
+        .koth
         .as_ref()
         .map(|m| m.id.clone())
         .unwrap_or_default();

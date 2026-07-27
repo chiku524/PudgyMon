@@ -6,14 +6,14 @@ Built with **Bevy 0.19 (Rust)** · Third-person · LAN multiplayer · Boing-read
 
 ## Elevator pitch
 
-Drop into **The Nest**, show off your Pudgy skin, and pick a mini-game pad: **Race**, **Vibe Collect**, **Shooter**, or the full **Party Saga** circuit. Solo bots fill empty seats; friends can host/join on LAN.
+Drop into **The Nest**, show off your Pudgy skin, and pick a mini-game pad: **Race**, **Vibe Collect**, **Shooter**, **King of the Hill**, or the full **Party Saga** circuit. Solo bots fill empty seats; friends can host/join on LAN.
 
 ## Status
 
 **Party + Nest hub (playable greybox)**
 
-- [x] Social Nest (no main menu) with mode pads + skin showcases
-- [x] Race / Vibe / Shooter + Party Saga loop
+- [x] Social Nest (no main menu) with mode pads, themed districts + skin showcases
+- [x] Race / Vibe / Shooter / King of the Hill + Party Saga loop
 - [x] Season points + cosmetics unlocks
 - [x] Boing RPC bridge + claim vouchers
 - [ ] Art drop-in for Pudgy characters / Nest props
@@ -43,7 +43,7 @@ cargo run -- join --address 127.0.0.1 --port 7777
 | Doc | Description |
 |-----|-------------|
 | [BRAND](docs/BRAND.md) | Locked names & tone |
-| [MAP_CREATOR](docs/MAP_CREATOR.md) | Race map UGC (create / save / play) |
+| [MAP_CREATOR](docs/MAP_CREATOR.md) | Stage UGC — Race / Vibe / Shooter / Hill (create / save / play) |
 | [PARTY_ROADMAP](docs/PARTY_ROADMAP.md) | Product loop + checklist |
 | [BOING_INTEGRATION](docs/BOING_INTEGRATION.md) | Wallet, RPC, claims |
 | [PACKAGING](docs/PACKAGING.md) | Playtester builds |

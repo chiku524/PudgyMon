@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "id": "official_koth_summit",
+  "label": "Official Hill Summit",
+  "mode": "koth",
+  "author": "PudgyMon",
+  "spawns": [
+    [0.0, 1.0, 18.0],
+    [16.0, 1.0, -10.0],
+    [-16.0, 1.0, -10.0],
+    [0.0, 1.0, -18.0]
+  ],
+  "hills": [
+    [0.0, 0.5, 0.0],
+    [16.0, 0.5, 12.0],
+    [-16.0, 0.5, -12.0],
+    [14.0, 0.5, -14.0]
+  ],
+  "hill_radius": 4.5,
+  "hill_switch_secs": 12.0,
+  "blocks": [
+    { "pos": [8.0, 0.5, 4.0], "size": [2.5, 1.2, 2.5] },
+    { "pos": [-8.0, 0.5, -4.0], "size": [2.5, 1.2, 2.5] },
+    { "pos": [0.0, 0.5, 8.0], "size": [3.0, 1.0, 2.0], "asset_id": "prop_cover_block_01" },
+    { "pos": [-6.0, 0.5, 14.0], "size": [2.0, 1.0, 2.0], "asset_id": "prop_target_star_01" },
+    { "pos": [6.0, 0.5, -14.0], "size": [2.0, 1.0, 2.0], "asset_id": "prop_target_star_01" }
+  ]
+}

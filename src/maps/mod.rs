@@ -123,6 +123,58 @@ impl Default for ShooterMap {
     }
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct KothMap {
+    pub schema_version: u32,
+    pub id: String,
+    pub label: String,
+    pub mode: String,
+    pub author: String,
+    pub spawns: Vec<[f32; 3]>,
+    /// Hill anchor points — the active hill cycles through these in order.
+    pub hills: Vec<[f32; 3]>,
+    #[serde(default = "default_hill_radius")]
+    pub hill_radius: f32,
+    /// Seconds before the hill moves to the next anchor.
+    #[serde(default = "default_hill_switch")]
+    pub hill_switch_secs: f32,
+    #[serde(default)]
+    pub blocks: Vec<MapBlock>,
+}
+
+fn default_hill_radius() -> f32 {
+    4.5
+}
+
+fn default_hill_switch() -> f32 {
+    12.0
+}
+
+impl Default for KothMap {
+    fn default() -> Self {
+        Self {
+            schema_version: 1,
+            id: "untitled_koth".into(),
+            label: "Untitled King of the Hill".into(),
+            mode: "koth".into(),
+            author: "local".into(),
+            spawns: vec![
+                [0.0, 1.0, 16.0],
+                [12.0, 1.0, -8.0],
+                [-12.0, 1.0, -8.0],
+                [0.0, 1.0, -16.0],
+            ],
+            hills: vec![[0.0, 0.5, 0.0], [14.0, 0.5, -10.0], [-14.0, 0.5, 10.0]],
+            hill_radius: default_hill_radius(),
+            hill_switch_secs: default_hill_switch(),
+            blocks: vec![
+                MapBlock::greybox([7.0, 0.5, 4.0], [2.5, 1.2, 2.5]),
+                MapBlock::greybox([-7.0, 0.5, -4.0], [2.5, 1.2, 2.5]),
+            ],
+        }
+    }
+}
+
 /// Full Party Saga UGC pack — three layouts, one project id.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PartyPack {
@@ -134,6 +186,9 @@ pub struct PartyPack {
     pub race: RaceMap,
     pub vibe: VibeMap,
     pub shooter: ShooterMap,
+    /// Added in schema v3 — old packs load with the default layout.
+    #[serde(default)]
+    pub koth: KothMap,
 }
 
 impl Default for PartyPack {
@@ -148,8 +203,11 @@ impl Default for PartyPack {
         let mut shooter = ShooterMap::default();
         shooter.id = format!("{stamp}_shooter");
         shooter.label = "Pack Shooter".into();
+        let mut koth = KothMap::default();
+        koth.id = format!("{stamp}_koth");
+        koth.label = "Pack King of the Hill".into();
         Self {
-            schema_version: 2,
+            schema_version: 3,
             id: "untitled_pack".into(),
             label: "Untitled Party Saga".into(),
             kind: "party_saga".into(),
@@ -157,6 +215,7 @@ impl Default for PartyPack {
             race,
             vibe,
             shooter,
+            koth,
         }
     }
 }
@@ -169,6 +228,7 @@ impl PartyPack {
         self.race.validate()?;
         self.vibe.validate()?;
         self.shooter.validate()?;
+        self.koth.validate()?;
         Ok(())
     }
 
@@ -176,6 +236,7 @@ impl PartyPack {
         self.race.clamp_to_arena();
         self.vibe.clamp_to_arena();
         self.shooter.clamp_to_arena();
+        self.koth.clamp_to_arena();
     }
 
     pub fn sync_ids_from_pack(&mut self) {
@@ -189,6 +250,9 @@ impl PartyPack {
         self.shooter.id = format!("{base}_shooter");
         self.shooter.label = format!("{} — Shooter", self.label);
         self.shooter.author = self.author.clone();
+        self.koth.id = format!("{base}_koth");
+        self.koth.label = format!("{} — King of the Hill", self.label);
+        self.koth.author = self.author.clone();
     }
 }
 
@@ -290,12 +354,55 @@ impl ShooterMap {
     }
 }
 
+impl KothMap {
+    pub fn validate(&self) -> Result<(), String> {
+        if self.mode != "koth" {
+            return Err(format!("unsupported mode '{}'", self.mode));
+        }
+        validate_spawns(&self.spawns, "koth")?;
+        if self.hills.is_empty() {
+            return Err("koth: need at least 1 hill".into());
+        }
+        for (i, h) in self.hills.iter().enumerate() {
+            if h[0].abs() > ARENA_BOUNDS || h[2].abs() > ARENA_BOUNDS {
+                return Err(format!("koth: hill {i} outside arena"));
+            }
+        }
+        if self.hill_radius < 1.0 {
+            return Err("koth: hill radius must be at least 1".into());
+        }
+        Ok(())
+    }
+
+    pub fn clamp_to_arena(&mut self) {
+        for s in &mut self.spawns {
+            clamp_xz(s);
+        }
+        for h in &mut self.hills {
+            clamp_xz(h);
+        }
+        for b in &mut self.blocks {
+            clamp_xz(&mut b.pos);
+        }
+        self.hill_radius = self.hill_radius.clamp(1.0, 12.0);
+        self.hill_switch_secs = self.hill_switch_secs.clamp(5.0, 60.0);
+    }
+
+    pub fn hill_positions(&self) -> Vec<Vec3> {
+        self.hills
+            .iter()
+            .map(|h| Vec3::new(h[0], h[1], h[2]))
+            .collect()
+    }
+}
+
 /// Active layouts for the next stage boots (None = built-in defaults).
 #[derive(Resource, Debug, Clone, Default)]
 pub struct ActiveStageMaps {
     pub race: Option<RaceMap>,
     pub vibe: Option<VibeMap>,
     pub shooter: Option<ShooterMap>,
+    pub koth: Option<KothMap>,
 }
 
 impl ActiveStageMaps {
@@ -307,6 +414,7 @@ impl ActiveStageMaps {
         self.race = Some(pack.race.clone());
         self.vibe = Some(pack.vibe.clone());
         self.shooter = Some(pack.shooter.clone());
+        self.koth = Some(pack.koth.clone());
     }
 }
 
@@ -315,6 +423,7 @@ pub fn resolve_active_from_ids(
     race_id: &str,
     vibe_id: &str,
     shooter_id: &str,
+    koth_id: &str,
 ) -> ActiveStageMaps {
     let catalog = list_catalog();
     let mut active = ActiveStageMaps::default();
@@ -345,7 +454,16 @@ pub fn resolve_active_from_ids(
             _ => None,
         });
     }
-    // Full pack id on all three fields (My Maps Party Saga).
+    if !koth_id.is_empty() {
+        active.koth = catalog.iter().find_map(|e| match e {
+            CatalogEntry::Koth(m) if m.id == koth_id => Some(m.clone()),
+            CatalogEntry::Pack(p) if p.koth.id == koth_id || p.id == koth_id => {
+                Some(p.koth.clone())
+            }
+            _ => None,
+        });
+    }
+    // Full pack id on all stage fields (My Maps Party Saga).
     if race_id == vibe_id && vibe_id == shooter_id && !race_id.is_empty() {
         if let Some(CatalogEntry::Pack(p)) = catalog.iter().find(|e| match e {
             CatalogEntry::Pack(p) => p.id == race_id,
@@ -366,6 +484,7 @@ pub enum CatalogEntry {
     Race(RaceMap),
     Vibe(VibeMap),
     Shooter(ShooterMap),
+    Koth(KothMap),
     Pack(PartyPack),
 }
 
@@ -375,6 +494,7 @@ impl CatalogEntry {
             Self::Race(m) => &m.label,
             Self::Vibe(m) => &m.label,
             Self::Shooter(m) => &m.label,
+            Self::Koth(m) => &m.label,
             Self::Pack(m) => &m.label,
         }
     }
@@ -384,6 +504,7 @@ impl CatalogEntry {
             Self::Race(_) => "Race",
             Self::Vibe(_) => "Vibe",
             Self::Shooter(_) => "Shooter",
+            Self::Koth(_) => "King of the Hill",
             Self::Pack(_) => "Party Saga",
         }
     }
@@ -460,6 +581,11 @@ pub fn save_vibe_map(map: &VibeMap) -> Result<PathBuf, String> {
 }
 
 pub fn save_shooter_map(map: &ShooterMap) -> Result<PathBuf, String> {
+    map.validate()?;
+    write_json(user_maps_dir(), &sanitize_id(&map.id), map)
+}
+
+pub fn save_koth_map(map: &KothMap) -> Result<PathBuf, String> {
     map.validate()?;
     write_json(user_maps_dir(), &sanitize_id(&map.id), map)
 }
@@ -570,6 +696,11 @@ fn push_catalog_path(out: &mut Vec<CatalogEntry>, path: &Path) {
             m.validate().ok()?;
             Some(CatalogEntry::Shooter(m))
         }),
+        "koth" => serde_json::from_str::<KothMap>(&raw).ok().and_then(|mut m| {
+            m.clamp_to_arena();
+            m.validate().ok()?;
+            Some(CatalogEntry::Koth(m))
+        }),
         _ => load_race_map_file(path).ok().map(CatalogEntry::Race),
     };
     if let Some(entry) = parsed {
@@ -577,12 +708,14 @@ fn push_catalog_path(out: &mut Vec<CatalogEntry>, path: &Path) {
             CatalogEntry::Race(m) => m.id.clone(),
             CatalogEntry::Vibe(m) => m.id.clone(),
             CatalogEntry::Shooter(m) => m.id.clone(),
+            CatalogEntry::Koth(m) => m.id.clone(),
             CatalogEntry::Pack(m) => m.id.clone(),
         };
         if let Some(i) = out.iter().position(|e| match e {
             CatalogEntry::Race(m) => m.id == id,
             CatalogEntry::Vibe(m) => m.id == id,
             CatalogEntry::Shooter(m) => m.id == id,
+            CatalogEntry::Koth(m) => m.id == id,
             CatalogEntry::Pack(m) => m.id == id,
         }) {
             out[i] = entry;
@@ -674,5 +807,38 @@ mod tests {
         let mut map = VibeMap::default();
         map.orbs.clear();
         assert!(map.validate().is_err());
+    }
+
+    #[test]
+    fn koth_default_validates() {
+        assert!(KothMap::default().validate().is_ok());
+    }
+
+    #[test]
+    fn koth_needs_hills() {
+        let mut map = KothMap::default();
+        map.hills.clear();
+        assert!(map.validate().is_err());
+    }
+
+    #[test]
+    fn legacy_pack_without_koth_loads() {
+        // Packs saved before schema v3 have no koth field.
+        let mut pack = PartyPack::default();
+        pack.sync_ids_from_pack();
+        let mut v = serde_json::to_value(&pack).unwrap();
+        v.as_object_mut().unwrap().remove("koth");
+        let loaded: PartyPack = serde_json::from_value(v).unwrap();
+        assert!(loaded.validate().is_ok());
+    }
+
+    #[test]
+    fn official_koth_map_loads() {
+        let path = bundled_maps_dir().join("official_koth_summit.json");
+        let raw = std::fs::read_to_string(path).unwrap();
+        let mut map: KothMap = serde_json::from_str(&raw).unwrap();
+        map.clamp_to_arena();
+        assert!(map.validate().is_ok());
+        assert!(map.hills.len() >= 2);
     }
 }

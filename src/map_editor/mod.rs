@@ -9,9 +9,9 @@ use crate::{
     flow::AppScreen,
     hub::{EditLayer, EditorMode, HubPrompt, ModeQueued, NestAction, NestUtilityPad},
     maps::{
-        export_share_code, list_catalog, save_party_pack, save_race_map, save_shooter_map,
-        save_vibe_map, sanitize_id, ActiveStageMaps, CatalogEntry, EDITOR_DECO_IDS, MapBlock,
-        PartyPack,
+        export_share_code, list_catalog, save_koth_map, save_party_pack, save_race_map,
+        save_shooter_map, save_vibe_map, sanitize_id, ActiveStageMaps, CatalogEntry,
+        EDITOR_DECO_IDS, MapBlock, PartyPack,
     },
     party::{PartyDirector, PartyPhase, PartyPlan, PartySpawn, StageKind},
     player::{LocalPlayer, ThirdPersonCamera},
@@ -33,6 +33,7 @@ impl EditorPalette {
             (EditLayer::Race, Self::Primary) => "Gate",
             (EditLayer::Vibe, Self::Primary) => "Orb",
             (EditLayer::Shooter, Self::Primary) => "Cover",
+            (EditLayer::Koth, Self::Primary) => "Hill",
             (_, Self::Spawn) => "Spawn",
             (_, Self::Block) => "Block",
             (_, Self::Deco) => "Deco GLB",
@@ -233,6 +234,11 @@ fn browse_maps_from_nest(
             active.shooter = Some(m.clone());
             PartyPlan::Single(StageKind::Shooter)
         }
+        CatalogEntry::Koth(m) => {
+            active.clear();
+            active.koth = Some(m.clone());
+            PartyPlan::Single(StageKind::Koth)
+        }
         CatalogEntry::Pack(p) => {
             active.apply_pack(p);
             PartyPlan::FullParty
@@ -337,6 +343,10 @@ fn editor_place_delete(
                 editor.pack.vibe.orbs.push([pos.x, 0.6, pos.z]);
                 editor.status = format!("Orb #{}", editor.pack.vibe.orbs.len());
             }
+            (EditLayer::Koth, EditorPalette::Primary) => {
+                editor.pack.koth.hills.push([pos.x, 0.5, pos.z]);
+                editor.status = format!("Hill #{}", editor.pack.koth.hills.len());
+            }
             (EditLayer::Shooter, EditorPalette::Primary)
             | (_, EditorPalette::Block) => {
                 let block = MapBlock::greybox([pos.x, 0.5, pos.z], [2.0, 1.0, 2.0]);
@@ -416,6 +426,10 @@ fn editor_save_playtest_exit(
                 editor.pack.shooter.id = sanitize_id(&editor.pack.shooter.id);
                 save_shooter_map(&editor.pack.shooter)
             }
+            EditLayer::Koth => {
+                editor.pack.koth.id = sanitize_id(&editor.pack.koth.id);
+                save_koth_map(&editor.pack.koth)
+            }
         };
         editor.status = match result {
             Ok(p) => format!("Saved layer {}", p.display()),
@@ -448,6 +462,7 @@ fn editor_save_playtest_exit(
             EditLayer::Race => editor.pack.race.validate(),
             EditLayer::Vibe => editor.pack.vibe.validate(),
             EditLayer::Shooter => editor.pack.shooter.validate(),
+            EditLayer::Koth => editor.pack.koth.validate(),
         };
         match ok {
             Ok(()) => {
@@ -464,6 +479,10 @@ fn editor_save_playtest_exit(
                     EditLayer::Shooter => {
                         active.shooter = Some(editor.pack.shooter.clone());
                         queued.0 = Some(PartyPlan::Single(StageKind::Shooter));
+                    }
+                    EditLayer::Koth => {
+                        active.koth = Some(editor.pack.koth.clone());
+                        queued.0 = Some(PartyPlan::Single(StageKind::Koth));
                     }
                 }
                 exit_editor_world(
@@ -535,6 +554,11 @@ fn sync_editor_ghost(
             meshes.add(Sphere::new(0.45)),
             0.6,
         ),
+        (EditLayer::Koth, EditorPalette::Primary) => (
+            Color::srgba(0.85, 0.6, 1.0, 0.4),
+            meshes.add(Cylinder::new(4.5, 0.25)),
+            0.15,
+        ),
         (_, EditorPalette::Spawn) => (
             Color::srgba(0.4, 1.0, 0.5, 0.45),
             meshes.add(Cylinder::new(0.6, 0.2)),
@@ -577,13 +601,14 @@ fn update_editor_hud(
     *vis = Visibility::Visible;
     if let Ok(mut t) = text.single_mut() {
         **t = format!(
-            "MAP EDITOR · {} · layer {}\nTool: {} · Race g{} · Vibe o{} · Shooter c{}\nTab layer · F5 layer · F8 pack · F6 play layer · F9 Party Saga · F7 share · Q exit\n{}",
+            "MAP EDITOR · {} · layer {}\nTool: {} · Race g{} · Vibe o{} · Shooter c{} · Hill h{}\nTab layer · F5 layer · F8 pack · F6 play layer · F9 Party Saga · F7 share · Q exit\n{}",
             editor.pack.label,
             editor.layer.label(),
             tool.0.label(editor.layer),
             editor.pack.race.gates.len(),
             editor.pack.vibe.orbs.len(),
             editor.pack.shooter.cover.len(),
+            editor.pack.koth.hills.len(),
             editor.status
         );
     }
@@ -643,6 +668,27 @@ fn rebuild_visuals(
                 spawn_spawn_marker(commands, meshes, materials, i as u8, s);
             }
             for (i, b) in editor.pack.shooter.cover.iter().enumerate() {
+                spawn_block(commands, meshes, materials, i as u8, b);
+            }
+        }
+        EditLayer::Koth => {
+            for (i, h) in editor.pack.koth.hills.iter().enumerate() {
+                spawn_prop(
+                    commands,
+                    meshes,
+                    materials,
+                    EditorPalette::Primary,
+                    i as u8,
+                    Cylinder::new(editor.pack.koth.hill_radius, 0.25),
+                    Color::srgb(0.85, 0.6, 1.0),
+                    Vec3::new(h[0], 0.15, h[2]),
+                    true,
+                );
+            }
+            for (i, s) in editor.pack.koth.spawns.iter().enumerate() {
+                spawn_spawn_marker(commands, meshes, materials, i as u8, s);
+            }
+            for (i, b) in editor.pack.koth.blocks.iter().enumerate() {
                 spawn_block(commands, meshes, materials, i as u8, b);
             }
         }
@@ -735,6 +781,7 @@ fn push_block(editor: &mut EditorMode, block: MapBlock) {
         EditLayer::Race => editor.pack.race.blocks.push(block),
         EditLayer::Vibe => editor.pack.vibe.blocks.push(block),
         EditLayer::Shooter => editor.pack.shooter.cover.push(block),
+        EditLayer::Koth => editor.pack.koth.blocks.push(block),
     }
 }
 
@@ -750,6 +797,9 @@ fn set_spawn(editor: &mut EditorMode, spawn: [f32; 3]) {
         }
         EditLayer::Shooter => {
             editor.pack.shooter.spawns.push(spawn);
+        }
+        EditLayer::Koth => {
+            editor.pack.koth.spawns.push(spawn);
         }
     }
 }
@@ -785,6 +835,17 @@ fn delete_prop(editor: &mut EditorMode, kind: EditorPalette, idx: usize) {
             if idx < editor.pack.shooter.cover.len() =>
         {
             editor.pack.shooter.cover.remove(idx);
+        }
+        (EditLayer::Koth, EditorPalette::Primary) if idx < editor.pack.koth.hills.len() => {
+            editor.pack.koth.hills.remove(idx);
+        }
+        (EditLayer::Koth, EditorPalette::Spawn) if idx < editor.pack.koth.spawns.len() => {
+            editor.pack.koth.spawns.remove(idx);
+        }
+        (EditLayer::Koth, EditorPalette::Block | EditorPalette::Deco)
+            if idx < editor.pack.koth.blocks.len() =>
+        {
+            editor.pack.koth.blocks.remove(idx);
         }
         _ => {}
     }

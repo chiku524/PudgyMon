@@ -267,6 +267,7 @@ fn sync_desired_music_bed(
         PartyPhase::Race => MusicBed::CargoGantry,
         PartyPhase::Vibe => MusicBed::HrOrientation,
         PartyPhase::Shooter => MusicBed::BreakerPanic,
+        PartyPhase::Koth => MusicBed::BreakerPanic,
         PartyPhase::Intermission => MusicBed::Lobby,
         PartyPhase::Results => MusicBed::Podium,
     });

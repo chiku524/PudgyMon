@@ -151,6 +151,7 @@ fn update_hud(
         PartyPhase::Race => "RACE",
         PartyPhase::Vibe => "VIBE COLLECT",
         PartyPhase::Shooter => "SHOOTER",
+        PartyPhase::Koth => "KING OF THE HILL",
         PartyPhase::Intermission => "INTERMISSION",
         PartyPhase::Results => "RESULTS",
     };

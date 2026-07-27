@@ -57,6 +57,7 @@ pub enum EditLayer {
     Race,
     Vibe,
     Shooter,
+    Koth,
 }
 
 impl EditLayer {
@@ -65,6 +66,7 @@ impl EditLayer {
             Self::Race => "Race",
             Self::Vibe => "Vibe",
             Self::Shooter => "Shooter",
+            Self::Koth => "Hill",
         }
     }
 
@@ -72,7 +74,8 @@ impl EditLayer {
         match self {
             Self::Race => Self::Vibe,
             Self::Vibe => Self::Shooter,
-            Self::Shooter => Self::Race,
+            Self::Shooter => Self::Koth,
+            Self::Koth => Self::Race,
         }
     }
 }
@@ -178,6 +181,11 @@ fn queue_mode_pad_showcase(
             ("prop_cover_block_01", Vec3::new(-3.5, 0.0, 2.0), 15.0),
             ("prop_target_star_01", Vec3::new(3.5, 0.0, 2.0), -20.0),
             ("prop_blaster_toy_01", Vec3::new(0.0, 0.0, 4.0), 180.0),
+        ],
+        "Hill" => &[
+            ("prop_target_star_01", Vec3::new(0.0, 0.0, 4.0), 0.0),
+            ("prop_cover_block_01", Vec3::new(-3.5, 0.0, 2.0), 30.0),
+            ("prop_cover_block_01", Vec3::new(3.5, 0.0, 2.0), -30.0),
         ],
         "PartySaga" => &[
             ("prop_race_cone_01", Vec3::new(-4.0, 0.0, 2.5), 0.0),
@@ -359,27 +367,34 @@ fn spawn_social_hub(
         }
     }
 
-    let pads: [(PartyPlan, Vec3, [f32; 3], &str, &str); 4] = [
+    let pads: [(PartyPlan, Vec3, [f32; 3], &str, &str); 5] = [
         (
             PartyPlan::Single(StageKind::Race),
-            Vec3::new(-16.0, 0.0, -12.0),
+            Vec3::new(-20.0, 0.0, -14.0),
             [0.2, 0.85, 1.0],
             "Race",
             "env_pad_race_01",
         ),
         (
             PartyPlan::Single(StageKind::Vibe),
-            Vec3::new(0.0, 0.0, -20.0),
+            Vec3::new(-8.0, 0.0, -24.0),
             [1.0, 0.85, 0.2],
             "Vibe",
             "env_pad_vibe_01",
         ),
         (
             PartyPlan::Single(StageKind::Shooter),
-            Vec3::new(16.0, 0.0, -12.0),
+            Vec3::new(20.0, 0.0, -14.0),
             [1.0, 0.4, 0.55],
             "Shooter",
             "env_pad_shooter_01",
+        ),
+        (
+            PartyPlan::Single(StageKind::Koth),
+            Vec3::new(8.0, 0.0, -24.0),
+            [0.75, 0.5, 1.0],
+            "Hill",
+            "env_pad_koth_01",
         ),
         (
             PartyPlan::FullParty,
@@ -528,6 +543,14 @@ fn spawn_social_hub(
         ));
     }
 
+    spawn_nest_zones(
+        &mut commands,
+        &mut meshes,
+        &mut materials,
+        registry,
+        &mut prop_queue,
+    );
+
     // Skin showcase ring — round Pudgy mannequins.
     for (i, item) in catalog.items.iter().enumerate() {
         let angle = i as f32 * 1.05;
@@ -571,6 +594,168 @@ fn spawn_social_hub(
             })),
             Transform::from_translation(pos - Vec3::Y * 0.55),
             Name::new(format!("ShowcaseBase_{}", item.id)),
+        ));
+    }
+}
+
+/// Themed districts that turn the Nest plaza into a small open world:
+/// Hill Lookout (north), Race Training Strip (west), Vibe Garden (east),
+/// plus lamps and far-corner flora. World coordinates, arena is ±48.
+fn spawn_nest_zones(
+    commands: &mut Commands,
+    meshes: &mut Assets<Mesh>,
+    materials: &mut Assets<StandardMaterial>,
+    registry: Option<&StudioRegistry>,
+    prop_queue: &mut StudioPropQueue,
+) {
+    // Hill Lookout — stepped mound players can rally around (KOTH flavor).
+    let mound_center = Vec3::new(0.0, 0.0, -38.0);
+    for (i, (radius, height)) in [(7.0, 0.8), (4.6, 1.8), (2.6, 2.8)].into_iter().enumerate() {
+        commands.spawn((
+            HubProp,
+            GameplayEntity,
+            Mesh3d(meshes.add(Cylinder::new(radius, 0.5))),
+            MeshMaterial3d(materials.add(StandardMaterial {
+                base_color: Color::srgb(0.5, 0.42, 0.55),
+                ..Default::default()
+            })),
+            Transform::from_translation(mound_center + Vec3::Y * height),
+            Name::new(format!("HillLookout_{i}")),
+        ));
+    }
+    commands.spawn((
+        HubProp,
+        GameplayEntity,
+        Mesh3d(meshes.add(Sphere::new(0.7))),
+        MeshMaterial3d(materials.add(StandardMaterial {
+            base_color: Color::srgb(1.0, 0.8, 0.25),
+            emissive: LinearRgba::rgb(1.8, 1.3, 0.3),
+            unlit: true,
+            ..Default::default()
+        })),
+        Transform::from_translation(mound_center + Vec3::Y * 4.0),
+        Name::new("HillLookoutBeacon"),
+    ));
+
+    // Studio props per zone (skipped when the GLB is not on disk yet).
+    if let Some(reg) = registry {
+        let zone_props: [(&str, Vec3, f32); 14] = [
+            // Hill Lookout flags
+            ("prop_target_star_01", Vec3::new(-6.0, 0.0, -42.0), 30.0),
+            ("prop_target_star_01", Vec3::new(6.0, 0.0, -42.0), -30.0),
+            // Race Training Strip (west): slalom + ramp + banner
+            ("prop_race_banner_01", Vec3::new(-40.0, 0.0, -6.0), 90.0),
+            ("prop_race_cone_01", Vec3::new(-38.0, 0.0, 0.0), 0.0),
+            ("prop_race_cone_01", Vec3::new(-34.0, 0.0, 5.0), 0.0),
+            ("prop_race_cone_01", Vec3::new(-38.0, 0.0, 10.0), 0.0),
+            ("prop_race_cone_01", Vec3::new(-34.0, 0.0, 15.0), 0.0),
+            ("env_race_ramp_01", Vec3::new(-40.0, 0.0, 20.0), 90.0),
+            // Vibe Garden (east)
+            ("prop_vibe_mushroom_01", Vec3::new(38.0, 0.0, 2.0), 0.0),
+            ("prop_vibe_flower_01", Vec3::new(35.0, 0.0, 8.0), 40.0),
+            ("prop_vibe_flower_01", Vec3::new(41.0, 0.0, 8.0), -40.0),
+            ("prop_vibe_crystal_01", Vec3::new(36.0, 0.0, 14.0), 20.0),
+            ("prop_vibe_crystal_01", Vec3::new(40.0, 0.0, 14.0), -20.0),
+            ("prop_vibe_orb_01", Vec3::new(38.0, 0.0, 20.0), 0.0),
+        ];
+        for (i, (asset_id, pos, yaw_deg)) in zone_props.into_iter().enumerate() {
+            let tf = Transform::from_translation(pos)
+                .with_rotation(Quat::from_rotation_y(yaw_deg.to_radians()));
+            queue_studio_prop(
+                prop_queue,
+                reg,
+                asset_id,
+                tf,
+                format!("NestZone_{i}_{asset_id}"),
+            );
+        }
+    }
+
+    // Vibe Garden pond.
+    commands.spawn((
+        HubProp,
+        GameplayEntity,
+        Mesh3d(meshes.add(Cylinder::new(4.5, 0.12))),
+        MeshMaterial3d(materials.add(StandardMaterial {
+            base_color: Color::srgb(0.25, 0.6, 0.85),
+            emissive: LinearRgba::rgb(0.08, 0.25, 0.4),
+            ..Default::default()
+        })),
+        Transform::from_xyz(38.0, 0.03, 30.0),
+        Name::new("VibeGardenPond"),
+    ));
+
+    // Lamps marking paths out to each district.
+    for (i, pos) in [
+        Vec3::new(-14.0, 0.0, -30.0),
+        Vec3::new(14.0, 0.0, -30.0),
+        Vec3::new(-28.0, 0.0, 8.0),
+        Vec3::new(28.0, 0.0, 8.0),
+        Vec3::new(0.0, 0.0, 30.0),
+        Vec3::new(-30.0, 0.0, 30.0),
+        Vec3::new(30.0, 0.0, -34.0),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        commands.spawn((
+            HubProp,
+            GameplayEntity,
+            Mesh3d(meshes.add(Cylinder::new(0.14, 3.0))),
+            MeshMaterial3d(materials.add(StandardMaterial {
+                base_color: Color::srgb(0.3, 0.32, 0.38),
+                ..Default::default()
+            })),
+            Transform::from_translation(pos + Vec3::Y * 1.5),
+            Name::new(format!("NestLampPost_{i}")),
+        ));
+        commands.spawn((
+            HubProp,
+            GameplayEntity,
+            Mesh3d(meshes.add(Sphere::new(0.4))),
+            MeshMaterial3d(materials.add(StandardMaterial {
+                base_color: Color::srgb(1.0, 0.9, 0.6),
+                emissive: LinearRgba::rgb(1.6, 1.3, 0.7),
+                unlit: true,
+                ..Default::default()
+            })),
+            Transform::from_translation(pos + Vec3::Y * 3.2),
+            Name::new(format!("NestLampGlow_{i}")),
+        ));
+    }
+
+    // Far-corner flora so the widened arena edges feel alive.
+    for (i, pos) in [
+        Vec3::new(-42.0, 0.0, -42.0),
+        Vec3::new(42.0, 0.0, -42.0),
+        Vec3::new(-42.0, 0.0, 42.0),
+        Vec3::new(42.0, 0.0, 42.0),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        if let Some(reg) = registry {
+            if studio_asset_exists(reg, "prop_vibe_mushroom_01") {
+                queue_studio_prop(
+                    prop_queue,
+                    reg,
+                    "prop_vibe_mushroom_01",
+                    Transform::from_translation(pos),
+                    format!("NestCornerShroom_{i}"),
+                );
+                continue;
+            }
+        }
+        commands.spawn((
+            HubProp,
+            GameplayEntity,
+            Mesh3d(meshes.add(Sphere::new(1.1))),
+            MeshMaterial3d(materials.add(StandardMaterial {
+                base_color: Color::srgb(0.4, 0.8, 0.55),
+                ..Default::default()
+            })),
+            Transform::from_translation(pos + Vec3::Y * 1.0),
+            Name::new(format!("NestCornerShroom_{i}")),
         ));
     }
 }
@@ -693,6 +878,7 @@ fn activate_mode_pad(
             PartyPlan::Single(StageKind::Race) => active.race = None,
             PartyPlan::Single(StageKind::Vibe) => active.vibe = None,
             PartyPlan::Single(StageKind::Shooter) => active.shooter = None,
+            PartyPlan::Single(StageKind::Koth) => active.koth = None,
             PartyPlan::FullParty => active.clear(),
             PartyPlan::Idle => {}
         }

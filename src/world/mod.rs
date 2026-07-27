@@ -77,6 +77,12 @@ fn sync_party_atmosphere(
             15_000.0,
             1_200_000.0,
         ),
+        PartyPhase::Koth => (
+            Color::srgb(0.9, 0.7, 1.0),
+            Color::srgb(0.75, 0.5, 1.0),
+            14_500.0,
+            1_150_000.0,
+        ),
         _ => (
             Color::srgb(1.0, 0.95, 0.88),
             Color::srgb(0.55, 0.45, 1.0),
