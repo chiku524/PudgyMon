@@ -1,3 +1,4 @@
+use bevy::pbr::{DistanceFog, FogFalloff};
 use bevy::prelude::*;
 
 use crate::flow::AppScreen;
@@ -22,9 +23,20 @@ struct KeyLight;
 struct FillLight;
 
 pub fn spawn_camera(mut commands: Commands) {
+    // Open-world sky: soft daylight clear color + distance fog so the ocean
+    // fades into the horizon instead of ending at a hard edge.
+    commands.insert_resource(ClearColor(Color::srgb(0.55, 0.74, 0.92)));
     commands.spawn((
         Camera3d::default(),
         MainCamera,
+        DistanceFog {
+            color: Color::srgb(0.62, 0.78, 0.9),
+            falloff: FogFalloff::Linear {
+                start: 95.0,
+                end: 260.0,
+            },
+            ..Default::default()
+        },
         Transform::from_xyz(0.0, 12.0, 22.0).looking_at(Vec3::ZERO, Vec3::Y),
         Name::new("MainCamera"),
     ));

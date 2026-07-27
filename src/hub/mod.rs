@@ -312,7 +312,27 @@ fn spawn_social_hub(
         );
     }
 
-    // Vibe mushrooms — outer ring
+    // Vibe mushrooms — outer ring (fallback greybox shares handles).
+    let stem_mesh = meshes.add(Cylinder::new(0.25, 1.6));
+    let stem_mat = materials.add(StandardMaterial {
+        base_color: Color::srgb(0.35, 0.75, 0.55),
+        ..Default::default()
+    });
+    let cap_mesh = meshes.add(Sphere::new(0.85));
+    let cap_mats = [
+        materials.add(StandardMaterial {
+            base_color: Color::srgb(1.0, 0.45, 0.4),
+            emissive: LinearRgba::rgb(0.3, 0.15, 0.1),
+            unlit: true,
+            ..Default::default()
+        }),
+        materials.add(StandardMaterial {
+            base_color: Color::srgb(0.45, 0.85, 1.0),
+            emissive: LinearRgba::rgb(0.3, 0.15, 0.1),
+            unlit: true,
+            ..Default::default()
+        }),
+    ];
     for (i, pos) in [
         Vec3::new(-22.0, 0.0, -16.0),
         Vec3::new(22.0, 0.0, -16.0),
@@ -334,33 +354,19 @@ fn spawn_social_hub(
                 format!("VibeMushroom_{i}"),
             );
         } else {
-            let stem = materials.add(StandardMaterial {
-                base_color: Color::srgb(0.35, 0.75, 0.55),
-                ..Default::default()
-            });
-            let cap_col = if i % 2 == 0 {
-                Color::srgb(1.0, 0.45, 0.4)
-            } else {
-                Color::srgb(0.45, 0.85, 1.0)
-            };
             commands.spawn((
                 HubProp,
                 GameplayEntity,
-                Mesh3d(meshes.add(Cylinder::new(0.25, 1.6))),
-                MeshMaterial3d(stem),
+                Mesh3d(stem_mesh.clone()),
+                MeshMaterial3d(stem_mat.clone()),
                 Transform::from_translation(hub + pos + Vec3::Y * 1.2),
                 Name::new(format!("VibeStem_{i}")),
             ));
             commands.spawn((
                 HubProp,
                 GameplayEntity,
-                Mesh3d(meshes.add(Sphere::new(0.85))),
-                MeshMaterial3d(materials.add(StandardMaterial {
-                    base_color: cap_col,
-                    emissive: LinearRgba::rgb(0.3, 0.15, 0.1),
-                    unlit: true,
-                    ..Default::default()
-                })),
+                Mesh3d(cap_mesh.clone()),
+                MeshMaterial3d(cap_mats[i % 2].clone()),
                 Transform::from_translation(hub + pos + Vec3::Y * 2.3),
                 Name::new(format!("VibeCap_{i}")),
             ));
@@ -551,7 +557,15 @@ fn spawn_social_hub(
         &mut prop_queue,
     );
 
-    // Skin showcase ring — round Pudgy mannequins.
+    // Skin showcase ring — round Pudgy mannequins. Meshes and the base
+    // material are shared; only the per-skin tint material is unique.
+    let body_mesh = meshes.add(Sphere::new(0.5));
+    let head_mesh = meshes.add(Sphere::new(0.36));
+    let base_mesh = meshes.add(Cylinder::new(0.7, 0.2));
+    let base_mat = materials.add(StandardMaterial {
+        base_color: Color::srgb(0.18, 0.28, 0.24),
+        ..Default::default()
+    });
     for (i, item) in catalog.items.iter().enumerate() {
         let angle = i as f32 * 1.05;
         let pos = hub + Vec3::new(angle.cos() * 20.0, 0.55, angle.sin() * 20.0 + 4.0);
@@ -574,12 +588,12 @@ fn spawn_social_hub(
             ))
             .with_children(|parent| {
                 parent.spawn((
-                    Mesh3d(meshes.add(Sphere::new(0.5))),
+                    Mesh3d(body_mesh.clone()),
                     MeshMaterial3d(mat.clone()),
                     Transform::from_xyz(0.0, 0.0, 0.0),
                 ));
                 parent.spawn((
-                    Mesh3d(meshes.add(Sphere::new(0.36))),
+                    Mesh3d(head_mesh.clone()),
                     MeshMaterial3d(mat),
                     Transform::from_xyz(0.0, 0.62, 0.04),
                 ));
@@ -587,11 +601,8 @@ fn spawn_social_hub(
         commands.spawn((
             HubProp,
             GameplayEntity,
-            Mesh3d(meshes.add(Cylinder::new(0.7, 0.2))),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::srgb(0.18, 0.28, 0.24),
-                ..Default::default()
-            })),
+            Mesh3d(base_mesh.clone()),
+            MeshMaterial3d(base_mat.clone()),
             Transform::from_translation(pos - Vec3::Y * 0.55),
             Name::new(format!("ShowcaseBase_{}", item.id)),
         ));
@@ -610,15 +621,16 @@ fn spawn_nest_zones(
 ) {
     // Hill Lookout — stepped mound players can rally around (KOTH flavor).
     let mound_center = Vec3::new(0.0, 0.0, -38.0);
+    let mound_mat = materials.add(StandardMaterial {
+        base_color: Color::srgb(0.5, 0.42, 0.55),
+        ..Default::default()
+    });
     for (i, (radius, height)) in [(7.0, 0.8), (4.6, 1.8), (2.6, 2.8)].into_iter().enumerate() {
         commands.spawn((
             HubProp,
             GameplayEntity,
             Mesh3d(meshes.add(Cylinder::new(radius, 0.5))),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::srgb(0.5, 0.42, 0.55),
-                ..Default::default()
-            })),
+            MeshMaterial3d(mound_mat.clone()),
             Transform::from_translation(mound_center + Vec3::Y * height),
             Name::new(format!("HillLookout_{i}")),
         ));
@@ -685,7 +697,19 @@ fn spawn_nest_zones(
         Name::new("VibeGardenPond"),
     ));
 
-    // Lamps marking paths out to each district.
+    // Lamps marking paths out to each district — shared handles, one asset each.
+    let post_mesh = meshes.add(Cylinder::new(0.14, 3.0));
+    let post_mat = materials.add(StandardMaterial {
+        base_color: Color::srgb(0.3, 0.32, 0.38),
+        ..Default::default()
+    });
+    let glow_mesh = meshes.add(Sphere::new(0.4));
+    let glow_mat = materials.add(StandardMaterial {
+        base_color: Color::srgb(1.0, 0.9, 0.6),
+        emissive: LinearRgba::rgb(1.6, 1.3, 0.7),
+        unlit: true,
+        ..Default::default()
+    });
     for (i, pos) in [
         Vec3::new(-14.0, 0.0, -30.0),
         Vec3::new(14.0, 0.0, -30.0),
@@ -701,30 +725,27 @@ fn spawn_nest_zones(
         commands.spawn((
             HubProp,
             GameplayEntity,
-            Mesh3d(meshes.add(Cylinder::new(0.14, 3.0))),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::srgb(0.3, 0.32, 0.38),
-                ..Default::default()
-            })),
+            Mesh3d(post_mesh.clone()),
+            MeshMaterial3d(post_mat.clone()),
             Transform::from_translation(pos + Vec3::Y * 1.5),
             Name::new(format!("NestLampPost_{i}")),
         ));
         commands.spawn((
             HubProp,
             GameplayEntity,
-            Mesh3d(meshes.add(Sphere::new(0.4))),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::srgb(1.0, 0.9, 0.6),
-                emissive: LinearRgba::rgb(1.6, 1.3, 0.7),
-                unlit: true,
-                ..Default::default()
-            })),
+            Mesh3d(glow_mesh.clone()),
+            MeshMaterial3d(glow_mat.clone()),
             Transform::from_translation(pos + Vec3::Y * 3.2),
             Name::new(format!("NestLampGlow_{i}")),
         ));
     }
 
-    // Far-corner flora so the widened arena edges feel alive.
+    // Far-corner flora so the island edges feel alive.
+    let shroom_mesh = meshes.add(Sphere::new(1.1));
+    let shroom_mat = materials.add(StandardMaterial {
+        base_color: Color::srgb(0.4, 0.8, 0.55),
+        ..Default::default()
+    });
     for (i, pos) in [
         Vec3::new(-42.0, 0.0, -42.0),
         Vec3::new(42.0, 0.0, -42.0),
@@ -749,11 +770,8 @@ fn spawn_nest_zones(
         commands.spawn((
             HubProp,
             GameplayEntity,
-            Mesh3d(meshes.add(Sphere::new(1.1))),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::srgb(0.4, 0.8, 0.55),
-                ..Default::default()
-            })),
+            Mesh3d(shroom_mesh.clone()),
+            MeshMaterial3d(shroom_mat.clone()),
             Transform::from_translation(pos + Vec3::Y * 1.0),
             Name::new(format!("NestCornerShroom_{i}")),
         ));
@@ -762,8 +780,16 @@ fn spawn_nest_zones(
 
 fn sync_hub_pad_visibility(
     director: Res<PartyDirector>,
+    mut last: Local<Option<PartyPhase>>,
     mut pads: Query<&mut Visibility, With<HubProp>>,
+    added: Query<(), (With<HubProp>, Added<Visibility>)>,
 ) {
+    // Only touch visibility when the phase flips or new props stream in
+    // (queued Studio GLBs spawn over many frames) — not every frame.
+    if *last == Some(director.phase) && added.is_empty() {
+        return;
+    }
+    *last = Some(director.phase);
     let show = director.phase == PartyPhase::Hub;
     let vis = if show {
         Visibility::Visible

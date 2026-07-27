@@ -33,14 +33,9 @@ pub fn apply_knockback_motion(
         }
         transform.translation += knock.velocity * dt;
         // Keep vertical motion owned by jump/gravity — only shove on XZ.
-        transform.translation.x = transform.translation.x.clamp(
-            -crate::core::ARENA_BOUNDS,
-            crate::core::ARENA_BOUNDS,
-        );
-        transform.translation.z = transform.translation.z.clamp(
-            -crate::core::ARENA_BOUNDS,
-            crate::core::ARENA_BOUNDS,
-        );
+        let keep_y = transform.translation.y;
+        transform.translation = crate::core::clamp_to_island(transform.translation);
+        transform.translation.y = keep_y;
         knock.velocity *= (1.0 - 6.0 * dt).max(0.0);
         if knock.velocity.length() < 0.2 {
             knock.velocity = Vec3::ZERO;

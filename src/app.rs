@@ -161,35 +161,69 @@ fn spawn_party_arena(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    // Nest playground floor + soft coral walls (PudgyMon greybox).
-    // Sized for the open-world Nest — plaza plus themed zones (~96×96).
-    let floor_mat = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.16, 0.28, 0.26),
-        ..Default::default()
-    });
-    let wall_mat = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.92, 0.45, 0.38),
-        ..Default::default()
-    });
+    // Open-world Nest island — no walls. Movement is softly clamped to the
+    // WORLD_BOUNDS circle at the beach line (see core::clamp_to_island).
+    let island_radius = crate::core::WORLD_BOUNDS + 1.5;
+
+    // Grass island top.
     commands.spawn((
         crate::world::ArenaPiece,
-        Mesh3d(meshes.add(Cuboid::new(96.0, 0.2, 96.0))),
-        MeshMaterial3d(floor_mat),
+        Mesh3d(meshes.add(Cylinder::new(island_radius, 0.2))),
+        MeshMaterial3d(materials.add(StandardMaterial {
+            base_color: Color::srgb(0.16, 0.28, 0.26),
+            ..Default::default()
+        })),
         Transform::from_xyz(0.0, -0.1, 0.0),
-        Name::new("NestFloor"),
+        Name::new("NestIsland"),
     ));
-    for (name, pos, size) in [
-        ("WallL", Vec3::new(-48.0, 2.0, 0.0), Vec3::new(0.4, 4.0, 96.0)),
-        ("WallR", Vec3::new(48.0, 2.0, 0.0), Vec3::new(0.4, 4.0, 96.0)),
-        ("WallN", Vec3::new(0.0, 2.0, -48.0), Vec3::new(96.0, 4.0, 0.4)),
-        ("WallS", Vec3::new(0.0, 2.0, 48.0), Vec3::new(96.0, 4.0, 0.4)),
-    ] {
+    // Sandy beach rim sloping to the water.
+    commands.spawn((
+        crate::world::ArenaPiece,
+        Mesh3d(meshes.add(Cylinder::new(island_radius + 6.0, 0.12))),
+        MeshMaterial3d(materials.add(StandardMaterial {
+            base_color: Color::srgb(0.86, 0.76, 0.55),
+            ..Default::default()
+        })),
+        Transform::from_xyz(0.0, -0.22, 0.0),
+        Name::new("NestBeach"),
+    ));
+    // Endless ocean plane to the horizon.
+    commands.spawn((
+        crate::world::ArenaPiece,
+        Mesh3d(meshes.add(Cuboid::new(600.0, 0.1, 600.0))),
+        MeshMaterial3d(materials.add(StandardMaterial {
+            base_color: Color::srgb(0.16, 0.42, 0.62),
+            emissive: LinearRgba::rgb(0.01, 0.05, 0.09),
+            ..Default::default()
+        })),
+        Transform::from_xyz(0.0, -0.42, 0.0),
+        Name::new("NestOcean"),
+    ));
+
+    // Distant islets for horizon interest (outside the playable circle).
+    let islet_mat = materials.add(StandardMaterial {
+        base_color: Color::srgb(0.24, 0.36, 0.3),
+        ..Default::default()
+    });
+    let islet_mesh = meshes.add(Sphere::new(1.0));
+    for (i, (angle_deg, dist, scale)) in [
+        (25.0_f32, 120.0_f32, 9.0_f32),
+        (110.0, 145.0, 14.0),
+        (185.0, 130.0, 7.0),
+        (250.0, 155.0, 12.0),
+        (320.0, 125.0, 8.0),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        let a = angle_deg.to_radians();
         commands.spawn((
             crate::world::ArenaPiece,
-            Mesh3d(meshes.add(Cuboid::new(size.x, size.y, size.z))),
-            MeshMaterial3d(wall_mat.clone()),
-            Transform::from_translation(pos),
-            Name::new(name),
+            Mesh3d(islet_mesh.clone()),
+            MeshMaterial3d(islet_mat.clone()),
+            Transform::from_xyz(a.cos() * dist, -scale * 0.55, a.sin() * dist)
+                .with_scale(Vec3::new(scale, scale * 0.6, scale)),
+            Name::new(format!("HorizonIslet_{i}")),
         ));
     }
 }

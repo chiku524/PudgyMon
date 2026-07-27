@@ -30,7 +30,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     core::{
-        ARENA_BOUNDS, CAMERA_DEFAULT_DISTANCE, CAMERA_MAX_DISTANCE, CAMERA_MIN_DISTANCE,
+        CAMERA_DEFAULT_DISTANCE, CAMERA_MAX_DISTANCE, CAMERA_MIN_DISTANCE,
         MAX_CAMERA_PITCH, MIN_CAMERA_PITCH, PLAYER_DOUBLE_JUMP_VELOCITY, PLAYER_FLOOR_Y,
         PLAYER_GRAVITY, PLAYER_JUMP_VELOCITY, PLAYER_MAX_AIR_JUMPS, PLAYER_SPEED,
         PLAYER_SPRINT_MULTIPLIER,
@@ -290,8 +290,7 @@ fn apply_player_move(
         motion.grounded = false;
     }
 
-    transform.translation.x = transform.translation.x.clamp(-ARENA_BOUNDS, ARENA_BOUNDS);
-    transform.translation.z = transform.translation.z.clamp(-ARENA_BOUNDS, ARENA_BOUNDS);
+    transform.translation = crate::core::clamp_to_island(transform.translation);
 }
 
 fn capture_cursor_when_playing(

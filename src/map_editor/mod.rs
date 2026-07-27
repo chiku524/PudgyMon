@@ -523,27 +523,50 @@ fn editor_save_playtest_exit(
     }
 }
 
+/// Ghost preview follows the placement point. The entity (and its mesh /
+/// material assets) is only rebuilt when the layer or tool changes —
+/// rebuilding every frame was churning the asset stores.
 fn sync_editor_ghost(
     editor: Res<EditorMode>,
     tool: Res<EditorTool>,
     camera: Res<ThirdPersonCamera>,
-    local: Query<&Transform, With<LocalPlayer>>,
+    local: Query<&Transform, (With<LocalPlayer>, Without<EditorGhost>)>,
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-    ghosts: Query<Entity, With<EditorGhost>>,
+    mut ghosts: Query<(Entity, &mut Transform), With<EditorGhost>>,
+    mut shape_key: Local<Option<(EditLayer, EditorPalette)>>,
 ) {
-    for entity in &ghosts {
-        commands.entity(entity).despawn();
-    }
     if !editor.active {
+        if shape_key.is_some() {
+            for (entity, _) in &ghosts {
+                commands.entity(entity).despawn();
+            }
+            *shape_key = None;
+        }
         return;
     }
     let Ok(player) = local.single() else {
         return;
     };
     let pos = place_point(player, camera.yaw);
-    let (color, mesh, y) = match (editor.layer, tool.0) {
+
+    let key = (editor.layer, tool.0);
+    if *shape_key == Some(key) {
+        if let Ok((_, mut tf)) = ghosts.single_mut() {
+            tf.translation.x = pos.x;
+            tf.translation.z = pos.z;
+            return;
+        }
+        // Ghost was despawned externally — fall through and rebuild.
+    }
+
+    for (entity, _) in &ghosts {
+        commands.entity(entity).despawn();
+    }
+    *shape_key = Some(key);
+
+    let (color, mesh, y) = match key {
         (EditLayer::Race, EditorPalette::Primary) => (
             Color::srgba(0.2, 0.85, 1.0, 0.45),
             meshes.add(Cuboid::new(3.0, 2.5, 0.4)),

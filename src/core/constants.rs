@@ -16,9 +16,25 @@ pub const PLAYER_JUMP_VELOCITY: f32 = 14.697; // sqrt(2 * 24 * 4.5)
 pub const PLAYER_DOUBLE_JUMP_VELOCITY: f32 = 17.664; // sqrt(2 * 24 * 6.5)
 pub const PLAYER_MAX_AIR_JUMPS: u8 = 1;
 
-/// Soft playable bounds for the arena shell (XZ half-extent).
-/// Nest floor / walls should stay slightly outside this.
+/// Placement bounds for stage layouts (XZ half-extent) — keeps mini-game
+/// content near the plaza where cameras and bots expect it.
 pub const ARENA_BOUNDS: f32 = 48.0;
+
+/// Radius of the walkable Nest island. The open world has no walls —
+/// movement is softly clamped to this circle at the beach line.
+pub const WORLD_BOUNDS: f32 = 70.0;
+
+/// Clamp an XZ position to the island circle (open-world soft boundary).
+pub fn clamp_to_island(mut pos: bevy::math::Vec3) -> bevy::math::Vec3 {
+    let xz = bevy::math::Vec2::new(pos.x, pos.z);
+    let len = xz.length();
+    if len > WORLD_BOUNDS {
+        let clamped = xz * (WORLD_BOUNDS / len);
+        pos.x = clamped.x;
+        pos.z = clamped.y;
+    }
+    pos
+}
 
 /// Seconds of grace after a room clears before elimination/finale advance.
 pub const ROOM_CLEAR_GRACE_SECS: f32 = 1.25;

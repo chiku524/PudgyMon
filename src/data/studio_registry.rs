@@ -57,8 +57,11 @@ impl StudioRegistry {
     pub fn load(path: impl AsRef<Path>) -> Result<Self, StudioRegistryError> {
         let raw = fs::read_to_string(path.as_ref())
             .map_err(|err| StudioRegistryError::Io(err.to_string()))?;
-        let parsed: StudioRegistryFile = serde_json::from_str(&raw)
+        let mut parsed: StudioRegistryFile = serde_json::from_str(&raw)
             .map_err(|err| StudioRegistryError::Parse(err.to_string()))?;
+        // `_`-prefixed ids (e.g. `_TEMPLATE`) are authoring stencils for the
+        // import scripts — never real assets, so drop them at load time.
+        parsed.assets.retain(|entry| !entry.asset_id.starts_with('_'));
         Ok(Self {
             import_root: parsed.import_root,
             assets: parsed.assets,
@@ -119,14 +122,24 @@ mod tests {
     fn loads_studio_registry() {
         let registry =
             StudioRegistry::load("assets/studio_registry.json").expect("registry loads");
-        assert!(registry.target_height("env_breaker_panel_01").is_some());
+        assert!(registry.target_height("env_nest_egg_01").is_some());
+        // Authoring stencils must be filtered out at load time.
+        assert!(!registry.contains("_TEMPLATE"));
     }
 
     #[test]
     fn floor_pad_uses_target_width() {
-        let registry =
-            StudioRegistry::load("assets/studio_registry.json").expect("registry loads");
-        let scale = registry.spawn_scale("safety_mat_floor_pad_01");
+        let registry = StudioRegistry {
+            import_root: String::new(),
+            assets: vec![StudioAssetEntry {
+                asset_id: "test_pad".into(),
+                target_height: 1.0,
+                target_width: Some(2.0),
+                uniform_scale: None,
+                notes: None,
+            }],
+        };
+        let scale = registry.spawn_scale("test_pad");
         assert!((scale.x - 2.0).abs() < f32::EPSILON);
         assert!((scale.z - 2.0).abs() < f32::EPSILON);
     }

@@ -2,7 +2,7 @@
 
 use bevy::prelude::*;
 
-use crate::core::ARENA_BOUNDS;
+use crate::core::clamp_to_island;
 
 /// Axis-aligned push volume in world space (center + half extents).
 #[derive(Component, Debug, Clone, Copy)]
@@ -63,8 +63,7 @@ pub fn resolve_player_push(
         }
     }
 
-    pos.x = pos.x.clamp(-ARENA_BOUNDS, ARENA_BOUNDS);
-    pos.z = pos.z.clamp(-ARENA_BOUNDS, ARENA_BOUNDS);
+    pos = clamp_to_island(pos);
     pos.y = keep_y;
     player.translation = pos;
 }

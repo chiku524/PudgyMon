@@ -2,7 +2,7 @@
 
 In-game UGC for **PudgyMon: Party Saga**. Create layouts in The Nest, save locally, playtest, export share codes.
 
-Playable XZ half-extent is `ARENA_BOUNDS` (**48**) — Nest floor is ~**96×96**. Place props anywhere inside ±48.
+Stage placement XZ half-extent is `ARENA_BOUNDS` (**48**). The Nest itself is an open-world island (radius `WORLD_BOUNDS` = **70**, no walls) — stage content stays inside ±48 so it always lands on the island.
 
 ## Loop
 
