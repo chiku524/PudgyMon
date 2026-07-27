@@ -46,15 +46,17 @@ cargo test --lib room_asset_ids_exist_in_registry_or_are_null
 
 ## Optimize dense Tripo GLBs
 
-Tripo meshes are often 100k–300k tris (~5–14 MB). Meshopt alone often stalls on split-vertex Tripo topology — use Blender weld+decimate:
+Tripo meshes are often 100k–300k tris (~5–14 MB). Use **UV-safe** Blender decimate (no weld-by-distance — welding Tripo split verts muddies UVs into a clay look):
 
 ```bash
-python scripts/blender_decimate_glb.py --batch assets/models --glob "*/*.glb" --skip-texture-pass
-# single asset:
-python scripts/blender_decimate_glb.py assets/models/env_nest_bench_01/env_nest_bench_01.glb
+# Quality redo from dense .pre_opt backups + soft toon material polish
+python scripts/blender_decimate_glb.py --batch assets/models --glob "*/*.glb" --from-pre-opt --toon
+
+# single asset
+python scripts/blender_decimate_glb.py assets/models/env_nest_bench_01/env_nest_bench_01.glb --from-pre-opt --toon
 ```
 
-Writes `.glb.pre_opt` backups (gitignored). Characters keep skins/clips; props target ~8–14k tris.
+Writes `.glb.pre_opt` backups (gitignored). Characters keep skins/clips. Face budgets stay softer (~24–48k) so painted textures read clean.
 ## Place in a room (required for playable)
 
 Edit the vault JSON under `data/rooms/` (or `arena.json` for the persistent shell).

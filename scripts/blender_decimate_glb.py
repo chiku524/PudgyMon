@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Decimate dense Tripo GLBs via Blender (meshopt often stalls on Tripo topology).
+"""UV-safe Blender decimate for dense Tripo GLBs (+ optional toon material polish).
 
-Restores from `.glb.pre_opt` when present and larger, applies Decimate to a target
-triangle budget, re-exports GLB, then runs the Bevy-safe texture/resample pass
-from optimize_glb.py (simplify skipped).
+Important: does **not** weld-by-distance. Welding Tripo split verts merges different
+UVs and creates the muddy clay look. Prefer higher face counts that keep textures.
+
+Restores from `.glb.pre_opt` when present (use --from-pre-opt to always restore).
 
 Usage:
-  python scripts/blender_decimate_glb.py assets/models/env_nest_bench_01/env_nest_bench_01.glb
-  python scripts/blender_decimate_glb.py --batch assets/models --glob "*/*.glb"
-  python scripts/blender_decimate_glb.py path.glb --faces 12000
+  python scripts/blender_decimate_glb.py --batch assets/models --glob "*/*.glb" --from-pre-opt --toon
+  python scripts/blender_decimate_glb.py assets/models/env_nest_bench_01/env_nest_bench_01.glb --from-pre-opt --toon
 """
 
 from __future__ import annotations
@@ -19,20 +19,21 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[1]
 _BLENDER_SCRIPT = Path(__file__).resolve().parent / "_blender_decimate_inner.py"
 
-# Default triangle targets by asset prefix.
+# Softer budgets — preserve painted Tripo silhouette / UVs over max compression.
 _FACE_BUDGET = {
-    "char_": 28_000,
-    "oceanic_": 28_000,
-    "npc_": 28_000,
-    "acc_": 8_000,
-    "prop_": 12_000,
-    "env_": 14_000,
-    "vfx_": 4_000,
+    "char_": 48_000,
+    "oceanic_": 48_000,
+    "npc_": 48_000,
+    "acc_": 24_000,
+    "prop_": 40_000,
+    "env_": 48_000,
+    "vfx_": 12_000,
 }
 
 
@@ -65,13 +66,10 @@ def _face_budget(path: Path, override: int | None) -> int:
     for prefix, faces in _FACE_BUDGET.items():
         if name.startswith(prefix):
             return faces
-    return 12_000
+    return 40_000
 
 
 def _safe_copy(src: Path, dst: Path, *, attempts: int = 8) -> None:
-    """Copy with retries — Windows often locks GLBs briefly (IDE / AV / mapper)."""
-    import time
-
     last: Exception | None = None
     for i in range(attempts):
         try:
@@ -88,23 +86,31 @@ def decimate_one(
     *,
     faces: int | None = None,
     dry_run: bool = False,
-    skip_texture_pass: bool = False,
+    from_pre_opt: bool = False,
+    toon: bool = True,
+    skip_texture_pass: bool = True,
 ) -> dict:
     src = src.resolve()
     if not src.is_file():
         raise FileNotFoundError(src)
     budget = _face_budget(src, faces)
-    before = src.stat().st_size
+    bak = src.with_suffix(src.suffix + ".pre_opt")
 
     if dry_run:
-        print(f"dry-run {src.name}: target_faces={budget} ({before / 1e6:.2f} MB)")
+        before = bak.stat().st_size if (from_pre_opt and bak.is_file()) else src.stat().st_size
+        print(
+            f"dry-run {src.name}: target_faces={budget} toon={int(toon)} "
+            f"from_pre_opt={int(from_pre_opt)} ({before / 1e6:.2f} MB)"
+        )
         return {"path": str(src), "before": before, "after": before, "faces": budget}
 
-    # Prefer denser .pre_opt when present.
-    bak = src.with_suffix(src.suffix + ".pre_opt")
-    if bak.is_file() and bak.stat().st_size > src.stat().st_size:
+    # Quality redo: always start from dense original when asked / available.
+    if from_pre_opt and bak.is_file():
         _safe_copy(bak, src)
         print(f"restored dense source from {bak.name}")
+    elif bak.is_file() and bak.stat().st_size > src.stat().st_size:
+        _safe_copy(bak, src)
+        print(f"restored denser backup from {bak.name}")
     elif not bak.is_file():
         _safe_copy(src, bak)
         print(f"backup -> {bak.name}")
@@ -124,8 +130,12 @@ def decimate_one(
             str(src),
             str(out_glb),
             str(budget),
+            "1" if toon else "0",
         ]
-        print(f"+ blender decimate {src.name} -> ~{budget:,} tris")
+        print(
+            f"+ blender UV-safe decimate {src.name} -> ~{budget:,} tris "
+            f"(toon={int(toon)})"
+        )
         proc = subprocess.run(
             cmd,
             capture_output=True,
@@ -133,14 +143,28 @@ def decimate_one(
             encoding="utf-8",
             errors="replace",
         )
+        # Surface useful Blender lines.
+        for line in (proc.stdout or "").splitlines():
+            if any(
+                k in line
+                for k in (
+                    "DECIMATE_",
+                    "TOON_",
+                    "start ",
+                    "decimate ",
+                    "skip ",
+                    "Error",
+                    "Traceback",
+                )
+            ):
+                print(line)
         if proc.returncode != 0 or not out_glb.is_file():
-            tail = ((proc.stderr or "") + (proc.stdout or ""))[-2000:]
+            tail = ((proc.stderr or "") + (proc.stdout or ""))[-2500:]
             raise RuntimeError(f"Blender decimate failed for {src.name}:\n{tail}")
 
-        # If Blender made the file larger (e.g. already-optimal oceanic), keep input.
-        if out_glb.stat().st_size > before * 1.02:
+        if out_glb.stat().st_size > before * 1.05:
             print(
-                f"keep source {src.name}: decimated larger "
+                f"keep source {src.name}: output larger "
                 f"({out_glb.stat().st_size / 1e6:.2f} MB > {before / 1e6:.2f} MB)"
             )
         else:
@@ -175,9 +199,21 @@ def main() -> int:
     parser.add_argument("--faces", type=int, default=None, help="Override triangle budget")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument(
-        "--skip-texture-pass",
+        "--from-pre-opt",
         action="store_true",
-        help="Skip optimize_glb texture/resample after decimate",
+        help="Always restore .glb.pre_opt before decimating (quality redo)",
+    )
+    parser.add_argument(
+        "--toon",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Apply soft matte cartoon material polish (default: on)",
+    )
+    parser.add_argument(
+        "--skip-texture-pass",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Skip gltf-transform texture pass (default: skip)",
     )
     args = parser.parse_args()
 
@@ -187,9 +223,7 @@ def main() -> int:
     files = [
         f
         for f in files
-        if f.is_file()
-        and f.suffix.lower() == ".glb"
-        and ".pre_opt" not in f.name
+        if f.is_file() and f.suffix.lower() == ".glb" and ".pre_opt" not in f.name
     ]
     seen: set[Path] = set()
     uniq: list[Path] = []
@@ -202,7 +236,6 @@ def main() -> int:
     if not files:
         print("error: no GLB inputs", file=sys.stderr)
         return 1
-
     if not _BLENDER_SCRIPT.is_file():
         print(f"error: missing {_BLENDER_SCRIPT}", file=sys.stderr)
         return 1
@@ -215,6 +248,8 @@ def main() -> int:
                 path,
                 faces=args.faces,
                 dry_run=args.dry_run,
+                from_pre_opt=args.from_pre_opt,
+                toon=args.toon,
                 skip_texture_pass=args.skip_texture_pass,
             )
             total_before += stats["before"]
