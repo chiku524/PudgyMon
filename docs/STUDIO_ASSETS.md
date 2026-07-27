@@ -46,17 +46,20 @@ cargo test --lib room_asset_ids_exist_in_registry_or_are_null
 
 ## Optimize dense Tripo GLBs
 
-Tripo meshes are often 100k–300k tris (~5–14 MB). Use **UV-safe** Blender decimate (no weld-by-distance — welding Tripo split verts muddies UVs into a clay look):
+Best path for **no holes + candy paint + fast loads**: remesh a closed low-poly cage, then **bake** Tripo diffuse onto it (Bevy-safe JPEG, no Draco/KTX2):
 
 ```bash
-# Quality redo from dense .pre_opt backups + soft toon material polish
-python scripts/blender_decimate_glb.py --batch assets/models --glob "*/*.glb" --from-pre-opt --toon
+# From dense .pre_opt backups (recommended)
+python scripts/blender_bake_optimize_glb.py --batch assets/models --glob "*/*.glb" --from-pre-opt
 
 # single asset
-python scripts/blender_decimate_glb.py assets/models/env_nest_bench_01/env_nest_bench_01.glb --from-pre-opt --toon
+python scripts/blender_bake_optimize_glb.py assets/models/env_nest_bench_01/env_nest_bench_01.glb --from-pre-opt
 ```
 
-Writes `.glb.pre_opt` backups (gitignored). Characters keep skins/clips. Face budgets stay softer (~24–48k) so painted textures read clean.
+- **Static props / accessories / env:** voxel remesh → ~6–10k tris → bake painted diffuse → matte toon material  
+- **Skinned characters:** hole-fill + mild decimate (keeps weights/clips); do not remesh  
+
+Fallback UV-only decimate (no bake): `scripts/blender_decimate_glb.py` — can leave holes on Tripo topology; prefer bake-optimize.
 ## Place in a room (required for playable)
 
 Edit the vault JSON under `data/rooms/` (or `arena.json` for the persistent shell).
