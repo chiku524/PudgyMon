@@ -173,7 +173,7 @@
       "asset_id": "char_pudgy_sky_01",
       "target_height": 1.2,
       "uniform_scale": 1.0,
-      "notes": "Sky Pudgy \u2014 static Tripo mesh on lava Studio 41-bone rig + walk/run clips"
+      "notes": "Sky Pudgy \u2014 Studio 41-bone rig with idle/walk/run/jump/emote"
     },
     {
       "asset_id": "env_nest_bench_01",

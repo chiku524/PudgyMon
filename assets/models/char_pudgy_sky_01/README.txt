@@ -1,5 +1,4 @@
 char_pudgy_sky_01
-Mesh: stylized+3d+character (1)-optimized.glb
-Donor rig/clips: char_pudgy_lava_01
-Sky Pudgy — static Tripo mesh on lava Studio 41-bone rig + walk/run clips
-Rebuild: python scripts/bind_mesh_to_studio_rig.py --mesh "<mesh>" --donor char_pudgy_lava_01 --asset-id char_pudgy_sky_01
+Source: stylized+3d+character-optimized.glb
+Sky Pudgy — Studio 41-bone rig with idle/walk/run/jump/emote
+Rebuild: python scripts/import_rigged_character_glb.py --src "<src>" --asset-id char_pudgy_sky_01
