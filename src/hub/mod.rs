@@ -782,22 +782,21 @@ fn sync_hub_pad_visibility(
     director: Res<PartyDirector>,
     mut last: Local<Option<PartyPhase>>,
     mut pads: Query<&mut Visibility, With<HubProp>>,
-    added: Query<(), (With<HubProp>, Added<Visibility>)>,
 ) {
-    // Only touch visibility when the phase flips or new props stream in
-    // (queued Studio GLBs spawn over many frames) — not every frame.
-    if *last == Some(director.phase) && added.is_empty() {
-        return;
-    }
+    // Only write visibility when the phase flips, or per prop as it streams
+    // in (queued Studio GLBs spawn over many frames). Checking `is_added()`
+    // reads change ticks without marking anything changed.
+    let phase_changed = *last != Some(director.phase);
     *last = Some(director.phase);
-    let show = director.phase == PartyPhase::Hub;
-    let vis = if show {
+    let vis = if director.phase == PartyPhase::Hub {
         Visibility::Visible
     } else {
         Visibility::Hidden
     };
     for mut v in &mut pads {
-        *v = vis;
+        if phase_changed || v.is_added() {
+            *v = vis;
+        }
     }
 }
 
