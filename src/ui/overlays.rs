@@ -68,8 +68,15 @@ pub fn update_phase_overlay(
     let Ok(mut visibility) = root.single_mut() else {
         return;
     };
+    // Compare-before-write throughout: unconditional Visibility / Text writes
+    // dirty the UI tree (and re-layout text) every frame.
+    let set_visibility = |visibility: &mut Mut<Visibility>, want: Visibility| {
+        if **visibility != want {
+            **visibility = want;
+        }
+    };
     if *screen.get() != AppScreen::Playing {
-        *visibility = Visibility::Hidden;
+        set_visibility(&mut visibility, Visibility::Hidden);
         return;
     }
 
@@ -93,16 +100,20 @@ pub fn update_phase_overlay(
 
     match content {
         Some((t, b)) => {
-            *visibility = Visibility::Visible;
+            set_visibility(&mut visibility, Visibility::Visible);
             if let Ok(mut text) = title.single_mut() {
-                **text = t;
+                if text.0 != t {
+                    **text = t;
+                }
             }
             if let Ok(mut text) = body.single_mut() {
-                **text = b;
+                if text.0 != b {
+                    **text = b;
+                }
             }
         }
         None => {
-            *visibility = Visibility::Hidden;
+            set_visibility(&mut visibility, Visibility::Hidden);
         }
     }
 }

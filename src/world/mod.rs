@@ -46,6 +46,7 @@ pub fn spawn_camera(mut commands: Commands) {
         DirectionalLight {
             illuminance: 12_000.0,
             color: Color::srgb(1.0, 0.95, 0.88),
+            shadow_maps_enabled: true,
             ..Default::default()
         },
         Transform::from_xyz(10.0, 22.0, 8.0).looking_at(Vec3::ZERO, Vec3::Y),
@@ -65,11 +66,27 @@ pub fn spawn_camera(mut commands: Commands) {
     ));
 }
 
+/// Seconds to crossfade lighting when the party phase changes.
+const ATMOSPHERE_FADE_SECS: f32 = 1.2;
+
 fn sync_party_atmosphere(
+    time: Res<Time>,
     director: Res<PartyDirector>,
+    mut last_phase: Local<Option<PartyPhase>>,
+    mut fade_left: Local<f32>,
     mut key: Query<&mut DirectionalLight, With<KeyLight>>,
     mut fill: Query<&mut PointLight, With<FillLight>>,
 ) {
+    if *last_phase != Some(director.phase) {
+        *last_phase = Some(director.phase);
+        *fade_left = ATMOSPHERE_FADE_SECS;
+    }
+    // Steady state: don't dirty the lights (and their GPU uniforms) each frame.
+    if *fade_left <= 0.0 {
+        return;
+    }
+    *fade_left -= time.delta_secs();
+
     let (key_color, fill_color, key_lux, fill_i) = match director.phase {
         PartyPhase::Race => (
             Color::srgb(0.7, 0.9, 1.0),
@@ -102,13 +119,19 @@ fn sync_party_atmosphere(
             900_000.0,
         ),
     };
+    // Exponential ease toward the target, snapping exactly on the last tick.
+    let t = if *fade_left <= 0.0 {
+        1.0
+    } else {
+        1.0 - (-5.0 * time.delta_secs()).exp()
+    };
     if let Ok(mut light) = key.single_mut() {
-        light.color = key_color;
-        light.illuminance = key_lux;
+        light.color = light.color.mix(&key_color, t);
+        light.illuminance += (key_lux - light.illuminance) * t;
     }
     if let Ok(mut light) = fill.single_mut() {
-        light.color = fill_color;
-        light.intensity = fill_i;
+        light.color = light.color.mix(&fill_color, t);
+        light.intensity += (fill_i - light.intensity) * t;
     }
 }
 

@@ -813,25 +813,32 @@ fn detect_mode_pad_prompt(
     if editor.active {
         return;
     }
+    // Assign through `set_line` only when the text differs — a per-frame write
+    // marks HubPrompt changed and cascades into HUD text re-layout.
+    let mut set_line = |line: String| {
+        if prompt.line != line {
+            prompt.line = line;
+        }
+    };
     if director.phase != PartyPhase::Hub {
-        prompt.line.clear();
+        set_line(String::new());
         return;
     }
     let Ok(player) = local.single() else {
-        prompt.line = "Hatching into The Nest…".into();
+        set_line("Hatching into The Nest…".into());
         return;
     };
 
     for (pad, tf) in &utilities {
         if player.translation.distance(tf.translation) < 2.8 {
-            prompt.line = match pad.action {
+            set_line(match pad.action {
                 NestAction::OpenEditor => {
                     "E / Enter — open Race Map Creator".into()
                 }
                 NestAction::BrowseMaps => {
                     "[ ] cycle maps · E play selected custom/official Race".into()
                 }
-            };
+            });
             return;
         }
     }
@@ -845,17 +852,17 @@ fn detect_mode_pad_prompt(
     }
 
     if let Some((_, plan)) = nearest {
-        prompt.line = format!(
+        set_line(format!(
             "E / Enter — start {}  ·  Skin {}  ·  Season {} pts",
             plan.label(),
             equipped.id,
             ledger.points
-        );
+        ));
     } else {
-        prompt.line = format!(
+        set_line(format!(
             "The Nest — mode pads · Create Map · My Maps · C skin ({}) · Season {} pts",
             equipped.id, ledger.points
-        );
+        ));
     }
 }
 
@@ -921,14 +928,23 @@ fn apply_equipped_skin_tint(
     mut players: Query<(Entity, &mut PlayerColor), With<LocalPlayer>>,
     children: Query<&Children>,
     tint_parts: Query<&MeshMaterial3d<StandardMaterial>, With<PudgyTintPart>>,
+    fresh_parts: Query<(), Added<PudgyTintPart>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
+    // Writing PlayerColor (replicated) and material assets every frame forces
+    // network + GPU re-uploads. Only run when the skin changes or a new
+    // procedural stub spawns and needs its first tint.
+    if !equipped.is_changed() && fresh_parts.is_empty() {
+        return;
+    }
     let Some(item) = catalog.items.iter().find(|i| i.id == equipped.id) else {
         return;
     };
     let [r, g, b] = item.tint;
     for (entity, mut color) in &mut players {
-        color.0 = item.tint;
+        if color.0 != item.tint {
+            color.0 = item.tint;
+        }
         if let Ok(kids) = children.get(entity) {
             for child in kids.iter() {
                 if let Ok(handle) = tint_parts.get(child) {

@@ -114,11 +114,14 @@ fn set_hud_visible(
     let Ok(mut vis) = roots.single_mut() else {
         return;
     };
-    *vis = if *screen.get() == AppScreen::Playing {
+    let want = if *screen.get() == AppScreen::Playing {
         Visibility::Visible
     } else {
         Visibility::Hidden
     };
+    if *vis != want {
+        *vis = want;
+    }
 }
 
 fn update_hud(
@@ -156,6 +159,8 @@ fn update_hud(
         PartyPhase::Results => "RESULTS",
     };
 
+    // Writing a Text component re-runs layout/shaping even if the string is
+    // identical, so both blocks below only assign when the content changed.
     if let Ok(mut text) = main.single_mut() {
         let timer_bit = if phase == PartyPhase::Hub {
             String::new()
@@ -174,7 +179,10 @@ fn update_hud(
         } else {
             line
         };
-        **text = format!("{phase_label}{timer_bit}{spec}\n{prompt}");
+        let content = format!("{phase_label}{timer_bit}{spec}\n{prompt}");
+        if text.0 != content {
+            **text = content;
+        }
     }
 
     if let Ok(mut text) = sub.single_mut() {
@@ -195,11 +203,14 @@ fn update_hud(
         } else {
             banner.message.clone()
         };
-        **text = format!(
+        let content = format!(
             "Party pts {pts} · Season {} · Skin {} · {rpc} · {wallet}\n{}\n{banner_line}",
             season.points,
             equipped.id,
             challenges.summary_line()
         );
+        if text.0 != content {
+            **text = content;
+        }
     }
 }

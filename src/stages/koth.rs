@@ -13,6 +13,9 @@ use crate::{
 /// Party points earned per full second alone on the hill.
 const HOLD_POINTS_PER_SEC: u32 = 1;
 
+/// Units per second the hill glides between anchors (instead of teleporting).
+const HILL_GLIDE_SPEED: f32 = 14.0;
+
 #[derive(Resource, Debug, Default)]
 pub struct KothState {
     /// Accrued uncontested hold time in seconds, per network slot.
@@ -36,6 +39,34 @@ impl KothState {
         }
         let elapsed = (self.start_timer - phase_timer).max(0.0);
         (elapsed / self.switch_secs.max(1.0)) as usize % self.hills.len()
+    }
+
+    /// Where the hill actually is right now, mid-glide included.
+    ///
+    /// Derived purely from the phase timer so the host's scoring and every
+    /// client's visuals agree without replicating the hill transform.
+    pub fn hill_center(&self, phase_timer: f32) -> Option<Vec3> {
+        if self.hills.is_empty() {
+            return None;
+        }
+        let idx = self.active_hill_index(phase_timer);
+        let current = self.hills[idx];
+        let elapsed = (self.start_timer - phase_timer).max(0.0);
+        let switch = self.switch_secs.max(1.0);
+        // First cycle starts on the hill; later cycles glide in from the
+        // previous anchor.
+        if elapsed < switch || self.hills.len() < 2 {
+            return Some(current);
+        }
+        let previous = self.hills[(idx + self.hills.len() - 1) % self.hills.len()];
+        let into_segment = elapsed % switch;
+        let span = previous.distance(current);
+        let travelled = HILL_GLIDE_SPEED * into_segment;
+        if travelled >= span || span <= f32::EPSILON {
+            Some(current)
+        } else {
+            Some(previous.lerp(current, travelled / span))
+        }
     }
 }
 
@@ -193,19 +224,20 @@ pub fn update_koth_hill(
     let Ok((mut tf, mat_handle)) = hills.single_mut() else {
         return;
     };
-    let Some(target) = state
-        .hills
-        .get(state.active_hill_index(director.phase_timer))
-    else {
+    let Some(center) = state.hill_center(director.phase_timer) else {
         return;
     };
-    tf.translation = Vec3::new(target.x, 0.12, target.z);
+    // Glides between anchors; only write the transform while actually moving.
+    let goal = Vec3::new(center.x, 0.12, center.z);
+    if tf.translation.distance_squared(goal) > 1e-6 {
+        tf.translation = goal;
+    }
 
     let occupants = players
         .iter()
         .filter(|p| {
             Vec2::new(p.translation.x, p.translation.z)
-                .distance(Vec2::new(target.x, target.z))
+                .distance(Vec2::new(center.x, center.z))
                 < state.radius
         })
         .count();
@@ -231,13 +263,14 @@ pub fn tick_koth(
 ) {
     let dt = time.delta_secs();
     let hill_index = state.active_hill_index(director.phase_timer);
-    let Some(hill) = state.hills.get(hill_index).copied() else {
+    // Scoring tracks the gliding center so it always matches what players see.
+    let Some(hill) = state.hill_center(director.phase_timer) else {
         return;
     };
 
     if state.announced_hill != hill_index {
         state.announced_hill = hill_index;
-        director.announcer = "The hill moved — go!".into();
+        director.announcer = "The hill is on the move — chase it!".into();
     }
 
     // Bots chase the hill and shuffle a little inside it.
