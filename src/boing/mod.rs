@@ -1,6 +1,7 @@
 //! Boing Network bridge — JSON-RPC reads + claim voucher helpers.
 
 use bevy::prelude::*;
+use bevy::tasks::{futures_lite::future, IoTaskPool, Task};
 use serde::{Deserialize, Serialize};
 
 #[derive(Resource, Debug, Clone, Serialize, Deserialize)]
@@ -128,45 +129,82 @@ struct BoingContractsFile {
     fungible_token: Option<String>,
 }
 
-fn poll_boing_health(
-    time: Res<Time>,
-    config: Res<BoingConfig>,
-    mut status: ResMut<BoingStatus>,
-    mut timer: Local<f32>,
-) {
-    *timer -= time.delta_secs();
-    if *timer > 0.0 {
-        return;
-    }
-    *timer = 8.0;
+/// Result of one background health probe (health + tip height + balance).
+struct HealthProbe {
+    reachable: bool,
+    tip_height: Option<u64>,
+    native_balance: Option<String>,
+    last_error: String,
+}
 
-    // Blocking HTTP is ok for rare polls in MVP; swap to async later.
-    match boing_rpc_call(&config.rpc_url, "boing_health", "[]") {
+fn run_health_probe(rpc_url: &str, account: Option<&str>) -> HealthProbe {
+    let mut probe = HealthProbe {
+        reachable: false,
+        tip_height: None,
+        native_balance: None,
+        last_error: String::new(),
+    };
+    match boing_rpc_call(rpc_url, "boing_health", "[]") {
         Ok(_) => {
-            status.reachable = true;
-            status.last_error.clear();
-            if let Ok(info) = boing_rpc_call(&config.rpc_url, "boing_getNetworkInfo", "[]") {
-                if let Some(h) = info.get("committed_height").and_then(|v| v.as_u64()) {
-                    status.tip_height = Some(h);
-                } else if let Some(h) = info.get("height").and_then(|v| v.as_u64()) {
-                    status.tip_height = Some(h);
-                }
+            probe.reachable = true;
+            if let Ok(info) = boing_rpc_call(rpc_url, "boing_getNetworkInfo", "[]") {
+                probe.tip_height = info
+                    .get("committed_height")
+                    .or_else(|| info.get("height"))
+                    .and_then(|v| v.as_u64());
             }
-            if let Some(account) = config.linked_account.clone() {
+            if let Some(account) = account {
                 let params = format!("[\"{account}\"]");
-                if let Ok(bal) = boing_rpc_call(&config.rpc_url, "boing_getBalance", &params) {
-                    status.native_balance = bal
+                if let Ok(bal) = boing_rpc_call(rpc_url, "boing_getBalance", &params) {
+                    probe.native_balance = bal
                         .get("balance")
                         .and_then(|v| v.as_str())
                         .map(|s| s.to_string());
                 }
             }
         }
-        Err(err) => {
-            status.reachable = false;
-            status.last_error = err;
-        }
+        Err(err) => probe.last_error = err,
     }
+    probe
+}
+
+fn poll_boing_health(
+    time: Res<Time>,
+    config: Res<BoingConfig>,
+    mut status: ResMut<BoingStatus>,
+    mut timer: Local<f32>,
+    mut inflight: Local<Option<Task<HealthProbe>>>,
+) {
+    // Drain a finished probe first. The blocking HTTP (up to ~3s of timeouts
+    // when the node is down) runs on the IO task pool — never on this thread.
+    if let Some(task) = inflight.as_mut() {
+        let Some(probe) = future::block_on(future::poll_once(task)) else {
+            return;
+        };
+        *inflight = None;
+        status.reachable = probe.reachable;
+        status.last_error = probe.last_error;
+        if probe.tip_height.is_some() {
+            status.tip_height = probe.tip_height;
+        }
+        if probe.native_balance.is_some() {
+            status.native_balance = probe.native_balance;
+        }
+        return;
+    }
+
+    *timer -= time.delta_secs();
+    if *timer > 0.0 {
+        return;
+    }
+    *timer = 8.0;
+
+    let rpc_url = config.rpc_url.clone();
+    let account = config.linked_account.clone();
+    *inflight = Some(
+        IoTaskPool::get()
+            .spawn(async move { run_health_probe(&rpc_url, account.as_deref()) }),
+    );
 }
 
 fn handle_wallet_paste(

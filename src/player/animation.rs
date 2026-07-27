@@ -26,13 +26,10 @@ pub const EMOTE_LIBRARY: &[(&str, &str, f32, bool)] = &[
 ];
 
 pub const EMOTE_SLOT_COUNT: usize = 5;
-/// Walk/run → idle blend. Long enough to hide pose pops; short enough that feet don't keep striding.
-const IDLE_CROSSFADE: Duration = Duration::from_millis(520);
+/// Walk/run → idle blend. Long enough to hide mid-stride pose pops.
+const IDLE_CROSSFADE: Duration = Duration::from_millis(400);
 const CROSSFADE: Duration = Duration::from_millis(180);
 const WALK_SPEED_EPS: f32 = 0.05;
-/// How long the avatar must stay still before the looping `idle` clip starts.
-/// Until then locomotion is frozen in place — no auto-emote.
-const IDLE_SETTLE_SECS: f32 = 3.0;
 
 #[derive(Component, Debug, Clone)]
 pub struct CrewAnimationSetup {
@@ -73,9 +70,6 @@ pub struct CrewAnimPlayback {
     pub library: Vec<CrewEmoteDef>,
     pub lock_until: f32,
     pub player_entity: Entity,
-    /// Elapsed seconds when the avatar last became grounded-and-still.
-    /// `None` while moving / airborne / emoting. Idle starts after [`IDLE_SETTLE_SECS`].
-    pub still_since: Option<f32>,
     /// Last `PlayerMotion::jump_count` we played a jump clip for.
     pub last_jump_count: u32,
 }
@@ -128,7 +122,6 @@ impl CrewAnimPlayback {
         self.kind = CrewAnimKind::Emote(slot);
         self.lock_until = if loops { f32::MAX } else { now + lock };
         self.applied = None;
-        self.still_since = None;
         true
     }
 
@@ -137,7 +130,6 @@ impl CrewAnimPlayback {
         // Cover ascent; fall can hold the last jump pose until land / loco.
         self.lock_until = now + 0.75;
         self.applied = None;
-        self.still_since = None;
     }
 }
 
@@ -374,7 +366,6 @@ fn finish_crew_animation_setup(
             library,
             lock_until: 0.0,
             player_entity,
-            still_since: Some(0.0),
             last_jump_count: 0,
         });
         commands.entity(entity).remove::<CrewSceneReady>();
@@ -471,7 +462,6 @@ fn choose_crew_anim_kind(
         }
 
         if moving || airborne {
-            anim.still_since = None;
             let desired = if airborne {
                 if motion.vertical_velocity > 0.15 {
                     CrewAnimKind::Jump
@@ -497,24 +487,9 @@ fn choose_crew_anim_kind(
             continue;
         }
 
-        // Grounded and still — never auto-play an emote. Settle briefly, then idle.
-        if anim.still_since.is_none() {
-            anim.still_since = Some(now);
-            // Leaving locomotion / a finished one-shot: freeze in place until idle settles.
-            if matches!(
-                anim.kind,
-                CrewAnimKind::Walk | CrewAnimKind::Run | CrewAnimKind::Jump | CrewAnimKind::Emote(_)
-            ) {
-                anim.applied = None;
-            }
-        }
-
-        let still_for = now - anim.still_since.unwrap_or(now);
-        if still_for < IDLE_SETTLE_SECS {
-            // Hold the current non-idle clip frozen; idle starts only after the settle window.
-            continue;
-        }
-
+        // Grounded and still — crossfade straight into the looping idle clip.
+        // (The old "settle" window froze walk / jump / emote poses for 3s
+        // before idling, which read as a broken animation.)
         if anim.kind != CrewAnimKind::Idle {
             anim.kind = CrewAnimKind::Idle;
             anim.applied = None;
@@ -524,28 +499,12 @@ fn choose_crew_anim_kind(
 
 fn apply_crew_anim_kind(
     mut commands: Commands,
-    time: Res<Time>,
     bindings: Res<crate::settings::EmoteBindings>,
     mut visuals: Query<(Entity, &mut CrewAnimPlayback)>,
     mut players: Query<(&mut AnimationPlayer, &mut AnimationTransitions)>,
 ) {
-    let now = time.elapsed_secs();
     for (entity, mut anim) in &mut visuals {
-        let settling = anim
-            .still_since
-            .is_some_and(|since| now - since < IDLE_SETTLE_SECS)
-            && !matches!(anim.kind, CrewAnimKind::Idle)
-            && now >= anim.lock_until;
-
         if anim.applied == Some(anim.kind) {
-            // Keep locomotion frozen while waiting for the idle settle timer.
-            if settling {
-                if let Ok((mut player, _)) = players.get_mut(anim.player_entity) {
-                    for (_, playing) in player.playing_animations_mut() {
-                        playing.set_speed(0.0);
-                    }
-                }
-            }
             continue;
         }
         let Ok((mut player, mut transitions)) = players.get_mut(anim.player_entity) else {
@@ -556,30 +515,16 @@ fn apply_crew_anim_kind(
             continue;
         };
 
-        let to_idle = anim.kind == CrewAnimKind::Idle;
-        if to_idle {
-            // Ease locomotion down instead of a hard freeze (hard 0-speed snaps look "clicky").
-            for (_, playing) in player.playing_animations_mut() {
-                playing.set_speed(0.2);
-            }
-        } else if settling {
-            for (_, playing) in player.playing_animations_mut() {
-                playing.set_speed(0.0);
-            }
+        // Outgoing clips keep playing at full speed while AnimationTransitions
+        // fades them out — no speed hacks, so blends stay fluid.
+        let fade = if anim.kind == CrewAnimKind::Idle {
+            IDLE_CROSSFADE
         } else {
-            for (_, playing) in player.playing_animations_mut() {
-                playing.set_speed(1.0);
-            }
-        }
-
-        let fade = if to_idle { IDLE_CROSSFADE } else { CROSSFADE };
+            CROSSFADE
+        };
         let node = anim.node(anim.kind, &bindings);
         let active = transitions.play(&mut player, node, fade);
-        if settling {
-            active.set_speed(0.0);
-        } else {
-            active.set_speed(1.0);
-        }
+        active.set_speed(1.0);
         if anim.loops(anim.kind, &bindings) {
             active.repeat();
         }
