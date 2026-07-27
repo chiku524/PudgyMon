@@ -342,6 +342,50 @@ def main() -> None:
         for t in arm.animation_data.nla_tracks:
             t.mute = False
 
+    # Contract accessory sockets (often missing on Studio exports).
+    bone_names = {b.name for b in arm.data.bones} if arm.data else set()
+
+    def _pick_bone(*candidates: str) -> str:
+        for c in candidates:
+            if c in bone_names:
+                return c
+        if "Root" in bone_names:
+            return "Root"
+        return next(iter(bone_names)) if bone_names else ""
+
+    socket_bones = {
+        "Socket_Hat": _pick_bone("Head"),
+        "Socket_Face": _pick_bone("Head"),
+        "Socket_Necklace": _pick_bone("Spine02", "Spine01", "Waist", "NeckTwist01"),
+        "Socket_Back": _pick_bone("Spine02", "Spine01", "Waist"),
+        "Socket_Hands": _pick_bone("Spine01", "Waist", "Spine02"),
+        "Socket_Shoes": _pick_bone("Root", "Hip", "Pelvis"),
+    }
+    socket_local = {
+        "Socket_Hat": (0.0, 0.0, 0.12),
+        "Socket_Face": (0.0, -0.08, 0.02),
+        "Socket_Necklace": (0.0, -0.04, 0.06),
+        "Socket_Back": (0.0, 0.08, 0.0),
+        "Socket_Hands": (0.0, 0.0, 0.0),
+        "Socket_Shoes": (0.0, 0.0, 0.0),
+    }
+    for sname, bname in socket_bones.items():
+        if not bname or sname in bpy.data.objects:
+            if sname in bpy.data.objects:
+                print(f"socket keep {sname}")
+            continue
+        empty = bpy.data.objects.new(sname, None)
+        empty.empty_display_type = "PLAIN_AXES"
+        empty.empty_display_size = 0.08
+        bpy.context.scene.collection.objects.link(empty)
+        empty.parent = arm
+        empty.parent_type = "BONE"
+        empty.parent_bone = bname
+        empty.location = mathutils.Vector(socket_local[sname])
+        empty.rotation_euler = (0.0, 0.0, 0.0)
+        empty.scale = (1.0, 1.0, 1.0)
+        print(f"socket {sname} -> {bname}")
+
     print(
         f"CHAR_OPT_OUT faces={len(low.data.polygons)} "
         f"groups={len(low.vertex_groups)} arm={arm.name}"

@@ -2017,12 +2017,9 @@ fn handle_accessory_select(
         if *interaction != Interaction::Pressed {
             continue;
         }
-        if client.is_some() {
-            commands.client_trigger(EquipAccessoryRequest {
-                slot: btn.slot.clone(),
-                asset_id: btn.id.clone(),
-            });
-        } else if let Ok(mut visual) = visuals.single_mut() {
+        // Always apply on the local avatar immediately so Esc → Wear feels live.
+        // Host/listen-server also mirrors via EquipAccessoryRequest for replication.
+        if let Ok(mut visual) = visuals.single_mut() {
             apply_accessory_choice(
                 &mut visual,
                 &catalog,
@@ -2030,6 +2027,12 @@ fn handle_accessory_select(
                 &btn.slot,
                 btn.id.clone(),
             );
+        }
+        if client.is_some() {
+            commands.client_trigger(EquipAccessoryRequest {
+                slot: btn.slot.clone(),
+                asset_id: btn.id.clone(),
+            });
         }
         let note = match &btn.id {
             Some(id) => format!("Wearing {}", catalog.label_for(id)),

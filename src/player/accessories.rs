@@ -228,6 +228,33 @@ fn socket_name(slot: &str) -> &'static str {
     }
 }
 
+/// Contract sockets + preferred bone parents (Studio 41-bone names) + local offset.
+/// Offsets match `import_rigged_character_glb.py` / `bind_mesh_to_studio_rig.py`.
+const ACCESSORY_SOCKETS: &[(&str, &[&str], Vec3)] = &[
+    ("Socket_Hat", &["Head"], Vec3::new(0.0, 0.12, 0.0)),
+    ("Socket_Face", &["Head"], Vec3::new(0.0, 0.02, -0.08)),
+    (
+        "Socket_Necklace",
+        &["Spine02", "Spine01", "Waist", "NeckTwist01"],
+        Vec3::new(0.0, 0.06, -0.04),
+    ),
+    (
+        "Socket_Back",
+        &["Spine02", "Spine01", "Waist"],
+        Vec3::new(0.0, 0.0, 0.08),
+    ),
+    (
+        "Socket_Hands",
+        &["Spine01", "Waist", "Spine02"],
+        Vec3::ZERO,
+    ),
+    (
+        "Socket_Shoes",
+        &["Root", "Hip", "Pelvis"],
+        Vec3::ZERO,
+    ),
+];
+
 fn find_named(
     root: Entity,
     want: &str,
@@ -249,6 +276,34 @@ fn find_named(
         }
     }
     None
+}
+
+/// Crew GLBs often ship armature + mesh without `Socket_*` empties. Spawn them
+/// under the matching bone so Esc → Wear can parent accessories.
+fn ensure_accessory_sockets(
+    commands: &mut Commands,
+    root: Entity,
+    names: &Query<&Name>,
+    children: &Query<&Children>,
+) {
+    for (socket, bone_candidates, local) in ACCESSORY_SOCKETS {
+        if find_named(root, socket, names, children).is_some() {
+            continue;
+        }
+        let Some(bone) = bone_candidates
+            .iter()
+            .find_map(|b| find_named(root, b, names, children))
+        else {
+            continue;
+        };
+        commands.entity(bone).with_children(|p| {
+            p.spawn((
+                Name::new(socket.to_string()),
+                Transform::from_translation(*local),
+                Visibility::default(),
+            ));
+        });
+    }
 }
 
 fn is_under(ancestor: Entity, node: Entity, children: &Query<&Children>) -> bool {
@@ -287,6 +342,8 @@ fn sync_accessory_meshes(
         let Some(root) = kids.iter().find(|c| visual_roots.contains(*c)) else {
             continue;
         };
+
+        ensure_accessory_sockets(&mut commands, root, &names, &children_q);
 
         let desired = [
             ("hat", visual.accessories.hat.as_deref()),
