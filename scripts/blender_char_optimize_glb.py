@@ -32,10 +32,8 @@ _DEFAULT_CHARS = [
     "oceanic_pudgymon_01",
 ]
 
-# Preserve-UV path keeps Tripo paint; 36k tris + 2048 PNG keeps eyes sharp.
-_FACE_BUDGET = 36_000
-_TEX_SIZE = 2048
-_PATH = "preserve"
+_FACE_BUDGET = 24_000
+_TEX_SIZE = 1024
 
 
 def _blender_bin() -> str:
@@ -73,7 +71,6 @@ def optimize_one(
     *,
     faces: int = _FACE_BUDGET,
     tex_size: int = _TEX_SIZE,
-    path: str = _PATH,
     from_pre_opt: bool = True,
     dry_run: bool = False,
 ) -> dict:
@@ -107,12 +104,8 @@ def optimize_one(
             str(out_glb),
             str(faces),
             str(tex_size),
-            path,
         ]
-        print(
-            f"+ blender char-optimize {asset_id} -> ~{faces:,} tris "
-            f"tex={tex_size} path={path}"
-        )
+        print(f"+ blender char-optimize {asset_id} -> ~{faces:,} tris tex={tex_size}")
         proc = subprocess.run(
             cmd,
             capture_output=True,
@@ -125,12 +118,9 @@ def optimize_one(
                 k in line
                 for k in (
                     "CHAR_OPT",
-                    "CHAR_PATH",
                     "remesh ",
                     "decimate ",
                     "bake ",
-                    "tex ",
-                    "uv-boost",
                     "weights ",
                     "drop ",
                     "warn:",

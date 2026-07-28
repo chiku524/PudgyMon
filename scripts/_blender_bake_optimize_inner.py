@@ -102,50 +102,6 @@ def _smart_uv(obj) -> None:
     bpy.ops.object.mode_set(mode="OBJECT")
 
 
-def _boost_upper_uv(obj, boost: float = 2.4, upper_frac: float = 0.42) -> None:
-    """Spend more atlas on the upper mesh (heads/faces) so eyes stay sharp."""
-    import bmesh
-
-    _activate(obj)
-    me = obj.data
-    if not me.uv_layers:
-        return
-    bpy.ops.object.mode_set(mode="EDIT")
-    bm = bmesh.from_edit_mesh(me)
-    uv_layer = bm.loops.layers.uv.active
-    if uv_layer is None:
-        bpy.ops.object.mode_set(mode="OBJECT")
-        return
-
-    zs = [v.co.z for v in bm.verts]
-    z_min, z_max = min(zs), max(zs)
-    thresh = z_min + (z_max - z_min) * (1.0 - upper_frac)
-    upper_loops = []
-    for face in bm.faces:
-        if sum(1 for v in face.verts if v.co.z >= thresh) < 2:
-            continue
-        for loop in face.loops:
-            upper_loops.append(loop[uv_layer])
-    if len(upper_loops) < 8:
-        bpy.ops.object.mode_set(mode="OBJECT")
-        print("uv-boost: skipped (no upper loops)")
-        return
-
-    cx = sum(l.uv.x for l in upper_loops) / len(upper_loops)
-    cy = sum(l.uv.y for l in upper_loops) / len(upper_loops)
-    for l in upper_loops:
-        l.uv.x = cx + (l.uv.x - cx) * boost
-        l.uv.y = cy + (l.uv.y - cy) * boost
-    bmesh.update_edit_mesh(me)
-    bpy.ops.mesh.select_all(action="SELECT")
-    try:
-        bpy.ops.uv.pack_islands(margin=0.04)
-    except Exception as err:  # noqa: BLE001
-        print(f"warn: pack_islands {err}")
-    bpy.ops.object.mode_set(mode="OBJECT")
-    print(f"uv-boost: upper_frac={upper_frac} x{boost:.2f} loops={len(upper_loops)}")
-
-
 def _bbox_max_dim(obj) -> float:
     dims = obj.dimensions
     return max(float(dims.x), float(dims.y), float(dims.z), 0.05)
@@ -233,7 +189,7 @@ def _bake_diffuse(high, low, tex_size: int) -> None:
     scene = bpy.context.scene
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
-    scene.cycles.samples = 32
+    scene.cycles.samples = 16
     scene.cycles.bake_type = "DIFFUSE"
     bake = scene.render.bake
     bake.use_pass_direct = False
@@ -306,8 +262,6 @@ def _optimize_static(obj, target_faces: int, tex_size: int) -> None:
     _decimate(low, target_faces)
     _fill_holes(low)
     _smart_uv(low)
-    # Heads/faces (eyes) get more atlas space than feet/bases.
-    _boost_upper_uv(low, boost=2.4, upper_frac=0.42)
 
     # Re-resolve by name — Blender RNA refs can go stale across ops.
     high = bpy.data.objects.get(high_name)
@@ -410,8 +364,8 @@ def main() -> None:
             export_texcoords=True,
             export_normals=True,
             export_materials="EXPORT",
-            # PNG keeps sharp eye / accent edges; JPEG chroma was smearing them.
-            export_image_format="PNG",
+            export_image_format="JPEG",
+            export_jpeg_quality=92,
             export_yup=True,
         )
     except TypeError:

@@ -113,36 +113,6 @@ def _is_char(asset_id: str) -> bool:
     return asset_id.startswith(("char_", "oceanic_", "npc_"))
 
 
-def _resample_anims_only(glb: Path) -> None:
-    """Keyframe resample without touching image buffers (keeps PNG eyes sharp)."""
-    import shutil
-    import subprocess
-    import tempfile
-
-    npx = shutil.which("npx.cmd") or shutil.which("npx")
-    if not npx:
-        print(f"warn: npx missing; skip resample for {glb.name}")
-        return
-    with tempfile.TemporaryDirectory(prefix="pudgy_resample_") as tmp:
-        out = Path(tmp) / "out.glb"
-        cmd = [
-            npx,
-            "--yes",
-            "@gltf-transform/cli@4.1.1",
-            "resample",
-            str(glb),
-            str(out),
-            "--tolerance",
-            "0.0004",
-        ]
-        proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
-        if proc.returncode != 0 or not out.is_file():
-            print(f"warn: resample skipped for {glb.name}: {(proc.stderr or '')[-400:]}")
-            return
-        shutil.copy2(out, glb)
-        print(f"resample ok {glb.name}")
-
-
 def rebake_one(bake, char_bake, opt, asset_id: str, height: float) -> dict:
     glb = _MODELS / asset_id / f"{asset_id}.glb"
     bak = glb.with_suffix(glb.suffix + ".pre_opt")
@@ -151,8 +121,17 @@ def rebake_one(bake, char_bake, opt, asset_id: str, height: float) -> dict:
 
     if _is_char(asset_id):
         char_bake.optimize_one(asset_id, from_pre_opt=True)
-        # Never re-JPEG the atlas — chroma subsampling re-blurs eye paint.
-        _resample_anims_only(glb)
+        # Resample clips without restoring the dense backup over the bake.
+        # Resample clips only — keep the fresh 1024 atlas (game preset
+        # defaults to max_tex=512 which would re-blur eyes).
+        opt.optimize_file(
+            glb,
+            preset="game",
+            backup=False,
+            force=False,
+            max_tex=1024,
+            jpeg_quality=92,
+        )
     else:
         bake.optimize_one(glb, from_pre_opt=True)
 
