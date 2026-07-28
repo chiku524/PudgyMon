@@ -176,15 +176,525 @@
       "notes": "Sky Pudgy \u2014 Studio 41-bone rig with idle/walk/run/jump/emote"
     },
     {
+      "asset_id": "env_nest_arcade_01",
+      "target_height": 1.9,
+      "notes": "Nest d\u00e9cor \u2014 arcade cabinet",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_arch_01",
+      "target_height": 3.2,
+      "notes": "Nest d\u00e9cor \u2014 candy arch gate",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_arch_02",
+      "target_height": 3.2,
+      "notes": "Nest d\u00e9cor \u2014 candy arch gate",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_arch_balloon_01",
+      "target_height": 3.4,
+      "notes": "Nest d\u00e9cor \u2014 balloon arch",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_ball_01",
+      "target_height": 0.8,
+      "notes": "Nest d\u00e9cor \u2014 bouncy ball",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_barrel_01",
+      "target_height": 1.0,
+      "notes": "Nest d\u00e9cor \u2014 deco barrel",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_bench_01",
       "target_height": 0.6,
       "notes": "Studio prop \u2014 Nest bench",
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_bench_02",
+      "target_height": 0.9,
+      "notes": "Nest d\u00e9cor \u2014 candy bench",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_blob_01",
+      "target_height": 0.8,
+      "notes": "Nest d\u00e9cor \u2014 green blob buddy",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_booth_ticket_01",
+      "target_height": 2.6,
+      "notes": "Nest d\u00e9cor \u2014 ticket booth",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_cake_01",
+      "target_height": 1.6,
+      "notes": "Nest d\u00e9cor \u2014 tiered party cake",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_cake_02",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 cake prop",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_car_01",
+      "target_height": 1.4,
+      "notes": "Nest d\u00e9cor \u2014 cartoon car",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_cart_candy_01",
+      "target_height": 1.8,
+      "notes": "Nest d\u00e9cor \u2014 candy vendor cart",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_cart_snack_01",
+      "target_height": 1.9,
+      "notes": "Nest d\u00e9cor \u2014 snack cart",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_chair_01",
+      "target_height": 1.0,
+      "notes": "Nest d\u00e9cor \u2014 candy chair",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_char_sphere_01",
+      "target_height": 1.0,
+      "notes": "Nest d\u00e9cor \u2014 spherical buddy",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_char_star_01",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 star buddy",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_chest_01",
+      "target_height": 0.9,
+      "notes": "Nest d\u00e9cor \u2014 treasure chest",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_cookie_01",
+      "target_height": 0.8,
+      "notes": "Nest d\u00e9cor \u2014 giant pink cookie",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_couch_01",
+      "target_height": 1.0,
+      "notes": "Nest d\u00e9cor \u2014 candy couch",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_crate_01",
+      "target_height": 0.9,
+      "notes": "Nest d\u00e9cor \u2014 deco crate",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_creature_party_01",
+      "target_height": 1.3,
+      "notes": "Nest d\u00e9cor \u2014 party creature",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_deco_01",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 candy deco prop",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_deco_02",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 candy deco prop",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_deco_03",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 candy deco prop",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_deco_04",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 candy deco prop",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_deco_05",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 candy deco prop",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_deco_06",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 candy deco prop",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_deco_07",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 pastel deco prop",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_deco_08",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 cartoon deco prop",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_dumpling_01",
+      "target_height": 0.9,
+      "notes": "Nest d\u00e9cor \u2014 cartoon dumpling",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_egg_01",
       "target_height": 2.0,
       "notes": "Studio prop \u2014 Nest egg",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_egg_02",
+      "target_height": 1.8,
+      "notes": "Nest d\u00e9cor \u2014 decorative nest egg",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_egg_rainbow_01",
+      "target_height": 2.0,
+      "notes": "Nest d\u00e9cor \u2014 rainbow egg sculpture",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_fountain_01",
+      "target_height": 2.6,
+      "notes": "Nest d\u00e9cor \u2014 candy plaza fountain",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_hydrant_01",
+      "target_height": 0.9,
+      "notes": "Nest d\u00e9cor \u2014 pink hydrant",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_jukebox_01",
+      "target_height": 1.6,
+      "notes": "Nest d\u00e9cor \u2014 candy jukebox",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_kiosk_info_01",
+      "target_height": 2.2,
+      "notes": "Nest d\u00e9cor \u2014 info kiosk",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_kiosk_map_01",
+      "target_height": 2.2,
+      "notes": "Nest d\u00e9cor \u2014 map kiosk",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_lamp_01",
+      "target_height": 2.4,
+      "notes": "Nest d\u00e9cor \u2014 candy street lamp",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_loveseat_01",
+      "target_height": 1.0,
+      "notes": "Nest d\u00e9cor \u2014 heart loveseat",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_mailbox_01",
+      "target_height": 1.3,
+      "notes": "Nest d\u00e9cor \u2014 Pudgy mailbox",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_01",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 cute monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_02",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 cute monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_03",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 cartoon monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_04",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 cute monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_05",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 cute monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_06",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 cute monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_07",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_08",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_09",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 cute monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_10",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_11",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 cute monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_12",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 cute monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_13",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_14",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 cute monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_15",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_16",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_17",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_18",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 candy monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_19",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 cute monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_20",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 cute monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_21",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_22",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 party monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_23",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 party monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_24",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 cute monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_25",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 cute monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_balloon_01",
+      "target_height": 1.6,
+      "notes": "Nest d\u00e9cor \u2014 balloon monster",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_piggybank_01",
+      "target_height": 1.0,
+      "notes": "Nest d\u00e9cor \u2014 piggy bank",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_plant_01",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 potted plant",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_planter_01",
+      "target_height": 1.0,
+      "notes": "Nest d\u00e9cor \u2014 candy planter",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_pond_01",
+      "target_height": 0.5,
+      "notes": "Nest d\u00e9cor \u2014 candy pond",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_portal_01",
+      "target_height": 3.0,
+      "notes": "Nest d\u00e9cor \u2014 game portal",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_ring_01",
+      "target_height": 1.4,
+      "notes": "Nest d\u00e9cor \u2014 lime ring sculpture",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_sign_arrow_01",
+      "target_height": 1.6,
+      "notes": "Nest d\u00e9cor \u2014 arrow signpost",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_signboard_01",
+      "target_height": 1.8,
+      "notes": "Nest d\u00e9cor \u2014 candy signboard",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_stair_01",
+      "target_height": 1.0,
+      "notes": "Nest d\u00e9cor \u2014 pink stair block",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_table_01",
+      "target_height": 0.9,
+      "notes": "Nest d\u00e9cor \u2014 round candy table",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_tile_01",
+      "target_height": 0.4,
+      "notes": "Nest d\u00e9cor \u2014 candy floor tile",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_trashbin_01",
+      "target_height": 1.0,
+      "notes": "Nest d\u00e9cor \u2014 party trash bin",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_tree_01",
+      "target_height": 3.6,
+      "notes": "Nest d\u00e9cor \u2014 stylized tree",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_tree_candy_01",
+      "target_height": 3.4,
+      "notes": "Nest d\u00e9cor \u2014 candy tree",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_tree_candy_02",
+      "target_height": 3.2,
+      "notes": "Nest d\u00e9cor \u2014 candy tree",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_tree_round_01",
+      "target_height": 3.4,
+      "notes": "Nest d\u00e9cor \u2014 round foliage tree",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_truck_icecream_01",
+      "target_height": 2.6,
+      "notes": "Nest d\u00e9cor \u2014 ice cream truck",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_umbrella_01",
+      "target_height": 2.4,
+      "notes": "Nest d\u00e9cor \u2014 candy parasol",
       "uniform_scale": 1.0
     },
     {

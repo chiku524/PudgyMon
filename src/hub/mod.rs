@@ -681,35 +681,45 @@ fn spawn_nest_zones(
                 format!("NestZone_{i}_{asset_id}"),
             );
         }
+
+        queue_candy_districts(reg, prop_queue);
     }
 
-    // Vibe Garden pond.
-    commands.spawn((
-        HubProp,
-        GameplayEntity,
-        Mesh3d(meshes.add(Cylinder::new(4.5, 0.12))),
-        MeshMaterial3d(materials.add(StandardMaterial {
-            base_color: Color::srgb(0.25, 0.6, 0.85),
-            emissive: LinearRgba::rgb(0.08, 0.25, 0.4),
-            ..Default::default()
-        })),
-        Transform::from_xyz(38.0, 0.03, 30.0),
-        Name::new("VibeGardenPond"),
-    ));
+    // Vibe Garden pond — candy pond GLB when imported, greybox disc otherwise.
+    if !registry.is_some_and(|r| studio_asset_exists(r, "env_nest_pond_01")) {
+        commands.spawn((
+            HubProp,
+            GameplayEntity,
+            Mesh3d(meshes.add(Cylinder::new(4.5, 0.12))),
+            MeshMaterial3d(materials.add(StandardMaterial {
+                base_color: Color::srgb(0.25, 0.6, 0.85),
+                emissive: LinearRgba::rgb(0.08, 0.25, 0.4),
+                ..Default::default()
+            })),
+            Transform::from_xyz(38.0, 0.03, 30.0),
+            Name::new("VibeGardenPond"),
+        ));
+    }
 
-    // Lamps marking paths out to each district — shared handles, one asset each.
-    let post_mesh = meshes.add(Cylinder::new(0.14, 3.0));
-    let post_mat = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.3, 0.32, 0.38),
-        ..Default::default()
-    });
-    let glow_mesh = meshes.add(Sphere::new(0.4));
-    let glow_mat = materials.add(StandardMaterial {
-        base_color: Color::srgb(1.0, 0.9, 0.6),
-        emissive: LinearRgba::rgb(1.6, 1.3, 0.7),
-        unlit: true,
-        ..Default::default()
-    });
+    // Lamps marking paths out to each district — candy lamp GLBs when
+    // imported, shared-handle greyboxes otherwise.
+    let lamp_glb = registry.is_some_and(|r| studio_asset_exists(r, "env_nest_lamp_01"));
+    let mut greybox_lamp = None;
+    if !lamp_glb {
+        let post_mesh = meshes.add(Cylinder::new(0.14, 3.0));
+        let post_mat = materials.add(StandardMaterial {
+            base_color: Color::srgb(0.3, 0.32, 0.38),
+            ..Default::default()
+        });
+        let glow_mesh = meshes.add(Sphere::new(0.4));
+        let glow_mat = materials.add(StandardMaterial {
+            base_color: Color::srgb(1.0, 0.9, 0.6),
+            emissive: LinearRgba::rgb(1.6, 1.3, 0.7),
+            unlit: true,
+            ..Default::default()
+        });
+        greybox_lamp = Some((post_mesh, post_mat, glow_mesh, glow_mat));
+    }
     for (i, pos) in [
         Vec3::new(-14.0, 0.0, -30.0),
         Vec3::new(14.0, 0.0, -30.0),
@@ -718,10 +728,23 @@ fn spawn_nest_zones(
         Vec3::new(0.0, 0.0, 30.0),
         Vec3::new(-30.0, 0.0, 30.0),
         Vec3::new(30.0, 0.0, -34.0),
+        Vec3::new(-6.0, 0.0, -20.0),
+        Vec3::new(6.0, 0.0, -20.0),
     ]
     .into_iter()
     .enumerate()
     {
+        if lamp_glb {
+            queue_studio_prop(
+                prop_queue,
+                registry.unwrap(),
+                "env_nest_lamp_01",
+                Transform::from_translation(pos),
+                format!("NestLamp_{i}"),
+            );
+            continue;
+        }
+        let (post_mesh, post_mat, glow_mesh, glow_mat) = greybox_lamp.as_ref().unwrap();
         commands.spawn((
             HubProp,
             GameplayEntity,
@@ -775,6 +798,130 @@ fn spawn_nest_zones(
             Transform::from_translation(pos + Vec3::Y * 1.0),
             Name::new(format!("NestCornerShroom_{i}")),
         ));
+    }
+}
+
+/// Candy-district décor pass — the Nest prop mega-batch laid out as themed
+/// neighborhoods. World coordinates (hub plaza at origin, island grass ~±48):
+/// Gateway Boulevard runs north to the mode pads, Candy Plaza + Food Boardwalk
+/// + Arcade Corner fill the south, the Gardens extend the east, and two
+/// monster meadows bookend the northwest/northeast island edges.
+/// Missing GLBs are skipped, so partial imports degrade gracefully.
+fn queue_candy_districts(reg: &StudioRegistry, prop_queue: &mut StudioPropQueue) {
+    // (asset_id, x, z, yaw_degrees)
+    const DISTRICTS: &[(&str, f32, f32, f32)] = &[
+        // Gateway Boulevard — arches + wayfinding on the walk to the pads.
+        ("env_nest_arch_01", 0.0, -10.0, 0.0),
+        ("env_nest_arch_02", 0.0, -30.0, 0.0),
+        ("env_nest_sign_arrow_01", -7.0, -9.0, 40.0),
+        ("env_nest_sign_arrow_01", 7.0, -9.0, -40.0),
+        ("env_nest_kiosk_map_01", 5.0, -13.0, -30.0),
+        ("env_nest_kiosk_info_01", -5.0, -13.0, 30.0),
+        ("env_nest_tile_01", 1.5, -16.0, 0.0),
+        ("env_nest_tile_01", -1.5, -22.0, 30.0),
+        ("env_nest_booth_ticket_01", 10.0, -34.0, -20.0),
+        // Candy Plaza — fountain court south of the spawn plaza.
+        ("env_nest_fountain_01", 0.0, 26.0, 0.0),
+        ("env_nest_arch_balloon_01", 0.0, 18.0, 0.0),
+        ("env_nest_couch_01", -7.0, 28.0, 130.0),
+        ("env_nest_loveseat_01", 7.0, 28.0, -130.0),
+        ("env_nest_chair_01", -4.0, 31.0, 60.0),
+        ("env_nest_table_01", 4.0, 31.0, 0.0),
+        ("env_nest_umbrella_01", 5.0, 32.0, 0.0),
+        ("env_nest_cake_01", 0.0, 34.0, 0.0),
+        ("env_nest_trashbin_01", 10.0, 26.0, 0.0),
+        ("env_nest_hydrant_01", -10.0, 24.0, 0.0),
+        ("env_nest_mailbox_01", 4.0, 19.0, 180.0),
+        ("env_nest_signboard_01", -3.0, 20.0, 160.0),
+        // Food Boardwalk — southwest snack row.
+        ("env_nest_truck_icecream_01", -28.0, 30.0, 55.0),
+        ("env_nest_cart_snack_01", -20.0, 27.0, 25.0),
+        ("env_nest_cart_candy_01", -34.0, 24.0, 90.0),
+        ("env_nest_car_01", -16.0, 34.0, -70.0),
+        ("env_nest_bench_02", -22.0, 33.0, 0.0),
+        ("env_nest_bench_02", -17.0, 30.0, 45.0),
+        ("env_nest_cookie_01", -24.0, 26.0, 0.0),
+        ("env_nest_dumpling_01", -26.0, 24.0, 0.0),
+        ("env_nest_cake_02", -31.0, 27.0, 0.0),
+        ("env_nest_barrel_01", -30.0, 34.0, 0.0),
+        ("env_nest_crate_01", -32.0, 33.0, 15.0),
+        ("env_nest_creature_party_01", -24.0, 37.0, 180.0),
+        // Arcade Corner — southeast games alley.
+        ("env_nest_arcade_01", 24.0, 28.0, -35.0),
+        ("env_nest_arcade_01", 27.0, 29.0, -55.0),
+        ("env_nest_jukebox_01", 21.0, 26.0, -20.0),
+        ("env_nest_portal_01", 32.0, 36.0, -45.0),
+        ("env_nest_piggybank_01", 29.0, 24.0, 0.0),
+        ("env_nest_chest_01", 33.0, 27.0, -60.0),
+        ("env_nest_ring_01", 26.0, 36.0, 0.0),
+        ("env_nest_ball_01", 23.0, 33.0, 0.0),
+        ("env_nest_stair_01", 31.0, 31.0, 20.0),
+        ("env_nest_blob_01", 19.0, 36.0, 0.0),
+        // Gardens & Grove — extends the Vibe Garden east with real flora.
+        ("env_nest_pond_01", 38.0, 30.0, 0.0),
+        ("env_nest_tree_01", 44.0, 24.0, 0.0),
+        ("env_nest_tree_round_01", 34.0, 40.0, 0.0),
+        ("env_nest_tree_candy_01", 44.0, 36.0, 70.0),
+        ("env_nest_tree_candy_02", 28.0, 44.0, -30.0),
+        ("env_nest_planter_01", 36.0, 24.0, 0.0),
+        ("env_nest_planter_01", 40.0, 22.0, 0.0),
+        ("env_nest_plant_01", 32.0, 26.0, 0.0),
+        ("env_nest_egg_rainbow_01", 40.0, 42.0, 0.0),
+        ("env_nest_egg_02", 46.0, 30.0, 0.0),
+        // Monster Meadow — northwest island edge.
+        ("env_nest_char_star_01", -36.0, -16.0, 140.0),
+        ("env_nest_monster_01", -30.0, -20.0, 60.0),
+        ("env_nest_monster_02", -34.0, -24.0, 120.0),
+        ("env_nest_monster_03", -38.0, -20.0, -40.0),
+        ("env_nest_monster_04", -42.0, -26.0, 30.0),
+        ("env_nest_monster_05", -32.0, -30.0, -120.0),
+        ("env_nest_monster_06", -36.0, -34.0, 0.0),
+        ("env_nest_monster_07", -42.0, -34.0, 45.0),
+        ("env_nest_monster_08", -28.0, -26.0, 90.0),
+        ("env_nest_monster_balloon_01", -38.0, -28.0, 0.0),
+        ("env_nest_monster_09", -30.0, -38.0, 160.0),
+        ("env_nest_monster_10", -44.0, -30.0, -90.0),
+        ("env_nest_monster_11", -34.0, -40.0, -20.0),
+        ("env_nest_monster_12", -40.0, -40.0, 75.0),
+        // Monster Cove — northeast island edge.
+        ("env_nest_char_sphere_01", 36.0, -16.0, -140.0),
+        ("env_nest_monster_13", 30.0, -20.0, -60.0),
+        ("env_nest_monster_14", 34.0, -24.0, -120.0),
+        ("env_nest_monster_15", 38.0, -20.0, 40.0),
+        ("env_nest_monster_16", 42.0, -26.0, -30.0),
+        ("env_nest_monster_17", 32.0, -30.0, 120.0),
+        ("env_nest_monster_18", 36.0, -34.0, 0.0),
+        ("env_nest_monster_19", 42.0, -34.0, -45.0),
+        ("env_nest_monster_20", 28.0, -26.0, -90.0),
+        ("env_nest_monster_21", 30.0, -38.0, -160.0),
+        ("env_nest_monster_22", 44.0, -30.0, 90.0),
+        ("env_nest_monster_23", 34.0, -40.0, 20.0),
+        ("env_nest_monster_24", 40.0, -40.0, -75.0),
+        ("env_nest_monster_25", 46.0, -36.0, 10.0),
+        // Deco accents flanking the main walkways.
+        ("env_nest_deco_01", -12.0, -18.0, 30.0),
+        ("env_nest_deco_02", 12.0, -18.0, -30.0),
+        ("env_nest_deco_03", -16.0, 22.0, 0.0),
+        ("env_nest_deco_04", 16.0, 22.0, 0.0),
+        ("env_nest_deco_05", -8.0, 35.0, 20.0),
+        ("env_nest_deco_06", 8.0, 35.0, -20.0),
+        ("env_nest_deco_07", -24.0, 12.0, 90.0),
+        ("env_nest_deco_08", 24.0, 12.0, -90.0),
+    ];
+
+    for (i, (asset_id, x, z, yaw_deg)) in DISTRICTS.iter().enumerate() {
+        if !studio_asset_exists(reg, asset_id) {
+            continue;
+        }
+        let tf = Transform::from_xyz(*x, 0.0, *z)
+            .with_rotation(Quat::from_rotation_y(yaw_deg.to_radians()));
+        queue_studio_prop(
+            prop_queue,
+            reg,
+            asset_id,
+            tf,
+            format!("CandyDistrict_{i}_{asset_id}"),
+        );
     }
 }
 
