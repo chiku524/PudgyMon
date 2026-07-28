@@ -278,23 +278,18 @@ def _ensure_sockets(arm) -> None:
 
 
 def _optimize_preserve(body, arm, target_faces: int) -> None:
-    """Keep Tripo UVs + painted textures; only clean topology."""
-    print(f"CHAR_PATH preserve faces_in={len(body.data.polygons)}")
-    for m in body.modifiers:
-        if m.type == "ARMATURE":
-            m.show_viewport = False
-            m.show_render = False
+    """Keep Tripo UVs + painted textures; geometry untouched.
 
-    _fill_holes(body)
-    _decimate(body, target_faces)
-    _fill_holes(body)
+    Blender's collapse decimate drifts UVs at island seams — on Tripo's
+    edge-to-edge fragment atlases that sampled neighbouring fragments
+    and covered characters in dark speckles. Decimation is done by the
+    wrapper with meshopt (gltf-transform simplify), which never merges
+    vertices across UV seams.
+    """
+    print(f"CHAR_PATH preserve faces_in={len(body.data.polygons)} (simplify deferred)")
     for slot in body.material_slots:
         _toon_mat(slot.material)
 
-    for m in body.modifiers:
-        if m.type == "ARMATURE":
-            m.show_viewport = True
-            m.show_render = True
     if not any(m.type == "ARMATURE" for m in body.modifiers):
         arm_mod = body.modifiers.new(name="Armature", type="ARMATURE")
         arm_mod.object = arm

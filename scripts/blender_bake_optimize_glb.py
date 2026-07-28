@@ -77,6 +77,102 @@ def _prefix_lookup(path: Path, table: dict[str, int], default: int) -> int:
     return default
 
 
+def _dilate_atlases(glb_path: Path) -> None:
+    """Flood the black bake background with nearest island colors.
+
+    Bilinear sampling at UV island borders reads background texels; if
+    those stay pure black every island edge renders as dark speckling.
+    Iterative 8-neighbour dilation pushes island colors outward until
+    the whole atlas is covered.
+    """
+    import io
+    import json
+    import struct
+
+    import numpy as np
+    from PIL import Image
+
+    data = glb_path.read_bytes()
+    if data[:4] != b"glTF":
+        return
+    off = 12
+    gltf = None
+    bin_chunk = b""
+    while off + 8 <= len(data):
+        clen, ctype = struct.unpack_from("<II", data, off)
+        chunk = data[off + 8 : off + 8 + clen]
+        if ctype == 0x4E4F534A:
+            gltf = json.loads(chunk)
+        elif ctype == 0x004E4942:
+            bin_chunk = chunk
+        off += 8 + clen
+    if gltf is None or not gltf.get("images"):
+        return
+
+    bin_out = bytearray(bin_chunk)
+    changed = False
+    for idx, img_def in enumerate(gltf["images"]):
+        bv = gltf["bufferViews"][img_def["bufferView"]]
+        blob = bin_chunk[bv["byteOffset"] : bv["byteOffset"] + bv["byteLength"]]
+        im = Image.open(io.BytesIO(blob)).convert("RGB")
+        px = np.asarray(im).astype(np.uint8)
+        empty = px.max(axis=2) < 8  # bake background is pure black
+        frac = float(empty.mean())
+        if frac < 0.002:
+            continue
+        filled = px.copy()
+        mask = empty.copy()
+        # Each pass fills one texel ring outward from the islands; the
+        # bake's own 32px EXTEND margin sits underneath, so 12 rings is
+        # belt-and-braces for bilinear sampling. The distant background
+        # gets one flat mean color, which PNG compresses to nothing.
+        for _ in range(12):
+            if not mask.any():
+                break
+            grew = False
+            for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)):
+                src_col = np.roll(np.roll(filled, dy, axis=0), dx, axis=1)
+                src_mask = np.roll(np.roll(mask, dy, axis=0), dx, axis=1)
+                take = mask & ~src_mask
+                if take.any():
+                    filled[take] = src_col[take]
+                    mask = mask & src_mask
+                    grew = True
+            if not grew:
+                break
+        if mask.any():
+            filled[mask] = px[~empty].mean(axis=0).astype(np.uint8)
+        buf = io.BytesIO()
+        Image.fromarray(filled).save(buf, format="PNG", optimize=True)
+        png = buf.getvalue()
+        while len(bin_out) % 4:
+            bin_out.append(0)
+        gltf["bufferViews"].append(
+            {"buffer": 0, "byteOffset": len(bin_out), "byteLength": len(png)}
+        )
+        bin_out.extend(png)
+        img_def["bufferView"] = len(gltf["bufferViews"]) - 1
+        img_def["mimeType"] = "image/png"
+        changed = True
+        print(f"dilate {glb_path.name} img{idx}: filled {frac * 100:.1f}% background")
+
+    if not changed:
+        return
+    while len(bin_out) % 4:
+        bin_out.append(0)
+    gltf["buffers"][0]["byteLength"] = len(bin_out)
+    json_bytes = json.dumps(gltf, separators=(",", ":")).encode("utf-8")
+    while len(json_bytes) % 4:
+        json_bytes += b" "
+    total = 12 + 8 + len(json_bytes) + 8 + len(bin_out)
+    with glb_path.open("wb") as fh:
+        fh.write(struct.pack("<4sII", b"glTF", 2, total))
+        fh.write(struct.pack("<II", len(json_bytes), 0x4E4F534A))
+        fh.write(json_bytes)
+        fh.write(struct.pack("<II", len(bin_out), 0x004E4942))
+        fh.write(bytes(bin_out))
+
+
 def _safe_copy(src: Path, dst: Path, *, attempts: int = 10) -> None:
     last: Exception | None = None
     for i in range(attempts):
@@ -174,6 +270,7 @@ def optimize_one(
             tail = ((proc.stderr or "") + (proc.stdout or ""))[-3000:]
             raise RuntimeError(f"bake-optimize failed for {src.name}:\n{tail}")
 
+        _dilate_atlases(out_glb)
         _safe_copy(out_glb, src)
 
     after = src.stat().st_size

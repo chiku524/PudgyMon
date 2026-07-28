@@ -95,8 +95,10 @@ def _smart_uv(obj) -> None:
     _activate(obj)
     bpy.ops.object.mode_set(mode="EDIT")
     bpy.ops.mesh.select_all(action="SELECT")
-    # 45° splits faces into more islands; 3% margin guards against bake bleed.
-    bpy.ops.uv.smart_project(angle_limit=45.0, island_margin=0.03)
+    # 66° keeps organic bumpy meshes in few large islands — hundreds of
+    # confetti islands mean border texels everywhere, which sample the
+    # black atlas background in-game (dark speckling).
+    bpy.ops.uv.smart_project(angle_limit=66.0, island_margin=0.02)
     bpy.ops.object.mode_set(mode="OBJECT")
 
 
@@ -174,7 +176,7 @@ def _boost_face_islands(obj, boost: float = 2.2, upper_frac: float = 0.45) -> No
 
     bpy.ops.mesh.select_all(action="SELECT")
     try:
-        bpy.ops.uv.pack_islands(margin=0.03)
+        bpy.ops.uv.pack_islands(margin=0.015)
     except Exception as err:  # noqa: BLE001
         print(f"warn: pack_islands {err}")
     bpy.ops.object.mode_set(mode="OBJECT")
@@ -273,14 +275,15 @@ def _bake_diffuse(high, low, tex_size: int) -> None:
     bake.use_pass_direct = False
     bake.use_pass_indirect = False
     bake.use_pass_color = True
-    bake.margin = max(8, tex_size // 64)
+    bake.margin = max(16, tex_size // 32)
     if hasattr(bake, "margin_type"):
         bake.margin_type = "EXTEND"
     bake.use_selected_to_active = True
     cage = _cage_extrusion(low)
     bake.cage_extrusion = cage
-    # Cap ray length so misses cannot pull color from far surfaces.
-    bake.max_ray_distance = cage * 3.0
+    # Long enough for concave bumps (misses bake black), short enough
+    # to not grab paint from the far side of the mesh.
+    bake.max_ray_distance = cage * 6.0
 
     bpy.ops.object.select_all(action="DESELECT")
     high.hide_render = False

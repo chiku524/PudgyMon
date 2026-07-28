@@ -129,7 +129,7 @@ def _resample_anims_only(glb: Path) -> None:
         if proc.returncode != 0 or not out.is_file():
             print(f"warn: resample skipped for {glb.name}: {(proc.stderr or '')[-400:]}")
             return
-        shutil.copy2(out, glb)
+        _with_retries(shutil.copy2, out, glb, label=f"resample copy {glb.name}")
         print(f"resample ok {glb.name}")
 
 

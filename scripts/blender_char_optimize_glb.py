@@ -68,6 +68,37 @@ def _safe_copy(src: Path, dst: Path, *, attempts: int = 10) -> None:
     raise RuntimeError(f"copy failed {src} -> {dst}: {last}")
 
 
+def _simplify_meshopt(glb: Path, target_faces: int) -> None:
+    """Decimate with meshopt — UV-seam-safe, unlike Blender collapse."""
+    import shutil
+    import subprocess
+    import tempfile
+
+    npx = shutil.which("npx.cmd") or shutil.which("npx")
+    if not npx:
+        print(f"warn: npx missing; char stays dense: {glb.name}")
+        return
+    # Estimate ratio from file's face count is overkill; Tripo crew are
+    # all ~180-190k tris, so pick ratio from the budget conservatively.
+    ratio = max(0.05, min(0.9, target_faces / 190_000))
+    with tempfile.TemporaryDirectory(prefix="pudgy_simplify_") as tmp:
+        out = Path(tmp) / "out.glb"
+        cmd = [
+            npx, "--yes", "@gltf-transform/cli@4.1.1",
+            "simplify", str(glb), str(out),
+            "--ratio", f"{ratio:.4f}",
+            "--error", "0.001",
+        ]
+        proc = subprocess.run(
+            cmd, capture_output=True, text=True, encoding="utf-8", errors="replace"
+        )
+        if proc.returncode != 0 or not out.is_file():
+            print(f"warn: simplify failed for {glb.name}: {(proc.stderr or '')[-400:]}")
+            return
+        shutil.copy2(out, glb)
+        print(f"simplify ok {glb.name} ratio={ratio:.3f}")
+
+
 def _sharpen_basecolor(glb: Path, target_edge: int = 1024) -> None:
     """Upscale + unsharp the authored basecolor and embed as PNG.
 
@@ -224,6 +255,8 @@ def optimize_one(
         if proc.returncode != 0 or not out_glb.is_file():
             tail = ((proc.stderr or "") + (proc.stdout or ""))[-3500:]
             raise RuntimeError(f"char-optimize failed for {asset_id}:\n{tail}")
+        if path != "remesh":
+            _simplify_meshopt(out_glb, faces)
         _sharpen_basecolor(out_glb)
         _safe_copy(out_glb, src)
 
