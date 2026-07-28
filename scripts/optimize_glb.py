@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
 """Bevy-safe GLB size optimizer (no Draco / Meshopt / WebP / KTX2).
 
-Tripo crew meshes are often 100k–500k tris after a light pass — that dominates
-file size. This script welds, UV-aware simplifies, caps/re-encodes JPEG textures,
-and resamples animation keyframes while staying compatible with Bevy 0.19.
+Welds, UV-aware simplifies, caps/re-encodes JPEG textures (alpha-safe), strips
+ORM/normal maps on props, resamples animation keyframes, prunes orphans, and
+validates the output still loads in Bevy 0.19.
+
+NOTE: raw Tripo exports are vertex-split triangle soup that meshopt cannot
+simplify much — the script warns when that happens. For those, use the Blender
+pipelines instead (they remesh a closed cage and bake the diffuse):
+  scripts/blender_bake_optimize_glb.py   (props / accessories / env)
+  scripts/blender_char_optimize_glb.py   (skinned characters)
 
 Usage:
   python scripts/optimize_glb.py assets/models/char_pudgy_pink_01/char_pudgy_pink_01.glb
@@ -68,7 +74,9 @@ PRESETS: dict[str, Preset] = {
     # Do not re-run on already-optimized GLBs without --force (see optimize_file).
     "hero": Preset("hero", ratio=0.18, error=0.008, max_tex=768, jpeg_quality=82),
     "game": Preset("game", ratio=0.12, error=0.010, max_tex=512, jpeg_quality=78),
-    "prop": Preset("prop", ratio=0.08, error=0.016, max_tex=384, jpeg_quality=72),
+    "prop": Preset(
+        "prop", ratio=0.08, error=0.016, max_tex=384, jpeg_quality=72, strip_orm=True
+    ),
 }
 
 
@@ -112,6 +120,44 @@ def _gltf(npx: str, *args: str) -> None:
         raise RuntimeError(f"gltf-transform {' '.join(args[:2])} failed:\n{err}")
 
 
+def _load_glb(glb: Path) -> tuple[dict, bytearray]:
+    """Parse a GLB into (gltf json, binary chunk)."""
+    data = glb.read_bytes()
+    if data[:4] != b"glTF":
+        raise RuntimeError(f"not a GLB: {glb}")
+    offset = 12
+    json_chunk = None
+    bin_chunk = bytearray()
+    while offset + 8 <= len(data):
+        clen, ctype = struct.unpack_from("<II", data, offset)
+        chunk = data[offset + 8 : offset + 8 + clen]
+        if ctype == 0x4E4F534A:
+            json_chunk = chunk
+        elif ctype == 0x004E4942:
+            bin_chunk = bytearray(chunk)
+        offset += 8 + clen
+    if json_chunk is None:
+        raise RuntimeError(f"incomplete GLB: {glb}")
+    return json.loads(json_chunk), bin_chunk
+
+
+def _write_glb(glb: Path, gltf: dict, bin_chunk: bytearray) -> None:
+    gltf["buffers"] = [{"byteLength": len(bin_chunk)}]
+    new_json = json.dumps(gltf, separators=(",", ":")).encode("utf-8")
+    new_json += b" " * ((4 - (len(new_json) % 4)) % 4)
+    bin_chunk = bytearray(bin_chunk)
+    bin_chunk.extend(b"\x00" * ((4 - (len(bin_chunk) % 4)) % 4))
+
+    out = bytearray()
+    out += b"glTF"
+    out += struct.pack("<II", 2, 12 + 8 + len(new_json) + 8 + len(bin_chunk))
+    out += struct.pack("<II", len(new_json), 0x4E4F534A)
+    out += new_json
+    out += struct.pack("<II", len(bin_chunk), 0x004E4942)
+    out += bin_chunk
+    glb.write_bytes(out)
+
+
 def _sanitize_bevy_accessors(glb: Path) -> int:
     """Materialize zero accessors that lack bufferView (illegal for Bevy's loader).
 
@@ -119,27 +165,7 @@ def _sanitize_bevy_accessors(glb: Path) -> int:
     accessors with no bufferView. Spec allows that for zeros; Bevy 0.19 rejects
     the file as invalid glTF. Returns how many accessors were repaired.
     """
-    data = glb.read_bytes()
-    if data[:4] != b"glTF":
-        raise RuntimeError(f"not a GLB: {glb}")
-    offset = 12
-    json_chunk = None
-    bin_chunk = None
-    json_start = bin_start = None
-    while offset + 8 <= len(data):
-        clen, ctype = struct.unpack_from("<II", data, offset)
-        chunk = data[offset + 8 : offset + 8 + clen]
-        if ctype == 0x4E4F534A:
-            json_chunk = bytearray(chunk)
-            json_start = offset
-        elif ctype == 0x004E4942:
-            bin_chunk = bytearray(chunk)
-            bin_start = offset
-        offset += 8 + clen
-    if json_chunk is None or bin_chunk is None:
-        raise RuntimeError(f"incomplete GLB: {glb}")
-
-    gltf = json.loads(bytes(json_chunk))
+    gltf, bin_chunk = _load_glb(glb)
     accessors = gltf.get("accessors", [])
     buffer_views = gltf.setdefault("bufferViews", [])
     repaired = 0
@@ -172,24 +198,68 @@ def _sanitize_bevy_accessors(glb: Path) -> int:
     if repaired == 0:
         return 0
 
-    gltf["buffers"] = [{"byteLength": len(bin_chunk)}]
-    new_json = json.dumps(gltf, separators=(",", ":")).encode("utf-8")
-    json_pad = (4 - (len(new_json) % 4)) % 4
-    new_json += b" " * json_pad
-    bin_pad = (4 - (len(bin_chunk) % 4)) % 4
-    bin_chunk.extend(b"\x00" * bin_pad)
-
-    out = bytearray()
-    out += b"glTF"
-    out += struct.pack("<II", 2, 12 + 8 + len(new_json) + 8 + len(bin_chunk))
-    out += struct.pack("<II", len(new_json), 0x4E4F534A)
-    out += new_json
-    out += struct.pack("<II", len(bin_chunk), 0x004E4942)
-    out += bin_chunk
-    # Silence unused-start lint for readers that keep offsets around.
-    _ = (json_start, bin_start)
-    glb.write_bytes(out)
+    _write_glb(glb, gltf, bin_chunk)
     return repaired
+
+
+def _has_alpha_materials(glb: Path) -> bool:
+    """True when any material relies on texture alpha (MASK / BLEND)."""
+    gltf, _ = _load_glb(glb)
+    return any(
+        mat.get("alphaMode", "OPAQUE") in ("MASK", "BLEND")
+        for mat in gltf.get("materials", [])
+    )
+
+
+def _has_skins(glb: Path) -> bool:
+    gltf, _ = _load_glb(glb)
+    return bool(gltf.get("skins"))
+
+
+# Material texture slots that are dead weight on tiny props (paint is baked
+# into baseColor; toon-ish lighting makes normal / ORM detail invisible).
+_ORM_SLOTS = ("normalTexture", "occlusionTexture")
+_PBR_ORM_SLOTS = ("metallicRoughnessTexture",)
+
+
+def _strip_orm_slots(glb: Path) -> int:
+    """Remove normal / occlusion / metallicRoughness texture refs from materials.
+
+    Returns the number of references removed. The images themselves become
+    orphans — run a `prune` pass afterwards to drop them from the file.
+    """
+    gltf, bin_chunk = _load_glb(glb)
+    removed = 0
+    for mat in gltf.get("materials", []):
+        for slot in _ORM_SLOTS:
+            if slot in mat:
+                del mat[slot]
+                removed += 1
+        pbr = mat.get("pbrMetallicRoughness", {})
+        for slot in _PBR_ORM_SLOTS:
+            if slot in pbr:
+                del pbr[slot]
+                removed += 1
+    if removed:
+        _write_glb(glb, gltf, bin_chunk)
+    return removed
+
+
+def _validate_bevy_glb(glb: Path) -> None:
+    """Fail loudly if the output would not load in Bevy 0.19."""
+    gltf, _ = _load_glb(glb)
+    problems: list[str] = []
+    for i, acc in enumerate(gltf.get("accessors", [])):
+        if "bufferView" not in acc and "sparse" not in acc:
+            problems.append(f"accessor {i} has no bufferView (Bevy rejects this)")
+    for ext in gltf.get("extensionsRequired", []):
+        problems.append(f"requires extension {ext} (Bevy may not support it)")
+    for i, img in enumerate(gltf.get("images", [])):
+        mime = img.get("mimeType")
+        if mime not in (None, "image/jpeg", "image/png"):
+            problems.append(f"image {i} has unsupported mimeType {mime}")
+    if problems:
+        raise RuntimeError(f"{glb.name} failed Bevy validation: " + "; ".join(problems))
 
 
 def _face_count(glb: Path) -> int | None:
@@ -319,6 +389,10 @@ def optimize_file(
         run("dedup", "dedup")
         run("prune", "prune")
         if do_simplify:
+            # Border locking protects skinned seams, but on static meshes it
+            # can lock nearly every vertex (Tripo exports are vertex-split
+            # triangle soup where every edge is a "border").
+            lock_border = "true" if _has_skins(cur) else "false"
             run(
                 "simplify",
                 "simplify",
@@ -327,8 +401,17 @@ def optimize_file(
                 "--error",
                 str(error),
                 "--lock-border",
-                "true",
+                lock_border,
             )
+
+        # ORM / normal maps are dead weight on props (diffuse is baked, toon
+        # lighting hides the detail) — drop the refs, prune removes the images.
+        if p.strip_orm:
+            stripped = _strip_orm_slots(cur)
+            if stripped:
+                print(f"strip-orm: removed {stripped} material texture ref(s)")
+                run("prune_orm", "prune")
+
         run(
             "resize",
             "resize",
@@ -340,6 +423,12 @@ def optimize_file(
             "lanczos3",
         )
         # Plain image/jpeg embeds — Bevy-safe (no EXT_texture_webp / Basis).
+        # JPEG has no alpha channel: keep baseColor as-is (PNG) whenever a
+        # material cuts out / blends via texture alpha, or it goes opaque.
+        base_slots = "baseColorTexture,"
+        if _has_alpha_materials(cur):
+            print("alpha materials present — keeping baseColor format (no JPEG)")
+            base_slots = ""
         run(
             "jpeg",
             "jpeg",
@@ -348,7 +437,7 @@ def optimize_file(
             "--formats",
             "*",
             "--slots",
-            "baseColorTexture,metallicRoughnessTexture,occlusionTexture,emissiveTexture",
+            "{" + f"{base_slots}metallicRoughnessTexture,occlusionTexture,emissiveTexture" + "}",
         )
         # Normals benefit from slightly higher quality to avoid banding.
         try:
@@ -371,11 +460,32 @@ def optimize_file(
         # Do NOT run gltf-transform `sparse`: it emits zero accessors without
         # bufferView, which Bevy 0.19 rejects as invalid glTF.
 
+        # Final sweep for anything the passes above orphaned.
+        run("prune_final", "prune")
+
         out.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(cur, out)
         fixed = _sanitize_bevy_accessors(out)
         if fixed:
             print(f"bevy-sanitize: materialized {fixed} zero accessor(s)")
+        _validate_bevy_glb(out)
+
+    # meshopt can only collapse topologically connected edges. Raw Tripo
+    # exports are vertex-split soup that resists simplification — the Blender
+    # remesh+bake pipeline is the tool for those, so say so instead of
+    # silently shipping a 200k-tri "optimized" mesh.
+    if do_simplify and faces:
+        after_faces = _face_count(out)
+        target = max(int(faces * ratio), skip_simplify_below)
+        if after_faces and after_faces > target * 3:
+            print(
+                f"WARN {out.name}: simplify stalled at {after_faces:,} tris "
+                f"(target ~{int(faces * ratio):,}) - mesh topology is likely "
+                "disconnected triangle soup. Use "
+                "scripts/blender_bake_optimize_glb.py (props) or "
+                "scripts/blender_char_optimize_glb.py (characters) for a real "
+                "reduction."
+            )
 
     after = out.stat().st_size
     saved = 1.0 - (after / before) if before else 0.0
