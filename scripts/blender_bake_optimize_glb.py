@@ -38,15 +38,13 @@ _FACE_BUDGET = {
     "vfx_": 3_000,
 }
 
-# Higher atlases keep painted eyes / candy accents sharp after remesh.
-# (Was 512/384 — eyes blurred and neighboring colors bled together.)
 _TEX_SIZE = {
-    "char_": 1024,
-    "oceanic_": 1024,
-    "npc_": 1024,
-    "acc_": 512,
-    "prop_": 1024,
-    "env_": 1024,
+    "char_": 512,
+    "oceanic_": 512,
+    "npc_": 512,
+    "acc_": 384,
+    "prop_": 512,
+    "env_": 512,
     "vfx_": 256,
 }
 

@@ -112,14 +112,8 @@ def _smart_uv(obj) -> None:
     _activate(obj)
     bpy.ops.object.mode_set(mode="EDIT")
     bpy.ops.mesh.select_all(action="SELECT")
-    # More islands + wider gaps keep painted eyes from bleeding into skin.
-    bpy.ops.uv.smart_project(angle_limit=45.0, island_margin=0.04)
+    bpy.ops.uv.smart_project(angle_limit=66.0, island_margin=0.02)
     bpy.ops.object.mode_set(mode="OBJECT")
-
-
-def _cage_extrusion(obj) -> float:
-    dim = _bbox_max_dim(obj)
-    return max(0.001, min(0.012, dim * 0.005))
 
 
 def _toon_mat(mat) -> None:
@@ -179,18 +173,13 @@ def _bake_diffuse(high, low, tex_size: int) -> None:
     scene = bpy.context.scene
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
-    scene.cycles.samples = 16
-    bake = scene.render.bake
-    bake.use_pass_direct = False
-    bake.use_pass_indirect = False
-    bake.use_pass_color = True
-    bake.margin = max(8, tex_size // 64)
-    if hasattr(bake, "margin_type"):
-        bake.margin_type = "EXTEND"
-    bake.use_selected_to_active = True
-    cage = _cage_extrusion(low)
-    bake.cage_extrusion = cage
-    bake.max_ray_distance = cage * 3.0
+    scene.cycles.samples = 8
+    scene.render.bake.use_pass_direct = False
+    scene.render.bake.use_pass_indirect = False
+    scene.render.bake.use_pass_color = True
+    scene.render.bake.margin = 8
+    scene.render.bake.use_selected_to_active = True
+    scene.render.bake.cage_extrusion = max(0.01, _bbox_max_dim(low) * 0.025)
 
     high.hide_render = False
     low.hide_render = False
@@ -202,7 +191,7 @@ def _bake_diffuse(high, low, tex_size: int) -> None:
     bpy.context.view_layer.objects.active = low
     print(
         f"bake DIFFUSE {high.name} -> {low.name} tex={tex_size} "
-        f"cage={cage:.4f} margin={bake.margin}"
+        f"cage={scene.render.bake.cage_extrusion:.4f}"
     )
     bpy.ops.object.bake(type="DIFFUSE", pass_filter={"COLOR"}, use_clear=True)
     nt.links.new(tex.outputs["Color"], principled.inputs["Base Color"])
@@ -415,7 +404,7 @@ def main() -> None:
             export_normals=True,
             export_materials="EXPORT",
             export_image_format="JPEG",
-            export_jpeg_quality=92,
+            export_jpeg_quality=82,
             export_yup=True,
         )
     except TypeError:
