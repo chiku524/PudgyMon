@@ -24,9 +24,9 @@ _REPO = Path(__file__).resolve().parents[1]
 # (max_tris, max_tex_edge) by asset id prefix — mirrors the Blender bake
 # budgets in blender_bake_optimize_glb.py / blender_char_optimize_glb.py.
 _BUDGETS: dict[str, tuple[int, int]] = {
-    "char_": (36_000, 1024),
-    "oceanic_": (36_000, 1024),
-    "npc_": (36_000, 1024),
+    "char_": (36_000, 2048),
+    "oceanic_": (36_000, 2048),
+    "npc_": (36_000, 2048),
     "acc_": (6_000, 512),
     "prop_": (8_000, 1024),
     "env_": (10_000, 1024),

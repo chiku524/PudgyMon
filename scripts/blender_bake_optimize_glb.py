@@ -38,12 +38,12 @@ _FACE_BUDGET = {
     "vfx_": 3_000,
 }
 
-# Higher atlases keep painted eyes / candy accents sharp after remesh.
-# (Was 512/384 — eyes blurred and neighboring colors bled together.)
+# PNG atlases (not JPEG — chroma was smearing eyes). Head UV-boost gives
+# faces more of the 1024 atlas; chars use preserve-UV at source resolution.
 _TEX_SIZE = {
-    "char_": 1024,
-    "oceanic_": 1024,
-    "npc_": 1024,
+    "char_": 2048,
+    "oceanic_": 2048,
+    "npc_": 2048,
     "acc_": 512,
     "prop_": 1024,
     "env_": 1024,
@@ -163,6 +163,7 @@ def optimize_one(
                     "remesh ",
                     "decimate ",
                     "bake ",
+                    "uv-boost",
                     "warn:",
                     "Error",
                     "Traceback",
