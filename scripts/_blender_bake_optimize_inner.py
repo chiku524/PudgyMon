@@ -92,16 +92,26 @@ def _voxel_remesh(obj, voxel_size: float) -> None:
 
 
 def _smart_uv(obj) -> None:
+    """Tighter angle + wider island gaps so painted eyes/accents stay isolated."""
     _activate(obj)
     bpy.ops.object.mode_set(mode="EDIT")
     bpy.ops.mesh.select_all(action="SELECT")
-    bpy.ops.uv.smart_project(angle_limit=66.0, island_margin=0.02)
+    # 45° splits face regions into more islands; 4% margin stops bake bleed
+    # between eye paint and neighboring candy colors.
+    bpy.ops.uv.smart_project(angle_limit=45.0, island_margin=0.04)
     bpy.ops.object.mode_set(mode="OBJECT")
 
 
 def _bbox_max_dim(obj) -> float:
     dims = obj.dimensions
     return max(float(dims.x), float(dims.y), float(dims.z), 0.05)
+
+
+def _cage_extrusion(obj) -> float:
+    """Keep the cage tight so bake rays do not sample neighboring paint."""
+    dim = _bbox_max_dim(obj)
+    # Was dim*0.02 (min 0.01) — too wide; eyes/accents blended into body colors.
+    return max(0.001, min(0.012, dim * 0.005))
 
 
 def _toon_principled(mat) -> None:
@@ -175,19 +185,25 @@ def _bake_diffuse(high, low, tex_size: int) -> None:
     tex_node.select = True
     nt.nodes.active = tex_node
 
-    # Cycles bake setup.
+    # Cycles bake setup — sharp color transfer, minimal cross-island bleed.
     scene = bpy.context.scene
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
-    scene.cycles.samples = 8
+    scene.cycles.samples = 16
     scene.cycles.bake_type = "DIFFUSE"
-    scene.render.bake.use_pass_direct = False
-    scene.render.bake.use_pass_indirect = False
-    scene.render.bake.use_pass_color = True
-    scene.render.bake.margin = 8
-    scene.render.bake.use_selected_to_active = True
-    scene.render.bake.cage_extrusion = max(0.01, _bbox_max_dim(low) * 0.02)
-    scene.render.bake.max_ray_distance = 0.0
+    bake = scene.render.bake
+    bake.use_pass_direct = False
+    bake.use_pass_indirect = False
+    bake.use_pass_color = True
+    # Margin scales with atlas size (~16 px @ 1024) so UV pads stay clean.
+    bake.margin = max(8, tex_size // 64)
+    if hasattr(bake, "margin_type"):
+        bake.margin_type = "EXTEND"
+    bake.use_selected_to_active = True
+    cage = _cage_extrusion(low)
+    bake.cage_extrusion = cage
+    # Cap ray length so missed hits don't pull color from far surfaces.
+    bake.max_ray_distance = cage * 3.0
 
     bpy.ops.object.select_all(action="DESELECT")
     high.hide_render = False
@@ -198,7 +214,7 @@ def _bake_diffuse(high, low, tex_size: int) -> None:
 
     print(
         f"bake DIFFUSE {high.name} -> {low.name} "
-        f"tex={tex_size} cage={scene.render.bake.cage_extrusion:.4f}"
+        f"tex={tex_size} cage={cage:.4f} margin={bake.margin}"
     )
     bpy.ops.object.bake(type="DIFFUSE", pass_filter={"COLOR"}, use_clear=True)
 
@@ -349,7 +365,7 @@ def main() -> None:
             export_normals=True,
             export_materials="EXPORT",
             export_image_format="JPEG",
-            export_jpeg_quality=80,
+            export_jpeg_quality=92,
             export_yup=True,
         )
     except TypeError:

@@ -33,7 +33,7 @@ _DEFAULT_CHARS = [
 ]
 
 _FACE_BUDGET = 24_000
-_TEX_SIZE = 512
+_TEX_SIZE = 1024
 
 
 def _blender_bin() -> str:

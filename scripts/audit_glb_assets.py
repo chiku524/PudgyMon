@@ -24,15 +24,15 @@ _REPO = Path(__file__).resolve().parents[1]
 # (max_tris, max_tex_edge) by asset id prefix — mirrors the Blender bake
 # budgets in blender_bake_optimize_glb.py / blender_char_optimize_glb.py.
 _BUDGETS: dict[str, tuple[int, int]] = {
-    "char_": (36_000, 512),
-    "oceanic_": (36_000, 512),
-    "npc_": (36_000, 512),
-    "acc_": (6_000, 384),
-    "prop_": (8_000, 512),
-    "env_": (10_000, 512),
+    "char_": (36_000, 1024),
+    "oceanic_": (36_000, 1024),
+    "npc_": (36_000, 1024),
+    "acc_": (6_000, 512),
+    "prop_": (8_000, 1024),
+    "env_": (10_000, 1024),
     "vfx_": (3_000, 256),
 }
-_DEFAULT_BUDGET = (10_000, 512)
+_DEFAULT_BUDGET = (10_000, 1024)
 # Headroom before a flag fires (decimate targets are approximate).
 _TRIS_SLACK = 1.35
 
