@@ -123,6 +123,20 @@ BATCH: list[tuple[str, str, float, str]] = [
     ("stylized+candy+tree+3d+model-optimized.glb", "env_nest_tree_candy_02", 3.2, "candy tree"),
     ("green+blob+3d+model-optimized.glb", "env_nest_blob_01", 0.8, "green blob buddy"),
     ("stylized+pond+3d+model-optimized.glb", "env_nest_pond_01", 0.5, "candy pond"),
+    # Stragglers (batch 2) — left out of the first drop.
+    ("blue+mushroom+creature+3d+model-optimized.glb", "env_nest_creature_mushroom_01", 1.2, "mushroom creature"),
+    ("stylized+cartoon+3d+prop-optimized.glb", "env_nest_deco_09", 1.2, "cartoon deco prop"),
+    ("candy+rock+cluster+3d+model-optimized.glb", "env_nest_rocks_01", 1.0, "candy rock cluster"),
+    ("lily+pad+3d+model-optimized.glb", "env_nest_lilypad_01", 0.3, "lily pad"),
+    ("stylized+candy+hammock+3d+model-optimized.glb", "env_nest_hammock_01", 1.4, "candy hammock"),
+    ("stylized+plant+3d+model-optimized.glb", "env_nest_plant_02", 1.2, "stylized plant"),
+    ("candle+nest+prop+3d+model-optimized.glb", "env_nest_candle_01", 1.1, "nest candle"),
+    ("cute+round+monster+3d+model-optimized.glb", "env_nest_monster_26", 1.1, "round monster statue"),
+    ("cute+swing+prop+3d+model-optimized.glb", "env_nest_swing_01", 2.2, "candy swing"),
+    ("candy+post+3d+model-optimized.glb", "env_nest_post_01", 1.8, "candy post"),
+    ("stylized+monster+3d+model (5)-optimized.glb", "env_nest_monster_27", 1.2, "monster statue"),
+    ("stylized+candy+arch+3d+model (1)-optimized.glb", "env_nest_arch_03", 3.2, "candy arch gate"),
+    ("cute+monster+3d+model (13)-optimized.glb", "env_nest_monster_28", 1.1, "cute monster statue"),
 ]
 
 

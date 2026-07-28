@@ -194,6 +194,12 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_arch_03",
+      "target_height": 3.2,
+      "notes": "Nest d\u00e9cor \u2014 candy arch gate",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_arch_balloon_01",
       "target_height": 3.4,
       "notes": "Nest d\u00e9cor \u2014 balloon arch",
@@ -245,6 +251,12 @@
       "asset_id": "env_nest_cake_02",
       "target_height": 1.2,
       "notes": "Nest d\u00e9cor \u2014 cake prop",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_candle_01",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 nest candle",
       "uniform_scale": 1.0
     },
     {
@@ -308,6 +320,12 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_creature_mushroom_01",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 mushroom creature",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_creature_party_01",
       "target_height": 1.3,
       "notes": "Nest d\u00e9cor \u2014 party creature",
@@ -362,6 +380,12 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_deco_09",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 cartoon deco prop",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_dumpling_01",
       "target_height": 0.9,
       "notes": "Nest d\u00e9cor \u2014 cartoon dumpling",
@@ -392,6 +416,12 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_hammock_01",
+      "target_height": 1.4,
+      "notes": "Nest d\u00e9cor \u2014 candy hammock",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_hydrant_01",
       "target_height": 0.9,
       "notes": "Nest d\u00e9cor \u2014 pink hydrant",
@@ -419,6 +449,12 @@
       "asset_id": "env_nest_lamp_01",
       "target_height": 2.4,
       "notes": "Nest d\u00e9cor \u2014 candy street lamp",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_lilypad_01",
+      "target_height": 0.3,
+      "notes": "Nest d\u00e9cor \u2014 lily pad",
       "uniform_scale": 1.0
     },
     {
@@ -584,6 +620,24 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_monster_26",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 round monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_27",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 monster statue",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_monster_28",
+      "target_height": 1.1,
+      "notes": "Nest d\u00e9cor \u2014 cute monster statue",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_monster_balloon_01",
       "target_height": 1.6,
       "notes": "Nest d\u00e9cor \u2014 balloon monster",
@@ -599,6 +653,12 @@
       "asset_id": "env_nest_plant_01",
       "target_height": 1.2,
       "notes": "Nest d\u00e9cor \u2014 potted plant",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_plant_02",
+      "target_height": 1.2,
+      "notes": "Nest d\u00e9cor \u2014 stylized plant",
       "uniform_scale": 1.0
     },
     {
@@ -620,9 +680,21 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_post_01",
+      "target_height": 1.8,
+      "notes": "Nest d\u00e9cor \u2014 candy post",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_ring_01",
       "target_height": 1.4,
       "notes": "Nest d\u00e9cor \u2014 lime ring sculpture",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_rocks_01",
+      "target_height": 1.0,
+      "notes": "Nest d\u00e9cor \u2014 candy rock cluster",
       "uniform_scale": 1.0
     },
     {
@@ -641,6 +713,12 @@
       "asset_id": "env_nest_stair_01",
       "target_height": 1.0,
       "notes": "Nest d\u00e9cor \u2014 pink stair block",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_swing_01",
+      "target_height": 2.2,
+      "notes": "Nest d\u00e9cor \u2014 candy swing",
       "uniform_scale": 1.0
     },
     {
