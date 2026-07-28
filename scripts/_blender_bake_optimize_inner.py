@@ -95,13 +95,101 @@ def _smart_uv(obj) -> None:
     _activate(obj)
     bpy.ops.object.mode_set(mode="EDIT")
     bpy.ops.mesh.select_all(action="SELECT")
-    bpy.ops.uv.smart_project(angle_limit=66.0, island_margin=0.02)
+    # 45° splits faces into more islands; 3% margin guards against bake bleed.
+    bpy.ops.uv.smart_project(angle_limit=45.0, island_margin=0.03)
     bpy.ops.object.mode_set(mode="OBJECT")
+
+
+def _boost_face_islands(obj, boost: float = 2.2, upper_frac: float = 0.45) -> None:
+    """Scale whole upper-mesh UV islands so faces/eyes get more texels.
+
+    Island-aware (union-find over UV-continuous edges): scaling complete
+    islands cannot distort UVs inside an island, unlike per-loop scaling.
+    pack_islands preserves relative island scale when refitting to 0-1.
+    """
+    import bmesh
+
+    _activate(obj)
+    me = obj.data
+    if not me.uv_layers:
+        return
+    bpy.ops.object.mode_set(mode="EDIT")
+    bm = bmesh.from_edit_mesh(me)
+    uv = bm.loops.layers.uv.active
+    if uv is None:
+        bpy.ops.object.mode_set(mode="OBJECT")
+        return
+    bm.faces.ensure_lookup_table()
+
+    parent = list(range(len(bm.faces)))
+
+    def find(a: int) -> int:
+        while parent[a] != a:
+            parent[a] = parent[parent[a]]
+            a = parent[a]
+        return a
+
+    for edge in bm.edges:
+        faces = edge.link_faces
+        if len(faces) != 2:
+            continue
+        f1, f2 = faces
+        continuous = True
+        for v in edge.verts:
+            uv1 = next((l[uv].uv for l in f1.loops if l.vert == v), None)
+            uv2 = next((l[uv].uv for l in f2.loops if l.vert == v), None)
+            if uv1 is None or uv2 is None or (uv1 - uv2).length > 1e-5:
+                continuous = False
+                break
+        if continuous:
+            ra, rb = find(f1.index), find(f2.index)
+            if ra != rb:
+                parent[rb] = ra
+
+    islands: dict[int, list] = {}
+    for f in bm.faces:
+        islands.setdefault(find(f.index), []).append(f)
+
+    zs = [v.co.z for v in bm.verts]
+    z_min, z_max = min(zs), max(zs)
+    if z_max - z_min < 1e-6:
+        bpy.ops.object.mode_set(mode="OBJECT")
+        return
+    thresh = z_min + (z_max - z_min) * (1.0 - upper_frac)
+
+    boosted = 0
+    for faces in islands.values():
+        verts = [v for f in faces for v in f.verts]
+        z_avg = sum(v.co.z for v in verts) / max(1, len(verts))
+        if z_avg < thresh:
+            continue
+        loops = [l[uv] for f in faces for l in f.loops]
+        cx = sum(l.uv.x for l in loops) / len(loops)
+        cy = sum(l.uv.y for l in loops) / len(loops)
+        for l in loops:
+            l.uv.x = cx + (l.uv.x - cx) * boost
+            l.uv.y = cy + (l.uv.y - cy) * boost
+        boosted += 1
+    bmesh.update_edit_mesh(me)
+
+    bpy.ops.mesh.select_all(action="SELECT")
+    try:
+        bpy.ops.uv.pack_islands(margin=0.03)
+    except Exception as err:  # noqa: BLE001
+        print(f"warn: pack_islands {err}")
+    bpy.ops.object.mode_set(mode="OBJECT")
+    print(f"uv-boost islands={boosted}/{len(islands)} x{boost:.1f}")
 
 
 def _bbox_max_dim(obj) -> float:
     dims = obj.dimensions
     return max(float(dims.x), float(dims.y), float(dims.z), 0.05)
+
+
+def _cage_extrusion(obj) -> float:
+    """Tight cage: wide cages sampled neighboring paint (color bleed)."""
+    dim = _bbox_max_dim(obj)
+    return max(0.001, min(0.012, dim * 0.005))
 
 
 def _toon_principled(mat) -> None:
@@ -175,19 +263,24 @@ def _bake_diffuse(high, low, tex_size: int) -> None:
     tex_node.select = True
     nt.nodes.active = tex_node
 
-    # Cycles bake setup.
+    # Cycles bake setup — sharp color transfer, minimal cross-island bleed.
     scene = bpy.context.scene
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
-    scene.cycles.samples = 8
+    scene.cycles.samples = 32
     scene.cycles.bake_type = "DIFFUSE"
-    scene.render.bake.use_pass_direct = False
-    scene.render.bake.use_pass_indirect = False
-    scene.render.bake.use_pass_color = True
-    scene.render.bake.margin = 8
-    scene.render.bake.use_selected_to_active = True
-    scene.render.bake.cage_extrusion = max(0.01, _bbox_max_dim(low) * 0.02)
-    scene.render.bake.max_ray_distance = 0.0
+    bake = scene.render.bake
+    bake.use_pass_direct = False
+    bake.use_pass_indirect = False
+    bake.use_pass_color = True
+    bake.margin = max(8, tex_size // 64)
+    if hasattr(bake, "margin_type"):
+        bake.margin_type = "EXTEND"
+    bake.use_selected_to_active = True
+    cage = _cage_extrusion(low)
+    bake.cage_extrusion = cage
+    # Cap ray length so misses cannot pull color from far surfaces.
+    bake.max_ray_distance = cage * 3.0
 
     bpy.ops.object.select_all(action="DESELECT")
     high.hide_render = False
@@ -198,7 +291,7 @@ def _bake_diffuse(high, low, tex_size: int) -> None:
 
     print(
         f"bake DIFFUSE {high.name} -> {low.name} "
-        f"tex={tex_size} cage={scene.render.bake.cage_extrusion:.4f}"
+        f"tex={tex_size} cage={cage:.4f} margin={bake.margin}"
     )
     bpy.ops.object.bake(type="DIFFUSE", pass_filter={"COLOR"}, use_clear=True)
 
@@ -246,6 +339,10 @@ def _optimize_static(obj, target_faces: int, tex_size: int) -> None:
     _decimate(low, target_faces)
     _fill_holes(low)
     _smart_uv(low)
+    try:
+        _boost_face_islands(low, boost=2.2, upper_frac=0.45)
+    except Exception as err:  # noqa: BLE001
+        print(f"warn: uv-boost skipped ({err})")
 
     # Re-resolve by name — Blender RNA refs can go stale across ops.
     high = bpy.data.objects.get(high_name)
@@ -348,8 +445,8 @@ def main() -> None:
             export_texcoords=True,
             export_normals=True,
             export_materials="EXPORT",
-            export_image_format="JPEG",
-            export_jpeg_quality=80,
+            # PNG keeps sharp eye / accent edges; JPEG chroma smears them.
+            export_image_format="PNG",
             export_yup=True,
         )
     except TypeError:

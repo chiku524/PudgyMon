@@ -38,13 +38,14 @@ _FACE_BUDGET = {
     "vfx_": 3_000,
 }
 
+# PNG atlases; 1024 + island-aware face boost keeps painted eyes readable.
 _TEX_SIZE = {
-    "char_": 512,
-    "oceanic_": 512,
-    "npc_": 512,
-    "acc_": 384,
-    "prop_": 512,
-    "env_": 512,
+    "char_": 1024,
+    "oceanic_": 1024,
+    "npc_": 1024,
+    "acc_": 512,
+    "prop_": 1024,
+    "env_": 1024,
     "vfx_": 256,
 }
 
@@ -161,6 +162,7 @@ def optimize_one(
                     "remesh ",
                     "decimate ",
                     "bake ",
+                    "uv-boost",
                     "warn:",
                     "Error",
                     "Traceback",

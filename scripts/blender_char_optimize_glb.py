@@ -32,8 +32,10 @@ _DEFAULT_CHARS = [
     "oceanic_pudgymon_01",
 ]
 
-_FACE_BUDGET = 24_000
-_TEX_SIZE = 512
+# Preserve path keeps Tripo UV paint; tris can go higher since no bake.
+_FACE_BUDGET = 36_000
+_TEX_SIZE = 1024  # remesh-fallback bake size; preserve path ignores it
+_PATH = "preserve"
 
 
 def _blender_bin() -> str:
@@ -66,11 +68,95 @@ def _safe_copy(src: Path, dst: Path, *, attempts: int = 10) -> None:
     raise RuntimeError(f"copy failed {src} -> {dst}: {last}")
 
 
+def _sharpen_basecolor(glb: Path, target_edge: int = 1024) -> None:
+    """Upscale + unsharp the authored basecolor and embed as PNG.
+
+    The Tripo source paint is 512px JPEG — soft eyes are baked into the
+    source. Lanczos 2x + a moderate unsharp mask recovers edge contrast,
+    and PNG stops any further chroma loss.
+    """
+    import io
+    import json
+    import struct
+
+    from PIL import Image, ImageFilter
+
+    data = glb.read_bytes()
+    if data[:4] != b"glTF":
+        raise ValueError(f"not a GLB: {glb}")
+    off = 12
+    gltf = None
+    bin_chunk = b""
+    while off + 8 <= len(data):
+        clen, ctype = struct.unpack_from("<II", data, off)
+        chunk = data[off + 8 : off + 8 + clen]
+        if ctype == 0x4E4F534A:
+            gltf = json.loads(chunk)
+        elif ctype == 0x004E4942:
+            bin_chunk = chunk
+        off += 8 + clen
+    if gltf is None:
+        raise ValueError(f"no JSON chunk: {glb}")
+
+    # Basecolor image indices via material references.
+    base_imgs: set[int] = set()
+    textures = gltf.get("textures", [])
+    for mat in gltf.get("materials", []):
+        tex_info = mat.get("pbrMetallicRoughness", {}).get("baseColorTexture")
+        if tex_info is not None:
+            src = textures[tex_info["index"]].get("source")
+            if src is not None:
+                base_imgs.add(src)
+    if not base_imgs:
+        print(f"warn: no basecolor to sharpen in {glb.name}")
+        return
+
+    views = gltf["bufferViews"]
+    bin_out = bytearray(bin_chunk)
+    for idx in sorted(base_imgs):
+        img_def = gltf["images"][idx]
+        bv = views[img_def["bufferView"]]
+        blob = bin_chunk[bv["byteOffset"] : bv["byteOffset"] + bv["byteLength"]]
+        im = Image.open(io.BytesIO(blob)).convert("RGB")
+        w, h = im.size
+        if max(w, h) < target_edge:
+            scale = target_edge / max(w, h)
+            im = im.resize((int(w * scale), int(h * scale)), Image.LANCZOS)
+        im = im.filter(ImageFilter.UnsharpMask(radius=1.6, percent=140, threshold=2))
+        buf = io.BytesIO()
+        im.save(buf, format="PNG", optimize=True)
+        png = buf.getvalue()
+
+        while len(bin_out) % 4:
+            bin_out.append(0)
+        new_view = {"buffer": 0, "byteOffset": len(bin_out), "byteLength": len(png)}
+        bin_out.extend(png)
+        gltf["bufferViews"].append(new_view)
+        img_def["bufferView"] = len(gltf["bufferViews"]) - 1
+        img_def["mimeType"] = "image/png"
+        print(f"sharpen {glb.name} img{idx}: {w}x{h} -> {im.size[0]}x{im.size[1]} PNG")
+
+    while len(bin_out) % 4:
+        bin_out.append(0)
+    gltf["buffers"][0]["byteLength"] = len(bin_out)
+    json_bytes = json.dumps(gltf, separators=(",", ":")).encode("utf-8")
+    while len(json_bytes) % 4:
+        json_bytes += b" "
+    total = 12 + 8 + len(json_bytes) + 8 + len(bin_out)
+    with glb.open("wb") as fh:
+        fh.write(struct.pack("<4sII", b"glTF", 2, total))
+        fh.write(struct.pack("<II", len(json_bytes), 0x4E4F534A))
+        fh.write(json_bytes)
+        fh.write(struct.pack("<II", len(bin_out), 0x004E4942))
+        fh.write(bytes(bin_out))
+
+
 def optimize_one(
     asset_id: str,
     *,
     faces: int = _FACE_BUDGET,
     tex_size: int = _TEX_SIZE,
+    path: str = _PATH,
     from_pre_opt: bool = True,
     dry_run: bool = False,
 ) -> dict:
@@ -104,8 +190,12 @@ def optimize_one(
             str(out_glb),
             str(faces),
             str(tex_size),
+            path,
         ]
-        print(f"+ blender char-optimize {asset_id} -> ~{faces:,} tris tex={tex_size}")
+        print(
+            f"+ blender char-optimize {asset_id} -> ~{faces:,} tris "
+            f"tex={tex_size} path={path}"
+        )
         proc = subprocess.run(
             cmd,
             capture_output=True,
@@ -118,6 +208,7 @@ def optimize_one(
                 k in line
                 for k in (
                     "CHAR_OPT",
+                    "CHAR_PATH",
                     "remesh ",
                     "decimate ",
                     "bake ",
@@ -133,6 +224,7 @@ def optimize_one(
         if proc.returncode != 0 or not out_glb.is_file():
             tail = ((proc.stderr or "") + (proc.stdout or ""))[-3500:]
             raise RuntimeError(f"char-optimize failed for {asset_id}:\n{tail}")
+        _sharpen_basecolor(out_glb)
         _safe_copy(out_glb, src)
 
     after = src.stat().st_size
