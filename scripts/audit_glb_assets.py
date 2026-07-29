@@ -27,12 +27,14 @@ _BUDGETS: dict[str, tuple[int, int]] = {
     "char_": (48_000, 1024),
     "oceanic_": (48_000, 1024),
     "npc_": (48_000, 1024),
-    "acc_": (14_000, 1024),
-    "prop_": (18_000, 1024),
-    "env_": (22_000, 1024),
-    "vfx_": (6_000, 512),
+    # Preserve-path décor often stalls ~200–350k on Tripo soup; flag only
+    # above that soft ceiling so audits stay useful.
+    "acc_": (550_000, 1024),
+    "prop_": (550_000, 1024),
+    "env_": (550_000, 1024),
+    "vfx_": (80_000, 512),
 }
-_DEFAULT_BUDGET = (18_000, 1024)
+_DEFAULT_BUDGET = (550_000, 1024)
 # Headroom before a flag fires (decimate targets are approximate).
 _TRIS_SLACK = 1.35
 

@@ -56,7 +56,7 @@ python scripts/blender_bake_optimize_glb.py --batch assets/models --glob "*/*.gl
 python scripts/blender_bake_optimize_glb.py assets/models/env_nest_bench_01/env_nest_bench_01.glb --from-pre-opt
 ```
 
-- **Static props / accessories / env:** voxel remesh → ~14–22k tris → bake painted diffuse (1024 PNG) → matte toon material  
+- **Static props / accessories / env:** default **preserve** path keeps Tripo UVs + paint (meshopt simplify + PNG baseColor). This avoids remesh+bake color bleed that made balloon arches / striped umbrellas look muddy. Files are larger (~10–20 MB) because Tripo topology resists aggressive decimation — prefer that over muddy candy. Use `--path remesh` only when the mesh is too broken (holes).
 - **Skinned characters:** preserve Tripo UVs + meshopt simplify (~48k tris) + PNG basecolor (keeps armature clips):
 
 ```bash

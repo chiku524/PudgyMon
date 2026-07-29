@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
-"""Blender: closed low-poly + bake Tripo paint (fixes holes + clay + size).
+"""Blender: optimize Tripo décor without muddy remesh color bleed.
 
-Pipeline for static props/accessories/env:
+Default path ("preserve"):
   1. Import dense Tripo GLB
-  2. Keep high-poly source
-  3. Voxel-remesh + decimate a low-poly cage (manifold → no holes)
-  4. Smart UV project
-  5. Bake DIFFUSE color from high → low (preserves painted candy look)
-  6. Soft toon material (matte roughness, flat normals)
-  7. Export GLB
+  2. Hole-fill + unlink normal/ORM (matte candy)
+  3. Export — authored baseColor/UVs ride through; wrapper meshopt-simplifies
+     and upscales baseColor to PNG
 
-Skinned characters skip remesh (would destroy weights). They get hole-fill +
-mild decimate while keeping original UVs/textures.
+Remesh+rebake fused multi-color props (balloon arches, striped umbrellas)
+into blended candy mush. Only use --path remesh when the mesh is too broken.
 
-Invoked as:
-  blender --background --python this.py -- <src.glb> <dst.glb> <target_faces> <tex_size>
+  blender --background --python this.py -- <src.glb> <dst.glb> <faces> <tex> [preserve|remesh]
 """
 
 from __future__ import annotations
@@ -98,7 +94,13 @@ def _smart_uv(obj) -> None:
     # 66° keeps organic bumpy meshes in few large islands — hundreds of
     # confetti islands mean border texels everywhere, which sample the
     # black atlas background in-game (dark speckling).
-    bpy.ops.uv.smart_project(angle_limit=66.0, island_margin=0.02)
+    # Extra island_margin leaves room for bake EXTEND + bilinear filtering
+    # so adjacent candy colors do not bleed across island edges.
+    bpy.ops.uv.smart_project(angle_limit=66.0, island_margin=0.04)
+    try:
+        bpy.ops.uv.pack_islands(margin=0.03)
+    except Exception as err:  # noqa: BLE001
+        print(f"warn: pack_islands {err}")
     bpy.ops.object.mode_set(mode="OBJECT")
 
 
@@ -189,9 +191,13 @@ def _bbox_max_dim(obj) -> float:
 
 
 def _cage_extrusion(obj) -> float:
-    """Tight cage: wide cages sampled neighboring paint (color bleed)."""
+    """Very tight cage — wide cages sample neighboring candy colors.
+
+    Balloon arches / striped umbrellas pack distinct paints millimeters apart;
+    even dim*0.005 was enough to smear yellow into blue at bake time.
+    """
     dim = _bbox_max_dim(obj)
-    return max(0.001, min(0.012, dim * 0.005))
+    return max(0.0006, min(0.004, dim * 0.002))
 
 
 def _toon_principled(mat) -> None:
@@ -275,15 +281,16 @@ def _bake_diffuse(high, low, tex_size: int) -> None:
     bake.use_pass_direct = False
     bake.use_pass_indirect = False
     bake.use_pass_color = True
-    bake.margin = max(24, tex_size // 24)
+    # Keep bake margin inside the UV island gap (~0.03–0.04 of atlas).
+    # Oversized EXTEND reaches the next island and blends candy colors.
+    bake.margin = max(8, min(28, tex_size // 64))
     if hasattr(bake, "margin_type"):
         bake.margin_type = "EXTEND"
     bake.use_selected_to_active = True
     cage = _cage_extrusion(low)
     bake.cage_extrusion = cage
-    # Long enough for concave bumps (misses bake black), short enough
-    # to not grab paint from the far side of the mesh.
-    bake.max_ray_distance = cage * 6.0
+    # Short rays: prefer a miss (dilate fills it) over sampling a neighbor.
+    bake.max_ray_distance = cage * 2.5
 
     bpy.ops.object.select_all(action="DESELECT")
     high.hide_render = False
@@ -312,10 +319,27 @@ def _bake_diffuse(high, low, tex_size: int) -> None:
     _toon_principled(mat)
 
 
-def _optimize_static(obj, target_faces: int, tex_size: int) -> None:
+def _optimize_static_preserve(obj, target_faces: int) -> None:
+    """Keep Tripo UVs + painted baseColor; geometry simplify deferred to meshopt.
+
+    Remesh+rebake was fusing multi-color props (balloon arches, striped
+    umbrellas) into muddy blended candy. Preserve path keeps the authored
+    atlas and only hole-fills; the wrapper UV-safe-simplifies afterward.
+    """
+    print(
+        f"static preserve {obj.name}: faces_in={len(obj.data.polygons)} "
+        f"(target={target_faces}, simplify deferred)"
+    )
+    _fill_holes(obj)
+    for slot in obj.material_slots:
+        _toon_principled(slot.material)
+    print(f"static done {obj.name}: faces_out={len(obj.data.polygons)} path=preserve")
+
+
+def _optimize_static_remesh(obj, target_faces: int, tex_size: int) -> None:
     high = obj
     high_name = high.name
-    print(f"static optimize {high_name}: faces_in={len(high.data.polygons)}")
+    print(f"static remesh {high_name}: faces_in={len(high.data.polygons)}")
 
     # Duplicate as low-poly target.
     _activate(high)
@@ -328,27 +352,43 @@ def _optimize_static(obj, target_faces: int, tex_size: int) -> None:
     low.hide_render = False
     low.hide_viewport = False
 
-    # Closed manifold cage. Finer voxels for higher face budgets so decimate
-    # (not remesh) is what hits the target — remesh alone was blotting detail.
+    # Closed manifold cage. Aim for ~2.5x target faces from remesh so
+    # decimate (not a coarse voxel) sets the silhouette — coarse voxels on
+    # multi-color props fuse balloons/stripes into muddy color regions.
     dim = _bbox_max_dim(high)
-    if target_faces <= 10_000:
-        voxel = max(dim / 80.0, 0.0035)
-    elif target_faces <= 18_000:
-        voxel = max(dim / 110.0, 0.0028)
-    elif target_faces <= 28_000:
-        voxel = max(dim / 140.0, 0.0022)
-    else:
-        voxel = max(dim / 160.0, 0.0018)
+    remesh_target = max(int(target_faces * 2.5), target_faces + 6_000)
+    # faces ≈ c*(dim/voxel)^2 on organic surfaces; c≈10 works empirically.
+    voxel = dim * (10.0 / max(remesh_target, 1)) ** 0.5
+    voxel = max(min(voxel, dim / 220.0), dim / 420.0, 0.0012)
 
     _voxel_remesh(low, voxel)
+    remesh_faces = len(low.data.polygons)
+    # If still too coarse, rebuild the low cage from high with a finer voxel
+    # (re-remeshing the coarse cage cannot recover fused balloon detail).
+    if remesh_faces < target_faces * 1.4:
+        finer = max(voxel * 0.65, dim / 420.0, 0.0010)
+        print(
+            f"remesh refine {low_name}: {remesh_faces} < budget*1.4; "
+            f"rebuild voxel {voxel:.4f}->{finer:.4f}"
+        )
+        bpy.data.objects.remove(low, do_unlink=True)
+        high = bpy.data.objects.get(high_name)
+        if high is None:
+            raise RuntimeError(f"lost high before remesh refine ({high_name!r})")
+        _activate(high)
+        bpy.ops.object.duplicate()
+        low = bpy.context.view_layer.objects.active
+        low.name = low_name
+        low.hide_render = False
+        low.hide_viewport = False
+        _voxel_remesh(low, finer)
     _fill_holes(low)
     _decimate(low, target_faces)
     _fill_holes(low)
     _smart_uv(low)
-    try:
-        _boost_face_islands(low, boost=2.2, upper_frac=0.45)
-    except Exception as err:  # noqa: BLE001
-        print(f"warn: uv-boost skipped ({err})")
+    # Do NOT face-boost UV islands on décor props. That path was for crew
+    # eyes; on balloon arches / striped umbrellas it starves most islands
+    # of texels and packs them so tightly that candy colors bleed together.
 
     # Re-resolve by name — Blender RNA refs can go stale across ops.
     high = bpy.data.objects.get(high_name)
@@ -372,7 +412,14 @@ def _optimize_static(obj, target_faces: int, tex_size: int) -> None:
     low.name = high_name
     if low.data:
         low.data.name = high_name
-    print(f"static done {low.name}: faces_out={len(low.data.polygons)}")
+    print(f"static done {low.name}: faces_out={len(low.data.polygons)} path=remesh")
+
+
+def _optimize_static(obj, target_faces: int, tex_size: int, path: str) -> None:
+    if path == "remesh":
+        _optimize_static_remesh(obj, target_faces, tex_size)
+    else:
+        _optimize_static_preserve(obj, target_faces)
 
 
 def _optimize_skinned(obj, target_faces: int) -> None:
@@ -398,6 +445,7 @@ def _optimize_skinned(obj, target_faces: int) -> None:
 def main() -> None:
     argv = sys.argv[sys.argv.index("--") + 1 :]
     src, dst, faces_s, tex_s = argv[0], argv[1], argv[2], argv[3]
+    path = (argv[4] if len(argv) > 4 else "preserve").lower()
     target_faces = int(faces_s)
     tex_size = int(tex_s)
 
@@ -410,7 +458,7 @@ def main() -> None:
 
     print(
         f"BAKE_OPT_IN faces={_total_faces(meshes)} target={target_faces} "
-        f"tex={tex_size} meshes={len(meshes)}"
+        f"tex={tex_size} meshes={len(meshes)} path={path}"
     )
 
     # Drop tiny helper meshes (Tripo sometimes embeds an Icosphere, etc.).
@@ -435,7 +483,7 @@ def main() -> None:
         if _is_skinned(obj):
             _optimize_skinned(obj, share)
         else:
-            _optimize_static(obj, share, tex_size)
+            _optimize_static(obj, share, tex_size, path)
 
     print(f"BAKE_OPT_OUT faces={_total_faces(_meshes())}")
 
@@ -451,8 +499,9 @@ def main() -> None:
             export_texcoords=True,
             export_normals=True,
             export_materials="EXPORT",
-            # PNG keeps sharp eye / accent edges; JPEG chroma smears them.
-            export_image_format="PNG",
+            # AUTO keeps authored baseColor bytes on the preserve path;
+            # remesh path still writes a fresh PNG atlas via bake.
+            export_image_format="AUTO" if path != "remesh" else "PNG",
             export_yup=True,
         )
     except TypeError:

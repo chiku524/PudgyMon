@@ -133,7 +133,7 @@ def _resample_anims_only(glb: Path) -> None:
         print(f"resample ok {glb.name}")
 
 
-def _with_retries(fn, *args, attempts: int = 6, label: str = ""):
+def _with_retries(fn, *args, attempts: int = 12, label: str = ""):
     """Windows AV / mmap scanners transiently lock fresh GLBs — retry."""
     last: Exception | None = None
     for i in range(attempts):
