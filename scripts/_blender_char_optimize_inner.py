@@ -171,12 +171,12 @@ def _bake_diffuse(high, low, tex_size: int) -> None:
     scene = bpy.context.scene
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
-    scene.cycles.samples = 32
+    scene.cycles.samples = 64
     bake = scene.render.bake
     bake.use_pass_direct = False
     bake.use_pass_indirect = False
     bake.use_pass_color = True
-    bake.margin = max(8, tex_size // 64)
+    bake.margin = max(24, tex_size // 24)
     if hasattr(bake, "margin_type"):
         bake.margin_type = "EXTEND"
     bake.use_selected_to_active = True

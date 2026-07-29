@@ -269,13 +269,13 @@ def _bake_diffuse(high, low, tex_size: int) -> None:
     scene = bpy.context.scene
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
-    scene.cycles.samples = 32
+    scene.cycles.samples = 64
     scene.cycles.bake_type = "DIFFUSE"
     bake = scene.render.bake
     bake.use_pass_direct = False
     bake.use_pass_indirect = False
     bake.use_pass_color = True
-    bake.margin = max(16, tex_size // 32)
+    bake.margin = max(24, tex_size // 24)
     if hasattr(bake, "margin_type"):
         bake.margin_type = "EXTEND"
     bake.use_selected_to_active = True
@@ -328,14 +328,17 @@ def _optimize_static(obj, target_faces: int, tex_size: int) -> None:
     low.hide_render = False
     low.hide_viewport = False
 
-    # Closed manifold cage.
+    # Closed manifold cage. Finer voxels for higher face budgets so decimate
+    # (not remesh) is what hits the target — remesh alone was blotting detail.
     dim = _bbox_max_dim(high)
-    if target_faces <= 12_000:
-        voxel = max(dim / 70.0, 0.004)
-    elif target_faces <= 24_000:
-        voxel = max(dim / 90.0, 0.003)
+    if target_faces <= 10_000:
+        voxel = max(dim / 80.0, 0.0035)
+    elif target_faces <= 18_000:
+        voxel = max(dim / 110.0, 0.0028)
+    elif target_faces <= 28_000:
+        voxel = max(dim / 140.0, 0.0022)
     else:
-        voxel = max(dim / 110.0, 0.0025)
+        voxel = max(dim / 160.0, 0.0018)
 
     _voxel_remesh(low, voxel)
     _fill_holes(low)

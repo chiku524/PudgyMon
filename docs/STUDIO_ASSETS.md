@@ -56,16 +56,18 @@ python scripts/blender_bake_optimize_glb.py --batch assets/models --glob "*/*.gl
 python scripts/blender_bake_optimize_glb.py assets/models/env_nest_bench_01/env_nest_bench_01.glb --from-pre-opt
 ```
 
-- **Static props / accessories / env:** voxel remesh → ~6–10k tris → bake painted diffuse → matte toon material  
-- **Skinned characters:** use the dedicated remesh + bake + **weight-transfer** path (keeps armature clips, closed mesh):
+- **Static props / accessories / env:** voxel remesh → ~14–22k tris → bake painted diffuse (1024 PNG) → matte toon material  
+- **Skinned characters:** preserve Tripo UVs + meshopt simplify (~48k tris) + PNG basecolor (keeps armature clips):
 
 ```bash
 python scripts/blender_char_optimize_glb.py --all --from-pre-opt
 ```
 
-Do not skin-preserve Decimate characters alone — Tripo topology tears into holes. The char path remeshes a cage, bakes candy diffuse, then transfers `VGROUP_WEIGHTS` from the dense donor.
+Do not skin-preserve Decimate characters alone — Tripo topology tears into holes. Prefer the preserve path above; remesh+bake+weight-transfer is the fallback for broken meshes.
 
 Fallback UV-only decimate (no bake): `scripts/blender_decimate_glb.py` — can leave holes on Tripo topology; prefer bake-optimize (props) / char-optimize (skins).
+
+**Quality policy:** face/tex budgets are quality-first (not max compression). `optimize_glb.py` never JPEG-encodes baseColor (chroma smear). Baked atlases stay PNG.
 ## Place in a room (required for playable)
 
 Edit the vault JSON under `data/rooms/` (or `arena.json` for the persistent shell).

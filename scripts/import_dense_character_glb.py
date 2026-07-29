@@ -290,7 +290,7 @@ def main() -> int:
         default=1024,
         help="Longest texture edge after downscale (default 1024).",
     )
-    parser.add_argument("--jpeg-quality", type=int, default=85)
+    parser.add_argument("--jpeg-quality", type=int, default=90)
     parser.add_argument(
         "--simplify-ratio",
         type=float,

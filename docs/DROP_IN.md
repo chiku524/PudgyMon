@@ -19,12 +19,19 @@ Selectable crew (**5**): `char_pudgy_base_01`, `oceanic_pudgymon_01`, `char_pudg
 
 ## GLB size optimization
 
+Quality-first (preserves painted candy detail; Bevy-safe, no Draco/KTX2/WebP):
+
 ```bash
+# Prefer Blender bake/char pipelines for Tripo exports
+python scripts/blender_bake_optimize_glb.py --batch assets/models --glob "env_*/*.glb" --from-pre-opt
+python scripts/blender_char_optimize_glb.py --all --from-pre-opt
+
+# Light UV-safe pass (never JPEG-encodes baseColor)
 python scripts/optimize_glb.py assets/models/char_pudgy_base_01/char_pudgy_base_01.glb --preset game
 python scripts/optimize_glb.py --batch assets/models --glob "acc_*/*.glb"   # guesses prop
 ```
 
-Import pipelines call the same optimizer after export.
+Import pipelines call the same optimizer after export with quality-first defaults (1024px, high JPEG for non-baseColor only).
 
 ---
 

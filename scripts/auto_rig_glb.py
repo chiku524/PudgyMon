@@ -153,7 +153,7 @@ def main() -> int:
         help="Optional comma list for --clip-source transfer",
     )
     parser.add_argument("--height", type=float, default=1.2)
-    parser.add_argument("--max-tex", type=int, default=512)
+    parser.add_argument("--max-tex", type=int, default=1024)
     parser.add_argument("--notes", default="")
     parser.add_argument("--inspect", action="store_true", help="Print rig family and exit")
     parser.add_argument(

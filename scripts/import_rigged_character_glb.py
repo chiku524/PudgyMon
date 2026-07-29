@@ -452,13 +452,13 @@ def main() -> int:
     parser.add_argument("--src", type=Path, required=True)
     parser.add_argument("--asset-id", required=True)
     parser.add_argument("--height", type=float, default=1.2)
-    parser.add_argument("--max-tex", type=int, default=512)
-    parser.add_argument("--jpeg-quality", type=int, default=72)
+    parser.add_argument("--max-tex", type=int, default=1024)
+    parser.add_argument("--jpeg-quality", type=int, default=90)
     parser.add_argument(
         "--simplify-ratio",
         type=float,
-        default=0.12,
-        help="Vertex keep ratio after import (default 0.12 — party-game density).",
+        default=0.25,
+        help="Vertex keep ratio after import (default 0.25 — quality-first).",
     )
     parser.add_argument("--simplify-error", type=float, default=0.010)
     parser.add_argument("--notes", default="Imported rigged creature GLB (walk/run preserved).")

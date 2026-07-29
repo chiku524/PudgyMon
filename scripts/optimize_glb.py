@@ -18,9 +18,9 @@ Usage:
   python scripts/optimize_glb.py path.glb --dry-run
 
 Presets (quality-first → smaller):
-  hero  keep more tris / 768px tex  (close-ups)
-  game  default party third-person
-  prop  aggressive (accessories / décor)
+  hero  keep more tris / 1024px tex  (close-ups)
+  game  default party third-person (1024px, high JPEG)
+  prop  décor/accessories — still readable, not crushed
 """
 
 from __future__ import annotations
@@ -70,12 +70,13 @@ class Preset:
 
 
 PRESETS: dict[str, Preset] = {
-    # Tuned for a single pass from dense Tripo meshes (~100k–300k tris).
+    # Quality-first: size savings without crushing painted candy detail.
     # Do not re-run on already-optimized GLBs without --force (see optimize_file).
-    "hero": Preset("hero", ratio=0.18, error=0.008, max_tex=768, jpeg_quality=82),
-    "game": Preset("game", ratio=0.12, error=0.010, max_tex=512, jpeg_quality=78),
+    # Prefer Blender bake/char pipelines for raw Tripo triangle soup.
+    "hero": Preset("hero", ratio=0.35, error=0.004, max_tex=1024, jpeg_quality=92),
+    "game": Preset("game", ratio=0.25, error=0.006, max_tex=1024, jpeg_quality=90),
     "prop": Preset(
-        "prop", ratio=0.08, error=0.016, max_tex=384, jpeg_quality=72, strip_orm=True
+        "prop", ratio=0.18, error=0.010, max_tex=1024, jpeg_quality=88, strip_orm=True
     ),
 }
 
@@ -319,7 +320,7 @@ def optimize_file(
     backup: bool = True,
     dry_run: bool = False,
     force: bool = False,
-    skip_simplify_below: int = 40_000,
+    skip_simplify_below: int = 60_000,
 ) -> dict:
     """Optimize one GLB. Returns size stats. Writes to dest (default: in-place)."""
     if preset not in PRESETS:
@@ -422,13 +423,15 @@ def optimize_file(
             "--filter",
             "lanczos3",
         )
-        # Plain image/jpeg embeds — Bevy-safe (no EXT_texture_webp / Basis).
-        # JPEG has no alpha channel: keep baseColor as-is (PNG) whenever a
-        # material cuts out / blends via texture alpha, or it goes opaque.
-        base_slots = "baseColorTexture,"
+        # Quality-first texture policy:
+        # - Never JPEG-encode baseColor (chroma smear kills painted eyes/edges).
+        #   Bake/char pipelines already ship PNG atlases; keep them.
+        # - Alpha materials must keep PNG baseColor anyway.
+        # - ORM / emissive maps may still JPEG for size (no chroma-critical paint).
         if _has_alpha_materials(cur):
             print("alpha materials present — keeping baseColor format (no JPEG)")
-            base_slots = ""
+        else:
+            print("keeping baseColor as PNG/source format (no JPEG chroma loss)")
         run(
             "jpeg",
             "jpeg",
@@ -437,7 +440,7 @@ def optimize_file(
             "--formats",
             "*",
             "--slots",
-            "{" + f"{base_slots}metallicRoughnessTexture,occlusionTexture,emissiveTexture" + "}",
+            "{metallicRoughnessTexture,occlusionTexture,emissiveTexture}",
         )
         # Normals benefit from slightly higher quality to avoid banding.
         try:
@@ -445,7 +448,7 @@ def optimize_file(
                 "jpeg_n",
                 "jpeg",
                 "--quality",
-                str(min(90, jpeg_quality + 8)),
+                str(min(95, jpeg_quality + 4)),
                 "--formats",
                 "*",
                 "--slots",

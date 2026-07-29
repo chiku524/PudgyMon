@@ -32,8 +32,8 @@ _DEFAULT_CHARS = [
     "oceanic_pudgymon_01",
 ]
 
-# Preserve path keeps Tripo UV paint; tris can go higher since no bake.
-_FACE_BUDGET = 36_000
+# Preserve path keeps Tripo UV paint; keep enough tris for soft body silhouette.
+_FACE_BUDGET = 48_000
 _TEX_SIZE = 1024  # remesh-fallback bake size; preserve path ignores it
 _PATH = "preserve"
 
@@ -78,16 +78,17 @@ def _simplify_meshopt(glb: Path, target_faces: int) -> None:
     if not npx:
         print(f"warn: npx missing; char stays dense: {glb.name}")
         return
-    # Estimate ratio from file's face count is overkill; Tripo crew are
-    # all ~180-190k tris, so pick ratio from the budget conservatively.
-    ratio = max(0.05, min(0.9, target_faces / 190_000))
+    # Tripo crew are ~180-190k tris; keep ratio tied to budget. Tight error
+    # stops meshopt from chewing soft silhouettes / eye sockets.
+    ratio = max(0.08, min(0.9, target_faces / 190_000))
     with tempfile.TemporaryDirectory(prefix="pudgy_simplify_") as tmp:
         out = Path(tmp) / "out.glb"
         cmd = [
             npx, "--yes", "@gltf-transform/cli@4.1.1",
             "simplify", str(glb), str(out),
             "--ratio", f"{ratio:.4f}",
-            "--error", "0.001",
+            "--error", "0.0005",
+            "--lock-border", "true",
         ]
         proc = subprocess.run(
             cmd, capture_output=True, text=True, encoding="utf-8", errors="replace"
@@ -102,9 +103,9 @@ def _simplify_meshopt(glb: Path, target_faces: int) -> None:
 def _sharpen_basecolor(glb: Path, target_edge: int = 1024) -> None:
     """Upscale + unsharp the authored basecolor and embed as PNG.
 
-    The Tripo source paint is 512px JPEG — soft eyes are baked into the
-    source. Lanczos 2x + a moderate unsharp mask recovers edge contrast,
-    and PNG stops any further chroma loss.
+    The Tripo source paint is often 512px JPEG — soft eyes are baked into
+    the source. Lanczos upscale to target_edge + a *light* unsharp recovers
+    edge contrast without halos; PNG stops further chroma loss.
     """
     import io
     import json
@@ -144,16 +145,23 @@ def _sharpen_basecolor(glb: Path, target_edge: int = 1024) -> None:
 
     views = gltf["bufferViews"]
     bin_out = bytearray(bin_chunk)
+    changed = False
     for idx in sorted(base_imgs):
         img_def = gltf["images"][idx]
         bv = views[img_def["bufferView"]]
         blob = bin_chunk[bv["byteOffset"] : bv["byteOffset"] + bv["byteLength"]]
         im = Image.open(io.BytesIO(blob)).convert("RGB")
         w, h = im.size
+        already_png = img_def.get("mimeType") == "image/png"
+        # Already at/above target as PNG — leave pixels alone (no re-unsharp).
+        if already_png and max(w, h) >= target_edge:
+            print(f"sharpen skip {glb.name} img{idx}: already {w}x{h} PNG")
+            continue
         if max(w, h) < target_edge:
             scale = target_edge / max(w, h)
             im = im.resize((int(w * scale), int(h * scale)), Image.LANCZOS)
-        im = im.filter(ImageFilter.UnsharpMask(radius=1.6, percent=140, threshold=2))
+            # Mild unsharp only after upscale — aggressive masks halo eyes.
+            im = im.filter(ImageFilter.UnsharpMask(radius=1.2, percent=70, threshold=3))
         buf = io.BytesIO()
         im.save(buf, format="PNG", optimize=True)
         png = buf.getvalue()
@@ -165,7 +173,11 @@ def _sharpen_basecolor(glb: Path, target_edge: int = 1024) -> None:
         gltf["bufferViews"].append(new_view)
         img_def["bufferView"] = len(gltf["bufferViews"]) - 1
         img_def["mimeType"] = "image/png"
+        changed = True
         print(f"sharpen {glb.name} img{idx}: {w}x{h} -> {im.size[0]}x{im.size[1]} PNG")
+
+    if not changed:
+        return
 
     while len(bin_out) % 4:
         bin_out.append(0)

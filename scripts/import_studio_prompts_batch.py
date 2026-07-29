@@ -122,8 +122,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--only", default="", help="Comma-separated asset_ids to import")
     parser.add_argument("--src", type=Path, default=_SRC)
-    parser.add_argument("--simplify-ratio", type=float, default=0.18)
-    parser.add_argument("--max-tex", type=int, default=768)
+    parser.add_argument("--simplify-ratio", type=float, default=0.25)
+    parser.add_argument("--max-tex", type=int, default=1024)
     args = parser.parse_args()
 
     only = {s.strip() for s in args.only.split(",") if s.strip()}

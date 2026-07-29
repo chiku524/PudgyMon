@@ -51,4 +51,4 @@ python scripts/optimize_glb.py --batch assets/models --glob "*/*.glb"
 | Shared clip names | `idle`, `walk`, `run`, `jump`, `emote_wave`, `emote_dance` (+ `emote_scared` when present) |
 | Accessory sockets | Created at runtime on `Head` / spine / limb bones (`Socket_Hat`, `Socket_Necklace`, `Socket_Shoes`, `Socket_Back`, `Socket_Face`, `Socket_Hands`). Not embedded in crew GLBs. |
 
-**Texture format:** plain JPEG embeds for opaque maps (no `EXT_texture_webp` / `KHR_texture_basisu`). See optimizer notes in [DROP_IN.md](DROP_IN.md).
+**Texture format:** PNG for painted/baked baseColor (sharp eyes & edges). JPEG is OK for ORM/emissive only. See optimizer notes in [DROP_IN.md](DROP_IN.md) and [STUDIO_ASSETS.md](STUDIO_ASSETS.md).

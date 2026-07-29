@@ -27,26 +27,27 @@ from pathlib import Path
 _REPO = Path(__file__).resolve().parents[1]
 _INNER = Path(__file__).resolve().parent / "_blender_bake_optimize_inner.py"
 
-# Aggressive but bake-safe budgets (paint lives in the texture now).
+# Quality-first face budgets. Remesh still closes Tripo holes; higher counts
+# keep silhouettes readable at party-game camera distances.
 _FACE_BUDGET = {
-    "char_": 36_000,
-    "oceanic_": 36_000,
-    "npc_": 36_000,
-    "acc_": 6_000,
-    "prop_": 8_000,
-    "env_": 10_000,
-    "vfx_": 3_000,
+    "char_": 48_000,
+    "oceanic_": 48_000,
+    "npc_": 48_000,
+    "acc_": 14_000,
+    "prop_": 18_000,
+    "env_": 22_000,
+    "vfx_": 6_000,
 }
 
-# PNG atlases; 1024 + island-aware face boost keeps painted eyes readable.
+# PNG atlases; accessories are worn close-up so they share the 1024 budget.
 _TEX_SIZE = {
     "char_": 1024,
     "oceanic_": 1024,
     "npc_": 1024,
-    "acc_": 512,
+    "acc_": 1024,
     "prop_": 1024,
     "env_": 1024,
-    "vfx_": 256,
+    "vfx_": 512,
 }
 
 
