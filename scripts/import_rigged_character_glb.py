@@ -327,7 +327,15 @@ for clip_name, nframes in (("jump", 15), ("emote_wave", 30), ("emote_dance", 24)
 
 arm.animation_data.action = None
 
-# Accessory sockets parented to closest contract-ish bones.
+# Accessory sockets are created at runtime by Bevy (`src/player/accessories.rs`).
+# Do NOT bone-parent empties here — Blender exports them with a +90° X tilt that
+# tips wearables onto their side. Strip any leftovers from the source GLB.
+for obj in list(bpy.data.objects):
+    if obj.name.startswith("Socket_"):
+        bpy.data.objects.remove(obj, do_unlink=True)
+        print("SOCKET_STRIP", obj.name)
+
+# Keep the bone-name picker for logging / contract validation only.
 bone_names = {b.name for b in arm.data.bones}
 
 def pick_bone(*candidates):
@@ -336,40 +344,15 @@ def pick_bone(*candidates):
             return c
     return "Root" if "Root" in bone_names else next(iter(bone_names))
 
-socket_bones = {
-    "Socket_Hat": pick_bone("Head"),
-    "Socket_Face": pick_bone("Head"),
-    "Socket_Necklace": pick_bone("Spine02", "Spine01", "Waist", "NeckTwist01"),
-    "Socket_Back": pick_bone("Spine02", "Spine01", "Waist"),
-    "Socket_Hands": pick_bone("Spine01", "Waist", "Spine02"),
-    "Socket_Shoes": pick_bone("Root", "Hip", "Pelvis"),
-}
-socket_local = {
-    "Socket_Hat": (0.0, 0.0, 0.12),
-    "Socket_Face": (0.0, -0.08, 0.02),
-    "Socket_Necklace": (0.0, -0.04, 0.06),
-    "Socket_Back": (0.0, 0.08, 0.0),
-    "Socket_Hands": (0.0, 0.0, 0.0),
-    "Socket_Shoes": (0.0, 0.0, 0.0),
-}
-
-def parent_to_bone(obj, armature, bone_name):
-    obj.parent = armature
-    obj.parent_type = "BONE"
-    obj.parent_bone = bone_name
-    obj.location = mathutils.Vector(socket_local[obj.name])
-    obj.rotation_euler = (0, 0, 0)
-    obj.scale = (1, 1, 1)
-
-for sname, bname in socket_bones.items():
-    if sname in bpy.data.objects:
-        continue
-    empty = bpy.data.objects.new(sname, None)
-    empty.empty_display_type = "PLAIN_AXES"
-    empty.empty_display_size = 0.08
-    bpy.context.scene.collection.objects.link(empty)
-    parent_to_bone(empty, arm, bname)
-    print("SOCKET", sname, "->", bname)
+for slot, bones in (
+    ("hat", ("Head",)),
+    ("face", ("Head",)),
+    ("necklace", ("NeckTwist01", "NeckTwist02", "Spine02", "Spine01")),
+    ("back", ("Spine02", "Spine01", "Waist")),
+    ("hands", ("Spine01", "Waist", "Spine02")),
+    ("shoes", ("Root", "Hip", "Pelvis")),
+):
+    print("SOCKET_BONE", slot, "->", pick_bone(*bones))
 
 OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
 export_kwargs = dict(

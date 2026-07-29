@@ -21,7 +21,6 @@ import sys
 from pathlib import Path
 
 import bpy
-import mathutils
 
 
 def _meshes():
@@ -233,48 +232,22 @@ def _transfer_weights(src, dst, arm) -> int:
 
 
 def _ensure_sockets(arm) -> None:
-    bone_names = {b.name for b in arm.data.bones} if arm.data else set()
+    """Strip authored Socket_* empties — Bevy creates them at runtime.
 
-    def _pick_bone(*candidates: str) -> str:
-        for c in candidates:
-            if c in bone_names:
-                return c
-        if "Root" in bone_names:
-            return "Root"
-        return next(iter(bone_names)) if bone_names else ""
-
-    socket_bones = {
-        "Socket_Hat": _pick_bone("Head"),
-        "Socket_Face": _pick_bone("Head"),
-        "Socket_Necklace": _pick_bone("NeckTwist01", "NeckTwist02", "Spine02", "Spine01"),
-        "Socket_Back": _pick_bone("Spine02", "Spine01", "Waist"),
-        "Socket_Hands": _pick_bone("Spine01", "Waist", "Spine02"),
-        "Socket_Shoes": _pick_bone("Root", "Hip", "Pelvis"),
-    }
-    socket_local = {
-        "Socket_Hat": (0.0, 0.10, 0.0),
-        "Socket_Face": (0.0, 0.02, -0.11),
-        "Socket_Necklace": (0.0, -0.02, -0.05),
-        "Socket_Back": (0.0, 0.04, 0.12),
-        "Socket_Hands": (0.0, -0.05, -0.18),
-        "Socket_Shoes": (0.0, 0.0, 0.0),
-    }
-    for sname, bname in socket_bones.items():
-        if not bname or sname in bpy.data.objects:
-            if sname in bpy.data.objects:
-                print(f"socket keep {sname}")
-            continue
-        empty = bpy.data.objects.new(sname, None)
-        empty.empty_display_type = "PLAIN_AXES"
-        empty.empty_display_size = 0.08
-        bpy.context.scene.collection.objects.link(empty)
-        empty.parent = arm
-        empty.parent_type = "BONE"
-        empty.parent_bone = bname
-        empty.location = mathutils.Vector(socket_local[sname])
-        empty.rotation_euler = (0.0, 0.0, 0.0)
-        empty.scale = (1.0, 1.0, 1.0)
-        print(f"socket {sname} -> {bname}")
+    Blender bone-parented empties export with a +90° X rest tilt that tips
+    every wearable onto its side. Runtime `ensure_accessory_sockets` parents
+    clean identity-rotation sockets to the same bones with tuned offsets.
+    """
+    _ = arm  # armature still required by caller for skin validation
+    removed = 0
+    for obj in list(bpy.data.objects):
+        if obj.name.startswith("Socket_"):
+            bpy.data.objects.remove(obj, do_unlink=True)
+            removed += 1
+    if removed:
+        print(f"socket strip removed={removed} (runtime will recreate)")
+    else:
+        print("socket strip: none present")
 
 
 def _optimize_preserve(body, arm, target_faces: int) -> None:

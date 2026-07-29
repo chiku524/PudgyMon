@@ -49,6 +49,6 @@ python scripts/optimize_glb.py --batch assets/models --glob "*/*.glb"
 | Playable height | ~1.2 m |
 | Pivot | Floor center, +Y up, character faces **−Z** (Bevy forward) |
 | Shared clip names | `idle`, `walk`, `run`, `jump`, `emote_wave`, `emote_dance` (+ `emote_scared` when present) |
-| Accessory sockets | `Socket_Hat`, `Socket_Necklace`, `Socket_Shoes`, `Socket_Back`, `Socket_Face`, `Socket_Hands` |
+| Accessory sockets | Created at runtime on `Head` / spine / limb bones (`Socket_Hat`, `Socket_Necklace`, `Socket_Shoes`, `Socket_Back`, `Socket_Face`, `Socket_Hands`). Not embedded in crew GLBs. |
 
 **Texture format:** plain JPEG embeds for opaque maps (no `EXT_texture_webp` / `KHR_texture_basisu`). See optimizer notes in [DROP_IN.md](DROP_IN.md).

@@ -243,20 +243,29 @@ fn socket_name(slot: &str) -> &'static str {
 
 /// Contract sockets + preferred bone parents + bone-local offset (Bevy Y-up).
 ///
-/// Hat/face sit on `Head` (Y along bone ≈ up the skull). Pair shoes/hands start
-/// on a torso/root bone and are retargeted each frame to the limb midpoint.
+/// Studio Tripo bones use local +Y along the bone (≈ world up on the spine/head
+/// chain). Local −Z is character forward in the authored GLB (+Z mesh forward).
+///
+/// Offsets are tuned against `char_pudgy_*` bind proportions (~1.2 m tall):
+/// hat on the crown, face at the eye-bridge/snout, necklace on the upper chest,
+/// back slightly behind the upper spine. Pair shoes/hands start on a torso/root
+/// bone and are retargeted each frame to the limb midpoint.
+///
+/// Socket local rotation must stay IDENTITY. Blender bone-parented empties ship
+/// with a +90° X rest tilt that tips every accessory onto its side — Rust
+/// overwrites that whenever sockets are ensured.
 const ACCESSORY_SOCKETS: &[(&str, &[&str], Vec3)] = &[
-    ("Socket_Hat", &["Head"], Vec3::new(0.0, 0.1, 0.0)),
-    ("Socket_Face", &["Head"], Vec3::new(0.0, 0.02, -0.11)),
+    ("Socket_Hat", &["Head"], Vec3::new(0.0, 0.36, 0.0)),
+    ("Socket_Face", &["Head"], Vec3::new(0.0, 0.06, -0.14)),
     (
         "Socket_Necklace",
         &["NeckTwist01", "NeckTwist02", "Spine02", "Spine01"],
-        Vec3::new(0.0, -0.02, -0.05),
+        Vec3::new(0.0, 0.02, -0.08),
     ),
     (
         "Socket_Back",
         &["Spine02", "Spine01", "Waist"],
-        Vec3::new(0.0, 0.04, 0.12),
+        Vec3::new(0.0, 0.08, 0.16),
     ),
     (
         "Socket_Hands",
@@ -309,9 +318,13 @@ fn ensure_accessory_sockets(
         if let Some(existing) = find_named(root, socket, names, children) {
             // Refresh authored offsets for static sockets. Pair sockets are
             // driven by `retarget_pair_sockets` instead.
+            // Always clear rotation: Blender bone-parent empties arrive with a
+            // +90° X tilt that would tip hats/face props onto their side.
             if !matches!(*socket, "Socket_Shoes" | "Socket_Hands") {
                 if let Ok(mut xf) = transforms.get_mut(existing) {
                     xf.translation = *local;
+                    xf.rotation = Quat::IDENTITY;
+                    xf.scale = Vec3::ONE;
                 }
             }
             continue;
@@ -326,7 +339,11 @@ fn ensure_accessory_sockets(
         commands.entity(bone).with_children(|p| {
             p.spawn((
                 Name::new(socket.to_string()),
-                Transform::from_translation(*local),
+                Transform {
+                    translation: *local,
+                    rotation: Quat::IDENTITY,
+                    scale: Vec3::ONE,
+                },
                 Visibility::default(),
             ));
         });
@@ -515,12 +532,22 @@ fn set_bone_scales(
     }
 }
 
-/// Local accessory transform (registry scale). Pair sockets are retargeted to
-/// limb forward; static sockets inherit bone orientation from the crew armature.
-fn accessory_attach_transform(_slot: &str, scale: Vec3) -> Transform {
+/// Local accessory transform (registry scale + per-slot wear orientation).
+///
+/// Studio props are floor-pivoted product shots (mesh above y=0). Back items
+/// hang down the spine, so they flip 180° around X. Pair sockets are retargeted
+/// to limb forward; static sockets inherit bone orientation from the armature.
+fn accessory_attach_transform(slot: &str, scale: Vec3) -> Transform {
+    let rotation = match slot {
+        // Floor-pivoted cape/wings/pack: hang down (−Y) behind the back socket.
+        "back" => Quat::from_rotation_x(std::f32::consts::PI),
+        // Collar/bell props: hang below the neck clasp.
+        "necklace" => Quat::from_rotation_x(std::f32::consts::PI),
+        _ => Quat::IDENTITY,
+    };
     Transform {
         translation: Vec3::ZERO,
-        rotation: Quat::IDENTITY,
+        rotation,
         scale,
     }
 }
