@@ -24,7 +24,7 @@ See [docs/PARTY_ROADMAP.md](docs/PARTY_ROADMAP.md) and [docs/BRAND.md](docs/BRAN
 
 ## Requirements
 
-- [Unity Hub](https://unity.com/download) + **Unity 6.3 LTS or 6.5** (open the inner `unity/` folder, not the repo root)
+- [Unity Hub](https://unity.com/download) + **Unity 6.5** (`6000.5.9f1`; open the inner `unity/` folder, not the repo root)
 - Windows PC (primary target)
 - Rust only for the optional accounts API (`services/accounts`)
 
@@ -35,7 +35,7 @@ git clone https://github.com/chiku524/PudgyMon.git
 cd PudgyMon
 ```
 
-Unity Hub → **Add project from disk** → select the inner `unity/` folder (not the repo root). **Unity 6.5 is fine**; Hub will upgrade the 6.3 project on first open. Play `Assets/PudgyMon/Scenes/Nest.unity`.
+Unity Hub → **Add project from disk** → select the inner `unity/` folder (not the repo root). Open with **Unity 6.5.9f1**. Play `Assets/PudgyMon/Scenes/Nest.unity`.
 
 Cursor MCP: [docs/UNITY.md](docs/UNITY.md).
 

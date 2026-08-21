@@ -5,14 +5,14 @@ The playable Nest + mini-game loop lives in this Unity 6 project. Cursor drives 
 ## Requirements
 
 - [Unity Hub](https://unity.com/download)
-- **Unity 6.3 LTS or 6.5** (6.5 will upgrade this 6.3 project on first open)
+- **Unity 6.5** (`6000.5.9f1` — this machine’s install; Hub must see this version in `ProjectVersion.txt`)
 - Git (Package Manager pulls [MCP for Unity](https://github.com/CoplayDev/unity-mcp))
 - Python 3.10+ with [`uv`](https://docs.astral.sh/uv/) (MCP for Unity's local server)
 
 ## Open and play
 
 1. Unity Hub → **Add** → **Add project from disk** → this `unity/` folder (not the PudgyMon repo root).
-2. Open with **Unity 6.5** if that is what Hub has installed. Accept the upgrade from 6.3.
+2. Open with the installed **Unity 6.5.9f1** editor.
 3. Play `Assets/PudgyMon/Scenes/Nest.unity` (`GameBootstrap` auto-spawns).
 4. **Window → MCP for Unity → Configure All Detected Clients**.
 
