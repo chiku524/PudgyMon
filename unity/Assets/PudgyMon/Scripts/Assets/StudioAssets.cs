@@ -365,7 +365,7 @@ namespace PudgyMon
             renderer.sharedMaterial = Lit(color, emission, unlit);
             var col = go.GetComponent<Collider>();
             if (col != null)
-                Object.Destroy(col);
+                UnityEngine.Object.Destroy(col);
             return go;
         }
 
@@ -378,7 +378,7 @@ namespace PudgyMon
             child.GetComponent<Renderer>().sharedMaterial = Lit(color, null, unlit);
             var col = child.GetComponent<Collider>();
             if (col != null)
-                Object.Destroy(col);
+                UnityEngine.Object.Destroy(col);
         }
 
         /// <summary>
