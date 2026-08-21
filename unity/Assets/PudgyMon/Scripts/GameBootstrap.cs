@@ -3,10 +3,6 @@ using UnityEngine;
 
 namespace PudgyMon
 {
-    /// <summary>
-    /// Boots The Nest and the Party Saga loop inside Unity.
-    /// Drop this on an empty scene object (or open Scenes/Nest).
-    /// </summary>
     public sealed class GameBootstrap : MonoBehaviour
     {
         public int BotFill = 4;
@@ -14,16 +10,27 @@ namespace PudgyMon
         PartyDirector _director;
         SeasonLedger _season;
         CosmeticsCatalog _cosmetics;
+        ChallengeBoard _challenges;
+        CrewRoster _roster;
+        AccessoryCatalog _hats;
+        BoingBridge _boing;
+        AccountSession _account;
+        ActiveMaps _maps;
         StudioAssets _studio;
         NestHub _nest;
         StageRuntime _stages;
+        MapEditor _editor;
         GameHud _hud;
+        PartyAudio _audio;
+        LanSession _lan;
         ThirdPersonCameraRig _camera;
         Light _key;
         Light _fill;
         readonly List<PlayerMotor> _players = new List<PlayerMotor>();
         PlayerAvatar _localAvatar;
         bool _cursorBound;
+        int _catalogIndex;
+        string _banner = "";
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void AutoBoot()
@@ -39,20 +46,32 @@ namespace PudgyMon
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
             DontDestroyOnLoad(gameObject);
-
             EnsureCameraAndLights();
 
             _director = new PartyDirector();
             _season = SeasonLedger.Load();
             _cosmetics = CosmeticsCatalog.Load();
+            _challenges = ChallengeBoard.Load();
+            _roster = CrewRoster.Load();
+            _hats = AccessoryCatalog.Load();
+            _boing = BoingBridge.Load();
+            _account = AccountSession.Load();
+            _maps = new ActiveMaps();
+            if (!string.IsNullOrEmpty(_account.BoingWallet))
+                _boing.LinkedAccount = _account.BoingWallet;
+            _lan = new LanSession();
+            _lan.TryParseCommandLine();
 
             _studio = gameObject.AddComponent<StudioAssets>();
             _studio.Init(StudioRegistry.Load());
-
             NestWorld.Build(transform);
             _nest = NestHub.Build(transform, _studio, _cosmetics);
+            _audio = gameObject.AddComponent<PartyAudio>();
+            _audio.Init();
             _stages = gameObject.AddComponent<StageRuntime>();
-            _stages.Init(_director, _studio);
+            _stages.Init(_director, _studio, _maps, _challenges, _audio);
+            _editor = gameObject.AddComponent<MapEditor>();
+            _editor.Init(_studio);
             _hud = GameHud.Create();
 
             SpawnRoster();
@@ -73,7 +92,6 @@ namespace PudgyMon
 
             Camera.main.nearClipPlane = 0.15f;
             Camera.main.farClipPlane = 400f;
-
             var keyGo = new GameObject("KeyLight");
             _key = keyGo.AddComponent<Light>();
             _key.type = LightType.Directional;
@@ -81,7 +99,6 @@ namespace PudgyMon
             _key.color = new Color(1f, 0.95f, 0.88f);
             _key.intensity = 1.1f;
             keyGo.transform.rotation = Quaternion.Euler(50f, -30f, 0f);
-
             var fillGo = new GameObject("FillLight");
             _fill = fillGo.AddComponent<Light>();
             _fill.type = LightType.Point;
@@ -96,14 +113,13 @@ namespace PudgyMon
             var tint = _cosmetics.Equipped.Color;
             _localAvatar = PlayerAvatar.Spawn(transform, 0, true, false, GameConstants.HubSpawn, tint, "LocalPlayer");
             _players.Add(_localAvatar.Motor);
-            _localAvatar.AttachCrewMesh(_studio, "char_pudgy_base_01");
-
+            _localAvatar.AttachCrewMesh(_studio, _roster.Current.Id);
             for (int i = 0; i < BotFill; i++)
             {
                 var slot = i + 1;
-                var botTint = new Color(0.5f, 0.55f, 0.65f);
                 var bot = PlayerAvatar.Spawn(transform, slot, false, true,
-                    GameConstants.HubSpawn + new Vector3(slot * 2.2f, 0f, 0f), botTint, $"PartyBot_{slot}");
+                    GameConstants.HubSpawn + new Vector3(slot * 2.2f, 0f, 0f), new Color(0.5f, 0.55f, 0.65f),
+                    $"PartyBot_{slot}");
                 bot.gameObject.SetActive(false);
                 _players.Add(bot.Motor);
             }
@@ -118,18 +134,12 @@ namespace PudgyMon
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) && !_editor.Active)
                 _hud.TogglePause();
 
             if (_hud.Paused)
             {
-                if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    _director.ReturnToNest();
-                    SetBotsActive(false);
-                    _hud.TogglePause();
-                }
-
+                HandlePauseKeys();
                 return;
             }
 
@@ -142,37 +152,159 @@ namespace PudgyMon
             }
 
             var local = _localAvatar.Motor;
-            if (_director.Phase == PartyPhase.Hub || _director.Phase == PartyPhase.Intermission ||
-                _director.Phase == PartyPhase.Results || !_localAvatar.Motor.Frozen)
+            var look = _camera.PlanarForward;
+            if (_editor.Tick(local.transform.position, look, _maps, _director))
             {
-                var dir = Vector3.zero;
-                if (Input.GetKey(KeyCode.W)) dir += _camera.PlanarForward;
-                if (Input.GetKey(KeyCode.S)) dir -= _camera.PlanarForward;
-                if (Input.GetKey(KeyCode.A)) dir -= _camera.PlanarRight;
-                if (Input.GetKey(KeyCode.D)) dir += _camera.PlanarRight;
-                local.ApplyMove(dir, Input.GetKey(KeyCode.LeftShift), Input.GetKeyDown(KeyCode.Space),
+                local.ApplyMove(MoveDir(), Input.GetKey(KeyCode.LeftShift), Input.GetKeyDown(KeyCode.Space),
                     Time.deltaTime);
+                _banner = _editor.Status;
+                _hud.Render(_director, _nest, _season, _cosmetics, _challenges, _boing, _account, _lan, _banner);
+                if (_director.Queued.HasValue)
+                    SetBotsActive(true);
+                var prevEd = _director.Phase;
+                _director.Tick(Time.deltaTime, _season, _challenges);
+                _stages.Tick(Time.deltaTime, ActivePlayers(), _camera);
+                if (prevEd != PartyPhase.Hub && _director.Phase == PartyPhase.Hub)
+                    SetBotsActive(false);
+                return;
             }
 
+            local.ApplyMove(MoveDir(), Input.GetKey(KeyCode.LeftShift), Input.GetKeyDown(KeyCode.Space),
+                Time.deltaTime);
+
             if (_director.Phase == PartyPhase.Hub)
+                HandleHub(local);
+
+            HandleGlobalHotkeys();
+
+            var previous = _director.Phase;
+            _director.Tick(Time.deltaTime, _season, _challenges);
+            if (previous != PartyPhase.Hub && _director.Phase == PartyPhase.Hub)
+                SetBotsActive(false);
+
+            var active = ActivePlayers();
+            _stages.Tick(Time.deltaTime, active, _camera);
+            if (_lan.Hosting)
             {
-                _nest.RefreshPrompt(local.transform.position, _director, _cosmetics, _season);
-                if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return))
+                _lan.ApplyRemotes(active);
+                _lan.TickHost(Time.deltaTime, active, _director);
+            }
+            else if (_lan.Joining)
+            {
+                _lan.TickJoin(Time.deltaTime, local, _director);
+                _lan.ApplyRemotes(active);
+            }
+
+            _hud.Render(_director, _nest, _season, _cosmetics, _challenges, _boing, _account, _lan, _banner);
+        }
+
+        Vector3 MoveDir()
+        {
+            var dir = Vector3.zero;
+            if (Input.GetKey(KeyCode.W)) dir += _camera.PlanarForward;
+            if (Input.GetKey(KeyCode.S)) dir -= _camera.PlanarForward;
+            if (Input.GetKey(KeyCode.A)) dir -= _camera.PlanarRight;
+            if (Input.GetKey(KeyCode.D)) dir += _camera.PlanarRight;
+            return dir;
+        }
+
+        void HandleHub(PlayerMotor local)
+        {
+            var pos = local.transform.position;
+            _nest.RefreshPrompt(pos, _director, _cosmetics, _season, string.IsNullOrEmpty(_banner) ? null : _banner);
+            var util = _nest.NearestUtility(pos, GameConstants.InteractRadius);
+            var catalog = MapCatalog.ListAll();
+            if (util != null && util.Action == NestAction.BrowseMaps)
+            {
+                if (Input.GetKeyDown(KeyCode.LeftBracket) || Input.GetKeyDown(KeyCode.RightBracket))
                 {
-                    var pad = _nest.NearestPad(local.transform.position, GameConstants.InteractRadius);
-                    if (pad != null)
+                    if (catalog.Count > 0)
                     {
-                        _director.Queue(pad.Plan);
-                        SetBotsActive(true);
+                        var delta = Input.GetKeyDown(KeyCode.RightBracket) ? 1 : -1;
+                        _catalogIndex = (_catalogIndex + delta + catalog.Count) % catalog.Count;
+                        _banner = $"My Maps · {catalog[_catalogIndex].Label}  (E play)";
                     }
+                    else _banner = "No maps found — create one on Create Map";
+                }
+            }
+
+            if (!(Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return)))
+                return;
+
+            if (util != null)
+            {
+                if (util.Action == NestAction.OpenEditor)
+                {
+                    _editor.Open();
+                    _audio.Pad();
+                    _banner = _editor.Status;
+                    return;
                 }
 
-                if (Input.GetKeyDown(KeyCode.C))
+                if (catalog.Count == 0)
                 {
-                    _cosmetics.Cycle(_season);
-                    _localAvatar.ApplyTint(_cosmetics.Equipped.Color);
-                    _director.Announcer = $"Skin {_cosmetics.Equipped.label}";
+                    _banner = "No maps found — create one on Create Map";
+                    return;
                 }
+
+                _catalogIndex = Mathf.Clamp(_catalogIndex, 0, catalog.Count - 1);
+                var entry = catalog[_catalogIndex];
+                _maps.Apply(entry);
+                _director.Queue(entry.Plan);
+                SetBotsActive(true);
+                _audio.Pad();
+                _banner = "Starting " + entry.Label;
+                return;
+            }
+
+            var pad = _nest.NearestPad(pos, GameConstants.InteractRadius);
+            if (pad != null)
+            {
+                _maps.Clear();
+                _director.Queue(pad.Plan);
+                SetBotsActive(true);
+                _audio.Pad();
+            }
+        }
+
+        void HandleGlobalHotkeys()
+        {
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                _cosmetics.Cycle(_season);
+                _localAvatar.ApplyTint(_cosmetics.Equipped.Color);
+                _director.Announcer = "Skin " + _cosmetics.Equipped.label;
+            }
+
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                var crew = _roster.Cycle();
+                _localAvatar.AttachCrewMesh(_studio, crew.Id);
+                _director.Announcer = "Crew " + crew.Label;
+            }
+
+            if (Input.GetKeyDown(KeyCode.H) && !Input.GetKey(KeyCode.LeftControl))
+            {
+                var hat = _hats.CycleHat();
+                if (hat != null)
+                {
+                    _studio.QueueProp(hat, _localAvatar.transform.position + Vector3.up * 1.4f,
+                        _localAvatar.transform.rotation, _localAvatar.transform, "Hat",
+                        PrimitiveType.Sphere, new Vector3(0.22f, 0.22f, 0.22f), Color.white);
+                    _director.Announcer = "Hat " + hat;
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.M))
+                _banner = _boing.PrepareClaim(_season, _cosmetics.EquippedId);
+            if (Input.GetKeyDown(KeyCode.O) && Input.GetKey(KeyCode.LeftControl))
+                _banner = _boing.OpenCompanion();
+            if (Input.GetKeyDown(KeyCode.V) && Input.GetKey(KeyCode.LeftControl))
+                _banner = _boing.LinkFromEnv();
+            if (Input.GetKeyDown(KeyCode.L) && Input.GetKey(KeyCode.LeftControl))
+            {
+                _account.OpenWebsite();
+                _banner = _account.Note;
             }
 
             if (Input.GetKeyDown(KeyCode.Q) && _director.Phase != PartyPhase.Hub)
@@ -181,28 +313,53 @@ namespace PudgyMon
                 SetBotsActive(false);
             }
 
-            if (Input.GetKeyDown(KeyCode.R) && _director.Phase == PartyPhase.Results && _director.Plan.Kind != PartyPlanKind.Idle)
+            if (Input.GetKeyDown(KeyCode.R) && _director.Phase == PartyPhase.Results &&
+                _director.Plan.Kind != PartyPlanKind.Idle)
             {
                 _director.Queue(_director.Plan);
                 SetBotsActive(true);
             }
-
-            var previous = _director.Phase;
-            _director.Tick(Time.deltaTime, _season);
-            if (previous != PartyPhase.Hub && _director.Phase == PartyPhase.Hub)
-                SetBotsActive(false);
-
-            _stages.Tick(Time.deltaTime, _players.FindAll(p => p.gameObject.activeInHierarchy), _camera);
-            _hud.Render(_director, _nest, _season, _cosmetics);
         }
+
+        void HandlePauseKeys()
+        {
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                _director.ReturnToNest();
+                SetBotsActive(false);
+                _hud.TogglePause();
+            }
+
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                _lan.StartHost();
+                _banner = _lan.Status;
+            }
+
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                _lan.StartJoin(_lan.JoinAddress);
+                _banner = _lan.Status;
+            }
+
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                _account.OpenWebsite();
+                _banner = _account.Note;
+            }
+
+            _hud.Render(_director, _nest, _season, _cosmetics, _challenges, _boing, _account, _lan, _banner);
+        }
+
+        List<PlayerMotor> ActivePlayers() => _players.FindAll(p => p.gameObject.activeInHierarchy);
 
         void SetBotsActive(bool active)
         {
+            if (_lan.Joining)
+                return;
             foreach (var p in _players)
-            {
                 if (p.IsBot)
                     p.gameObject.SetActive(active);
-            }
         }
     }
 }

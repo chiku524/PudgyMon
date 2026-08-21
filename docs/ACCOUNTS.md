@@ -72,18 +72,15 @@ Optional query override: `?api=http://127.0.0.1:8788`
 ## Play (in-game intro)
 
 1. Start accounts API (+ tunnel if you want the hosted site to work)
-2. `cargo run` / `pudgymon`
-3. **Register** or **Sign In** on the intro
-4. JWT persisted at `%LOCALAPPDATA%\PudgyMon\account_session.json`
-
-Controls: **Sign In** / **Register** · `F1`/`F2` · `Tab` · type · `Enter` / **Continue**
+2. Play the Unity client (`unity/`)
+3. Sign in on the [accounts website](../web/) — JWT lands at `%LOCALAPPDATA%\PudgyMon\account_session.json`
+4. In-game **Ctrl+L** / pause **A** opens the website
 
 Game env:
 
-- `PUDGYMON_ACCOUNTS_URL` — default `http://127.0.0.1:8788` (game talks to local API; use the public URL if you want)
-- `PUDGYMON_ACCOUNT_TOKEN` — inject JWT
+- `PUDGYMON_ACCOUNTS_URL` — default `http://127.0.0.1:8788`
 - `PUDGYMON_WEB_URL` — Nest “Open website”
-- `PUDGYMON_SKIP_AUTH=1` — skip intro (smoke / tooling); Host/Join CLI also skip
+- `BOING_ACCOUNT` — `0x` + 64 hex, linked with **Ctrl+V**
 
 ## API sketch
 

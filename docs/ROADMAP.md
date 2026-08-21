@@ -6,12 +6,11 @@ For the archived vault playable checklist, see [archive/vault/PLAYABLE_ROADMAP.m
 
 ## Phase 0 — Engine foundation ✓
 
-- [x] Bevy 0.19 project at repo root (legacy client)
 - [x] Unity 6.3 client at `unity/` with Nest + four mini-games + Cursor MCP
-- [x] LAN host/join (bevy_replicon + renet) — Unity Netcode not ported yet
-- [x] GLB asset pipeline (Immersive Studio)
-- [x] Third-person camera + server-authoritative interact
-- [x] Headless multiplayer smoke test + CI
+- [x] LAN host/join (`LanSession` UDP listen-server)
+- [x] GLB asset pipeline (Immersive Studio → runtime glTFast)
+- [x] Third-person camera + pad interact
+- [x] Accounts API CI (`services/accounts`)
 
 ## Phase 1 — Tournament core (MVP) ← **IN PROGRESS**
 
@@ -76,33 +75,27 @@ For the archived vault playable checklist, see [archive/vault/PLAYABLE_ROADMAP.m
 
 ---
 
-## Code map (implemented)
+## Code map (Unity Party Saga)
 
-| Module | Path | Phase |
-|--------|------|-------|
-| Tournament director | `src/tournament/` | 1–2 |
-| Scoring / CI | `src/scoring/` | 1–2 |
-| Room runtime | `src/rooms/` | 1–2 |
-| Economy / wallet | `src/economy/` | 1, 4 |
-| Announcer | `src/announcer/` | 1 |
-| Meta / mastery | `src/meta/` | 3 |
-| Live ops | `src/live_ops/` | 5 |
+| Module | Path |
+|--------|------|
+| Nest + pads | `unity/Assets/PudgyMon/Scripts/Hub/` |
+| Party director | `unity/Assets/PudgyMon/Scripts/Core/PartyDirector.cs` |
+| Stages | `unity/Assets/PudgyMon/Scripts/Stages/` |
+| Maps / editor | `unity/Assets/PudgyMon/Scripts/Maps/` |
+| LAN | `unity/Assets/PudgyMon/Scripts/Net/LanSession.cs` |
+| Accounts API | `services/accounts/` |
+
+Vault tournament modules were removed with the Bevy client. Design: [archive/vault/](archive/vault/).
 
 ## Design reference
 
 | Doc | Contents |
 |-----|----------|
-| [GDD.md](GDD.md) | Game vision |
-| [TOURNAMENT.md](TOURNAMENT.md) | Brackets & timing |
-| [SCORING.md](SCORING.md) | Points & CI |
-| [ROOMS.md](ROOMS.md) | Vault stages |
-| [WAGERING.md](WAGERING.md) | Economy |
-| [legacy/](legacy/) | v0.2 stowaway design (archived) |
+| [PARTY_ROADMAP.md](PARTY_ROADMAP.md) | Live product loop |
+| [BRAND.md](BRAND.md) | Names & tone |
+| [archive/vault/GDD.md](archive/vault/GDD.md) | Retired vault vision |
 
 ## Run locally
 
-```bash
-cargo run -- local
-```
-
-Press **F** at the green vault pad during active rooms. Tournament auto-advances with 3 bots on fast timers (~2 min full run).
+Unity Hub → open `unity/` → Play. See [UNITY.md](UNITY.md).

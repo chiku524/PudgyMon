@@ -67,7 +67,7 @@ def main() -> int:
     else:
         print(f"GLB missing (expected {glb.relative_to(_REPO_ROOT)}) — import a pack or copy the file")
     print("Next: add a marker with this asset_id to data/rooms/<room>.json")
-    print("      then `cargo run -- local`")
+    print("      then Play in Unity Hub → unity/")
     return 0
 
 

@@ -12,7 +12,7 @@ Related: [BOING_INTEGRATION.md](BOING_INTEGRATION.md) · [PACKAGING.md](PACKAGIN
 2. Stand on a mode pad → **E** / Enter: Race, Vibe, Shooter, or full **Party Saga**
 3. Play stage(s) → Results → season points → back to Nest
 4. Claim cosmetics / currency on Boing (testnet)
-5. LAN: `pudgymon host` / `join` CLI
+5. LAN: pause **H** / **J**, or `--host` / `--join`
 
 ## Checklist
 

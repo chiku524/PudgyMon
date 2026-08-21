@@ -13,4 +13,4 @@ After Tripo export:
      OR copy this folder to assets/models/<asset_id>/ and run
         python scripts/register_studio_asset.py <asset_id> --height 1.0
   2. Set "asset_id" on the room marker (keep greybox for CI fallback)
-  3. cargo run -- local
+  3. Play in Unity Hub → unity/

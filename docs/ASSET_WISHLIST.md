@@ -88,4 +88,4 @@ Hats are no longer roster-only tint indices — equip real meshes via Nest **Acc
 4. Accessories → register; equip via `PlayerVisualSpec.accessories.*`
 5. Nest / stage props → swap `asset_id` on markers (or Nest spawn later)
 6. `python scripts/validate_studio_assets.py`
-7. `cargo run -- local` and check scale / pivot / socket alignment
+7. Play in Unity and check scale / pivot / socket alignment

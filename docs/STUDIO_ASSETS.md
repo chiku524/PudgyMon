@@ -1,6 +1,6 @@
 # Immersive Studio → PudgyMon workflow
 
-PudgyMon uses [Immersive Labs Studio](https://github.com/chiku524/immersive.labs) to generate **Tripo AI** meshes with baked PBR, then imports GLBs into `assets/models/` for the Bevy runtime.
+PudgyMon uses [Immersive Labs Studio](https://github.com/chiku524/immersive.labs) to generate **Tripo AI** meshes with baked PBR, then imports GLBs into `assets/models/` for the Unity runtime.
 
 Placement is **data-driven**: import a pack → register the asset → add a marker in `data/rooms/*.json` → play. No Rust spawn code required for props/stations.
 
@@ -46,7 +46,7 @@ cargo test --lib room_asset_ids_exist_in_registry_or_are_null
 
 ## Optimize dense Tripo GLBs
 
-Best path for **no holes + candy paint + fast loads**: remesh a closed low-poly cage, then **bake** Tripo diffuse onto it (Bevy-safe JPEG, no Draco/KTX2):
+Best path for **no holes + candy paint + fast loads**: remesh a closed low-poly cage, then **bake** Tripo diffuse onto it (Unity-safe JPEG, no Draco/KTX2):
 
 ```bash
 # From dense .pre_opt backups (recommended)
@@ -101,26 +101,16 @@ Edit the vault JSON under `data/rooms/` (or `arena.json` for the persistent shel
 | `interactable` | Optional. Kinds: `crane`, `vault_objective`, `sort_chute`, `breaker`, `coolant_valve`, `meltdown_door`. |
 | `greybox` | **Required** for interactables — CI/headless fallback when GLB missing. |
 
-Then verify:
+Then verify in Unity Play mode (The Nest). Stage props use `asset_id` on map blocks.
 
-```bash
-cargo run -- local
-```
-
-Walk to the marker and press **F** if it has an `interactable`.
-
-## Runtime wiring (Bevy)
+## Runtime wiring (Unity)
 
 | Piece | Location |
 |-------|----------|
 | Asset registry JSON | `assets/studio_registry.json` |
-| Room / arena layouts | `data/rooms/*.json` |
-| Registry loader | `src/data/studio_registry.rs` |
-| Layout schema | `src/data/room_layout.rs` |
-| GLB spawn | `src/assets/mod.rs` (`WorldAssetRoot`) |
-| Marker spawn | `src/rooms/spawner.rs` |
-| Room swap | `src/rooms/layout.rs` |
-| Character hook | `PlayerVisualSpec` in `src/player/mod.rs` |
+| Official maps | `data/maps/*.json` |
+| Registry + GLB spawn | `unity/Assets/PudgyMon/Scripts/Assets/` |
+| Character / accessories | `CrewRoster` + `AccessoryCatalog` in `Scripts/Meta/` |
 
 ## Character models
 
@@ -130,7 +120,7 @@ Until accessory GLBs exist, leave those fields empty; `hat_slot` 0–7 remains a
 
 ## Regenerating existing assets with Tripo
 
-Older packs may use ComfyUI sidecars or placeholder meshes. Re-run Studio jobs with the same `asset_id`, import with `--update`, and re-test scale/placement in the Bevy level. Use marker `"scale"` or registry `"uniform_scale"` to fine-tune without re-exporting.
+Older packs may use ComfyUI sidecars or placeholder meshes. Re-run Studio jobs with the same `asset_id`, import with `--update`, and re-test scale/placement in Unity. Use registry `"uniform_scale"` to fine-tune without re-exporting.
 
 ## Still needed (wishlist)
 

@@ -327,7 +327,7 @@ for clip_name, nframes in (("jump", 15), ("emote_wave", 30), ("emote_dance", 24)
 
 arm.animation_data.action = None
 
-# Accessory sockets are created at runtime by Bevy (`src/player/accessories.rs`).
+# Accessory sockets attach in Unity (`AccessoryCatalog` + hat cycle).
 # Do NOT bone-parent empties here — Blender exports them with a +90° X tilt that
 # tips wearables onto their side. Strip any leftovers from the source GLB.
 for obj in list(bpy.data.objects):

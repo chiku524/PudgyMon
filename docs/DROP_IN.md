@@ -1,6 +1,6 @@
 # Drop-in guide (art + audio)
 
-Wired so you can drop files and play — **no Rust required** for normal replacements.
+Wired so you can drop files and play — **no extra tooling** for normal replacements.
 
 Related: [CHARACTERS.md](CHARACTERS.md) · [STUDIO_ASSETS.md](STUDIO_ASSETS.md) · [STUDIO_PROMPTS.md](STUDIO_PROMPTS.md) · [ASSET_WISHLIST.md](ASSET_WISHLIST.md)
 
@@ -19,7 +19,7 @@ Selectable crew (**5**): `char_pudgy_base_01`, `oceanic_pudgymon_01`, `char_pudg
 
 ## GLB size optimization
 
-Quality-first (preserves painted candy detail; Bevy-safe, no Draco/KTX2/WebP):
+Quality-first (preserves painted candy detail; Unity-safe, no Draco/KTX2/WebP):
 
 ```bash
 # Prefer Blender bake/char pipelines for Tripo exports

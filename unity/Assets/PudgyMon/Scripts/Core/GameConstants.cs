@@ -13,6 +13,7 @@ namespace PudgyMon
         public const int PlayerMaxAirJumps = 1;
 
         public const float WorldBounds = 70.0f;
+        public const float ArenaBounds = 48.0f;
         public const float InteractRadius = 2.8f;
 
         public const float MouseSensitivity = 0.0025f;

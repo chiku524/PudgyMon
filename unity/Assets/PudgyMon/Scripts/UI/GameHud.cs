@@ -34,7 +34,7 @@ namespace PudgyMon
                 new Color(0.7f, 0.85f, 0.95f), font, "");
             hud._hint = MakeText(canvasGo.transform, "Hint", new Vector2(20, -200), 13,
                 new Color(0.55f, 0.6f, 0.7f), font,
-                "WASD · Shift sprint · Space jump · pads E · C skin · Q Nest · R rematch · Esc pause · ` free cursor");
+                "WASD · Shift sprint · Space jump · pads E · Create Map · My Maps · C skin · N crew · H hat · M claim · Ctrl+O companion · Q Nest · R rematch · Esc pause · ` cursor";
 
             var hintRect = hud._hint.rectTransform;
             hintRect.anchorMin = new Vector2(0f, 0f);
@@ -51,8 +51,9 @@ namespace PudgyMon
             pauseRect.anchorMax = Vector2.one;
             pauseRect.offsetMin = Vector2.zero;
             pauseRect.offsetMax = Vector2.zero;
-            MakeText(hud._pause.transform, "PauseLabel", new Vector2(40, -80), 36,
-                Color.white, font, "Paused\nEsc resume · Q Nest · Esc+Q quit via menu later");
+            MakeText(hud._pause.transform, "PauseLabel", new Vector2(40, -80), 28,
+                Color.white, font,
+                "Paused\nEsc resume · Q Nest\nH host LAN · J join 127.0.0.1\nA accounts website · Ctrl+O claim companion");
             hud._pause.SetActive(false);
             return hud;
         }
@@ -96,7 +97,9 @@ namespace PudgyMon
             Cursor.visible = !captured;
         }
 
-        public void Render(PartyDirector director, NestHub nest, SeasonLedger season, CosmeticsCatalog cosmetics)
+        public void Render(PartyDirector director, NestHub nest, SeasonLedger season, CosmeticsCatalog cosmetics,
+            ChallengeBoard challenges = null, BoingBridge boing = null, AccountSession account = null,
+            LanSession lan = null, string banner = null)
         {
             var phaseLabel = director.Phase switch
             {
@@ -116,8 +119,15 @@ namespace PudgyMon
                 ? nest.Prompt
                 : director.Announcer;
             _main.text = $"{phaseLabel}{timerBit}\n{prompt}";
+            var wallet = string.IsNullOrEmpty(boing?.LinkedAccount)
+                ? "unlinked"
+                : boing.LinkedAccount.Substring(0, Mathf.Min(10, boing.LinkedAccount.Length));
+            var acc = account != null && account.SignedIn ? account.DisplayName : "guest";
+            var net = lan == null || lan.Status == "Offline" ? "solo" : lan.Status;
             _sub.text =
-                $"Party pts {director.MatchPoints[0]} · Season {season.points} · Skin {cosmetics.EquippedId}\nUnity client — Bevy LAN still in src/";
+                $"Party pts {director.MatchPoints[0]} · Season {season.points} · Skin {cosmetics.EquippedId} · {acc} · {net} · {wallet}\n" +
+                (challenges != null ? challenges.SummaryLine() : "") + "\n" +
+                (banner ?? boing?.Note ?? "");
         }
     }
 }

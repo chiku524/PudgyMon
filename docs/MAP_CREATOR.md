@@ -63,9 +63,8 @@ Key **4** places blocks tagged with studio `asset_id` from `EDITOR_DECO_IDS` (cr
 
 | Module | Role |
 |--------|------|
-| [`src/maps/`](../src/maps/) | Race/Vibe/Shooter/Pack types, catalog, share codes |
-| [`src/map_editor/`](../src/map_editor/) | Multi-layer editor |
-| [`src/stages/`](../src/stages/) | Boots from `ActiveStageMaps` |
+| [`unity/Assets/PudgyMon/Scripts/Maps/`](../unity/Assets/PudgyMon/Scripts/Maps/) | Race/Vibe/Shooter/Pack types, catalog, share codes, editor |
+| [`unity/Assets/PudgyMon/Scripts/Stages/`](../unity/Assets/PudgyMon/Scripts/Stages/) | Boots from `ActiveMaps` |
 
 ## Later
 

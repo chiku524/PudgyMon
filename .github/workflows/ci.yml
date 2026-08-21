@@ -6,33 +6,6 @@ on:
   pull_request:
 
 jobs:
-  game:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - name: Install Bevy Linux dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            pkg-config \
-            libasound2-dev \
-            libudev-dev \
-            libwayland-dev \
-            libxkbcommon-dev \
-            libxkbcommon-x11-0 \
-            libxkbcommon-x11-dev \
-            libx11-dev \
-            libxcb1-dev \
-            libegl1-mesa-dev \
-            libgl1-mesa-dev \
-            mesa-vulkan-drivers
-      - name: Check game + accounts workspace
-        run: cargo check --workspace
-      - name: Unit / integration tests
-        run: cargo test --workspace --exclude pudgymon-accounts
-
   accounts-api:
     runs-on: ubuntu-latest
     defaults:
@@ -40,6 +13,12 @@ jobs:
         working-directory: services/accounts
     steps:
       - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: services/accounts
+      - name: Check accounts API
+        run: cargo check
       - name: Build accounts Docker image
         run: |
           printf '%s\n' \

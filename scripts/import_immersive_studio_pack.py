@@ -160,7 +160,7 @@ def _import_pack(pack_root: Path, *, update: bool, copy_textures: bool) -> int:
     print("  1. Add/update a marker in data/rooms/<room>.json with \"asset_id\": \"<id>\"")
     print("  2. Keep a greybox fallback on interactable markers")
     print("  3. python scripts/validate_studio_assets.py")
-    print("  4. cargo run -- local")
+    print("  4. Play in Unity Hub → unity/")
     return 0
 
 

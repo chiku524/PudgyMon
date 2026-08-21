@@ -3,7 +3,7 @@ using UnityEngine;
 namespace PudgyMon
 {
     /// <summary>
-    /// Authoritative Party Saga phase machine — port of src/party/director.rs.
+    /// Authoritative Party Saga phase machine.
     /// </summary>
     public sealed class PartyDirector
     {
@@ -34,7 +34,7 @@ namespace PudgyMon
 
         public void Queue(PartyPlan plan) => Queued = plan;
 
-        public void Tick(float dt, SeasonLedger season)
+        public void Tick(float dt, SeasonLedger season, ChallengeBoard challenges = null)
         {
             if (Phase == PartyPhase.Hub)
             {
@@ -72,7 +72,7 @@ namespace PudgyMon
                 case PartyPhase.Shooter when Plan.Kind == PartyPlanKind.Single && Plan.Stage == StageKind.Shooter:
                 case PartyPhase.Koth when Plan.Kind == PartyPlanKind.Single && Plan.Stage == StageKind.Koth:
                 case PartyPhase.Koth when Plan.Kind == PartyPlanKind.FullParty:
-                    FinishMatch(season);
+                    FinishMatch(season, challenges);
                     break;
                 case PartyPhase.Race when Plan.Kind == PartyPlanKind.FullParty:
                     Begin(PartyPhase.Intermission, 3f, "Vibe Collect up next…");
@@ -119,7 +119,7 @@ namespace PudgyMon
             Announcer = line;
         }
 
-        void FinishMatch(SeasonLedger season)
+        void FinishMatch(SeasonLedger season, ChallengeBoard challenges)
         {
             uint sum = 0;
             for (int i = 0; i < 8; i++)
@@ -128,6 +128,8 @@ namespace PudgyMon
             uint localBest = MatchPoints[0];
             uint award = System.Math.Max(localBest, System.Math.Min(earned, 50u));
             season.AddPoints(award);
+            challenges?.Bump("play_3", 1);
+            challenges?.ClaimReady(season);
             Begin(PartyPhase.Results, 6f, $"Results! You scored {localBest} party pts · season +{award}");
         }
     }

@@ -7,6 +7,9 @@ namespace PudgyMon
     {
         PartyDirector _director;
         StudioAssets _studio;
+        ActiveMaps _maps;
+        ChallengeBoard _challenges;
+        PartyAudio _audio;
         Transform _stageRoot;
         PartyPhase _booted = (PartyPhase)(-1);
 
@@ -40,10 +43,14 @@ namespace PudgyMon
             public float Ttl;
         }
 
-        public void Init(PartyDirector director, StudioAssets studio)
+        public void Init(PartyDirector director, StudioAssets studio, ActiveMaps maps, ChallengeBoard challenges,
+            PartyAudio audio)
         {
             _director = director;
             _studio = studio;
+            _maps = maps;
+            _challenges = challenges;
+            _audio = audio;
             _stageRoot = new GameObject("StageRoot").transform;
             _stageRoot.SetParent(transform, false);
         }
@@ -115,13 +122,30 @@ namespace PudgyMon
             System.Array.Clear(_nextGate, 0, _nextGate.Length);
             _raceFinished.Clear();
             var hub = GameConstants.HubSpawn;
-            Vector3[] gates =
+            var custom = _maps?.Race;
+            Vector3[] gates;
+            Vector3 spawnBase;
+            if (custom != null && custom.Gates.Count >= 2)
             {
-                hub + new Vector3(-12f, 1f, 4f),
-                hub + new Vector3(0f, 1f, -8f),
-                hub + new Vector3(12f, 1f, 4f),
-                hub + new Vector3(0f, 1f, 20f)
-            };
+                gates = new Vector3[custom.Gates.Count];
+                for (int i = 0; i < custom.Gates.Count; i++)
+                    gates[i] = new Vector3(custom.Gates[i][0], custom.Gates[i][1], custom.Gates[i][2]);
+                var s = custom.Spawns[0];
+                spawnBase = new Vector3(s[0], s[1], s[2]);
+                SpawnBlocks(custom.Blocks);
+            }
+            else
+            {
+                gates = new[]
+                {
+                    hub + new Vector3(-12f, 1f, 4f),
+                    hub + new Vector3(0f, 1f, -8f),
+                    hub + new Vector3(12f, 1f, 4f),
+                    hub + new Vector3(0f, 1f, 20f)
+                };
+                spawnBase = hub + new Vector3(0f, 0f, 20f);
+            }
+
             _gateCount = gates.Length;
             for (int i = 0; i < gates.Length; i++)
             {
@@ -135,7 +159,7 @@ namespace PudgyMon
             }
 
             foreach (var p in players)
-                p.Teleport(hub + new Vector3(p.Slot * 2.2f - 4f, 0f, 20f));
+                p.Teleport(spawnBase + new Vector3(p.Slot * 2.2f - 4f, 0f, 0f));
         }
 
         void TickRace(float dt, IReadOnlyList<PlayerMotor> players)
@@ -161,7 +185,12 @@ namespace PudgyMon
                         uint pts = place switch { 1 => 25, 2 => 18, 3 => 12, _ => 6 };
                         _director.AddPoints(p.Slot, pts);
                         if (p.IsLocal)
+                        {
                             _director.Announcer = $"You finished race #{place} (+{pts})";
+                            _audio?.Finish();
+                            if (place <= 3)
+                                _challenges?.Bump("race_podium", 1);
+                        }
                     }
                 }
             }
@@ -171,17 +200,36 @@ namespace PudgyMon
         {
             System.Array.Clear(_vibeCollected, 0, _vibeCollected.Length);
             var hub = GameConstants.HubSpawn;
-            for (int i = 0; i < 16; i++)
+            var custom = _maps?.Vibe;
+            List<Vector3> orbs = new List<Vector3>();
+            Vector3 spawnBase;
+            if (custom != null && custom.Orbs.Count >= 3)
             {
-                var angle = i * 0.7f;
-                var pos = hub + new Vector3(Mathf.Cos(angle) * 16f, 0.6f, Mathf.Sin(angle) * 16f);
-                var go = PrimitiveFactory.Create(PrimitiveType.Sphere, pos, new Vector3(0.45f, 0.45f, 0.45f),
+                foreach (var o in custom.Orbs)
+                    orbs.Add(new Vector3(o[0], o[1], o[2]));
+                var s = custom.Spawns[0];
+                spawnBase = new Vector3(s[0], s[1], s[2]);
+                SpawnBlocks(custom.Blocks);
+            }
+            else
+            {
+                for (int i = 0; i < 16; i++)
+                {
+                    var angle = i * 0.7f;
+                    orbs.Add(hub + new Vector3(Mathf.Cos(angle) * 16f, 0.6f, Mathf.Sin(angle) * 16f));
+                }
+                spawnBase = hub;
+            }
+
+            for (int i = 0; i < orbs.Count; i++)
+            {
+                var go = PrimitiveFactory.Create(PrimitiveType.Sphere, orbs[i], new Vector3(0.45f, 0.45f, 0.45f),
                     new Color(1f, 0.9f, 0.2f), _stageRoot, $"Vibe_{i}", true, new Color(2.5f, 2f, 0.3f));
                 _orbs.Add(go.transform);
             }
 
             foreach (var p in players)
-                p.Teleport(hub + new Vector3(p.Slot * 2f - 3f, 0f, 0f));
+                p.Teleport(spawnBase + new Vector3(p.Slot * 2f - 3f, 0f, 0f));
         }
 
         void TickVibe(float dt, IReadOnlyList<PlayerMotor> players)
@@ -215,7 +263,11 @@ namespace PudgyMon
                             _vibeCollected[p.Slot] += 1;
                             _director.AddPoints(p.Slot, 3);
                             if (p.IsLocal)
+                            {
+                                _challenges?.SetMax("vibe_10", _vibeCollected[p.Slot]);
                                 _director.Announcer = $"Vibe! ({_vibeCollected[p.Slot]})";
+                                _audio?.Pickup();
+                            }
                         }
 
                         break;
@@ -229,26 +281,39 @@ namespace PudgyMon
             System.Array.Clear(_kos, 0, _kos.Length);
             System.Array.Clear(_shootCd, 0, _shootCd.Length);
             var hub = GameConstants.HubSpawn;
-            (string id, Vector3 offset, float yaw)[] cover =
+            var custom = _maps?.Shooter;
+            if (custom != null && custom.Cover.Count > 0)
             {
-                ("prop_cover_block_01", new Vector3(-6f, 0f, -6f), 20f),
-                ("prop_cover_block_01", new Vector3(6f, 0f, -6f), -20f),
-                ("prop_cover_block_01", new Vector3(0f, 0f, -12f), 0f),
-                ("prop_target_star_01", new Vector3(-10f, 0f, -10f), 45f),
-                ("prop_target_star_01", new Vector3(10f, 0f, -10f), -45f),
-                ("prop_blaster_toy_01", new Vector3(0f, 0f, -4f), 180f)
-            };
-            foreach (var c in cover)
-            {
-                _studio.QueueProp(c.id, hub + c.offset, Quaternion.Euler(0f, c.yaw, 0f), _stageRoot,
-                    $"Shooter_{c.id}", PrimitiveType.Cube, new Vector3(1.6f, 1.2f, 1.6f),
-                    new Color(0.45f, 0.5f, 0.55f));
+                SpawnBlocks(custom.Cover);
+                for (int i = 0; i < players.Count; i++)
+                {
+                    var s = custom.Spawns[Mathf.Min(i, custom.Spawns.Count - 1)];
+                    players[i].Teleport(new Vector3(s[0], s[1], s[2]));
+                }
             }
-
-            foreach (var p in players)
+            else
             {
-                var angle = p.Slot * 0.9f;
-                p.Teleport(hub + new Vector3(Mathf.Cos(angle) * 12f, 0f, Mathf.Sin(angle) * 12f - 8f));
+                (string id, Vector3 offset, float yaw)[] cover =
+                {
+                    ("prop_cover_block_01", new Vector3(-6f, 0f, -6f), 20f),
+                    ("prop_cover_block_01", new Vector3(6f, 0f, -6f), -20f),
+                    ("prop_cover_block_01", new Vector3(0f, 0f, -12f), 0f),
+                    ("prop_target_star_01", new Vector3(-10f, 0f, -10f), 45f),
+                    ("prop_target_star_01", new Vector3(10f, 0f, -10f), -45f),
+                    ("prop_blaster_toy_01", new Vector3(0f, 0f, -4f), 180f)
+                };
+                foreach (var c in cover)
+                {
+                    _studio.QueueProp(c.id, hub + c.offset, Quaternion.Euler(0f, c.yaw, 0f), _stageRoot,
+                        $"Shooter_{c.id}", PrimitiveType.Cube, new Vector3(1.6f, 1.2f, 1.6f),
+                        new Color(0.45f, 0.5f, 0.55f));
+                }
+
+                foreach (var p in players)
+                {
+                    var angle = p.Slot * 0.9f;
+                    p.Teleport(hub + new Vector3(Mathf.Cos(angle) * 12f, 0f, Mathf.Sin(angle) * 12f - 8f));
+                }
             }
         }
 
@@ -314,7 +379,11 @@ namespace PudgyMon
                         _kos[shot.Owner] += 1;
                         _director.AddPoints(shot.Owner, 8);
                         if (players[0].Slot == shot.Owner && players[0].IsLocal)
+                        {
                             _director.Announcer = $"KO! ({_kos[shot.Owner]} total)";
+                            _challenges?.SetMax("ko_5", _kos[shot.Owner]);
+                            _audio?.Ko();
+                        }
                         var push = new Vector3(Mathf.Sin(Time.time * 11f), 0f, Mathf.Cos(Time.time * 9f)).normalized;
                         p.Teleport(p.transform.position + push * 1.4f);
                         Destroy(shot.Transform.gameObject);
@@ -334,11 +403,39 @@ namespace PudgyMon
             System.Array.Clear(_hold, 0, _hold.Length);
             System.Array.Clear(_awarded, 0, _awarded.Length);
             var hub = GameConstants.HubSpawn;
-            _hills.Add(hub + new Vector3(0f, 0f, -6f));
-            _hills.Add(hub + new Vector3(13f, 0f, -14f));
-            _hills.Add(hub + new Vector3(-13f, 0f, 2f));
-            _hillRadius = 4.5f;
-            _hillSwitch = 12f;
+            var custom = _maps?.Koth;
+            _hills.Clear();
+            if (custom != null && custom.Hills.Count > 0)
+            {
+                foreach (var h in custom.Hills)
+                    _hills.Add(new Vector3(h[0], h[1], h[2]));
+                _hillRadius = custom.HillRadius;
+                _hillSwitch = custom.HillSwitchSecs;
+                SpawnBlocks(custom.Blocks);
+                for (int i = 0; i < players.Count; i++)
+                {
+                    var s = custom.Spawns[Mathf.Min(i, custom.Spawns.Count - 1)];
+                    players[i].Teleport(new Vector3(s[0], s[1], s[2]));
+                }
+            }
+            else
+            {
+                _hills.Add(hub + new Vector3(0f, 0f, -6f));
+                _hills.Add(hub + new Vector3(13f, 0f, -14f));
+                _hills.Add(hub + new Vector3(-13f, 0f, 2f));
+                _hillRadius = 4.5f;
+                _hillSwitch = 12f;
+                Vector3[] spawns =
+                {
+                    new Vector3(hub.x, 1f, hub.z + 8f),
+                    new Vector3(hub.x + 12f, 1f, hub.z - 10f),
+                    new Vector3(hub.x - 12f, 1f, hub.z - 10f),
+                    new Vector3(hub.x, 1f, hub.z - 18f)
+                };
+                foreach (var p in players)
+                    p.Teleport(spawns[p.Slot % spawns.Length]);
+            }
+
             _hillStartTimer = _director.PhaseTimer;
             _announcedHill = 0;
             var first = _hills[0];
@@ -347,16 +444,23 @@ namespace PudgyMon
                 "HillZone", true, new Color(1.6f, 1.1f, 0.2f));
             _hillZone = zone.transform;
             _hillRenderer = zone.GetComponent<Renderer>();
-            foreach (var p in players)
+        }
+
+        void SpawnBlocks(List<MapBlock> blocks)
+        {
+            if (blocks == null) return;
+            for (int i = 0; i < blocks.Count; i++)
             {
-                Vector3[] spawns =
-                {
-                    new Vector3(hub.x, 1f, hub.z + 8f),
-                    new Vector3(hub.x + 12f, 1f, hub.z - 10f),
-                    new Vector3(hub.x - 12f, 1f, hub.z - 10f),
-                    new Vector3(hub.x, 1f, hub.z - 18f)
-                };
-                p.Teleport(spawns[p.Slot % spawns.Length]);
+                var b = blocks[i];
+                var pos = new Vector3(b.Pos[0], b.Pos[1], b.Pos[2]);
+                var size = new Vector3(Mathf.Max(0.5f, b.Size[0]), Mathf.Max(0.5f, b.Size[1]),
+                    Mathf.Max(0.5f, b.Size[2]));
+                if (!string.IsNullOrEmpty(b.AssetId))
+                    _studio.QueueProp(b.AssetId, pos, Quaternion.identity, _stageRoot, $"Block_{i}",
+                        PrimitiveType.Cube, size, new Color(0.5f, 0.45f, 0.4f));
+                else
+                    PrimitiveFactory.Create(PrimitiveType.Cube, pos, size, new Color(0.5f, 0.45f, 0.4f),
+                        _stageRoot, $"Block_{i}");
             }
         }
 

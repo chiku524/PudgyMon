@@ -23,7 +23,7 @@ Current reference deploy in `contracts.json`: **Saga Token (SAGA)** + **PudgyMon
 
 **Registration creates a custodial Boing wallet** (Ed25519 AccountId `0x` + 64 hex) and stores it on the user profile (`boing_wallet`). The private key is encrypted at rest (`boing_wallet_secret_enc`) and returned **once** on signup (also exportable via `GET /v1/me/wallet/secret`).
 
-In-game, that cloud wallet is auto-linked into `BoingConfig.linked_account` after sign-in. Desktop Bevy does **not** embed Boing Express / `window.boing`.
+In-game, that cloud wallet is auto-linked after sign-in when `account_session.json` is present. The Unity client does **not** embed Boing Express / `window.boing`.
 
 ## Nest Market — on-chain Buy
 

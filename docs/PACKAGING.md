@@ -8,27 +8,27 @@
 pwsh scripts/build_windows_release.ps1
 ```
 
-Output: `dist/PudgyMon/` with `pudgymon.exe`, `assets/`, `data/`, and `README.txt`.
+Output: `dist/PudgyMon/` with the Unity player (if you built to `unity/Builds/Windows/`), plus `assets/`, `data/`, and `README.txt`.
+
+Build the player first in Unity: **File → Build Settings → Windows → Build**.
 
 ### In-game
 
 - Boots into **The Nest** (no main menu)
-- Walk glowing pads: Race · Vibe · Shooter · Party Saga → **E** / Enter to start
-- **Create Map** (orange) / **My Maps** (purple) — Race / Vibe / Shooter + Party Saga packs; see [MAP_CREATOR.md](MAP_CREATOR.md)
-- **Esc** Nest menu (Settings · Profile · Account · Inventory · Wallet · Market · Challenges · Controls · Quit) — Esc again closes
-- Accounts website: [`web/`](../web/) + API [`services/accounts/`](../services/accounts/) — see [ACCOUNTS.md](ACCOUNTS.md)
-- **C** cycle skins · **M** claim voucher · **Ctrl+V** link `BOING_ACCOUNT`
-- **Tab** spectate after race finish · **R** rematch · **Q** return to Nest
-- Weekly challenges: `data/challenges/weekly.json`
+- Walk glowing pads: Race · Vibe · Shooter · Hill · Party Saga → **E** / Enter to start
+- **Create Map** (orange) / **My Maps** (purple) — see [MAP_CREATOR.md](MAP_CREATOR.md)
+- **Esc** pause (H host LAN · J join · A accounts site)
+- **C** cycle skins · **N** crew · **H** hat · **M** claim voucher · **Ctrl+O** claim companion
+- **R** rematch · **Q** return to Nest
 
-### LAN multiplayer (Nest + stages)
+### LAN
 
 ```text
-pudgymon.exe host --port 7777
-pudgymon.exe join --address 192.168.1.10 --port 7777
+PudgyMon.exe --host --port 7777
+PudgyMon.exe --join --address 192.168.1.10 --port 7777
 ```
 
-Host is listen-server authority. Joiners see each other in **The Nest**, can press **E** on pads to queue a mode for everyone, and share Race / Vibe / Shooter (movement + scoring on host; shooters send fire to host). Custom My Maps need the same map JSON on host (and ideally joiners) under `%LOCALAPPDATA%/PudgyMon/maps/`.
+Or pause **H** / **J**. Host is listen-server authority.
 
 ## Crash / log path
 

@@ -16,7 +16,7 @@ After generation → import → place: [STUDIO_ASSETS.md](STUDIO_ASSETS.md). Cha
 |---------|--------|
 | Format | GLB with baked Tripo PBR |
 | Pivot | Floor center (characters / props) · wear origin (accessories) |
-| Facing | Character faces −Z (Bevy forward) when possible |
+| Facing | Character faces −Z (Unity/glTF forward) when possible |
 | Units | 1 unit ≈ 1 meter |
 | Naming | Folder + file = `asset_id` / `asset_id.glb` |
 | Characters | After polish: baked ~1.2 m height, `uniform_scale` `1.0` |

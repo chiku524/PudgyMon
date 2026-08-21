@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Bevy-safe GLB size optimizer (no Draco / Meshopt / WebP / KTX2).
+"""Unity-safe GLB size optimizer (no Draco / Meshopt / WebP / KTX2).
 
 Welds, UV-aware simplifies, caps/re-encodes JPEG textures (alpha-safe), strips
 ORM/normal maps on props, resamples animation keyframes, prunes orphans, and
-validates the output still loads in Bevy 0.19.
+validates the output still loads in Unity glTFast.
 
 NOTE: raw Tripo exports are vertex-split triangle soup that meshopt cannot
 simplify much — the script warns when that happens. For those, use the Blender

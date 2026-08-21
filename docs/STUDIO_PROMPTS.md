@@ -16,7 +16,7 @@ After generation → import → place (see [STUDIO_ASSETS.md](STUDIO_ASSETS.md))
 |---------|--------|
 | Format | GLB with baked Tripo PBR |
 | Pivot | Floor center (characters / props) · wear origin (accessories) |
-| Facing | Character faces −Z (Bevy forward) when possible |
+| Facing | Character faces −Z (Unity/glTF forward) when possible |
 | Units | 1 unit ≈ 1 meter |
 | Naming | Folder + file = `asset_id` / `asset_id.glb` |
 | Characters | After polish: baked ~1.2 m height, `uniform_scale` `1.0`. Raw Tripo imports: run `scripts/polish_character_glb.py` |
@@ -707,7 +707,7 @@ Each row is a separate uncached job — paste that asset’s full prompt only.
 ```bash
 python scripts/import_immersive_studio_pack.py path/to/pack.zip
 python scripts/validate_studio_assets.py
-cargo run -- local
+# Play in Unity Hub → unity/ → Nest scene
 ```
 
 If scale looks wrong: set `"uniform_scale"` in `studio_registry.json` or `"scale"` on the room marker — no re-export needed.

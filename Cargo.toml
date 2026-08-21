@@ -1,35 +1,3 @@
 [workspace]
-members = [".", "services/accounts"]
+members = ["services/accounts"]
 resolver = "2"
-
-[package]
-name = "pudgymon"
-version = "0.1.0"
-edition = "2021"
-description = "PudgyMon: Party Saga — cute Pudgy Monsters party mini-games on Boing Network"
-publish = false
-default-run = "pudgymon"
-
-[lib]
-name = "pudgymon"
-path = "src/lib.rs"
-
-[[bin]]
-name = "pudgymon"
-path = "src/main.rs"
-
-[[bin]]
-name = "pudgymon_smoke"
-path = "src/bin/smoke.rs"
-
-[dependencies]
-bevy = { version = "0.19", features = ["serialize", "jpeg"] }
-bevy_replicon = "0.41"
-bevy_replicon_renet = "0.17"
-clap = { version = "4", features = ["derive", "env"] }
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
-ureq = { version = "2", default-features = false, features = ["json", "tls"] }
-
-[dev-dependencies]
-pudgymon = { path = "." }

@@ -8,6 +8,17 @@ namespace PudgyMon
         public string Label;
     }
 
+    public enum NestAction
+    {
+        OpenEditor,
+        BrowseMaps
+    }
+
+    public sealed class UtilityPad : MonoBehaviour
+    {
+        public NestAction Action;
+    }
+
     public sealed class NestHub : MonoBehaviour
     {
         public string Prompt = "";
@@ -91,7 +102,23 @@ namespace PudgyMon
                 }
             }
 
+            SpawnUtility(hubGo.transform, origin, new Vector3(-12f, 0.12f, 16f),
+                new Color(0.95f, 0.65f, 0.25f), NestAction.OpenEditor, "CreateMap");
+            SpawnUtility(hubGo.transform, origin, new Vector3(12f, 0.12f, 16f),
+                new Color(0.65f, 0.45f, 1f), NestAction.BrowseMaps, "MyMaps");
+
             return hub;
+        }
+
+        static void SpawnUtility(Transform parent, Vector3 hub, Vector3 offset, Color color, NestAction action,
+            string name)
+        {
+            var pos = hub + offset;
+            var go = PrimitiveFactory.Create(PrimitiveType.Cylinder, pos, new Vector3(2.6f, 0.28f, 2.6f),
+                color, parent, $"UtilityPad_{name}", true, color * 1.2f);
+            go.AddComponent<UtilityPad>().Action = action;
+            PrimitiveFactory.Create(PrimitiveType.Cube, pos + new Vector3(0f, 2f, -2.6f),
+                new Vector3(2.8f, 0.2f, 0.2f), color, parent, $"UtilitySign_{name}", true, color);
         }
 
         static void SpawnPad(Transform parent, StudioAssets studio, Vector3 hub, PartyPlan plan, Vector3 offset,
@@ -173,12 +200,38 @@ namespace PudgyMon
             return best;
         }
 
+        public UtilityPad NearestUtility(Vector3 playerPos, float radius)
+        {
+            UtilityPad best = null;
+            var bestDist = radius;
+            foreach (var pad in GetComponentsInChildren<UtilityPad>())
+            {
+                var d = Vector3.Distance(playerPos, pad.transform.position);
+                if (d < bestDist)
+                {
+                    bestDist = d;
+                    best = pad;
+                }
+            }
+
+            return best;
+        }
+
         public void RefreshPrompt(Vector3 playerPos, PartyDirector director, CosmeticsCatalog cosmetics,
-            SeasonLedger season)
+            SeasonLedger season, string extra = null)
         {
             if (director.Phase != PartyPhase.Hub)
             {
-                Prompt = "";
+                Prompt = extra ?? "";
+                return;
+            }
+
+            var util = NearestUtility(playerPos, GameConstants.InteractRadius);
+            if (util != null)
+            {
+                Prompt = util.Action == NestAction.OpenEditor
+                    ? "E / Enter — open Race Map Creator"
+                    : "[ ] cycle maps · E play selected custom/official map";
                 return;
             }
 
@@ -191,8 +244,11 @@ namespace PudgyMon
             else
             {
                 Prompt =
-                    $"The Nest — mode pads · C skin ({cosmetics.EquippedId}) · Season {season.points} pts";
+                    $"The Nest — mode pads · Create Map · My Maps · C skin ({cosmetics.EquippedId}) · N crew · Season {season.points} pts";
             }
+
+            if (!string.IsNullOrEmpty(extra))
+                Prompt = extra;
         }
     }
 }
