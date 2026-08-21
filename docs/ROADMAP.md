@@ -6,7 +6,7 @@ For the archived vault playable checklist, see [archive/vault/PLAYABLE_ROADMAP.m
 
 ## Phase 0 — Engine foundation ✓
 
-- [x] Unity 6.3 client at `unity/` with Nest + four mini-games + Cursor MCP
+- [x] Unity 6.5 client at `unity/` with Nest + four mini-games + Cursor MCP
 - [x] LAN host/join (`LanSession` UDP listen-server)
 - [x] GLB asset pipeline (Immersive Studio → runtime glTFast)
 - [x] Third-person camera + pad interact

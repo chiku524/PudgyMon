@@ -4,7 +4,7 @@
 
 | Layer | Choice |
 |-------|--------|
-| Engine | **Unity 6.3 LTS** (`unity/`) |
+| Engine | **Unity 6.5** (`unity/`) |
 | Language | C# (game) · Rust (accounts API only) |
 | MCP | [MCP for Unity](https://github.com/CoplayDev/unity-mcp) + optional official Unity MCP |
 | Networking | UDP listen-server (`LanSession`, port 7777) |
@@ -55,5 +55,5 @@ GLBs load from `assets/models/{asset_id}/{asset_id}.glb`.
 
 ## Migration notes
 
-- **Engine:** Godot 4.7 → Bevy 0.19 → **Unity 6.3** (Bevy client removed).
+- **Engine:** Godot 4.7 → Bevy 0.19 → **Unity 6.5** (Bevy client removed).
 - **Design:** Crew vs Stowaway → Vault Break (archived) → **PudgyMon: Party Saga**. Vault docs: [archive/vault/](archive/vault/).

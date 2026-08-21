@@ -2,7 +2,7 @@
 
 Cute **Pudgy Monsters** party game — race, collect vibes, and toy-blaster FFA in **The Nest**, then earn season points and claim skins on **[Boing Network](https://boing.network/)**.
 
-Built with **Unity 6.3** · Third-person · LAN · Boing-ready collectibles
+Built with **Unity 6.5** · Third-person · LAN · Boing-ready collectibles
 
 ## Elevator pitch
 
