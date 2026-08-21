@@ -325,11 +325,10 @@ namespace PudgyMon
                     var src = mats[i];
                     if (src == null || src.shader == null)
                         continue;
-                    var shaderName = src.shader.name;
-                    if (shaderName.IndexOf("Universal Render Pipeline", StringComparison.OrdinalIgnoreCase) >= 0)
+                    if (KeepsAuthoredAlbedo(src.shader.name))
                         continue;
 
-                    var unlit = shaderName.IndexOf("Unlit", StringComparison.OrdinalIgnoreCase) >= 0;
+                    var unlit = src.shader.name.IndexOf("Unlit", StringComparison.OrdinalIgnoreCase) >= 0;
                     var dst = new Material(unlit && urpUnlit != null ? urpUnlit : urpLit);
                     CopyColorAndMaps(src, dst);
                     mats[i] = dst;
@@ -339,6 +338,14 @@ namespace PudgyMon
                 if (changed)
                     renderer.sharedMaterials = mats;
             }
+        }
+
+        static bool KeepsAuthoredAlbedo(string shaderName)
+        {
+            return shaderName.IndexOf("Universal Render Pipeline", StringComparison.OrdinalIgnoreCase) >= 0
+                   || shaderName.IndexOf("Shader Graphs/glTF", StringComparison.OrdinalIgnoreCase) >= 0
+                   || shaderName.IndexOf("glTF-pbr", StringComparison.OrdinalIgnoreCase) >= 0
+                   || shaderName.IndexOf("glTF-unlit", StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         public static void PlayIdle(GameObject go)
@@ -392,9 +399,14 @@ namespace PudgyMon
                     var mat = mats[i];
                     if (mat == null)
                         continue;
-                    mat.enableInstancing = true;
+                    var shaderName = mat.shader != null ? mat.shader.name : "";
+                    if (shaderName.IndexOf("Universal Render Pipeline/Lit", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                        shaderName.IndexOf("Universal Render Pipeline/Unlit", StringComparison.OrdinalIgnoreCase) >= 0)
+                        mat.enableInstancing = true;
                     if (mat.HasProperty("_Metallic"))
                         mat.SetFloat("_Metallic", 0f);
+                    if (mat.HasProperty("metallicFactor"))
+                        mat.SetFloat("metallicFactor", 0f);
                 }
             }
 
@@ -413,7 +425,9 @@ namespace PudgyMon
         static void CopyColorAndMaps(Material src, Material dst)
         {
             var color = Color.white;
-            if (src.HasProperty("_BaseColor"))
+            if (src.HasProperty("baseColorFactor"))
+                color = src.GetColor("baseColorFactor");
+            else if (src.HasProperty("_BaseColor"))
                 color = src.GetColor("_BaseColor");
             else if (src.HasProperty("_Color"))
                 color = src.GetColor("_Color");
@@ -422,11 +436,16 @@ namespace PudgyMon
             if (dst.HasProperty("_Color"))
                 dst.SetColor("_Color", color);
 
+            TryCopyTex(src, dst, "baseColorTexture", "_BaseMap");
             TryCopyTex(src, dst, "_BaseMap", "_BaseMap");
             TryCopyTex(src, dst, "_MainTex", "_BaseMap");
+            TryCopyTex(src, dst, "normalTexture", "_BumpMap");
             TryCopyTex(src, dst, "_BumpMap", "_BumpMap");
             TryCopyTex(src, dst, "_MetallicGlossMap", "_MetallicGlossMap");
+            TryCopyTex(src, dst, "emissiveTexture", "_EmissionMap");
             TryCopyTex(src, dst, "_EmissionMap", "_EmissionMap");
+            if (dst.HasProperty("_BaseMap") && dst.GetTexture("_BaseMap") != null)
+                dst.EnableKeyword("_BASEMAP");
 
             if (dst.HasProperty("_Metallic"))
                 dst.SetFloat("_Metallic", 0f);
