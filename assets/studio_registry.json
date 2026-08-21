@@ -1,5 +1,5 @@
 {
-  "import_root": "res://assets/models",
+  "import_root": "assets/models",
   "assets": [
     {
       "asset_id": "_TEMPLATE",

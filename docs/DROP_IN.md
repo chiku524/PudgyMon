@@ -22,13 +22,8 @@ Selectable crew (**5**): `char_pudgy_base_01`, `oceanic_pudgymon_01`, `char_pudg
 Quality-first (preserves painted candy detail; Unity-safe, no Draco/KTX2/WebP):
 
 ```bash
-# Prefer Blender bake/char pipelines for Tripo exports
-python scripts/blender_bake_optimize_glb.py --batch assets/models --glob "env_*/*.glb" --from-pre-opt
-python scripts/blender_char_optimize_glb.py --all --from-pre-opt
-
-# Light UV-safe pass (never JPEG-encodes baseColor)
-python scripts/optimize_glb.py assets/models/char_pudgy_base_01/char_pudgy_base_01.glb --preset game
-python scripts/optimize_glb.py --batch assets/models --glob "acc_*/*.glb"   # guesses prop
+# Unity/glTFast pass (toon metal=0, floor pivot, 512px JPEG props, PNG crew)
+python scripts/optimize_glb.py --batch assets/models --glob "*/*.glb" --jobs 4
 ```
 
 Import pipelines call the same optimizer after export with quality-first defaults (1024px, high JPEG for non-baseColor only).

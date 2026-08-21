@@ -32,6 +32,8 @@ import struct
 import subprocess
 import sys
 import tempfile
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -67,6 +69,9 @@ class Preset:
     jpeg_quality: int
     # Drop ORM / normal maps that are nearly unused weight on tiny props.
     strip_orm: bool = False
+    # JPEG baseColor — fine for env/props viewed at party distance; never for crew.
+    jpeg_basecolor: bool = False
+    skip_simplify_below: int = 60_000
 
 
 PRESETS: dict[str, Preset] = {
@@ -76,7 +81,14 @@ PRESETS: dict[str, Preset] = {
     "hero": Preset("hero", ratio=0.35, error=0.004, max_tex=1024, jpeg_quality=92),
     "game": Preset("game", ratio=0.25, error=0.006, max_tex=1024, jpeg_quality=90),
     "prop": Preset(
-        "prop", ratio=0.18, error=0.010, max_tex=1024, jpeg_quality=88, strip_orm=True
+        "prop",
+        ratio=0.12,
+        error=0.035,
+        max_tex=512,
+        jpeg_quality=86,
+        strip_orm=True,
+        jpeg_basecolor=True,
+        skip_simplify_below=16_000,
     ),
 }
 
@@ -94,7 +106,7 @@ def _npx() -> str:
 
 def _gltf(npx: str, *args: str) -> None:
     cmd = [npx, "--yes", "@gltf-transform/cli@4.1.1", *args]
-    print("+", " ".join(cmd[-6:] if len(cmd) > 8 else cmd))
+    print("+", " ".join(cmd[-8:] if len(cmd) > 10 else cmd))
     proc = subprocess.run(
         cmd,
         capture_output=True,
@@ -212,6 +224,11 @@ def _has_alpha_materials(glb: Path) -> bool:
     )
 
 
+def _has_normal_maps(glb: Path) -> bool:
+    gltf, _ = _load_glb(glb)
+    return any("normalTexture" in mat for mat in gltf.get("materials", []))
+
+
 def _has_skins(glb: Path) -> bool:
     gltf, _ = _load_glb(glb)
     return bool(gltf.get("skins"))
@@ -244,6 +261,63 @@ def _strip_orm_slots(glb: Path) -> int:
     if removed:
         _write_glb(glb, gltf, bin_chunk)
     return removed
+
+
+def _unity_tune_materials(glb: Path) -> None:
+    """Make PBR values Unity/URP-friendly for painted toon assets.
+
+    Bevy's default metallic=1 reads as chrome in URP Lit. Force dielectric
+    paint, drop cameras/lights that would steal Camera.main, and keep
+    double-sided off on opaque mats (fill-rate).
+    """
+    gltf, bin_chunk = _load_glb(glb)
+    dirty = False
+    if gltf.get("cameras"):
+        gltf["cameras"] = []
+        dirty = True
+    exts = gltf.get("extensions") or {}
+    if "KHR_lights_punctual" in exts:
+        del exts["KHR_lights_punctual"]
+        dirty = True
+    used = [e for e in gltf.get("extensionsUsed", []) if e != "KHR_lights_punctual"]
+    req = [e for e in gltf.get("extensionsRequired", []) if e != "KHR_lights_punctual"]
+    if used != gltf.get("extensionsUsed", []):
+        gltf["extensionsUsed"] = used
+        dirty = True
+    if req != gltf.get("extensionsRequired", []):
+        gltf["extensionsRequired"] = req
+        dirty = True
+
+    for node in gltf.get("nodes", []):
+        if "camera" in node:
+            del node["camera"]
+            dirty = True
+        if "extensions" in node and "KHR_lights_punctual" in node["extensions"]:
+            del node["extensions"]["KHR_lights_punctual"]
+            dirty = True
+
+    for mat in gltf.get("materials", []):
+        pbr = mat.setdefault("pbrMetallicRoughness", {})
+        if pbr.get("metallicFactor", 1.0) != 0.0:
+            pbr["metallicFactor"] = 0.0
+            dirty = True
+        if "roughnessFactor" not in pbr:
+            pbr["roughnessFactor"] = 0.62
+            dirty = True
+        if mat.get("alphaMode", "OPAQUE") == "OPAQUE" and mat.get("doubleSided"):
+            mat["doubleSided"] = False
+            dirty = True
+
+    asset = gltf.setdefault("asset", {})
+    extra = asset.setdefault("extras", {})
+    if extra.get("target") != "unity-gltfast":
+        extra["target"] = "unity-gltfast"
+        extra["up"] = "+Y"
+        extra["forward"] = "+Z"
+        dirty = True
+
+    if dirty:
+        _write_glb(glb, gltf, bin_chunk)
 
 
 def _validate_bevy_glb(glb: Path) -> None:
@@ -307,6 +381,21 @@ def _face_count(glb: Path) -> int | None:
         return None
 
 
+def _replace_file(src: Path, dest: Path) -> None:
+    """Copy dest in place, retrying Windows ERROR_USER_MAPPED_FILE (1224)."""
+    last: OSError | None = None
+    for attempt in range(8):
+        try:
+            shutil.copy2(src, dest)
+            return
+        except OSError as err:
+            last = err
+            if getattr(err, "winerror", None) != 1224:
+                raise
+            time.sleep(0.4 * (attempt + 1))
+    raise last  # type: ignore[misc]
+
+
 def _restore_dense_backup(src: Path, bak: Path) -> int:
     """Copy denser .pre_opt backup over working GLB. Returns restored byte size."""
     shutil.copy2(bak, src)
@@ -325,7 +414,8 @@ def optimize_file(
     backup: bool = True,
     dry_run: bool = False,
     force: bool = False,
-    skip_simplify_below: int = 60_000,
+    skip_simplify_below: int | None = None,
+    restore_pre_opt: bool = False,
 ) -> dict:
     """Optimize one GLB. Returns size stats. Writes to dest (default: in-place)."""
     if preset not in PRESETS:
@@ -335,6 +425,9 @@ def optimize_file(
     error = p.error if error is None else error
     max_tex = p.max_tex if max_tex is None else max_tex
     jpeg_quality = p.jpeg_quality if jpeg_quality is None else jpeg_quality
+    skip_simplify_below = (
+        p.skip_simplify_below if skip_simplify_below is None else skip_simplify_below
+    )
 
     src = src.resolve()
     if not src.is_file():
@@ -350,9 +443,9 @@ def optimize_file(
         return {"path": str(src), "before": before, "after": before, "preset": preset}
 
     bak = src.with_suffix(src.suffix + ".pre_opt")
-    # Prefer denser original backup so repeated / failed passes cannot lock in
-    # a barely-touched mesh. Restore whenever backup is larger (not only 2x).
-    if backup and out == src and bak.is_file() and bak.stat().st_size > before:
+    # Restoring dense .pre_opt is optional — Unity re-optimizes the working
+    # GLB (already glTF-Transform'd) unless the caller wants a full rebake.
+    if restore_pre_opt and backup and out == src and bak.is_file() and bak.stat().st_size > before:
         print(
             f"restoring dense source from {bak.name} "
             f"({bak.stat().st_size / 1e6:.2f} MB -> working copy)"
@@ -394,11 +487,26 @@ def optimize_file(
         run("weld", "weld")
         run("dedup", "dedup")
         run("prune", "prune")
+        skinned = _has_skins(cur)
+        if not skinned:
+            # Unity likes a single static mesh with the pivot on the floor.
+            try:
+                run("flatten", "flatten")
+            except RuntimeError as err:
+                print(f"warn: flatten skipped ({err})")
+            try:
+                run("join", "join")
+            except RuntimeError as err:
+                print(f"warn: join skipped ({err})")
+            try:
+                run("center", "center", "--pivot", "below")
+            except RuntimeError as err:
+                print(f"warn: center skipped ({err})")
         if do_simplify:
             # Border locking protects skinned seams, but on static meshes it
             # can lock nearly every vertex (Tripo exports are vertex-split
             # triangle soup where every edge is a "border").
-            lock_border = "true" if _has_skins(cur) else "false"
+            lock_border = "true" if skinned else "false"
             run(
                 "simplify",
                 "simplify",
@@ -428,15 +536,25 @@ def optimize_file(
             "--filter",
             "lanczos3",
         )
-        # Quality-first texture policy:
-        # - Never JPEG-encode baseColor (chroma smear kills painted eyes/edges).
-        #   Bake/char pipelines already ship PNG atlases; keep them.
-        # - Alpha materials must keep PNG baseColor anyway.
-        # - ORM / emissive maps may still JPEG for size (no chroma-critical paint).
-        if _has_alpha_materials(cur):
+        # Crew keeps PNG baseColor (eyes/edges). Env/props may JPEG — Unity URP
+        # samples them at party distance where chroma smear is invisible.
+        jpeg_albedo = p.jpeg_basecolor and not skinned and not _has_alpha_materials(cur)
+        if jpeg_albedo:
+            print("Unity prop: JPEG baseColor for URP size")
+            run(
+                "jpeg_base",
+                "jpeg",
+                "--quality",
+                str(jpeg_quality),
+                "--formats",
+                "*",
+                "--slots",
+                "baseColorTexture",
+            )
+        elif _has_alpha_materials(cur):
             print("alpha materials present — keeping baseColor format (no JPEG)")
         else:
-            print("keeping baseColor as PNG/source format (no JPEG chroma loss)")
+            print("keeping baseColor as PNG (crew / cutout)")
         run(
             "jpeg",
             "jpeg",
@@ -465,6 +583,13 @@ def optimize_file(
             run("resample", "resample", "--tolerance", "0.0004")
         except RuntimeError as err:
             print(f"warn: resample skipped ({err})")
+        # Tangents bloat vertex buffers; only emit them when a normal map exists
+        # (Unity/URP needs them for bump). Painted props skip this.
+        if _has_normal_maps(cur):
+            try:
+                run("tangents", "tangents")
+            except RuntimeError as err:
+                print(f"warn: tangents skipped ({err})")
         # Do NOT run gltf-transform `sparse`: it emits zero accessors without
         # bufferView, which Unity glTFast rejects as invalid glTF.
 
@@ -472,7 +597,8 @@ def optimize_file(
         run("prune_final", "prune")
 
         out.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(cur, out)
+        _replace_file(cur, out)
+        _unity_tune_materials(out)
         fixed = _sanitize_bevy_accessors(out)
         if fixed:
             print(f"unity-sanitize: materialized {fixed} zero accessor(s)")
@@ -567,6 +693,17 @@ def main() -> int:
         action="store_true",
         help="Simplify even when the mesh is already under the face budget",
     )
+    parser.add_argument(
+        "--from-pre-opt",
+        action="store_true",
+        help="Restore denser .glb.pre_opt before optimizing (slow, Bevy-era rebake)",
+    )
+    parser.add_argument(
+        "--jobs",
+        type=int,
+        default=1,
+        help="Parallel file workers (Unity re-opt of the library: 4 is a good start)",
+    )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -603,26 +740,46 @@ def main() -> int:
 
     total_before = total_after = 0
     failed = 0
-    for path in files:
+    jobs = max(1, args.jobs)
+
+    def _one(path: Path) -> dict:
         preset = args.preset or _guess_preset(path)
-        try:
-            stats = optimize_file(
-                path,
-                dest=args.out,
-                preset=preset,
-                ratio=args.ratio,
-                error=args.error,
-                max_tex=args.max_tex,
-                jpeg_quality=args.jpeg_quality,
-                backup=not args.no_backup,
-                dry_run=args.dry_run,
-                force=args.force,
-            )
-            total_before += stats["before"]
-            total_after += stats["after"]
-        except Exception as exc:  # noqa: BLE001 — batch continues
-            failed += 1
-            print(f"error: {path}: {exc}", file=sys.stderr)
+        return optimize_file(
+            path,
+            dest=args.out,
+            preset=preset,
+            ratio=args.ratio,
+            error=args.error,
+            max_tex=args.max_tex,
+            jpeg_quality=args.jpeg_quality,
+            backup=not args.no_backup,
+            dry_run=args.dry_run,
+            force=args.force,
+            restore_pre_opt=args.from_pre_opt,
+        )
+
+    if jobs == 1 or len(files) == 1:
+        for path in files:
+            try:
+                stats = _one(path)
+                total_before += stats["before"]
+                total_after += stats["after"]
+            except Exception as exc:  # noqa: BLE001 — batch continues
+                failed += 1
+                print(f"error: {path}: {exc}", file=sys.stderr)
+    else:
+        print(f"unity-opt: {len(files)} files, {jobs} workers")
+        with ThreadPoolExecutor(max_workers=jobs) as pool:
+            futs = {pool.submit(_one, path): path for path in files}
+            for fut in as_completed(futs):
+                path = futs[fut]
+                try:
+                    stats = fut.result()
+                    total_before += stats["before"]
+                    total_after += stats["after"]
+                except Exception as exc:  # noqa: BLE001
+                    failed += 1
+                    print(f"error: {path}: {exc}", file=sys.stderr)
 
     if len(files) > 1 and total_before:
         print(

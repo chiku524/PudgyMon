@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 #if PUDGYMON_URP
@@ -84,6 +85,15 @@ namespace PudgyMon
             BindCamera();
             _hud.BindCursor(true);
             _cursorBound = true;
+            StartCoroutine(CombineNestWhenReady());
+        }
+
+        IEnumerator CombineNestWhenReady()
+        {
+            yield return new WaitForSeconds(4f);
+            var nest = GameObject.Find("TheNest");
+            if (nest != null)
+                StaticBatchingUtility.Combine(nest);
         }
 
         void EnsureCameraAndLights()

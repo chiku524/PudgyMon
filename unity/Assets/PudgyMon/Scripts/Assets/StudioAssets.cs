@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Rendering;
 #if PUDGYMON_GLTFAST
 using GLTFast;
 #endif
@@ -90,7 +91,8 @@ namespace PudgyMon
         readonly Queue<SpawnRequest> _queue = new Queue<SpawnRequest>();
         readonly Dictionary<string, GameObject> _templates = new Dictionary<string, GameObject>();
         Transform _cacheRoot;
-        bool _busy;
+        int _inflight;
+        const int MaxInflight = 4;
 
         struct SpawnRequest
         {
@@ -134,43 +136,49 @@ namespace PudgyMon
 
         void Update()
         {
-            if (_busy || _queue.Count == 0)
-                return;
-            var req = _queue.Dequeue();
-            _ = Spawn(req);
+            while (_inflight < MaxInflight && _queue.Count > 0)
+            {
+                var req = _queue.Dequeue();
+                _inflight++;
+                _ = Spawn(req);
+            }
         }
 
         async Task Spawn(SpawnRequest req)
         {
-            _busy = true;
-            GameObject go;
-            var loaded = false;
-            if (TryCloneTemplate(req, out go))
-            {
-                loaded = true;
-            }
-            else
-            {
-                go = new GameObject(req.Name);
-                Place(go.transform, req);
-                loaded = await LoadGlb(req, go);
-                if (loaded)
-                    RememberTemplate(req.AssetId, go);
-            }
-
-            if (!loaded)
-                PrimitiveFactory.Attach(go, req.Fallback, req.FallbackScale, req.FallbackColor, req.Unlit);
-
             try
             {
-                req.OnSpawned?.Invoke(go, loaded);
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning($"Studio spawn callback failed for {req.AssetId}: {e.Message}");
-            }
+                GameObject go;
+                var loaded = false;
+                if (TryCloneTemplate(req, out go))
+                {
+                    loaded = true;
+                }
+                else
+                {
+                    go = new GameObject(req.Name);
+                    Place(go.transform, req);
+                    loaded = await LoadGlb(req, go);
+                    if (loaded)
+                        RememberTemplate(req.AssetId, go);
+                }
 
-            _busy = false;
+                if (!loaded)
+                    PrimitiveFactory.Attach(go, req.Fallback, req.FallbackScale, req.FallbackColor, req.Unlit);
+
+                try
+                {
+                    req.OnSpawned?.Invoke(go, loaded);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"Studio spawn callback failed for {req.AssetId}: {e.Message}");
+                }
+            }
+            finally
+            {
+                _inflight = Mathf.Max(0, _inflight - 1);
+            }
         }
 
         void Place(Transform t, SpawnRequest req)
@@ -225,11 +233,12 @@ namespace PudgyMon
             {
                 var import = new GltfImport();
                 var uri = new Uri(Path.GetFullPath(glb)).AbsoluteUri;
-                var settings = new ImportSettings
-                {
-                    GenerateMipMaps = true,
-                    AnimationMethod = AnimationMethod.Legacy
-                };
+                    var settings = new ImportSettings
+                    {
+                        GenerateMipMaps = false,
+                        AnimationMethod = AnimationMethod.Legacy,
+                        AnisotropicFilterLevel = 2
+                    };
                 loaded = await import.Load(uri, settings);
                 if (loaded)
                 {
@@ -256,6 +265,7 @@ namespace PudgyMon
                         go.transform.localScale = Vector3.one * scale;
                     UnityGltfFit.GroundAndCenter(go);
                     UnityGltfFit.PlayIdle(go);
+                    UnityGltfFit.TuneForPlay(go, req.AssetId);
                 }
             }
             catch (Exception e)
@@ -352,6 +362,54 @@ namespace PudgyMon
             anim.Play();
         }
 
+        public static bool WantsCollider(string assetId)
+        {
+            if (string.IsNullOrEmpty(assetId))
+                return false;
+            return assetId.IndexOf("cover", StringComparison.OrdinalIgnoreCase) >= 0
+                   || assetId.IndexOf("ramp", StringComparison.OrdinalIgnoreCase) >= 0
+                   || assetId.IndexOf("bench", StringComparison.OrdinalIgnoreCase) >= 0
+                   || assetId.IndexOf("crate", StringComparison.OrdinalIgnoreCase) >= 0
+                   || assetId.IndexOf("block", StringComparison.OrdinalIgnoreCase) >= 0
+                   || assetId.IndexOf("table", StringComparison.OrdinalIgnoreCase) >= 0
+                   || assetId.IndexOf("stair", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        public static void TuneForPlay(GameObject go, string assetId)
+        {
+            var tiny = !string.IsNullOrEmpty(assetId) &&
+                       (assetId.StartsWith("acc_")
+                        || assetId.IndexOf("orb", StringComparison.OrdinalIgnoreCase) >= 0
+                        || assetId.IndexOf("flower", StringComparison.OrdinalIgnoreCase) >= 0
+                        || assetId.IndexOf("mushroom", StringComparison.OrdinalIgnoreCase) >= 0);
+            foreach (var renderer in go.GetComponentsInChildren<Renderer>())
+            {
+                renderer.shadowCastingMode = tiny ? ShadowCastingMode.Off : ShadowCastingMode.On;
+                renderer.receiveShadows = !tiny;
+                var mats = renderer.sharedMaterials;
+                for (int i = 0; i < mats.Length; i++)
+                {
+                    var mat = mats[i];
+                    if (mat == null)
+                        continue;
+                    mat.enableInstancing = true;
+                    if (mat.HasProperty("_Metallic"))
+                        mat.SetFloat("_Metallic", 0f);
+                }
+            }
+
+            if (!WantsCollider(assetId))
+                return;
+            foreach (var filter in go.GetComponentsInChildren<MeshFilter>())
+            {
+                if (filter.sharedMesh == null || filter.GetComponent<Collider>() != null)
+                    continue;
+                var mc = filter.gameObject.AddComponent<MeshCollider>();
+                mc.sharedMesh = filter.sharedMesh;
+                filter.gameObject.layer = GameConstants.GroundLayer;
+            }
+        }
+
         static void CopyColorAndMaps(Material src, Material dst)
         {
             var color = Color.white;
@@ -370,8 +428,8 @@ namespace PudgyMon
             TryCopyTex(src, dst, "_MetallicGlossMap", "_MetallicGlossMap");
             TryCopyTex(src, dst, "_EmissionMap", "_EmissionMap");
 
-            if (src.HasProperty("_Metallic") && dst.HasProperty("_Metallic"))
-                dst.SetFloat("_Metallic", src.GetFloat("_Metallic"));
+            if (dst.HasProperty("_Metallic"))
+                dst.SetFloat("_Metallic", 0f);
             if (src.HasProperty("_Glossiness") && dst.HasProperty("_Smoothness"))
                 dst.SetFloat("_Smoothness", src.GetFloat("_Glossiness"));
             else if (src.HasProperty("_Smoothness") && dst.HasProperty("_Smoothness"))
@@ -433,6 +491,7 @@ namespace PudgyMon
             }
 
             Materials[key] = mat;
+            mat.enableInstancing = true;
             return mat;
         }
 

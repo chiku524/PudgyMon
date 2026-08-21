@@ -39,7 +39,13 @@ namespace PudgyMon
 
         public static string GlbPath(string assetId)
         {
-            var path = Path.Combine(ModelsRoot, assetId, assetId + ".glb");
+            if (string.IsNullOrEmpty(assetId))
+                return null;
+            var file = assetId + ".glb";
+            var streaming = Path.Combine(Application.streamingAssetsPath, "models", assetId, file);
+            if (File.Exists(streaming))
+                return streaming;
+            var path = Path.Combine(ModelsRoot, assetId, file);
             return File.Exists(path) ? path : null;
         }
     }

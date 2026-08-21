@@ -75,6 +75,24 @@ namespace PudgyMon
                     i % 2 == 0 ? new Color(1f, 0.45f, 0.4f) : new Color(0.45f, 0.85f, 1f), true);
             }
 
+            (string id, Vector3 offset, float yaw)[] scenery =
+            {
+                ("env_nest_tree_01", new Vector3(-34f, 0f, -6f), 25f),
+                ("env_nest_tree_candy_02", new Vector3(36f, 0f, -8f), -20f),
+                ("env_nest_fountain_01", new Vector3(0f, 0f, -38f), 0f),
+                ("env_nest_lamp_01", new Vector3(-12f, 0f, -8f), 15f),
+                ("env_nest_lamp_01", new Vector3(12f, 0f, -8f), -15f),
+                ("env_nest_plant_01", new Vector3(-24f, 0f, 8f), 40f),
+                ("env_nest_plant_02", new Vector3(24f, 0f, 8f), -40f),
+                ("env_nest_crate_01", new Vector3(-18f, 0f, 18f), 10f)
+            };
+            for (int i = 0; i < scenery.Length; i++)
+            {
+                studio.QueueProp(scenery[i].id, origin + scenery[i].offset,
+                    Quaternion.Euler(0f, scenery[i].yaw, 0f), hubGo.transform, $"NestScenery_{i}",
+                    PrimitiveType.Cube, Vector3.one, new Color(0.35f, 0.5f, 0.38f));
+            }
+
             SpawnPad(hubGo.transform, studio, origin, PartyPlan.Single(StageKind.Race),
                 new Vector3(-20f, 0f, -14f), new Color(0.2f, 0.85f, 1f), "Race", "env_pad_race_01");
             SpawnPad(hubGo.transform, studio, origin, PartyPlan.Single(StageKind.Vibe),
