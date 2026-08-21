@@ -4,22 +4,39 @@
 
 | Layer | Choice |
 |-------|--------|
-| Engine | Bevy 0.19 |
-| Language | Rust |
-| Networking | bevy_replicon + bevy_replicon_renet (ENet-style LAN) |
+| Engine | **Unity 6.3 LTS** (`unity/`) — current client |
+| Language | C# (Unity) · Rust still used for accounts API |
+| MCP | [MCP for Unity](https://github.com/CoplayDev/unity-mcp) + optional official Unity MCP |
+| Networking | Unity Netcode — not ported yet; Bevy LAN remains in `src/` |
 | Voice (later) | Steam Voice |
 | Version control | Git + GitHub |
-| Assets | Blender + Immersive Studio / Tripo + kitbash (GLB) |
+| Assets | Blender + Immersive Studio / Tripo + kitbash (GLB via glTFast) |
 | Target | Windows PC, Steam |
 
-## Why Bevy
+## Why Unity
 
-- Rust performance and type safety for a networked co-op game
-- ECS architecture fits job stations, replication, and round state
-- bevy_replicon provides server-authoritative replication patterns
-- Cross-platform dev with a single codebase
+- Official and community **MCP** so Cursor can create scenes, edit objects, run tests, and inspect the editor
+- Mature animation, lighting, and GLB import for the Studio drop-in pipeline
+- Steam / Windows packaging path
 
-## Architecture (current prototype)
+Bevy 0.19 (`src/`, `cargo run`) is the previous client. Do not extend it unless you are fixing a playtest blocker that Unity has not reached yet. See [UNITY.md](UNITY.md).
+
+## Architecture (Unity client)
+
+```
+unity/Assets/PudgyMon
+ ├── GameBootstrap     — boots Nest, HUD, player, bots, MCP-ready scene
+ ├── NestHub           — mode pads (Race / Vibe / Shooter / Hill / Party Saga)
+ ├── PartyDirector     — phase machine (hub → stages → results)
+ ├── StageRuntime      — greybox Race, Vibe, Shooter, King of the Hill
+ ├── PlayerMotor       — WASD, sprint, jump / double-jump, island clamp
+ ├── StudioAssets      — runtime GLB load from repo assets/models
+ └── GameHud           — phase, announcer, season points, skins
+```
+
+LAN / replicon still lives in the Bevy tree (`src/network`, `src/party`). Unity Netcode is the next port.
+
+## Architecture (legacy Bevy prototype)
 
 ```
 Host (authoritative server)
@@ -95,5 +112,5 @@ GLBs load from `assets/models/{asset_id}/{asset_id}.glb` via Bevy `AssetServer`.
 
 ## Migration notes
 
-- **Engine:** Migrated from Godot 4.7 to Bevy 0.19 (2026).
-- **Design:** Pivoted from Crew vs Stowaway co-op to **Vault Break** tournament escape rooms. See [GDD.md](GDD.md); legacy design in [legacy/](legacy/).
+- **Engine:** Godot 4.7 → Bevy 0.19 (2026) → **Unity 6.3** (current client in `unity/`).
+- **Design:** Pivoted from Crew vs Stowaway co-op to **Vault Break**, then to **PudgyMon: Party Saga**. Vault docs: [archive/vault/](archive/vault/).

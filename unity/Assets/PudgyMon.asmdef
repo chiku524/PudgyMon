@@ -1,0 +1,22 @@
+{
+    "name": "PudgyMon",
+    "rootNamespace": "PudgyMon",
+    "references": [
+        "glTFast"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.cloud.gltfast",
+            "expression": "",
+            "define": "PUDGYMON_GLTFAST"
+        }
+    ],
+    "noEngineReferences": false
+}

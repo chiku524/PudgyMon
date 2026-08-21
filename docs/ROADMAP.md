@@ -6,8 +6,9 @@ For the archived vault playable checklist, see [archive/vault/PLAYABLE_ROADMAP.m
 
 ## Phase 0 — Engine foundation ✓
 
-- [x] Bevy 0.19 project at repo root
-- [x] LAN host/join (bevy_replicon + renet)
+- [x] Bevy 0.19 project at repo root (legacy client)
+- [x] Unity 6.3 client at `unity/` with Nest + four mini-games + Cursor MCP
+- [x] LAN host/join (bevy_replicon + renet) — Unity Netcode not ported yet
 - [x] GLB asset pipeline (Immersive Studio)
 - [x] Third-person camera + server-authoritative interact
 - [x] Headless multiplayer smoke test + CI

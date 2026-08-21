@@ -14,6 +14,21 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Unity (project lives in /unity)
+unity/Library/
+unity/Temp/
+unity/Obj/
+unity/Build/
+unity/Builds/
+unity/Logs/
+unity/UserSettings/
+unity/MemoryCaptures/
+unity/*.csproj
+unity/*.sln
+unity/*.pidb
+unity/*.pdb
+unity/.vs/
+
 # Logs
 *.log
 
