@@ -13,6 +13,8 @@ namespace PudgyMon
         public Vector3 PlanarForward { get; private set; } = Vector3.back;
         public Vector3 PlanarRight { get; private set; } = Vector3.left;
 
+        static readonly int OcclusionMask = Physics.DefaultRaycastLayers & ~(1 << GameConstants.PlayerLayer);
+
         public void Snap()
         {
             RefreshPlanar();
@@ -63,10 +65,24 @@ namespace PudgyMon
             var focus = Target.position + Vector3.up * GameConstants.CameraFocusHeight;
             var rot = Quaternion.Euler(Pitch, Yaw, 0f);
             var desiredEye = focus + rot * new Vector3(0f, 0f, -Distance);
+            desiredEye = Occlude(focus, desiredEye);
             transform.position = follow >= 0.999f
                 ? desiredEye
                 : Vector3.Lerp(transform.position, desiredEye, follow);
             transform.LookAt(focus, Vector3.up);
+        }
+
+        static Vector3 Occlude(Vector3 focus, Vector3 desiredEye)
+        {
+            var offset = desiredEye - focus;
+            var dist = offset.magnitude;
+            if (dist < 0.05f)
+                return desiredEye;
+            var dir = offset / dist;
+            if (Physics.SphereCast(focus, GameConstants.CameraOcclusionRadius, dir, out var hit, dist,
+                    OcclusionMask, QueryTriggerInteraction.Ignore))
+                return hit.point + hit.normal * 0.12f;
+            return desiredEye;
         }
     }
 }

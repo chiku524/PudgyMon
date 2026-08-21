@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+#if PUDGYMON_URP
+using UnityEngine.Rendering.Universal;
+#endif
 
 namespace PudgyMon
 {
@@ -27,6 +30,7 @@ namespace PudgyMon
         Light _key;
         Light _fill;
         readonly List<PlayerMotor> _players = new List<PlayerMotor>();
+        readonly List<PlayerMotor> _active = new List<PlayerMotor>();
         PlayerAvatar _localAvatar;
         bool _cursorBound;
         int _catalogIndex;
@@ -44,7 +48,9 @@ namespace PudgyMon
         void Awake()
         {
             Application.runInBackground = true;
-            Application.targetFrameRate = 60;
+            QualitySettings.vSyncCount = 1;
+            Application.targetFrameRate = -1;
+            QualitySettings.shadowDistance = 80f;
             DontDestroyOnLoad(gameObject);
             EnsureCameraAndLights();
 
@@ -82,17 +88,27 @@ namespace PudgyMon
 
         void EnsureCameraAndLights()
         {
+            Camera cam;
             if (Camera.main == null)
             {
                 var camGo = new GameObject("Main Camera");
                 camGo.tag = "MainCamera";
-                camGo.AddComponent<Camera>();
+                cam = camGo.AddComponent<Camera>();
                 camGo.AddComponent<AudioListener>();
             }
+            else
+            {
+                cam = Camera.main;
+            }
 
-            Camera.main.nearClipPlane = 0.15f;
-            Camera.main.farClipPlane = 400f;
+            cam.nearClipPlane = 0.15f;
+            cam.farClipPlane = 400f;
+            cam.fieldOfView = 50f;
+            cam.allowHDR = true;
+            cam.useOcclusionCulling = true;
+            cam.clearFlags = CameraClearFlags.SolidColor;
             var keyGo = new GameObject("KeyLight");
+            keyGo.transform.SetParent(transform, false);
             _key = keyGo.AddComponent<Light>();
             _key.type = LightType.Directional;
             _key.shadows = LightShadows.Soft;
@@ -100,12 +116,43 @@ namespace PudgyMon
             _key.intensity = 1.1f;
             keyGo.transform.rotation = Quaternion.Euler(50f, -30f, 0f);
             var fillGo = new GameObject("FillLight");
+            fillGo.transform.SetParent(transform, false);
             _fill = fillGo.AddComponent<Light>();
             _fill.type = LightType.Point;
             _fill.range = 55f;
             _fill.color = new Color(0.55f, 0.45f, 1f);
             _fill.intensity = 1.4f;
             fillGo.transform.position = new Vector3(-8f, 8f, 8f);
+#if PUDGYMON_URP
+            var camData = cam.GetUniversalAdditionalCameraData();
+            camData.renderType = CameraRenderType.Base;
+            camData.renderShadows = true;
+            camData.antialiasing = AntialiasingMode.FastApproximateAntialiasing;
+            camData.renderPostProcessing = false;
+#endif
+        }
+
+        void OnApplicationFocus(bool focus)
+        {
+            if (_hud == null || _camera == null)
+                return;
+            if (!focus)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else if (!_hud.Paused)
+            {
+                _hud.BindCursor(_camera.Captured);
+            }
+        }
+
+        void OnApplicationQuit()
+        {
+            Time.timeScale = 1f;
+            AudioListener.pause = false;
+            _season?.Save();
+            _challenges?.Save();
         }
 
         void SpawnRoster()
@@ -175,7 +222,9 @@ namespace PudgyMon
             var look = _camera.PlanarForward;
             if (_editor.Tick(local.transform.position, look, _maps, _director))
             {
-                local.ApplyMove(MoveDir(), Input.GetKey(KeyCode.LeftShift), Input.GetKeyDown(KeyCode.Space),
+                local.ApplyMove(MoveDir(),
+                    Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift),
+                    Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump"),
                     Time.deltaTime);
                 _banner = _editor.Status;
                 _hud.Render(_director, _nest, _season, _cosmetics, _challenges, _boing, _account, _lan, _banner);
@@ -189,7 +238,9 @@ namespace PudgyMon
                 return;
             }
 
-            local.ApplyMove(MoveDir(), Input.GetKey(KeyCode.LeftShift), Input.GetKeyDown(KeyCode.Space),
+            local.ApplyMove(MoveDir(),
+                Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift),
+                Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump"),
                 Time.deltaTime);
 
             if (_director.Phase == PartyPhase.Hub)
@@ -382,7 +433,18 @@ namespace PudgyMon
             _hud.Render(_director, _nest, _season, _cosmetics, _challenges, _boing, _account, _lan, _banner);
         }
 
-        List<PlayerMotor> ActivePlayers() => _players.FindAll(p => p.gameObject.activeInHierarchy);
+        List<PlayerMotor> ActivePlayers()
+        {
+            _active.Clear();
+            for (int i = 0; i < _players.Count; i++)
+            {
+                var p = _players[i];
+                if (p != null && p.gameObject.activeInHierarchy)
+                    _active.Add(p);
+            }
+
+            return _active;
+        }
 
         void SetBotsActive(bool active)
         {

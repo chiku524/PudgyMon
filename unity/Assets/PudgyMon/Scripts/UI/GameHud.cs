@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace PudgyMon
@@ -10,16 +11,24 @@ namespace PudgyMon
         Text _sub;
         Text _hint;
         GameObject _pause;
+        string _lastMain = "";
+        string _lastSub = "";
 
         public bool Paused { get; private set; }
 
         public static GameHud Create()
         {
             var canvasGo = new GameObject("HUD");
+            DontDestroyOnLoad(canvasGo);
             var canvas = canvasGo.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvasGo.AddComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            canvas.sortingOrder = 100;
+            var scaler = canvasGo.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.matchWidthOrHeight = 0.5f;
             canvasGo.AddComponent<GraphicRaycaster>();
+            EnsureEventSystem();
 
             var hud = canvasGo.AddComponent<GameHud>();
             var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
@@ -58,6 +67,16 @@ namespace PudgyMon
             return hud;
         }
 
+        static void EnsureEventSystem()
+        {
+            if (FindFirstObjectByType<EventSystem>() != null)
+                return;
+            var es = new GameObject("EventSystem");
+            DontDestroyOnLoad(es);
+            es.AddComponent<EventSystem>();
+            es.AddComponent<StandaloneInputModule>();
+        }
+
         static Text MakeText(Transform parent, string name, Vector2 anchored, int size, Color color, Font font,
             string value)
         {
@@ -76,6 +95,7 @@ namespace PudgyMon
             text.alignment = TextAnchor.UpperLeft;
             text.horizontalOverflow = HorizontalWrapMode.Wrap;
             text.verticalOverflow = VerticalWrapMode.Overflow;
+            text.raycastTarget = false;
             text.text = value;
             return text;
         }
@@ -84,6 +104,8 @@ namespace PudgyMon
         {
             Paused = !Paused;
             _pause.SetActive(Paused);
+            Time.timeScale = Paused ? 0f : 1f;
+            AudioListener.pause = Paused;
             Cursor.lockState = Paused ? CursorLockMode.None : CursorLockMode.Locked;
             Cursor.visible = Paused;
             return Paused;
@@ -118,16 +140,24 @@ namespace PudgyMon
             var prompt = director.Phase == PartyPhase.Hub && nest != null && !string.IsNullOrEmpty(nest.Prompt)
                 ? nest.Prompt
                 : director.Announcer;
-            _main.text = $"{phaseLabel}{timerBit}\n{prompt}";
+            SetText(_main, ref _lastMain, $"{phaseLabel}{timerBit}\n{prompt}");
             var wallet = string.IsNullOrEmpty(boing?.LinkedAccount)
                 ? "unlinked"
                 : boing.LinkedAccount.Substring(0, Mathf.Min(10, boing.LinkedAccount.Length));
             var acc = account != null && account.SignedIn ? account.DisplayName : "guest";
             var net = lan == null || lan.Status == "Offline" ? "solo" : lan.Status;
-            _sub.text =
+            SetText(_sub, ref _lastSub,
                 $"Party pts {director.MatchPoints[0]} · Season {season.points} · Skin {cosmetics.EquippedId} · {acc} · {net} · {wallet}\n" +
                 (challenges != null ? challenges.SummaryLine() : "") + "\n" +
-                (banner ?? boing?.Note ?? "");
+                (banner ?? boing?.Note ?? ""));
+        }
+
+        static void SetText(Text text, ref string last, string value)
+        {
+            if (text == null || last == value)
+                return;
+            last = value;
+            text.text = value;
         }
     }
 }

@@ -88,6 +88,8 @@ namespace PudgyMon
     {
         public StudioRegistry Registry { get; private set; }
         readonly Queue<SpawnRequest> _queue = new Queue<SpawnRequest>();
+        readonly Dictionary<string, GameObject> _templates = new Dictionary<string, GameObject>();
+        Transform _cacheRoot;
         bool _busy;
 
         struct SpawnRequest
@@ -141,63 +143,21 @@ namespace PudgyMon
         async Task Spawn(SpawnRequest req)
         {
             _busy = true;
-            var go = new GameObject(req.Name);
-            go.transform.SetParent(req.Parent, false);
-            if (req.LocalSpace)
-                go.transform.SetLocalPositionAndRotation(req.Position, req.Rotation);
-            else
-                go.transform.SetPositionAndRotation(req.Position, req.Rotation);
-
-            var glb = RepoPaths.GlbPath(req.AssetId);
+            GameObject go;
             var loaded = false;
-#if PUDGYMON_GLTFAST
-            if (glb != null)
+            if (TryCloneTemplate(req, out go))
             {
-                try
-                {
-                    var import = new GltfImport();
-                    var uri = new Uri(Path.GetFullPath(glb)).AbsoluteUri;
-                    var settings = new ImportSettings
-                    {
-                        GenerateMipMaps = true,
-                        AnimationMethod = AnimationMethod.Legacy
-                    };
-                    loaded = await import.Load(uri, settings);
-                    if (loaded)
-                    {
-                        var fit = new GameObject("UnityFit");
-                        fit.transform.SetParent(go.transform, false);
-                        if (UnityGltfFit.NeedsForwardSpin(req.AssetId))
-                            fit.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
-                        var instSettings = new InstantiationSettings
-                        {
-                            Mask = ComponentType.All & ~ComponentType.Camera & ~ComponentType.Light,
-                            SkinUpdateWhenOffscreen = true
-                        };
-                        var instantiator = new GameObjectInstantiator(import, fit.transform, null, instSettings);
-                        loaded = await import.InstantiateMainSceneAsync(instantiator);
-                    }
-
-                    if (loaded)
-                    {
-                        foreach (var extraCam in go.GetComponentsInChildren<Camera>(true))
-                            Destroy(extraCam);
-                        UnityGltfFit.UpgradeMaterialsToUrp(go);
-                        var scale = Registry.ScaleFor(req.AssetId, go);
-                        if (Mathf.Abs(scale - 1f) > 0.01f)
-                            go.transform.localScale = Vector3.one * scale;
-                        UnityGltfFit.GroundAndCenter(go);
-                    }
-                }
-                catch (Exception e)
-                {
-                    Debug.LogWarning($"GLB load failed for {req.AssetId}: {e.Message}");
-                    loaded = false;
-                }
+                loaded = true;
             }
-#else
-            await Task.Yield();
-#endif
+            else
+            {
+                go = new GameObject(req.Name);
+                Place(go.transform, req);
+                loaded = await LoadGlb(req, go);
+                if (loaded)
+                    RememberTemplate(req.AssetId, go);
+            }
+
             if (!loaded)
                 PrimitiveFactory.Attach(go, req.Fallback, req.FallbackScale, req.FallbackColor, req.Unlit);
 
@@ -211,6 +171,102 @@ namespace PudgyMon
             }
 
             _busy = false;
+        }
+
+        void Place(Transform t, SpawnRequest req)
+        {
+            t.SetParent(req.Parent, false);
+            if (req.LocalSpace)
+                t.SetLocalPositionAndRotation(req.Position, req.Rotation);
+            else
+                t.SetPositionAndRotation(req.Position, req.Rotation);
+        }
+
+        bool TryCloneTemplate(SpawnRequest req, out GameObject go)
+        {
+            go = null;
+            if (string.IsNullOrEmpty(req.AssetId) ||
+                !_templates.TryGetValue(req.AssetId, out var tmpl) || tmpl == null)
+                return false;
+            go = Instantiate(tmpl);
+            go.name = req.Name;
+            go.SetActive(true);
+            Place(go.transform, req);
+            UnityGltfFit.PlayIdle(go);
+            return true;
+        }
+
+        void RememberTemplate(string assetId, GameObject live)
+        {
+            if (string.IsNullOrEmpty(assetId) || _templates.ContainsKey(assetId))
+                return;
+            if (_cacheRoot == null)
+            {
+                var cache = new GameObject("GltfTemplateCache");
+                cache.SetActive(false);
+                _cacheRoot = cache.transform;
+                _cacheRoot.SetParent(transform, false);
+            }
+
+            var tmpl = Instantiate(live, _cacheRoot, false);
+            tmpl.name = assetId;
+            tmpl.SetActive(false);
+            _templates[assetId] = tmpl;
+        }
+
+        async Task<bool> LoadGlb(SpawnRequest req, GameObject go)
+        {
+            var glb = RepoPaths.GlbPath(req.AssetId);
+            var loaded = false;
+#if PUDGYMON_GLTFAST
+            if (glb == null)
+                return false;
+            try
+            {
+                var import = new GltfImport();
+                var uri = new Uri(Path.GetFullPath(glb)).AbsoluteUri;
+                var settings = new ImportSettings
+                {
+                    GenerateMipMaps = true,
+                    AnimationMethod = AnimationMethod.Legacy
+                };
+                loaded = await import.Load(uri, settings);
+                if (loaded)
+                {
+                    var fit = new GameObject("UnityFit");
+                    fit.transform.SetParent(go.transform, false);
+                    if (UnityGltfFit.NeedsForwardSpin(req.AssetId))
+                        fit.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+                    var instSettings = new InstantiationSettings
+                    {
+                        Mask = ComponentType.All & ~ComponentType.Camera & ~ComponentType.Light,
+                        SkinUpdateWhenOffscreen = true
+                    };
+                    var instantiator = new GameObjectInstantiator(import, fit.transform, null, instSettings);
+                    loaded = await import.InstantiateMainSceneAsync(instantiator);
+                }
+
+                if (loaded)
+                {
+                    foreach (var extraCam in go.GetComponentsInChildren<Camera>(true))
+                        Destroy(extraCam);
+                    UnityGltfFit.UpgradeMaterialsToUrp(go);
+                    var scale = Registry.ScaleFor(req.AssetId, go);
+                    if (Mathf.Abs(scale - 1f) > 0.01f)
+                        go.transform.localScale = Vector3.one * scale;
+                    UnityGltfFit.GroundAndCenter(go);
+                    UnityGltfFit.PlayIdle(go);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"GLB load failed for {req.AssetId}: {e.Message}");
+                loaded = false;
+            }
+#else
+            await Task.Yield();
+#endif
+            return loaded;
         }
     }
 
@@ -252,7 +308,8 @@ namespace PudgyMon
 
             foreach (var renderer in go.GetComponentsInChildren<Renderer>())
             {
-                var mats = renderer.materials;
+                var mats = renderer.sharedMaterials;
+                var changed = false;
                 for (int i = 0; i < mats.Length; i++)
                 {
                     var src = mats[i];
@@ -266,10 +323,33 @@ namespace PudgyMon
                     var dst = new Material(unlit && urpUnlit != null ? urpUnlit : urpLit);
                     CopyColorAndMaps(src, dst);
                     mats[i] = dst;
+                    changed = true;
                 }
 
-                renderer.materials = mats;
+                if (changed)
+                    renderer.sharedMaterials = mats;
             }
+        }
+
+        public static void PlayIdle(GameObject go)
+        {
+            var anim = go.GetComponentInChildren<Animation>(true);
+            if (anim == null || anim.GetClipCount() == 0)
+                return;
+            AnimationClip idle = null;
+            foreach (AnimationState state in anim)
+            {
+                if (state.clip != null && state.clip.name.IndexOf("idle", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    idle = state.clip;
+                    break;
+                }
+            }
+
+            if (idle != null)
+                anim.clip = idle;
+            anim.wrapMode = WrapMode.Loop;
+            anim.Play();
         }
 
         static void CopyColorAndMaps(Material src, Material dst)
@@ -316,23 +396,25 @@ namespace PudgyMon
 
     public static class PrimitiveFactory
     {
+        static readonly Dictionary<int, Material> Materials = new Dictionary<int, Material>();
+        static Shader _urpLit;
+        static Shader _urpUnlit;
+        static Shader _fallback;
+
+        public static Shader UrpLit => _urpLit ??= Shader.Find("Universal Render Pipeline/Lit")
+                                                  ?? Shader.Find("Universal Render Pipeline/Simple Lit")
+                                                  ?? FallbackShader;
+        public static Shader UrpUnlit => _urpUnlit ??= Shader.Find("Universal Render Pipeline/Unlit")
+                                                       ?? FallbackShader;
+        static Shader FallbackShader => _fallback ??= Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
+
         public static Material Lit(Color color, Color? emission = null, bool unlit = false)
         {
-            Shader shader;
-            if (unlit)
-            {
-                shader = Shader.Find("Universal Render Pipeline/Unlit")
-                         ?? Shader.Find("Unlit/Color")
-                         ?? Shader.Find("Standard");
-            }
-            else
-            {
-                shader = Shader.Find("Universal Render Pipeline/Lit")
-                         ?? Shader.Find("Universal Render Pipeline/Simple Lit")
-                         ?? Shader.Find("Standard")
-                         ?? Shader.Find("Unlit/Color");
-            }
+            var key = MatKey(color, emission, unlit);
+            if (Materials.TryGetValue(key, out var cached) && cached != null)
+                return cached;
 
+            var shader = unlit ? UrpUnlit : UrpLit;
             var mat = new Material(shader);
             if (mat.HasProperty("_BaseColor"))
                 mat.SetColor("_BaseColor", color);
@@ -350,11 +432,20 @@ namespace PudgyMon
                     mat.SetColor("_Emission", emission.Value);
             }
 
+            Materials[key] = mat;
             return mat;
         }
 
+        static int MatKey(Color color, Color? emission, bool unlit)
+        {
+            var c = (Color32)color;
+            var e = emission.HasValue ? (Color32)emission.Value : default;
+            return HashCode.Combine(c.r, c.g, c.b, c.a,
+                HashCode.Combine(e.r, e.g, e.b, unlit, emission.HasValue));
+        }
+
         public static GameObject Create(PrimitiveType type, Vector3 position, Vector3 scale, Color color,
-            Transform parent, string name, bool unlit = false, Color? emission = null)
+            Transform parent, string name, bool unlit = false, Color? emission = null, bool solid = false)
         {
             var go = GameObject.CreatePrimitive(type);
             go.name = name;
@@ -363,9 +454,9 @@ namespace PudgyMon
             go.transform.localScale = ScaleFor(type, scale);
             var renderer = go.GetComponent<Renderer>();
             renderer.sharedMaterial = Lit(color, emission, unlit);
-            var col = go.GetComponent<Collider>();
-            if (col != null)
-                UnityEngine.Object.Destroy(col);
+            ApplyCollider(go, solid);
+            if (solid)
+                go.layer = GameConstants.GroundLayer;
             return go;
         }
 
@@ -376,9 +467,30 @@ namespace PudgyMon
             child.transform.SetParent(host.transform, false);
             child.transform.localScale = ScaleFor(type, scale);
             child.GetComponent<Renderer>().sharedMaterial = Lit(color, null, unlit);
-            var col = child.GetComponent<Collider>();
+            ApplyCollider(child, false);
+        }
+
+        static void ApplyCollider(GameObject go, bool solid)
+        {
+            var col = go.GetComponent<Collider>();
+            if (!solid)
+            {
+                if (col != null)
+                    UnityEngine.Object.Destroy(col);
+                return;
+            }
+
+            if (col is MeshCollider)
+                return;
             if (col != null)
+            {
+                col.enabled = false;
                 UnityEngine.Object.Destroy(col);
+            }
+
+            var mesh = go.GetComponent<MeshFilter>()?.sharedMesh;
+            if (mesh != null)
+                go.AddComponent<MeshCollider>().sharedMesh = mesh;
         }
 
         /// <summary>

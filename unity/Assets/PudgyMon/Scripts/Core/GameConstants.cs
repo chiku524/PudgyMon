@@ -23,6 +23,12 @@ namespace PudgyMon
         public const float CameraFocusHeight = 1.15f;
         public const float CameraDefaultYaw = 180f;
         public const float CameraDefaultPitch = 18f;
+        public const float CameraOcclusionRadius = 0.22f;
+
+        public const int PlayerLayer = 8;
+        public const int GroundLayer = 9;
+        public const float PlayerHeight = 1.6f;
+        public const float PlayerRadius = 0.38f;
 
         public static Vector3 HubSpawn = new Vector3(0f, PlayerFloorY, 14f);
 

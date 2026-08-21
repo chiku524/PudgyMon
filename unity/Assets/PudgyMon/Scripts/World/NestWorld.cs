@@ -7,12 +7,14 @@ namespace PudgyMon
         public static void Build(Transform parent)
         {
             const float islandRadius = GameConstants.WorldBounds + 1.5f;
-            PrimitiveFactory.Create(PrimitiveType.Cylinder, new Vector3(0f, -0.1f, 0f),
+            PrimitiveFactory.Create(PrimitiveType.Cylinder,
+                new Vector3(0f, GameConstants.PlayerFloorY - 0.1f, 0f),
                 new Vector3(islandRadius, 0.2f, islandRadius),
-                new Color(0.16f, 0.28f, 0.26f), parent, "NestIsland");
-            PrimitiveFactory.Create(PrimitiveType.Cylinder, new Vector3(0f, -0.22f, 0f),
+                new Color(0.16f, 0.28f, 0.26f), parent, "NestIsland", solid: true);
+            PrimitiveFactory.Create(PrimitiveType.Cylinder,
+                new Vector3(0f, GameConstants.PlayerFloorY - 0.22f, 0f),
                 new Vector3(islandRadius + 6f, 0.12f, islandRadius + 6f),
-                new Color(0.86f, 0.76f, 0.55f), parent, "NestBeach");
+                new Color(0.86f, 0.76f, 0.55f), parent, "NestBeach", solid: true);
             PrimitiveFactory.Create(PrimitiveType.Cube, new Vector3(0f, -0.42f, 0f),
                 new Vector3(600f, 0.1f, 600f),
                 new Color(0.16f, 0.42f, 0.62f), parent, "NestOcean",
@@ -30,9 +32,6 @@ namespace PudgyMon
                     Mathf.Sin(a) * islets[i].dist);
                 PrimitiveFactory.Create(PrimitiveType.Sphere, pos, Vector3.one * scale,
                     new Color(0.24f, 0.36f, 0.3f), parent, $"HorizonIslet_{i}");
-                var go = parent.Find($"HorizonIslet_{i}");
-                if (go != null)
-                    go.localScale = new Vector3(scale * 2f, scale * 1.2f, scale * 2f);
             }
 
             RenderSettings.fog = true;

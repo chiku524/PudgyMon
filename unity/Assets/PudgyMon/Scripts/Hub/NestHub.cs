@@ -22,6 +22,8 @@ namespace PudgyMon
     public sealed class NestHub : MonoBehaviour
     {
         public string Prompt = "";
+        ModePad[] _pads = System.Array.Empty<ModePad>();
+        UtilityPad[] _utils = System.Array.Empty<UtilityPad>();
 
         public static NestHub Build(Transform parent, StudioAssets studio, CosmeticsCatalog cosmetics)
         {
@@ -107,6 +109,8 @@ namespace PudgyMon
             SpawnUtility(hubGo.transform, origin, new Vector3(12f, 0.12f, 16f),
                 new Color(0.65f, 0.45f, 1f), NestAction.BrowseMaps, "MyMaps");
 
+            hub._pads = hub.GetComponentsInChildren<ModePad>(true);
+            hub._utils = hub.GetComponentsInChildren<UtilityPad>(true);
             return hub;
         }
 
@@ -187,7 +191,7 @@ namespace PudgyMon
         {
             ModePad best = null;
             var bestDist = radius;
-            foreach (var pad in GetComponentsInChildren<ModePad>())
+            foreach (var pad in _pads)
             {
                 var d = Vector3.Distance(playerPos, pad.transform.position);
                 if (d < bestDist)
@@ -204,7 +208,7 @@ namespace PudgyMon
         {
             UtilityPad best = null;
             var bestDist = radius;
-            foreach (var pad in GetComponentsInChildren<UtilityPad>())
+            foreach (var pad in _utils)
             {
                 var d = Vector3.Distance(playerPos, pad.transform.position);
                 if (d < bestDist)

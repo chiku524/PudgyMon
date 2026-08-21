@@ -2,7 +2,9 @@
     "name": "PudgyMon",
     "rootNamespace": "PudgyMon",
     "references": [
-        "glTFast"
+        "glTFast",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.RenderPipelines.Core.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -16,6 +18,11 @@
             "name": "com.unity.cloud.gltfast",
             "expression": "",
             "define": "PUDGYMON_GLTFAST"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "",
+            "define": "PUDGYMON_URP"
         }
     ],
     "noEngineReferences": false

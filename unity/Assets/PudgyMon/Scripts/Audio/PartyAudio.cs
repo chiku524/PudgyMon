@@ -5,12 +5,15 @@ namespace PudgyMon
     public sealed class PartyAudio : MonoBehaviour
     {
         AudioSource _src;
+        readonly System.Collections.Generic.Dictionary<int, AudioClip> _clips =
+            new System.Collections.Generic.Dictionary<int, AudioClip>();
 
         public void Init()
         {
             _src = gameObject.AddComponent<AudioSource>();
             _src.playOnAwake = false;
             _src.spatialBlend = 0f;
+            _src.ignoreListenerPause = false;
         }
 
         public void Pickup() => Blip(880f, 0.08f);
@@ -21,12 +24,15 @@ namespace PudgyMon
         void Blip(float hz, float dur)
         {
             if (_src == null) return;
-            var clip = Tone(hz, dur);
-            _src.PlayOneShot(clip, 0.35f);
+            _src.PlayOneShot(Tone(hz, dur), 0.35f);
         }
 
-        static AudioClip Tone(float hz, float seconds)
+        AudioClip Tone(float hz, float seconds)
         {
+            var key = (Mathf.RoundToInt(hz) << 8) ^ Mathf.RoundToInt(seconds * 1000f);
+            if (_clips.TryGetValue(key, out var cached) && cached != null)
+                return cached;
+
             var sampleRate = 22050;
             var samples = Mathf.CeilToInt(sampleRate * seconds);
             var data = new float[samples];
@@ -38,6 +44,7 @@ namespace PudgyMon
             }
             var clip = AudioClip.Create("tone", samples, 1, sampleRate, false);
             clip.SetData(data, 0);
+            _clips[key] = clip;
             return clip;
         }
     }

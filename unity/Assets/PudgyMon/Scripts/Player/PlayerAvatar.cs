@@ -20,6 +20,17 @@ namespace PudgyMon
             motor.IsLocal = isLocal;
             motor.IsBot = isBot;
 
+            root.layer = GameConstants.PlayerLayer;
+            var cc = root.AddComponent<CharacterController>();
+            cc.height = GameConstants.PlayerHeight;
+            cc.radius = GameConstants.PlayerRadius;
+            cc.center = new Vector3(0f, GameConstants.PlayerHeight * 0.5f, 0f);
+            cc.slopeLimit = 50f;
+            cc.stepOffset = 0.4f;
+            cc.minMoveDistance = 0f;
+            cc.skinWidth = 0.08f;
+            motor.BindController(cc);
+
             var body = PrimitiveFactory.Create(PrimitiveType.Capsule, position, new Vector3(0.45f, 1.6f, 0.45f),
                 tint, root.transform, "Body");
             body.transform.localPosition = new Vector3(0f, 0.8f, 0f);
@@ -29,7 +40,15 @@ namespace PudgyMon
             avatar._body = body.transform;
             avatar._tinted = root.GetComponentsInChildren<Renderer>();
             avatar.ApplyTint(tint);
+            SetLayerRecurse(root.transform, GameConstants.PlayerLayer);
             return avatar;
+        }
+
+        static void SetLayerRecurse(Transform t, int layer)
+        {
+            t.gameObject.layer = layer;
+            for (int i = 0; i < t.childCount; i++)
+                SetLayerRecurse(t.GetChild(i), layer);
         }
 
         public void ApplyTint(Color tint)
@@ -64,7 +83,10 @@ namespace PudgyMon
                 onSpawned: (go, loaded) =>
                 {
                     if (loaded && _body != null)
+                    {
                         _body.gameObject.SetActive(false);
+                        SetLayerRecurse(go.transform, GameConstants.PlayerLayer);
+                    }
                 });
         }
     }

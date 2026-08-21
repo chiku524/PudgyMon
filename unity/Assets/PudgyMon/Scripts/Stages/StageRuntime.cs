@@ -34,6 +34,8 @@ namespace PudgyMon
         int _announcedHill;
         Transform _hillZone;
         Renderer _hillRenderer;
+        Color _hillColor;
+        readonly List<PlayerMotor> _kothOccupants = new List<PlayerMotor>();
 
         struct Projectile
         {
@@ -461,7 +463,7 @@ namespace PudgyMon
                         PrimitiveType.Cube, size, new Color(0.5f, 0.45f, 0.4f));
                 else
                     PrimitiveFactory.Create(PrimitiveType.Cube, pos, size, new Color(0.5f, 0.45f, 0.4f),
-                        _stageRoot, $"Block_{i}");
+                        _stageRoot, $"Block_{i}", solid: true);
             }
         }
 
@@ -478,7 +480,7 @@ namespace PudgyMon
                 _director.Announcer = "The hill is on the move — chase it!";
             }
 
-            var occupants = new List<PlayerMotor>();
+            _kothOccupants.Clear();
             foreach (var p in players)
             {
                 if (p.IsBot)
@@ -490,27 +492,30 @@ namespace PudgyMon
 
                 var xz = new Vector2(p.transform.position.x, p.transform.position.z);
                 if (Vector2.Distance(xz, new Vector2(center.x, center.z)) < _hillRadius)
-                    occupants.Add(p);
+                    _kothOccupants.Add(p);
             }
 
-            Color hillColor = occupants.Count == 0
+            Color hillColor = _kothOccupants.Count == 0
                 ? new Color(1f, 0.8f, 0.2f)
-                : occupants.Count == 1
+                : _kothOccupants.Count == 1
                     ? new Color(0.3f, 1f, 0.45f)
                     : new Color(1f, 0.3f, 0.3f);
-            if (_hillRenderer != null)
-                _hillRenderer.sharedMaterial = PrimitiveFactory.Lit(hillColor, hillColor * 1.4f, true);
-
-            if (occupants.Count == 1)
+            if (_hillRenderer != null && _hillColor != hillColor)
             {
-                var slot = occupants[0].Slot;
+                _hillColor = hillColor;
+                _hillRenderer.sharedMaterial = PrimitiveFactory.Lit(hillColor, hillColor * 1.4f, true);
+            }
+
+            if (_kothOccupants.Count == 1)
+            {
+                var slot = _kothOccupants[0].Slot;
                 _hold[slot] += dt;
                 var total = (uint)_hold[slot];
                 if (total > _awarded[slot])
                 {
                     _director.AddPoints(slot, total - _awarded[slot]);
                     _awarded[slot] = total;
-                    if (occupants[0].IsLocal)
+                    if (_kothOccupants[0].IsLocal)
                         _director.Announcer = $"You are king! ({_hold[slot]:0}s held)";
                 }
             }
