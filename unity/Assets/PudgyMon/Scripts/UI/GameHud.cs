@@ -34,7 +34,7 @@ namespace PudgyMon
                 new Color(0.7f, 0.85f, 0.95f), font, "");
             hud._hint = MakeText(canvasGo.transform, "Hint", new Vector2(20, -200), 13,
                 new Color(0.55f, 0.6f, 0.7f), font,
-                "WASD · Shift sprint · Space jump · pads E · Create Map · My Maps · C skin · N crew · H hat · M claim · Ctrl+O companion · Q Nest · R rematch · Esc pause · ` cursor";
+                "WASD · Shift sprint · Space jump · pads E · Create Map · My Maps · C skin · N crew · H hat · M claim · Ctrl+O companion · Q Nest · R rematch · Esc pause · ` cursor");
 
             var hintRect = hud._hint.rectTransform;
             hintRect.anchorMin = new Vector2(0f, 0f);
