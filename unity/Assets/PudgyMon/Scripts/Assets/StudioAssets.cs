@@ -179,23 +179,36 @@ namespace PudgyMon
     {
         public static Material Lit(Color color, Color? emission = null, bool unlit = false)
         {
-            var shader = Shader.Find("Standard")
-                         ?? Shader.Find("Universal Render Pipeline/Lit")
+            Shader shader;
+            if (unlit)
+            {
+                shader = Shader.Find("Universal Render Pipeline/Unlit")
+                         ?? Shader.Find("Unlit/Color")
+                         ?? Shader.Find("Standard");
+            }
+            else
+            {
+                shader = Shader.Find("Universal Render Pipeline/Lit")
+                         ?? Shader.Find("Universal Render Pipeline/Simple Lit")
+                         ?? Shader.Find("Standard")
                          ?? Shader.Find("Unlit/Color");
+            }
+
             var mat = new Material(shader);
-            if (mat.HasProperty("_Color"))
-                mat.color = color;
             if (mat.HasProperty("_BaseColor"))
                 mat.SetColor("_BaseColor", color);
-            if (unlit && mat.HasProperty("_Metallic"))
+            if (mat.HasProperty("_Color"))
+                mat.color = color;
+            if (mat.HasProperty("_Metallic"))
                 mat.SetFloat("_Metallic", 0f);
-            if (emission.HasValue)
+            if (mat.HasProperty("_Smoothness"))
+                mat.SetFloat("_Smoothness", 0.18f);
+            if (emission.HasValue && mat.HasProperty("_EmissionColor"))
             {
-                if (mat.HasProperty("_EmissionColor"))
-                {
-                    mat.EnableKeyword("_EMISSION");
-                    mat.SetColor("_EmissionColor", emission.Value);
-                }
+                mat.EnableKeyword("_EMISSION");
+                mat.SetColor("_EmissionColor", emission.Value);
+                if (mat.HasProperty("_Emission"))
+                    mat.SetColor("_Emission", emission.Value);
             }
 
             return mat;

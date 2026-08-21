@@ -31,7 +31,7 @@ companion/                     Claim + map share desks
 
 1. Unity Hub → **Projects** → **Add** → **Add project from disk**
 2. Select **`C:\Users\chiku\Projects\PudgyMon\unity`** — the inner `unity` folder, not the PudgyMon repo root and not `Assets`.
-3. Open it with **Unity 6.5.9f1**. First import takes a few minutes (MCP for Unity + glTFast download over Git).
+3. Open it with **Unity 6.5.9f1**. First import takes a few minutes (URP + MCP for Unity + glTFast). The Built-in Render Pipeline warning should be gone — the project uses URP.
 4. Play `Assets/PudgyMon/Scenes/Nest.unity`.
 
 If Hub still greys out the folder, open the editor directly:

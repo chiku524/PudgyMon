@@ -2,7 +2,9 @@
     "name": "PudgyMon.Editor",
     "rootNamespace": "PudgyMon.EditorTools",
     "references": [
-        "PudgyMon"
+        "PudgyMon",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.RenderPipelines.Core.Runtime"
     ],
     "includePlatforms": [
         "Editor"
@@ -13,6 +15,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "",
+            "define": "PUDGYMON_URP"
+        }
+    ],
     "noEngineReferences": false
 }

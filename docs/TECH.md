@@ -4,7 +4,7 @@
 
 | Layer | Choice |
 |-------|--------|
-| Engine | **Unity 6.5** (`unity/`) |
+| Engine | **Unity 6.5** + URP (`unity/`) |
 | Language | C# (game) · Rust (accounts API only) |
 | MCP | [MCP for Unity](https://github.com/CoplayDev/unity-mcp) + optional official Unity MCP |
 | Networking | UDP listen-server (`LanSession`, port 7777) |
