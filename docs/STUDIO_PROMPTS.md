@@ -546,6 +546,20 @@ A circular floor mode pad for the full Party Saga circuit: flat soft disc with r
 rainbow candy swirl pattern, subtle emissive glow, very thin, about 2.5 meters wide.
 ```
 
+### `env_pad_koth_01` · target width **~2.5**
+
+**Plugs into:** Nest King of the Hill mode pad
+
+```
+Stylized cartoon 3D game prop for PudgyMon: Party Saga — cute chunky monster party world.
+Bright readable candy colors, soft rounded edges, soft matte painted cartoon materials (not clay, not glossy vinyl),
+exaggerated silhouettes, soft even shading, no gore, no realistic dirt, no photorealism.
+Single isolated object, centered, floor-pivoted at ground center, game-ready low-to-mid poly,
+no base/plinth, no floating text, no characters, no readable glyphs.
+A circular floor mode pad for King of the Hill: flat soft disc with a raised candy rim,
+purple and gold crown-ring pattern, subtle emissive glow, very thin, about 2.5 meters wide.
+```
+
 ---
 
 ## Priority 3 — Stage props

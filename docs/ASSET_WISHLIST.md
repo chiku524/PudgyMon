@@ -46,7 +46,7 @@ Hats are no longer roster-only tint indices — equip real meshes via Nest **Acc
 | Done | `env_nest_bench_01` | Nest seating ring | Procedural GLB |
 | Done | `prop_vibe_mushroom_01` | Nest flora ring | Procedural GLB |
 | Done | `env_pad_race_01` / `_vibe_01` / `_shooter_01` / `_party_01` | Mode pads | Procedural GLB |
-| Needed | `env_pad_koth_01` | King of the Hill mode pad (greybox cylinder until GLB lands) | — |
+| Done | `env_pad_koth_01` | King of the Hill mode pad | Tripo API |
 
 ---
 

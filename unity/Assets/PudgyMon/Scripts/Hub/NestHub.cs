@@ -184,9 +184,9 @@ namespace PudgyMon
                 },
                 "Hill" => new[]
                 {
-                    ("prop_target_star_01", new Vector3(0f, 0f, 4f), 0f),
-                    ("prop_cover_block_01", new Vector3(-3.5f, 0f, 2f), 30f),
-                    ("prop_cover_block_01", new Vector3(3.5f, 0f, 2f), -30f)
+                    ("env_koth_hill_01", new Vector3(0f, 0f, 3.5f), 0f),
+                    ("env_nest_crown_01", new Vector3(-3.2f, 0f, 1.5f), 15f),
+                    ("prop_koth_flag_01", new Vector3(3.2f, 0f, 1.5f), -15f)
                 },
                 "PartySaga" => new[]
                 {

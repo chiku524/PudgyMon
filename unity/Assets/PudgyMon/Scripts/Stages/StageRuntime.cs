@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -389,6 +390,13 @@ namespace PudgyMon
                         }
                         var push = new Vector3(Mathf.Sin(Time.time * 11f), 0f, Mathf.Cos(Time.time * 9f)).normalized;
                         p.Teleport(p.transform.position + push * 1.4f);
+                        _studio.QueueProp("vfx_ko_burst_marker_01", p.transform.position, Quaternion.identity,
+                            _stageRoot, "KoBurst", PrimitiveType.Cylinder, new Vector3(1.6f, 0.05f, 1.6f),
+                            new Color(1f, 0.4f, 0.7f), true, onSpawned: (go, _) =>
+                            {
+                                var fade = go.AddComponent<DespawnAfter>();
+                                fade.Ttl = 1.35f;
+                            });
                         Destroy(shot.Transform.gameObject);
                         _shots.RemoveAt(i);
                         hit = true;
@@ -443,10 +451,13 @@ namespace PudgyMon
             _announcedHill = 0;
             var first = _hills[0];
             var zone = PrimitiveFactory.Create(PrimitiveType.Cylinder, new Vector3(first.x, 0.12f, first.z),
-                new Vector3(_hillRadius, 0.25f, _hillRadius), new Color(1f, 0.8f, 0.2f, 0.65f), _stageRoot,
+                new Vector3(_hillRadius, 0.25f, _hillRadius), new Color(1f, 0.8f, 0.2f, 0.22f), _stageRoot,
                 "HillZone", true, new Color(1.6f, 1.1f, 0.2f));
             _hillZone = zone.transform;
             _hillRenderer = zone.GetComponent<Renderer>();
+            _studio.QueueProp("env_koth_hill_01", Vector3.zero, Quaternion.identity, _hillZone, "HillMesh",
+                PrimitiveType.Cylinder, new Vector3(_hillRadius, 0.35f, _hillRadius),
+                new Color(1f, 0.85f, 0.35f), true, localSpace: true);
         }
 
         void SpawnBlocks(List<MapBlock> blocks)
@@ -544,6 +555,18 @@ namespace PudgyMon
             if (travelled >= span || span <= 0.0001f)
                 return current;
             return Vector3.Lerp(previous, current, travelled / span);
+        }
+    }
+
+    sealed class DespawnAfter : MonoBehaviour
+    {
+        public float Ttl = 1f;
+
+        void Update()
+        {
+            Ttl -= Time.deltaTime;
+            if (Ttl <= 0f)
+                Destroy(gameObject);
         }
     }
 }

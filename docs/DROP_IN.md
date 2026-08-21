@@ -26,6 +26,14 @@ Quality-first (preserves painted candy detail; Unity-safe, no Draco/KTX2/WebP):
 python scripts/optimize_glb.py --batch assets/models --glob "*/*.glb" --jobs 4
 ```
 
+Generate new meshes from the [Tripo API](https://developers.tripo3d.ai/en) (key in gitignored `.env`):
+
+```bash
+python scripts/generate_tripo_assets.py --balance
+python scripts/generate_tripo_assets.py --wave nest
+python scripts/generate_tripo_assets.py --catalog-id char_pudgy_candy_01
+```
+
 Import pipelines call the same optimizer after export with quality-first defaults (1024px, high JPEG for non-baseColor only).
 
 ---
