@@ -6,6 +6,7 @@ namespace PudgyMon
     {
         public PlayerMotor Motor;
         Renderer[] _tinted;
+        Transform _body;
 
         public static PlayerAvatar Spawn(Transform parent, int slot, bool isLocal, bool isBot, Vector3 position,
             Color tint, string name)
@@ -21,10 +22,11 @@ namespace PudgyMon
 
             var body = PrimitiveFactory.Create(PrimitiveType.Capsule, position, new Vector3(0.45f, 1.6f, 0.45f),
                 tint, root.transform, "Body");
-            body.transform.localPosition = new Vector3(0f, 0.2f, 0f);
+            body.transform.localPosition = new Vector3(0f, 0.8f, 0f);
 
             var avatar = root.AddComponent<PlayerAvatar>();
             avatar.Motor = motor;
+            avatar._body = body.transform;
             avatar._tinted = root.GetComponentsInChildren<Renderer>();
             avatar.ApplyTint(tint);
             return avatar;
@@ -36,16 +38,34 @@ namespace PudgyMon
                 return;
             var mat = PrimitiveFactory.Lit(tint, tint * 0.25f);
             foreach (var r in _tinted)
-                r.sharedMaterial = mat;
+            {
+                if (r != null)
+                    r.sharedMaterial = mat;
+            }
         }
 
-        public async void AttachCrewMesh(StudioAssets studio, string modelId)
+        public void AttachCrewMesh(StudioAssets studio, string modelId)
         {
             if (studio == null || string.IsNullOrEmpty(modelId))
                 return;
-            studio.QueueProp(modelId, transform.position, transform.rotation, transform, $"Crew_{modelId}",
-                PrimitiveType.Capsule, new Vector3(0.45f, 1.6f, 0.45f), Color.white);
-            await System.Threading.Tasks.Task.Yield();
+
+            foreach (Transform child in transform)
+            {
+                if (child.name.StartsWith("Crew_"))
+                    Destroy(child.gameObject);
+            }
+
+            if (_body != null)
+                _body.gameObject.SetActive(true);
+
+            studio.QueueProp(modelId, Vector3.zero, Quaternion.identity, transform, $"Crew_{modelId}",
+                PrimitiveType.Capsule, new Vector3(0.45f, 1.6f, 0.45f), Color.white,
+                localSpace: true,
+                onSpawned: (go, loaded) =>
+                {
+                    if (loaded && _body != null)
+                        _body.gameObject.SetActive(false);
+                });
         }
     }
 }

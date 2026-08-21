@@ -17,11 +17,12 @@ namespace PudgyMon
         public const float InteractRadius = 2.8f;
 
         public const float MouseSensitivity = 0.0025f;
-        public static readonly float MinCameraPitch = -35f * Mathf.Deg2Rad;
-        public static readonly float MaxCameraPitch = 55f * Mathf.Deg2Rad;
         public const float CameraMinDistance = 2.5f;
         public const float CameraMaxDistance = 12.0f;
         public const float CameraDefaultDistance = 6.5f;
+        public const float CameraFocusHeight = 1.15f;
+        public const float CameraDefaultYaw = 180f;
+        public const float CameraDefaultPitch = 18f;
 
         public static Vector3 HubSpawn = new Vector3(0f, PlayerFloorY, 14f);
 

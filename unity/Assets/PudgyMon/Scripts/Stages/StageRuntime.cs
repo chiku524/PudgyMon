@@ -330,8 +330,9 @@ namespace PudgyMon
                 if (want && p.Slot < _shootCd.Length && _shootCd[p.Slot] <= 0f)
                 {
                     _shootCd[p.Slot] = p.IsBot ? 0.95f : 0.35f;
-                    var yaw = p.IsLocal && cam != null ? cam.Yaw : Mathf.Atan2(p.transform.position.x, p.transform.position.z + 0.01f);
-                    var forward = new Vector3(-Mathf.Sin(yaw), 0f, -Mathf.Cos(yaw));
+                    var forward = p.IsLocal && cam != null
+                        ? cam.PlanarForward
+                        : Vector3.ProjectOnPlane(p.transform.forward, Vector3.up).normalized;
                     var ball = PrimitiveFactory.Create(PrimitiveType.Sphere,
                         p.transform.position + Vector3.up * 1.1f + forward, new Vector3(0.18f, 0.18f, 0.18f),
                         new Color(1f, 0.4f, 0.2f), _stageRoot, "Projectile", true, new Color(2f, 0.6f, 0.2f));

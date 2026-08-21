@@ -34,9 +34,7 @@ namespace PudgyMon
                 Sprint = sprint;
                 var flat = direction.normalized;
                 transform.position += flat * Speed * dt;
-                var look = transform.position + flat;
-                look.y = transform.position.y;
-                transform.LookAt(look);
+                transform.rotation = Quaternion.LookRotation(flat, Vector3.up);
             }
 
             if (jumpPressed)

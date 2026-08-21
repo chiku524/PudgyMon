@@ -160,11 +160,11 @@ def _write_glb(glb: Path, gltf: dict, bin_chunk: bytearray) -> None:
 
 
 def _sanitize_bevy_accessors(glb: Path) -> int:
-    """Materialize zero accessors that lack bufferView (illegal for Bevy's loader).
+    """Materialize zero accessors that lack bufferView (illegal for some loaders).
 
     gltf-transform `sparse` / Blender animation optimize can emit constant-zero
-    accessors with no bufferView. Spec allows that for zeros; Bevy 0.19 rejects
-    the file as invalid glTF. Returns how many accessors were repaired.
+    accessors with no bufferView. Spec allows that for zeros; Unity glTFast
+    prefers explicit views. Returns how many accessors were repaired.
     """
     gltf, bin_chunk = _load_glb(glb)
     accessors = gltf.get("accessors", [])
@@ -247,20 +247,25 @@ def _strip_orm_slots(glb: Path) -> int:
 
 
 def _validate_bevy_glb(glb: Path) -> None:
-    """Fail loudly if the output would not load in Bevy 0.19."""
+    """Fail loudly if the output would not load in Unity glTFast (legacy name)."""
+    _validate_unity_glb(glb)
+
+
+def _validate_unity_glb(glb: Path) -> None:
+    """Fail loudly if the output would not load in Unity glTFast."""
     gltf, _ = _load_glb(glb)
     problems: list[str] = []
     for i, acc in enumerate(gltf.get("accessors", [])):
         if "bufferView" not in acc and "sparse" not in acc:
-            problems.append(f"accessor {i} has no bufferView (Bevy rejects this)")
+            problems.append(f"accessor {i} has no bufferView (glTFast rejects this)")
     for ext in gltf.get("extensionsRequired", []):
-        problems.append(f"requires extension {ext} (Bevy may not support it)")
+        problems.append(f"requires extension {ext} (Unity glTFast may not support it)")
     for i, img in enumerate(gltf.get("images", [])):
         mime = img.get("mimeType")
         if mime not in (None, "image/jpeg", "image/png"):
             problems.append(f"image {i} has unsupported mimeType {mime}")
     if problems:
-        raise RuntimeError(f"{glb.name} failed Bevy validation: " + "; ".join(problems))
+        raise RuntimeError(f"{glb.name} failed Unity glTFast validation: " + "; ".join(problems))
 
 
 def _face_count(glb: Path) -> int | None:
@@ -461,7 +466,7 @@ def optimize_file(
         except RuntimeError as err:
             print(f"warn: resample skipped ({err})")
         # Do NOT run gltf-transform `sparse`: it emits zero accessors without
-        # bufferView, which Bevy 0.19 rejects as invalid glTF.
+        # bufferView, which Unity glTFast rejects as invalid glTF.
 
         # Final sweep for anything the passes above orphaned.
         run("prune_final", "prune")
@@ -470,8 +475,8 @@ def optimize_file(
         shutil.copy2(cur, out)
         fixed = _sanitize_bevy_accessors(out)
         if fixed:
-            print(f"bevy-sanitize: materialized {fixed} zero accessor(s)")
-        _validate_bevy_glb(out)
+            print(f"unity-sanitize: materialized {fixed} zero accessor(s)")
+        _validate_unity_glb(out)
 
     # meshopt can only collapse topologically connected edges. Raw Tripo
     # exports are vertex-split soup that resists simplification — the Blender

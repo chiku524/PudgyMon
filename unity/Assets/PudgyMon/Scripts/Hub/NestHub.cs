@@ -57,7 +57,7 @@ namespace PudgyMon
             for (int i = 0; i < npcs.Length; i++)
             {
                 studio.QueueProp(npcs[i].id, origin + npcs[i].offset,
-                    Quaternion.Euler(0f, npcs[i].yaw, 0f), hubGo.transform, $"NestNpc_{i}_{npcs[i].id}",
+                    Quaternion.Euler(0f, npcs[i].yaw + 180f, 0f), hubGo.transform, $"NestNpc_{i}_{npcs[i].id}",
                     PrimitiveType.Capsule, new Vector3(0.5f, 1.4f, 0.5f), new Color(0.95f, 0.55f, 0.4f));
             }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -100,6 +101,8 @@ namespace PudgyMon
             public Vector3 FallbackScale;
             public Color FallbackColor;
             public bool Unlit;
+            public bool LocalSpace;
+            public Action<GameObject, bool> OnSpawned;
         }
 
         public void Init(StudioRegistry registry)
@@ -109,7 +112,7 @@ namespace PudgyMon
 
         public void QueueProp(string assetId, Vector3 position, Quaternion rotation, Transform parent, string name,
             PrimitiveType fallback = PrimitiveType.Cube, Vector3? fallbackScale = null, Color? color = null,
-            bool unlit = false)
+            bool unlit = false, bool localSpace = false, Action<GameObject, bool> onSpawned = null)
         {
             _queue.Enqueue(new SpawnRequest
             {
@@ -121,7 +124,9 @@ namespace PudgyMon
                 Fallback = fallback,
                 FallbackScale = fallbackScale ?? Vector3.one,
                 FallbackColor = color ?? new Color(0.85f, 0.55f, 0.35f),
-                Unlit = unlit
+                Unlit = unlit,
+                LocalSpace = localSpace,
+                OnSpawned = onSpawned
             });
         }
 
@@ -138,7 +143,10 @@ namespace PudgyMon
             _busy = true;
             var go = new GameObject(req.Name);
             go.transform.SetParent(req.Parent, false);
-            go.transform.SetPositionAndRotation(req.Position, req.Rotation);
+            if (req.LocalSpace)
+                go.transform.SetLocalPositionAndRotation(req.Position, req.Rotation);
+            else
+                go.transform.SetPositionAndRotation(req.Position, req.Rotation);
 
             var glb = RepoPaths.GlbPath(req.AssetId);
             var loaded = false;
@@ -148,18 +156,40 @@ namespace PudgyMon
                 try
                 {
                     var import = new GltfImport();
-                    var uri = new System.Uri(glb).AbsoluteUri;
-                    loaded = await import.Load(uri);
-                    if (loaded)
-                        loaded = await import.InstantiateMainSceneAsync(go.transform);
+                    var uri = new Uri(Path.GetFullPath(glb)).AbsoluteUri;
+                    var settings = new ImportSettings
+                    {
+                        GenerateMipMaps = true,
+                        AnimationMethod = AnimationMethod.Legacy
+                    };
+                    loaded = await import.Load(uri, settings);
                     if (loaded)
                     {
+                        var fit = new GameObject("UnityFit");
+                        fit.transform.SetParent(go.transform, false);
+                        if (UnityGltfFit.NeedsForwardSpin(req.AssetId))
+                            fit.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+                        var instSettings = new InstantiationSettings
+                        {
+                            Mask = ComponentType.All & ~ComponentType.Camera & ~ComponentType.Light,
+                            SkinUpdateWhenOffscreen = true
+                        };
+                        var instantiator = new GameObjectInstantiator(import, fit.transform, null, instSettings);
+                        loaded = await import.InstantiateMainSceneAsync(instantiator);
+                    }
+
+                    if (loaded)
+                    {
+                        foreach (var extraCam in go.GetComponentsInChildren<Camera>(true))
+                            Destroy(extraCam);
+                        UnityGltfFit.UpgradeMaterialsToUrp(go);
                         var scale = Registry.ScaleFor(req.AssetId, go);
                         if (Mathf.Abs(scale - 1f) > 0.01f)
                             go.transform.localScale = Vector3.one * scale;
+                        UnityGltfFit.GroundAndCenter(go);
                     }
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     Debug.LogWarning($"GLB load failed for {req.AssetId}: {e.Message}");
                     loaded = false;
@@ -171,7 +201,116 @@ namespace PudgyMon
             if (!loaded)
                 PrimitiveFactory.Attach(go, req.Fallback, req.FallbackScale, req.FallbackColor, req.Unlit);
 
+            try
+            {
+                req.OnSpawned?.Invoke(go, loaded);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"Studio spawn callback failed for {req.AssetId}: {e.Message}");
+            }
+
             _busy = false;
+        }
+    }
+
+    public static class UnityGltfFit
+    {
+        public static bool NeedsForwardSpin(string assetId)
+        {
+            if (string.IsNullOrEmpty(assetId))
+                return false;
+            return assetId.StartsWith("char_")
+                   || assetId.StartsWith("acc_")
+                   || assetId.StartsWith("npc_")
+                   || assetId.IndexOf("pudgy", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+        public static void GroundAndCenter(GameObject root)
+        {
+            var renderers = root.GetComponentsInChildren<Renderer>();
+            if (renderers.Length == 0)
+                return;
+
+            var bounds = renderers[0].bounds;
+            for (int i = 1; i < renderers.Length; i++)
+                bounds.Encapsulate(renderers[i].bounds);
+
+            var delta = new Vector3(
+                root.transform.position.x - bounds.center.x,
+                root.transform.position.y - bounds.min.y,
+                root.transform.position.z - bounds.center.z);
+            foreach (Transform child in root.transform)
+                child.position += delta;
+        }
+
+        public static void UpgradeMaterialsToUrp(GameObject go)
+        {
+            var urpLit = Shader.Find("Universal Render Pipeline/Lit");
+            var urpUnlit = Shader.Find("Universal Render Pipeline/Unlit");
+            if (urpLit == null)
+                return;
+
+            foreach (var renderer in go.GetComponentsInChildren<Renderer>())
+            {
+                var mats = renderer.materials;
+                for (int i = 0; i < mats.Length; i++)
+                {
+                    var src = mats[i];
+                    if (src == null || src.shader == null)
+                        continue;
+                    var shaderName = src.shader.name;
+                    if (shaderName.IndexOf("Universal Render Pipeline", StringComparison.OrdinalIgnoreCase) >= 0)
+                        continue;
+
+                    var unlit = shaderName.IndexOf("Unlit", StringComparison.OrdinalIgnoreCase) >= 0;
+                    var dst = new Material(unlit && urpUnlit != null ? urpUnlit : urpLit);
+                    CopyColorAndMaps(src, dst);
+                    mats[i] = dst;
+                }
+
+                renderer.materials = mats;
+            }
+        }
+
+        static void CopyColorAndMaps(Material src, Material dst)
+        {
+            var color = Color.white;
+            if (src.HasProperty("_BaseColor"))
+                color = src.GetColor("_BaseColor");
+            else if (src.HasProperty("_Color"))
+                color = src.GetColor("_Color");
+            if (dst.HasProperty("_BaseColor"))
+                dst.SetColor("_BaseColor", color);
+            if (dst.HasProperty("_Color"))
+                dst.SetColor("_Color", color);
+
+            TryCopyTex(src, dst, "_BaseMap", "_BaseMap");
+            TryCopyTex(src, dst, "_MainTex", "_BaseMap");
+            TryCopyTex(src, dst, "_BumpMap", "_BumpMap");
+            TryCopyTex(src, dst, "_MetallicGlossMap", "_MetallicGlossMap");
+            TryCopyTex(src, dst, "_EmissionMap", "_EmissionMap");
+
+            if (src.HasProperty("_Metallic") && dst.HasProperty("_Metallic"))
+                dst.SetFloat("_Metallic", src.GetFloat("_Metallic"));
+            if (src.HasProperty("_Glossiness") && dst.HasProperty("_Smoothness"))
+                dst.SetFloat("_Smoothness", src.GetFloat("_Glossiness"));
+            else if (src.HasProperty("_Smoothness") && dst.HasProperty("_Smoothness"))
+                dst.SetFloat("_Smoothness", src.GetFloat("_Smoothness"));
+
+            if (src.IsKeywordEnabled("_EMISSION") && dst.HasProperty("_EmissionColor"))
+            {
+                dst.EnableKeyword("_EMISSION");
+                dst.SetColor("_EmissionColor", src.GetColor("_EmissionColor"));
+            }
+        }
+
+        static void TryCopyTex(Material src, Material dst, string from, string to)
+        {
+            if (!src.HasProperty(from) || !dst.HasProperty(to))
+                return;
+            var tex = src.GetTexture(from);
+            if (tex != null)
+                dst.SetTexture(to, tex);
         }
     }
 

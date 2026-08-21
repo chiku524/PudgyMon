@@ -5,16 +5,22 @@ namespace PudgyMon
     public sealed class ThirdPersonCameraRig : MonoBehaviour
     {
         public Transform Target;
-        public float Yaw;
-        public float Pitch = -0.35f;
+        public float Yaw = 180f;
+        public float Pitch = 18f;
         public float Distance = GameConstants.CameraDefaultDistance;
         public bool Captured = true;
 
-        public void TickLook()
-        {
-            if (Target == null)
-                return;
+        public Vector3 PlanarForward { get; private set; } = Vector3.back;
+        public Vector3 PlanarRight { get; private set; } = Vector3.left;
 
+        public void Snap()
+        {
+            RefreshPlanar();
+            ApplyPose(1f);
+        }
+
+        public void TickInput()
+        {
             if (Input.GetKeyDown(KeyCode.BackQuote))
             {
                 Captured = !Captured;
@@ -25,37 +31,42 @@ namespace PudgyMon
             if (Captured)
             {
                 var delta = Input.mousePositionDelta;
-                Yaw -= delta.x * GameConstants.MouseSensitivity;
+                Yaw += delta.x * GameConstants.MouseSensitivity * Mathf.Rad2Deg;
                 Pitch = Mathf.Clamp(
-                    Pitch - delta.y * GameConstants.MouseSensitivity,
-                    GameConstants.MinCameraPitch,
-                    GameConstants.MaxCameraPitch);
+                    Pitch - delta.y * GameConstants.MouseSensitivity * Mathf.Rad2Deg,
+                    -55f, 35f);
                 Distance = Mathf.Clamp(
                     Distance - Input.mouseScrollDelta.y * 0.5f,
                     GameConstants.CameraMinDistance,
                     GameConstants.CameraMaxDistance);
             }
 
-            var focus = Target.position + Vector3.up * 1.15f;
-            var horizontal = Distance * Mathf.Cos(Pitch);
-            var desiredEye = focus + new Vector3(
-                horizontal * Mathf.Sin(Yaw),
-                -Distance * Mathf.Sin(Pitch),
-                horizontal * Mathf.Cos(Yaw));
-            var t = 1f - Mathf.Exp(-22f * Time.deltaTime);
-            transform.position = Vector3.Lerp(transform.position, desiredEye, t);
+            RefreshPlanar();
+        }
+
+        public void FollowTarget()
+        {
+            if (Target == null)
+                return;
+            ApplyPose(1f - Mathf.Exp(-22f * Time.deltaTime));
+        }
+
+        void RefreshPlanar()
+        {
+            var rot = Quaternion.Euler(0f, Yaw, 0f);
+            PlanarForward = rot * Vector3.forward;
+            PlanarRight = rot * Vector3.right;
+        }
+
+        void ApplyPose(float follow)
+        {
+            var focus = Target.position + Vector3.up * GameConstants.CameraFocusHeight;
+            var rot = Quaternion.Euler(Pitch, Yaw, 0f);
+            var desiredEye = focus + rot * new Vector3(0f, 0f, -Distance);
+            transform.position = follow >= 0.999f
+                ? desiredEye
+                : Vector3.Lerp(transform.position, desiredEye, follow);
             transform.LookAt(focus, Vector3.up);
         }
-
-        public Vector3 PlanarForward
-        {
-            get
-            {
-                var f = new Vector3(-Mathf.Sin(Yaw), 0f, -Mathf.Cos(Yaw));
-                return f.sqrMagnitude > 0f ? f.normalized : Vector3.forward;
-            }
-        }
-
-        public Vector3 PlanarRight => new Vector3(Mathf.Cos(Yaw), 0f, -Mathf.Sin(Yaw));
     }
 }

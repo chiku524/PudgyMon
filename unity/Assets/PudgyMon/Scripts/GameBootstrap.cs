@@ -112,6 +112,7 @@ namespace PudgyMon
         {
             var tint = _cosmetics.Equipped.Color;
             _localAvatar = PlayerAvatar.Spawn(transform, 0, true, false, GameConstants.HubSpawn, tint, "LocalPlayer");
+            _localAvatar.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
             _players.Add(_localAvatar.Motor);
             _localAvatar.AttachCrewMesh(_studio, _roster.Current.Id);
             for (int i = 0; i < BotFill; i++)
@@ -127,9 +128,28 @@ namespace PudgyMon
 
         void BindCamera()
         {
-            _camera = Camera.main.gameObject.AddComponent<ThirdPersonCameraRig>();
+            var cam = Camera.main;
+            cam.nearClipPlane = 0.15f;
+            cam.farClipPlane = 400f;
+            cam.fieldOfView = 50f;
+            cam.orthographic = false;
+            cam.rect = new Rect(0f, 0f, 1f, 1f);
+            cam.depth = -1f;
+            _camera = cam.gameObject.GetComponent<ThirdPersonCameraRig>()
+                      ?? cam.gameObject.AddComponent<ThirdPersonCameraRig>();
             _camera.Target = _localAvatar.transform;
-            Camera.main.transform.position = GameConstants.HubSpawn + new Vector3(0f, 12f, 8f);
+            _camera.Yaw = GameConstants.CameraDefaultYaw;
+            _camera.Pitch = GameConstants.CameraDefaultPitch;
+            _camera.Distance = GameConstants.CameraDefaultDistance;
+            _camera.Snap();
+        }
+
+        void LateUpdate()
+        {
+            if (_hud != null && _hud.Paused)
+                return;
+            if (_camera != null && _camera.Target != null)
+                _camera.FollowTarget();
         }
 
         void Update()
@@ -144,7 +164,7 @@ namespace PudgyMon
             }
 
             NestWorld.ApplyAtmosphere(_key, _fill, _director.Phase);
-            _camera.TickLook();
+            _camera.TickInput();
             if (_cursorBound != _camera.Captured)
             {
                 _hud.BindCursor(_camera.Captured);
@@ -200,11 +220,19 @@ namespace PudgyMon
 
         Vector3 MoveDir()
         {
-            var dir = Vector3.zero;
-            if (Input.GetKey(KeyCode.W)) dir += _camera.PlanarForward;
-            if (Input.GetKey(KeyCode.S)) dir -= _camera.PlanarForward;
-            if (Input.GetKey(KeyCode.A)) dir -= _camera.PlanarRight;
-            if (Input.GetKey(KeyCode.D)) dir += _camera.PlanarRight;
+            var h = Input.GetAxisRaw("Horizontal");
+            var v = Input.GetAxisRaw("Vertical");
+            if (Mathf.Abs(h) < 0.01f && Mathf.Abs(v) < 0.01f)
+            {
+                if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) v = 1f;
+                if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) v = -1f;
+                if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) h = 1f;
+                if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) h = -1f;
+            }
+
+            var dir = _camera.PlanarForward * v + _camera.PlanarRight * h;
+            if (dir.sqrMagnitude > 1f)
+                dir.Normalize();
             return dir;
         }
 
@@ -288,9 +316,12 @@ namespace PudgyMon
                 var hat = _hats.CycleHat();
                 if (hat != null)
                 {
-                    _studio.QueueProp(hat, _localAvatar.transform.position + Vector3.up * 1.4f,
-                        _localAvatar.transform.rotation, _localAvatar.transform, "Hat",
-                        PrimitiveType.Sphere, new Vector3(0.22f, 0.22f, 0.22f), Color.white);
+                    var existing = _localAvatar.transform.Find("Hat");
+                    if (existing != null)
+                        Object.Destroy(existing.gameObject);
+                    _studio.QueueProp(hat, new Vector3(0f, 1.15f, 0f), Quaternion.identity, _localAvatar.transform,
+                        "Hat", PrimitiveType.Sphere, new Vector3(0.22f, 0.22f, 0.22f), Color.white,
+                        localSpace: true);
                     _director.Announcer = "Hat " + hat;
                 }
             }

@@ -3,7 +3,7 @@
 
 Unlike import_dense_character_glb.py (static mesh → later re-rig), this keeps the
 incoming Armature + NLA clips, renames locomotion to the party contract names,
-adds accessory sockets, floors/scales to ~1.2 m, and re-exports Bevy-safe JPEG
+adds accessory sockets, floors/scales to ~1.2 m, and re-exports Unity/glTFast-safe JPEG
 (no Draco / WebP extensions).
 
 Usage:
@@ -369,7 +369,7 @@ export_kwargs = dict(
     export_animations=True,
     export_nla_strips=True,
     export_def_bones=False,
-    # False: Blender's anim optimizer can emit zero accessors Bevy rejects.
+    # False: Blender's anim optimizer can emit zero accessors glTFast rejects.
     export_optimize_animation_size=False,
 )
 try:
@@ -407,7 +407,7 @@ def _gltf_transform(*args: str) -> None:
 
 
 def _optimize_mesh(glb: Path, *, ratio: float, error: float, max_tex: int) -> None:
-    """Delegate to scripts/optimize_glb.py (Bevy-safe, quality-preserving)."""
+    """Delegate to scripts/optimize_glb.py (Unity/glTFast-safe, quality-preserving)."""
     import importlib.util
     import sys
 
