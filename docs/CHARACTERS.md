@@ -2,7 +2,7 @@
 
 Chunky party creatures for **PudgyMon: Party Saga**. One shared base figure, species skins that match the same proportions, and **detachable accessories** on fixed sockets so movement and cosmetics stay in sync.
 
-Selectable crew matches [STUDIO_PROMPTS.md](STUDIO_PROMPTS.md) Priority 0 (**5 characters**).
+Selectable crew is listed in [`data/characters/roster.json`](../data/characters/roster.json) (core 5 plus Aug 22 Tripo species / Nest NPCs).
 
 ## Playable roster
 
@@ -13,6 +13,7 @@ Selectable crew matches [STUDIO_PROMPTS.md](STUDIO_PROMPTS.md) Priority 0 (**5 c
 | `char_pudgy_forest_01` | Forest Pudgy | Forest/leaf — Studio 41-bone rig + walk/run clips |
 | `char_pudgy_lava_01` | Lava Pudgy | Lava — Studio 41-bone rig + walk/run clips |
 | `char_pudgy_sky_01` | Sky Pudgy | Sky Tripo mesh on Studio 41-bone (lava donor clips) |
+| `char_pudgy_*` / `npc_nest_*` | Species + Nest NPCs | Aug 22 Tripo drop — see `roster.json` |
 
 Default crew id: [`data/player_defaults.json`](../data/player_defaults.json). Roster: [`data/characters/roster.json`](../data/characters/roster.json). Switch live in Esc Nest → **Characters**.
 

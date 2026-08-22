@@ -36,6 +36,50 @@
         {
           "id": "acc_hat_sleep_01",
           "label": "Sleep Cap"
+        },
+        {
+          "id": "acc_hat_candy_scoop_01",
+          "label": "Candy Scoop"
+        },
+        {
+          "id": "acc_hat_honey_pot_01",
+          "label": "Honey Beanie"
+        },
+        {
+          "id": "acc_hat_storm_cap_01",
+          "label": "Storm Cap"
+        },
+        {
+          "id": "acc_hat_race_helmet_01",
+          "label": "Race Helmet"
+        },
+        {
+          "id": "acc_hat_forest_leaf_01",
+          "label": "Leaf Wreath"
+        },
+        {
+          "id": "acc_hat_ice_crown_01",
+          "label": "Candy Crown"
+        },
+        {
+          "id": "acc_hat_sprinkle_cap_01",
+          "label": "Sprinkle Cap"
+        },
+        {
+          "id": "acc_hat_night_moon_01",
+          "label": "Moon Hat"
+        },
+        {
+          "id": "acc_hat_lava_ember_01",
+          "label": "Ember Crown"
+        },
+        {
+          "id": "acc_hat_sky_cloud_01",
+          "label": "Cloud Beret"
+        },
+        {
+          "id": "acc_hat_meadow_wreath_01",
+          "label": "Meadow Crown"
         }
       ]
     },

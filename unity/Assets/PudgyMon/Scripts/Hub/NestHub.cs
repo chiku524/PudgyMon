@@ -63,6 +63,43 @@ namespace PudgyMon
                     PrimitiveType.Capsule, new Vector3(0.5f, 1.4f, 0.5f), new Color(0.95f, 0.55f, 0.4f));
             }
 
+            string[] extraCrew =
+            {
+                "char_pudgy_candy_01", "char_pudgy_ice_01", "char_pudgy_desert_01", "char_pudgy_meadow_01",
+                "char_pudgy_storm_01", "char_pudgy_crystal_01", "char_pudgy_berry_01", "char_pudgy_bubble_01",
+                "char_pudgy_aurora_01", "char_pudgy_honey_01", "char_pudgy_mint_01", "char_pudgy_night_01",
+                "char_pudgy_coral_01", "char_pudgy_ember_01", "char_pudgy_cloud_01", "char_pudgy_sprout_01",
+                "char_pudgy_peach_01", "char_pudgy_grape_01", "char_pudgy_lemon_01", "char_pudgy_cocoa_01",
+                "char_pudgy_peach_rare_01", "char_pudgy_cocoa_rare_01", "char_pudgy_storm_rare_01",
+                "char_pudgy_lava_party_01", "char_pudgy_forest_bloom_01", "char_pudgy_ocean_festival_01",
+                "npc_nest_dj_01", "npc_nest_ref_01", "npc_nest_shop_01", "npc_nest_photo_01",
+                "npc_nest_coach_01", "npc_nest_bard_01"
+            };
+            for (int i = 0; i < extraCrew.Length; i++)
+            {
+                var t = i / (float)extraCrew.Length * Mathf.PI * 2f;
+                var pos = origin + new Vector3(Mathf.Cos(t) * 34f, 0f, Mathf.Sin(t) * 34f - 4f);
+                var yaw = t * Mathf.Rad2Deg + 180f;
+                studio.QueueProp(extraCrew[i], pos, Quaternion.Euler(0f, yaw, 0f), hubGo.transform,
+                    $"NestCrew_{i}_{extraCrew[i]}", PrimitiveType.Capsule, new Vector3(0.5f, 1.4f, 0.5f),
+                    new Color(0.95f, 0.6f, 0.45f));
+            }
+
+            string[] extraHats =
+            {
+                "acc_hat_candy_scoop_01", "acc_hat_honey_pot_01", "acc_hat_storm_cap_01",
+                "acc_hat_race_helmet_01", "acc_hat_forest_leaf_01", "acc_hat_ice_crown_01",
+                "acc_hat_sprinkle_cap_01", "acc_hat_night_moon_01", "acc_hat_lava_ember_01",
+                "acc_hat_sky_cloud_01", "acc_hat_meadow_wreath_01"
+            };
+            for (int i = 0; i < extraHats.Length; i++)
+            {
+                var pos = origin + new Vector3(-18f + i * 1.65f, 0f, 20f);
+                studio.QueueProp(extraHats[i], pos, Quaternion.Euler(0f, 180f, 0f), hubGo.transform,
+                    $"NestHatRack_{i}", PrimitiveType.Sphere, new Vector3(0.35f, 0.35f, 0.35f),
+                    new Color(0.85f, 0.7f, 0.45f));
+            }
+
             Vector3[] mushrooms =
             {
                 new Vector3(-22f, 0f, -16f), new Vector3(22f, 0f, -16f), new Vector3(-20f, 0f, 16f),

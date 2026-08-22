@@ -62,6 +62,12 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "acc_hat_candy_scoop_01",
+      "target_height": 0.32,
+      "notes": "Ice-cream swirl crown + cherry (download was labeled ember crown).",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "acc_hat_chef_01",
       "target_height": 0.3,
       "notes": "Studio prop \u2014 chef hat",
@@ -71,6 +77,42 @@
       "asset_id": "acc_hat_flower_01",
       "target_height": 0.32,
       "notes": "Studio prop \u2014 daisy hat",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "acc_hat_forest_leaf_01",
+      "target_height": 0.26,
+      "notes": "Green leaf wreath (no flowers).",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "acc_hat_honey_pot_01",
+      "target_height": 0.28,
+      "notes": "Cream dessert beanie, chocolate brim and star (labeled ocean shell).",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "acc_hat_ice_crown_01",
+      "target_height": 0.28,
+      "notes": "Soft cream crown with candy spots.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "acc_hat_lava_ember_01",
+      "target_height": 0.26,
+      "notes": "Rocky ember crown (labeled crystal tiara).",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "acc_hat_meadow_wreath_01",
+      "target_height": 0.22,
+      "notes": "Cream crown with mixed leaf nubs.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "acc_hat_night_moon_01",
+      "target_height": 0.28,
+      "notes": "Crescent moon hat.",
       "uniform_scale": 1.0
     },
     {
@@ -86,15 +128,39 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "acc_hat_race_helmet_01",
+      "target_height": 0.26,
+      "notes": "Stubby racing helmet, cream/tan with cyan ear cup.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "acc_hat_racer_cap_01",
       "target_height": 0.18,
       "notes": "Studio prop \u2014 racer cap",
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "acc_hat_sky_cloud_01",
+      "target_height": 0.24,
+      "notes": "Puffy cloud-lobe beret.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "acc_hat_sleep_01",
       "target_height": 0.28,
       "notes": "Studio prop \u2014 sleep cap",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "acc_hat_sprinkle_cap_01",
+      "target_height": 0.28,
+      "notes": "Gray sprinkle-dome hat.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "acc_hat_storm_cap_01",
+      "target_height": 0.26,
+      "notes": "Puffy thundercloud cap.",
       "uniform_scale": 1.0
     },
     {
@@ -152,10 +218,76 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "char_pudgy_aurora_01",
+      "target_height": 1.2,
+      "notes": "Charcoal body, gold leaf crown, star dots.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "char_pudgy_base_01",
       "target_height": 1.2,
       "uniform_scale": 1.0,
       "notes": "Shared coral-peach party base"
+    },
+    {
+      "asset_id": "char_pudgy_berry_01",
+      "target_height": 1.2,
+      "notes": "Gray body, salmon berry spots + loose orbs.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_bubble_01",
+      "target_height": 1.2,
+      "notes": "Gray pudgy with bubble cluster on the back.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_candy_01",
+      "target_height": 1.2,
+      "notes": "Peach dumpling with hovering cherry \u2014 candy species.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_cloud_01",
+      "target_height": 1.2,
+      "notes": "Peach pudgy with extra shoulder puffs / crest.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_cocoa_01",
+      "target_height": 1.2,
+      "notes": "Cream body, chocolate-chip spots.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_cocoa_rare_01",
+      "target_height": 1.2,
+      "notes": "Beige body, chocolate-pour hair.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_coral_01",
+      "target_height": 1.2,
+      "notes": "Peach body, coral side-fins \u2014 coral reef species.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_crystal_01",
+      "target_height": 1.2,
+      "notes": "Charcoal body, tan crystal/rock growths.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_desert_01",
+      "target_height": 1.2,
+      "notes": "Full cactus-spined pudgy (download was labeled hat).",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_ember_01",
+      "target_height": 1.2,
+      "notes": "Peach pudgy, orange-ember tail and horns.",
+      "uniform_scale": 1.0
     },
     {
       "asset_id": "char_pudgy_forest_01",
@@ -164,16 +296,106 @@
       "notes": "Forest Pudgy \u2014 Studio 41-bone rig with idle/walk/run/jump/emote"
     },
     {
+      "asset_id": "char_pudgy_forest_bloom_01",
+      "target_height": 1.2,
+      "notes": "Tan, pink spots, leaf sprout \u2014 forest bloom seasonal.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_grape_01",
+      "target_height": 1.2,
+      "notes": "Gray pudgy, grape-nodule hat and backpack bake.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_honey_01",
+      "target_height": 1.2,
+      "notes": "Cream dumpling with beak snout \u2014 honey stand-in.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_ice_01",
+      "target_height": 1.2,
+      "notes": "Slate body with white pearl frost spots.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "char_pudgy_lava_01",
       "target_height": 1.2,
       "uniform_scale": 1.0,
       "notes": "Lava Pudgy \u2014 Studio 41-bone rig with idle/walk/run/jump/emote"
     },
     {
+      "asset_id": "char_pudgy_lava_party_01",
+      "target_height": 1.2,
+      "notes": "Tan body, charcoal wavy cap, pink nub \u2014 lava party seasonal.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_lemon_01",
+      "target_height": 1.2,
+      "notes": "Peach-pink, lime-yellow eyes, tiny horn.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_meadow_01",
+      "target_height": 1.2,
+      "notes": "Beige dumpling, petal tuft and pink ear nubs.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_mint_01",
+      "target_height": 1.2,
+      "notes": "Olive-sage body, pink orb shoulder.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_night_01",
+      "target_height": 1.2,
+      "notes": "Dark untextured night-palette body, head fin.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_ocean_festival_01",
+      "target_height": 1.2,
+      "notes": "Gray/yellow/brown festival markings, pink blush.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_peach_01",
+      "target_height": 1.2,
+      "notes": "Peach chick-dumpling, three head bumps.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_peach_rare_01",
+      "target_height": 1.2,
+      "notes": "Soft peach dumpling, three tufts \u2014 peach rare.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "char_pudgy_sky_01",
       "target_height": 1.2,
       "uniform_scale": 1.0,
       "notes": "Sky Pudgy \u2014 Studio 41-bone rig with idle/walk/run/jump/emote"
+    },
+    {
+      "asset_id": "char_pudgy_sprout_01",
+      "target_height": 1.2,
+      "notes": "Tan body, orange sprout nub.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_storm_01",
+      "target_height": 1.2,
+      "notes": "Gray dragon-pudgy, horns and back spikes.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_storm_rare_01",
+      "target_height": 1.2,
+      "notes": "Dark spiky-snout pudgy \u2014 storm rare.",
+      "uniform_scale": 1.0
     },
     {
       "asset_id": "env_koth_hill_01",
@@ -825,6 +1047,42 @@
       "asset_id": "env_race_ramp_01",
       "target_height": 1.2,
       "notes": "Studio prop \u2014 race ramp",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "npc_nest_bard_01",
+      "target_height": 1.2,
+      "notes": "Gray rocky pudgy \u2014 Nest bard stand-in.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "npc_nest_coach_01",
+      "target_height": 1.2,
+      "notes": "Tan pudgy with spiked cap \u2014 Nest coach stand-in.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "npc_nest_dj_01",
+      "target_height": 1.2,
+      "notes": "Gray pudgy wearing brown headphones \u2014 Nest DJ.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "npc_nest_photo_01",
+      "target_height": 1.2,
+      "notes": "Beige pudgy with dark beret \u2014 Nest photographer.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "npc_nest_ref_01",
+      "target_height": 1.2,
+      "notes": "Cream pudgy with tiny horns and freckle spots \u2014 Nest ref look.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "npc_nest_shop_01",
+      "target_height": 1.2,
+      "notes": "Gray spotted pudgy \u2014 Nest shopkeep stand-in.",
       "uniform_scale": 1.0
     },
     {

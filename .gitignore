@@ -51,3 +51,6 @@ scripts/boing/local-node-data/
 *.glb.stubby_bak
 __pycache__/
 *.py[cod]
+
+# Local Tripo preview renders
+/_tripo_preview/

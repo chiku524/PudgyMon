@@ -9,22 +9,182 @@
     {
       "id": "oceanic_pudgymon_01",
       "label": "Ocean Pudgy",
-      "blurb": "Ocean species \u2014 fins and teal candy palette"
+      "blurb": "Ocean species — fins and teal candy palette"
     },
     {
       "id": "char_pudgy_forest_01",
       "label": "Forest Pudgy",
-      "blurb": "Forest species \u2014 leaf tufts and lime palette"
+      "blurb": "Forest species — leaf tufts and lime palette"
     },
     {
       "id": "char_pudgy_lava_01",
       "label": "Lava Pudgy",
-      "blurb": "Lava species \u2014 ember freckles and charcoal crust"
+      "blurb": "Lava species — ember freckles and charcoal crust"
     },
     {
       "id": "char_pudgy_sky_01",
       "label": "Sky Pudgy",
-      "blurb": "Sky species \u2014 puffball cheeks and sky-blue coat"
+      "blurb": "Sky species — puffball cheeks and sky-blue coat"
+    },
+    {
+      "id": "char_pudgy_candy_01",
+      "label": "Candy Pudgy",
+      "blurb": "Pink-cream frosting and a hovering cherry"
+    },
+    {
+      "id": "char_pudgy_ice_01",
+      "label": "Ice Pudgy",
+      "blurb": "Slate frost coat with pearl freckles"
+    },
+    {
+      "id": "char_pudgy_desert_01",
+      "label": "Desert Pudgy",
+      "blurb": "Cactus-spine dumpling, sand and teal"
+    },
+    {
+      "id": "char_pudgy_meadow_01",
+      "label": "Meadow Pudgy",
+      "blurb": "Petal tuft and pink ear nubs"
+    },
+    {
+      "id": "char_pudgy_storm_01",
+      "label": "Storm Pudgy",
+      "blurb": "Dragon-soft spikes and thunder gray"
+    },
+    {
+      "id": "char_pudgy_crystal_01",
+      "label": "Crystal Pudgy",
+      "blurb": "Charcoal body with candy rock growths"
+    },
+    {
+      "id": "char_pudgy_berry_01",
+      "label": "Berry Pudgy",
+      "blurb": "Salmon seed spots and loose berry orbs"
+    },
+    {
+      "id": "char_pudgy_bubble_01",
+      "label": "Bubble Pudgy",
+      "blurb": "Soft bubble cluster on the back"
+    },
+    {
+      "id": "char_pudgy_aurora_01",
+      "label": "Aurora Pudgy",
+      "blurb": "Night coat, gold leaf crown, star dots"
+    },
+    {
+      "id": "char_pudgy_honey_01",
+      "label": "Honey Pudgy",
+      "blurb": "Warm cream dumpling"
+    },
+    {
+      "id": "char_pudgy_mint_01",
+      "label": "Mint Pudgy",
+      "blurb": "Olive-sage coat and a pink shoulder orb"
+    },
+    {
+      "id": "char_pudgy_night_01",
+      "label": "Night Pudgy",
+      "blurb": "Dark candy body with a head fin"
+    },
+    {
+      "id": "char_pudgy_coral_01",
+      "label": "Coral Pudgy",
+      "blurb": "Peach dumpling with coral side fins"
+    },
+    {
+      "id": "char_pudgy_ember_01",
+      "label": "Ember Pudgy",
+      "blurb": "Peach coat, ember tail and horns"
+    },
+    {
+      "id": "char_pudgy_cloud_01",
+      "label": "Cloud Pudgy",
+      "blurb": "Peach puffball with extra shoulder clouds"
+    },
+    {
+      "id": "char_pudgy_sprout_01",
+      "label": "Sprout Pudgy",
+      "blurb": "Tan body with an orange sprout nub"
+    },
+    {
+      "id": "char_pudgy_peach_01",
+      "label": "Peach Pudgy",
+      "blurb": "Peach chick-dumpling"
+    },
+    {
+      "id": "char_pudgy_grape_01",
+      "label": "Grape Pudgy",
+      "blurb": "Grape-nodule crown"
+    },
+    {
+      "id": "char_pudgy_lemon_01",
+      "label": "Lemon Pudgy",
+      "blurb": "Peach-pink with lime eyes"
+    },
+    {
+      "id": "char_pudgy_cocoa_01",
+      "label": "Cocoa Pudgy",
+      "blurb": "Cream body with chocolate-chip spots"
+    },
+    {
+      "id": "char_pudgy_peach_rare_01",
+      "label": "Peach Rare",
+      "blurb": "Soft peach dumpling, three tufts"
+    },
+    {
+      "id": "char_pudgy_cocoa_rare_01",
+      "label": "Cocoa Rare",
+      "blurb": "Chocolate-pour hair"
+    },
+    {
+      "id": "char_pudgy_storm_rare_01",
+      "label": "Storm Rare",
+      "blurb": "Dark spiky-snout morph"
+    },
+    {
+      "id": "char_pudgy_lava_party_01",
+      "label": "Lava Party",
+      "blurb": "Charcoal cap, party nub"
+    },
+    {
+      "id": "char_pudgy_forest_bloom_01",
+      "label": "Forest Bloom",
+      "blurb": "Leaf sprout and flower spots"
+    },
+    {
+      "id": "char_pudgy_ocean_festival_01",
+      "label": "Ocean Festival",
+      "blurb": "Festival markings and pink blush"
+    },
+    {
+      "id": "npc_nest_dj_01",
+      "label": "Nest DJ",
+      "blurb": "Headphones and a party stare"
+    },
+    {
+      "id": "npc_nest_ref_01",
+      "label": "Nest Ref",
+      "blurb": "Tiny horns, ready to call the race"
+    },
+    {
+      "id": "npc_nest_shop_01",
+      "label": "Nest Shopkeep",
+      "blurb": "Spotted plaza merchant"
+    },
+    {
+      "id": "npc_nest_photo_01",
+      "label": "Nest Photog",
+      "blurb": "Dark beret, say cheese"
+    },
+    {
+      "id": "npc_nest_coach_01",
+      "label": "Nest Coach",
+      "blurb": "Spiked cap, game-day stare"
+    },
+    {
+      "id": "npc_nest_bard_01",
+      "label": "Nest Bard",
+      "blurb": "Rocky gray street performer"
     }
   ]
 }
