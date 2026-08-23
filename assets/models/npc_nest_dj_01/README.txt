@@ -1,3 +1,5 @@
 npc_nest_dj_01
-Source: stylized+pudgy+monster+3d+model.glb
-Playable import (height 1.2, textures ≤1024px JPEG q88, opaque, simplify ratio 0.0).
+Mesh: npc_nest_dj_01.glb
+Donor rig/clips: char_pudgy_lava_01
+Nest DJ — Studio skeleton + lava locomotion
+Rebuild: python scripts/bind_mesh_to_studio_rig.py --mesh "<mesh>" --donor char_pudgy_lava_01 --asset-id npc_nest_dj_01
