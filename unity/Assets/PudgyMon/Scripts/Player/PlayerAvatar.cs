@@ -96,13 +96,34 @@ namespace PudgyMon
                 });
         }
 
-        // Nest props keep a 180° glTF spin so authored yaws stay valid.
-        // The player motor already faces the move vector, so undo that spin here.
+        // Studio-rigged crew faces Unity +Z after glTFast. Dense Tripo imports
+        // face +X, so they need an extra -90° or WASD looks a quarter-turn off.
         static void AlignMeshToMotorForward(Transform crewRoot)
         {
             var fit = crewRoot.Find("UnityFit");
-            if (fit != null)
-                fit.localRotation = Quaternion.identity;
+            if (fit == null)
+                return;
+            fit.localRotation = HasLocomotionClips(crewRoot)
+                ? Quaternion.identity
+                : Quaternion.Euler(0f, -90f, 0f);
+        }
+
+        static bool HasLocomotionClips(Transform crewRoot)
+        {
+            var anim = crewRoot.GetComponentInChildren<Animation>(true);
+            if (anim == null)
+                return false;
+            foreach (AnimationState state in anim)
+            {
+                if (state.clip == null)
+                    continue;
+                var name = state.clip.name;
+                if (name.IndexOf("walk", System.StringComparison.OrdinalIgnoreCase) >= 0
+                    || name.IndexOf("run", System.StringComparison.OrdinalIgnoreCase) >= 0)
+                    return true;
+            }
+
+            return false;
         }
     }
 }
