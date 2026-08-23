@@ -82,12 +82,27 @@ namespace PudgyMon
                 localSpace: true,
                 onSpawned: (go, loaded) =>
                 {
-                    if (loaded && _body != null)
-                    {
+                    if (!loaded)
+                        return;
+                    if (_body != null)
                         _body.gameObject.SetActive(false);
-                        SetLayerRecurse(go.transform, GameConstants.PlayerLayer);
-                    }
+                    AlignMeshToMotorForward(go.transform);
+                    SetLayerRecurse(go.transform, GameConstants.PlayerLayer);
+                    var loco = GetComponent<CrewLocomotion>();
+                    if (loco == null)
+                        loco = gameObject.AddComponent<CrewLocomotion>();
+                    loco.Motor = Motor;
+                    loco.Bind(go);
                 });
+        }
+
+        // Nest props keep a 180° glTF spin so authored yaws stay valid.
+        // The player motor already faces the move vector, so undo that spin here.
+        static void AlignMeshToMotorForward(Transform crewRoot)
+        {
+            var fit = crewRoot.Find("UnityFit");
+            if (fit != null)
+                fit.localRotation = Quaternion.identity;
         }
     }
 }
