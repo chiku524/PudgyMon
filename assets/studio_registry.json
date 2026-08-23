@@ -236,9 +236,21 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "char_pudgy_berry_rare_01",
+      "target_height": 1.2,
+      "notes": "Heart-headed cream pudgy.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "char_pudgy_bubble_01",
       "target_height": 1.2,
       "notes": "Gray pudgy with bubble cluster on the back.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_bubble_rare_01",
+      "target_height": 1.2,
+      "notes": "White pudgy with heart strap and star flag.",
       "uniform_scale": 1.0
     },
     {
@@ -248,9 +260,21 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "char_pudgy_candy_rare_01",
+      "target_height": 1.2,
+      "notes": "Tan pudgy with a SUN flag.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "char_pudgy_cloud_01",
       "target_height": 1.2,
       "notes": "Peach pudgy with extra shoulder puffs / crest.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_cloud_rare_01",
+      "target_height": 1.2,
+      "notes": "Hooded blue-red pudgy (labeled backpack).",
       "uniform_scale": 1.0
     },
     {
@@ -272,6 +296,12 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "char_pudgy_coral_rare_01",
+      "target_height": 1.2,
+      "notes": "Tan pudgy with coral-pink hood.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "char_pudgy_crystal_01",
       "target_height": 1.2,
       "notes": "Charcoal body, tan crystal/rock growths.",
@@ -284,9 +314,21 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "char_pudgy_desert_rare_01",
+      "target_height": 1.2,
+      "notes": "Brown bear-suit pudgy with a tiny crown.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "char_pudgy_ember_01",
       "target_height": 1.2,
       "notes": "Peach pudgy, orange-ember tail and horns.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_ember_rare_01",
+      "target_height": 1.2,
+      "notes": "Brown horned grinning pudgy.",
       "uniform_scale": 1.0
     },
     {
@@ -294,6 +336,12 @@
       "target_height": 1.2,
       "uniform_scale": 1.0,
       "notes": "Forest Pudgy \u2014 Studio 41-bone rig with idle/walk/run/jump/emote"
+    },
+    {
+      "asset_id": "char_pudgy_forest_autumn_01",
+      "target_height": 1.2,
+      "notes": "Floral-shoulder pudgy with a pale helm.",
+      "uniform_scale": 1.0
     },
     {
       "asset_id": "char_pudgy_forest_bloom_01",
@@ -314,9 +362,21 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "char_pudgy_honey_rare_01",
+      "target_height": 1.2,
+      "notes": "Cream-belly charcoal pudgy on a cookie pad.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "char_pudgy_ice_01",
       "target_height": 1.2,
       "notes": "Slate body with white pearl frost spots.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_ice_rare_01",
+      "target_height": 1.2,
+      "notes": "Blue-gray pudgy with cloud scarf and belt.",
       "uniform_scale": 1.0
     },
     {
@@ -338,6 +398,12 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "char_pudgy_lemon_rare_01",
+      "target_height": 1.2,
+      "notes": "Yellow spotted pudgy with a red hat.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "char_pudgy_meadow_01",
       "target_height": 1.2,
       "notes": "Beige dumpling, petal tuft and pink ear nubs.",
@@ -356,9 +422,21 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "char_pudgy_night_rare_01",
+      "target_height": 1.2,
+      "notes": "Gray pudgy with a tiny gold crown.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "char_pudgy_ocean_festival_01",
       "target_height": 1.2,
       "notes": "Gray/yellow/brown festival markings, pink blush.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_ocean_winter_01",
+      "target_height": 1.2,
+      "notes": "Brown pudgy holding a star flag.",
       "uniform_scale": 1.0
     },
     {
@@ -380,9 +458,21 @@
       "notes": "Sky Pudgy \u2014 Studio 41-bone rig with idle/walk/run/jump/emote"
     },
     {
+      "asset_id": "char_pudgy_sky_sunset_01",
+      "target_height": 1.2,
+      "notes": "Star-belt pudgy with cloud collar.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "char_pudgy_sprout_01",
       "target_height": 1.2,
       "notes": "Tan body, orange sprout nub.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "char_pudgy_sprout_rare_01",
+      "target_height": 1.2,
+      "notes": "Candy-decorated cream pudgy.",
       "uniform_scale": 1.0
     },
     {
@@ -434,6 +524,24 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_arch_race_01",
+      "target_height": 3.0,
+      "notes": "Gingerbread star-rim arch.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_arch_shooter_01",
+      "target_height": 3.0,
+      "notes": "Rounded arch framing a pudgy (labeled cartoon model).",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_arch_vibe_01",
+      "target_height": 3.0,
+      "notes": "Colorful candy-blob arch.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_ball_01",
       "target_height": 0.8,
       "notes": "Nest d\u00e9cor \u2014 bouncy ball",
@@ -464,9 +572,39 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_booth_claim_01",
+      "target_height": 2.0,
+      "notes": "Blank-sign stall with a smiling vendor.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_booth_dj_01",
+      "target_height": 1.8,
+      "notes": "Toy boombox / DJ deck.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_booth_photo_01",
+      "target_height": 2.2,
+      "notes": "Hollow log photo booth with curtains and a tiny vendor.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_booth_shop_01",
+      "target_height": 2.4,
+      "notes": "Pink-canopy dessert stall.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_booth_ticket_01",
       "target_height": 2.6,
       "notes": "Nest d\u00e9cor \u2014 ticket booth",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_bounce_castle_01",
+      "target_height": 2.5,
+      "notes": "Inflatable bounce-castle frame.",
       "uniform_scale": 1.0
     },
     {
@@ -527,6 +665,12 @@
       "asset_id": "env_nest_chest_01",
       "target_height": 0.9,
       "notes": "Nest d\u00e9cor \u2014 treasure chest",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_confetti_cannon_01",
+      "target_height": 1.4,
+      "notes": "Orb cannon on a stubby stand.",
       "uniform_scale": 1.0
     },
     {
@@ -620,6 +764,24 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_dessert_cup_01",
+      "target_height": 0.6,
+      "notes": "Cream dumpling peeking from a garnished dessert bowl.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_disco_01",
+      "target_height": 1.8,
+      "notes": "Grid disco ball with candy nubs.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_donut_01",
+      "target_height": 0.4,
+      "notes": "Braided cream donut / torus deco.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_dumpling_01",
       "target_height": 0.9,
       "notes": "Nest d\u00e9cor \u2014 cartoon dumpling",
@@ -656,6 +818,12 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_hedge_arch_01",
+      "target_height": 2.5,
+      "notes": "Terracotta candy/moss arch.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_hydrant_01",
       "target_height": 0.9,
       "notes": "Nest d\u00e9cor \u2014 pink hydrant",
@@ -686,9 +854,21 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_layer_cake_01",
+      "target_height": 0.5,
+      "notes": "Short layered frosting cake with a loose cherry.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_lilypad_01",
       "target_height": 0.3,
       "notes": "Nest d\u00e9cor \u2014 lily pad",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_logo_01",
+      "target_height": 0.7,
+      "notes": "PudgyMon Party Joy logo on a cookie disc (labeled coin).",
       "uniform_scale": 1.0
     },
     {
@@ -902,6 +1082,12 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_podium_01",
+      "target_height": 1.2,
+      "notes": "Three-tier chocolate candy podium.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_pond_01",
       "target_height": 0.5,
       "notes": "Nest d\u00e9cor \u2014 candy pond",
@@ -911,6 +1097,12 @@
       "asset_id": "env_nest_portal_01",
       "target_height": 3.0,
       "notes": "Nest d\u00e9cor \u2014 game portal",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_portal_race_01",
+      "target_height": 2.8,
+      "notes": "Brown bolted gate with an orange pudgy in the opening.",
       "uniform_scale": 1.0
     },
     {
@@ -932,6 +1124,12 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_seesaw_01",
+      "target_height": 1.0,
+      "notes": "Low wide Nest seesaw / ring board.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_sign_arrow_01",
       "target_height": 1.6,
       "notes": "Nest d\u00e9cor \u2014 arrow signpost",
@@ -944,9 +1142,27 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_nest_slide_01",
+      "target_height": 2.0,
+      "notes": "Monster-head playground slide.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_speaker_01",
+      "target_height": 1.6,
+      "notes": "Stacked coral-pink toy speakers.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_nest_stair_01",
       "target_height": 1.0,
       "notes": "Nest d\u00e9cor \u2014 pink stair block",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_nest_statue_pudgy_01",
+      "target_height": 2.2,
+      "notes": "Cream dumpling mascot on a pink pedestal.",
       "uniform_scale": 1.0
     },
     {
@@ -1010,6 +1226,18 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "env_pad_claim_01",
+      "target_height": 0.15,
+      "notes": "Shallow party basin / claim disk with baked figures.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_pad_create_01",
+      "target_height": 0.15,
+      "notes": "Wide party disk / Create Map pad.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "env_pad_koth_01",
       "target_height": 0.28,
       "uniform_scale": 1.0,
@@ -1041,6 +1269,12 @@
       "target_height": 0.52,
       "notes": "Studio prop \u2014 Vibe mode pad",
       "target_width": 2.5,
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "env_pad_wardrobe_01",
+      "target_height": 0.15,
+      "notes": "Spotted party disk / wardrobe pad.",
       "uniform_scale": 1.0
     },
     {
@@ -1104,6 +1338,18 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "prop_cover_block_round_01",
+      "target_height": 1.2,
+      "notes": "Rounded candy cube on a pad \u2014 shooter cover.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "prop_foam_shield_01",
+      "target_height": 1.0,
+      "notes": "Tan toy heater shield.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "prop_koth_flag_01",
       "target_height": 2.2,
       "uniform_scale": 1.0,
@@ -1128,9 +1374,27 @@
       "uniform_scale": 1.0
     },
     {
+      "asset_id": "prop_target_circle_01",
+      "target_height": 1.0,
+      "notes": "Round gold-rim emblem shield with a mascot face.",
+      "uniform_scale": 1.0
+    },
+    {
       "asset_id": "prop_target_star_01",
       "target_height": 1.0,
       "notes": "Studio prop \u2014 star target",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "prop_trophy_egg_01",
+      "target_height": 0.9,
+      "notes": "Chocolate egg trophy in a candy cup.",
+      "uniform_scale": 1.0
+    },
+    {
+      "asset_id": "prop_trophy_gold_01",
+      "target_height": 0.9,
+      "notes": "Tan candy trophy cup with blank plaque.",
       "uniform_scale": 1.0
     },
     {

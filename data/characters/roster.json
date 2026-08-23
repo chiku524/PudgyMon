@@ -185,6 +185,81 @@
       "id": "npc_nest_bard_01",
       "label": "Nest Bard",
       "blurb": "Rocky gray street performer"
+    },
+    {
+      "id": "char_pudgy_sky_sunset_01",
+      "label": "Sunset Pudgy",
+      "blurb": "Cloud collar and a hovering star belt"
+    },
+    {
+      "id": "char_pudgy_honey_rare_01",
+      "label": "Honey Rare",
+      "blurb": "Charcoal cap, cream belly, cookie pad"
+    },
+    {
+      "id": "char_pudgy_berry_rare_01",
+      "label": "Berry Rare",
+      "blurb": "Heart-headed cream dumpling"
+    },
+    {
+      "id": "char_pudgy_forest_autumn_01",
+      "label": "Forest Autumn",
+      "blurb": "Floral shoulders and a pale helm"
+    },
+    {
+      "id": "char_pudgy_ember_rare_01",
+      "label": "Ember Rare",
+      "blurb": "Brown horned grin"
+    },
+    {
+      "id": "char_pudgy_coral_rare_01",
+      "label": "Coral Rare",
+      "blurb": "Tan coat with a coral-pink hood"
+    },
+    {
+      "id": "char_pudgy_ocean_winter_01",
+      "label": "Ocean Winter",
+      "blurb": "Brown pudgy with a star flag"
+    },
+    {
+      "id": "char_pudgy_candy_rare_01",
+      "label": "Candy Rare",
+      "blurb": "Tan pudgy waving a SUN flag"
+    },
+    {
+      "id": "char_pudgy_night_rare_01",
+      "label": "Night Rare",
+      "blurb": "Gray coat and a tiny gold crown"
+    },
+    {
+      "id": "char_pudgy_sprout_rare_01",
+      "label": "Sprout Rare",
+      "blurb": "Candy-decorated cream dumpling"
+    },
+    {
+      "id": "char_pudgy_bubble_rare_01",
+      "label": "Bubble Rare",
+      "blurb": "Heart strap and a star flag"
+    },
+    {
+      "id": "char_pudgy_cloud_rare_01",
+      "label": "Cloud Rare",
+      "blurb": "Blue-red hooded dumpling"
+    },
+    {
+      "id": "char_pudgy_ice_rare_01",
+      "label": "Ice Rare",
+      "blurb": "Blue-gray scarf and utility belt"
+    },
+    {
+      "id": "char_pudgy_lemon_rare_01",
+      "label": "Lemon Rare",
+      "blurb": "Yellow spots and a red hat"
+    },
+    {
+      "id": "char_pudgy_desert_rare_01",
+      "label": "Desert Rare",
+      "blurb": "Bear-suit pudgy with a starfish crown"
     }
   ]
 }

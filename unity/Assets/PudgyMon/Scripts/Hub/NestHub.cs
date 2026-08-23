@@ -73,7 +73,12 @@ namespace PudgyMon
                 "char_pudgy_peach_rare_01", "char_pudgy_cocoa_rare_01", "char_pudgy_storm_rare_01",
                 "char_pudgy_lava_party_01", "char_pudgy_forest_bloom_01", "char_pudgy_ocean_festival_01",
                 "npc_nest_dj_01", "npc_nest_ref_01", "npc_nest_shop_01", "npc_nest_photo_01",
-                "npc_nest_coach_01", "npc_nest_bard_01"
+                "npc_nest_coach_01", "npc_nest_bard_01",
+                "char_pudgy_sky_sunset_01", "char_pudgy_honey_rare_01", "char_pudgy_berry_rare_01",
+                "char_pudgy_forest_autumn_01", "char_pudgy_ember_rare_01", "char_pudgy_coral_rare_01",
+                "char_pudgy_ocean_winter_01", "char_pudgy_candy_rare_01", "char_pudgy_night_rare_01",
+                "char_pudgy_sprout_rare_01", "char_pudgy_bubble_rare_01", "char_pudgy_cloud_rare_01",
+                "char_pudgy_ice_rare_01", "char_pudgy_lemon_rare_01", "char_pudgy_desert_rare_01"
             };
             for (int i = 0; i < extraCrew.Length; i++)
             {
@@ -121,7 +126,28 @@ namespace PudgyMon
                 ("env_nest_lamp_01", new Vector3(12f, 0f, -8f), -15f),
                 ("env_nest_plant_01", new Vector3(-24f, 0f, 8f), 40f),
                 ("env_nest_plant_02", new Vector3(24f, 0f, 8f), -40f),
-                ("env_nest_crate_01", new Vector3(-18f, 0f, 18f), 10f)
+                ("env_nest_crate_01", new Vector3(-18f, 0f, 18f), 10f),
+                ("env_nest_logo_01", new Vector3(0f, 0f, -6f), 180f),
+                ("env_nest_statue_pudgy_01", new Vector3(0f, 0f, 22f), 180f),
+                ("env_nest_podium_01", new Vector3(6f, 0f, 22f), 180f),
+                ("env_nest_slide_01", new Vector3(-32f, 0f, 18f), 40f),
+                ("env_nest_bounce_castle_01", new Vector3(32f, 0f, 18f), -40f),
+                ("env_nest_seesaw_01", new Vector3(-26f, 0f, 22f), 20f),
+                ("env_nest_booth_photo_01", new Vector3(-22f, 0f, 26f), 160f),
+                ("env_nest_booth_shop_01", new Vector3(22f, 0f, 26f), -160f),
+                ("env_nest_booth_claim_01", new Vector3(-8f, 0f, 26f), 180f),
+                ("env_nest_booth_dj_01", new Vector3(8f, 0f, 26f), 180f),
+                ("env_nest_speaker_01", new Vector3(-4f, 0f, 24f), 15f),
+                ("env_nest_disco_01", new Vector3(4f, 0f, 24f), -15f),
+                ("env_nest_confetti_cannon_01", new Vector3(0f, 0f, 28f), 180f),
+                ("env_nest_hedge_arch_01", new Vector3(-16f, 0f, -28f), 0f),
+                ("env_nest_arch_vibe_01", new Vector3(16f, 0f, -28f), 0f),
+                ("env_nest_arch_race_01", new Vector3(-28f, 0f, -18f), 35f),
+                ("env_nest_arch_shooter_01", new Vector3(28f, 0f, -18f), -35f),
+                ("env_nest_portal_race_01", new Vector3(0f, 0f, -30f), 0f),
+                ("env_nest_layer_cake_01", new Vector3(-6f, 0f, 20f), 20f),
+                ("env_nest_donut_01", new Vector3(10f, 0f, 20f), -20f),
+                ("env_nest_dessert_cup_01", new Vector3(-10f, 0f, 20f), 10f)
             };
             for (int i = 0; i < scenery.Length; i++)
             {
@@ -163,6 +189,15 @@ namespace PudgyMon
                 new Color(0.95f, 0.65f, 0.25f), NestAction.OpenEditor, "CreateMap");
             SpawnUtility(hubGo.transform, origin, new Vector3(12f, 0.12f, 16f),
                 new Color(0.65f, 0.45f, 1f), NestAction.BrowseMaps, "MyMaps");
+            studio.QueueProp("env_pad_create_01", origin + new Vector3(-12f, 0f, 16f),
+                Quaternion.identity, hubGo.transform, "UtilityVisual_Create",
+                PrimitiveType.Cylinder, new Vector3(2.8f, 0.2f, 2.8f), new Color(0.95f, 0.65f, 0.25f), true);
+            studio.QueueProp("env_pad_claim_01", origin + new Vector3(12f, 0f, 16f),
+                Quaternion.identity, hubGo.transform, "UtilityVisual_Maps",
+                PrimitiveType.Cylinder, new Vector3(2.8f, 0.2f, 2.8f), new Color(0.65f, 0.45f, 1f), true);
+            studio.QueueProp("env_pad_wardrobe_01", origin + new Vector3(0f, 0f, 18f),
+                Quaternion.identity, hubGo.transform, "UtilityVisual_Wardrobe",
+                PrimitiveType.Cylinder, new Vector3(2.8f, 0.2f, 2.8f), new Color(0.95f, 0.8f, 0.45f), true);
 
             hub._pads = hub.GetComponentsInChildren<ModePad>(true);
             hub._utils = hub.GetComponentsInChildren<UtilityPad>(true);
@@ -216,7 +251,10 @@ namespace PudgyMon
                 "Shooter" => new[]
                 {
                     ("prop_cover_block_01", new Vector3(-3.5f, 0f, 2f), 15f),
+                    ("prop_cover_block_round_01", new Vector3(-5.5f, 0f, 0.5f), 0f),
                     ("prop_target_star_01", new Vector3(3.5f, 0f, 2f), -20f),
+                    ("prop_target_circle_01", new Vector3(5.2f, 0f, 0.5f), -20f),
+                    ("prop_foam_shield_01", new Vector3(0f, 0f, 5.4f), 180f),
                     ("prop_blaster_toy_01", new Vector3(0f, 0f, 4f), 180f)
                 },
                 "Hill" => new[]
@@ -229,7 +267,9 @@ namespace PudgyMon
                 {
                     ("prop_race_cone_01", new Vector3(-4f, 0f, 2.5f), 0f),
                     ("prop_vibe_orb_01", new Vector3(0f, 0f, 3.5f), 0f),
-                    ("prop_target_star_01", new Vector3(4f, 0f, 2.5f), 0f)
+                    ("prop_target_star_01", new Vector3(4f, 0f, 2.5f), 0f),
+                    ("prop_trophy_gold_01", new Vector3(-2.4f, 0f, 5.2f), 20f),
+                    ("prop_trophy_egg_01", new Vector3(2.4f, 0f, 5.2f), -20f)
                 },
                 _ => System.Array.Empty<(string, Vector3, float)>()
             };
