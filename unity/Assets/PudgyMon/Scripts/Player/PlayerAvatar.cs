@@ -97,7 +97,7 @@ namespace PudgyMon
         }
 
         // Studio-rigged crew faces Unity +Z after glTFast. Dense Tripo imports
-        // face +X, so they need an extra -90° or WASD looks a quarter-turn off.
+        // face +X; +90° turns that into motor forward (the other sign walks backward).
         static void AlignMeshToMotorForward(Transform crewRoot)
         {
             var fit = crewRoot.Find("UnityFit");
@@ -105,7 +105,7 @@ namespace PudgyMon
                 return;
             fit.localRotation = HasLocomotionClips(crewRoot)
                 ? Quaternion.identity
-                : Quaternion.Euler(0f, -90f, 0f);
+                : Quaternion.Euler(0f, 90f, 0f);
         }
 
         static bool HasLocomotionClips(Transform crewRoot)
